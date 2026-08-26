@@ -1,0 +1,14 @@
+---
+title: "The HTTP Protocol"
+lang: en-GB
+---
+
+## Requests, Responses and Status Codes {#sec-03-http-en}
+
+> Content to be developed. Planned topics:
+>
+> - HTTP request/response structure
+> - GET / POST methods
+> - HTTP headers
+> - Status codes (2xx / 3xx / 4xx / 5xx)
+> - Statelessness (introduction, revisited in Chapters 5 and 7)

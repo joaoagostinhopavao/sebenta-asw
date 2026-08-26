@@ -1,0 +1,17 @@
+---
+title: "REST Web Services and Stateless Architecture (Part 1)"
+lang: en-GB
+---
+
+## What is a Web Service {#sec-07-rest-en}
+
+> Content to be developed, aligned with the first half of ESIGELEC's
+> Lecture 4 (REST Web Services and Stateless Architecture). Planned
+> topics:
+>
+> - What is a Web Service
+> - REST (conceptual level)
+> - Resources and endpoints
+> - JSON as a data interchange format
+> - The HTTP contract as the API contract
+> - Stateful vs. Stateless

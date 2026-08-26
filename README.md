@@ -24,18 +24,42 @@ Sebenta-ASW/
 │   ├── css/custom.css    # Estilos personalizados (paleta azul-petróleo)
 │   ├── images/           # Imagens e figuras (heroes/, capa/Web/, capa/PDF/ — por preencher)
 │   └── cover.tex          # Capa PDF (TikZ, sem foto ainda)
+├── en/                    # Versão em inglês (projecto Quarto próprio, só HTML)
+│   ├── _quarto.yml
+│   ├── index.qmd
+│   ├── references.qmd
+│   ├── capitulos/         # cap01.qmd … cap08.qmd, em inglês
+│   └── assets/css/custom.css  # cópia do CSS principal (ver nota abaixo)
 └── referencias.bib        # Bibliografia (a partir da ficha oficial da UC)
 ```
 
 ## Renderização
 
 ```bash
-# Livro completo (HTML + PDF)
+# Versão portuguesa — livro completo (HTML + PDF)
 quarto render
 
-# Preview com hot reload
+# Versão inglesa — só HTML (sem secção pdf: no en/_quarto.yml)
+quarto render en/
+
+# Preview com hot reload (cada versão tem de ser aberta em separado)
 quarto preview
+quarto preview en/
 ```
+
+A versão em inglês (`en/`) segue o mesmo padrão já usado no Sebenta-IM:
+projecto Quarto irmão, com `output-dir: ../docs/en`, gerando o site em
+`docs/en/`. O rodapé de cada versão tem uma ligação para a outra
+(`🇬🇧 English` / `🇵🇹 Português`), usando caminhos relativos à raiz do
+site (`/en/` e `/`) — assume que o site é publicado na raiz do domínio;
+ajustar se um dia for publicado num subdiretório (ex. GitHub Pages de
+projecto).
+
+**Nota sobre o CSS da versão inglesa:** o caminho `/assets/css/custom.css`
+no `en/_quarto.yml` resolve-se à raiz do *site* do próprio subprojecto
+`en/` (`docs/en/`), não à pasta principal (`docs/`). Por isso existe uma
+cópia própria em `en/assets/css/custom.css` — sempre que o `custom.css`
+principal for alterado, replicar a alteração também aqui.
 
 ## Estado
 

@@ -1,0 +1,14 @@
+---
+title: "Course Introduction and Web Application Architecture"
+lang: en-GB
+---
+
+## Introduction and Client-Server Architecture {#sec-01-intro-en}
+
+> Content to be developed. Planned topics:
+>
+> - Course syllabus and assessment model
+> - Client-server architecture
+> - Front-end vs. back-end
+> - Java EE as this course's case study
+> - Course overview: from HTML/CSS to REST

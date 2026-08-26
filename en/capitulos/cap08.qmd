@@ -1,0 +1,16 @@
+---
+title: "REST Web Services (Part 2) and the JavaScript Client"
+lang: en-GB
+---
+
+## JWT, Scalability and Consuming the API in JavaScript {#sec-08-jwt-js-en}
+
+> Content to be developed, aligned with the second half of ESIGELEC's
+> Lecture 4 + UTAD's own JavaScript "twist". Planned topics:
+>
+> - Session limitations in distributed systems
+> - Authorization header
+> - JWT (header, payload, signature)
+> - Horizontal scalability
+> - fetch() and client-side JSON
+> - The DOM as the browser's "View"

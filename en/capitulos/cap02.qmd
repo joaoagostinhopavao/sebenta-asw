@@ -1,0 +1,13 @@
+---
+title: "HTML, CSS and Bootstrap"
+lang: en-GB
+---
+
+## HTML Structure and Styling with CSS {#sec-02-html-css-en}
+
+> Content to be developed. Planned topics:
+>
+> - HTML5 structure
+> - CSS selectors and the box model
+> - Grid / Flexbox
+> - Bootstrap components (navbar, form, grid)

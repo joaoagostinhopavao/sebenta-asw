@@ -1,0 +1,59 @@
+---
+lang: en-GB
+---
+
+# Preface {.unnumbered}
+
+```{=html}
+<div class="hero">
+  <div class="hero-badge">UTAD · 2026/2027</div>
+  <h1>Web Applications and Services</h1>
+  <h2>Course Study Guide</h2>
+  <p>University of Trás-os-Montes e Alto Douro</p>
+  <div class="hero-meta">
+    <span>João Pavão</span>
+    <span class="hero-meta-date">26 August 2026</span>
+  </div>
+</div>
+```
+
+This textbook is a self-study resource for the theoretical component of
+**Web Applications and Services** (ASW), Master's in Electrical and
+Computer Engineering (MEEC), covering Web application architecture, best
+development practices, the HTTP protocol, HTML and CSS, server-side and
+client-side programming, database access, and REST Web Services, with
+Java EE as the case study.
+
+This course follows closely the material and practical work of an
+equivalent course already taught at ESIGELEC (international partner),
+with one important difference: ESIGELEC students already have an HTML/CSS
+and database background, UTAD students do not. For this reason, the first
+chapters cover that foundation before converging on the same Java EE
+material.
+
+## Organisation {.unnumbered}
+
+The textbook is organised into three thematic blocks:
+
+1. **Web Foundations** — client-server architecture, HTML, CSS and the
+   HTTP protocol
+2. **Classic Java EE** — Servlets, the stateful model and session
+   management
+3. **Web Services** — security and filters, and REST Web Services,
+   including consuming an API from JavaScript in the browser
+
+The practical LABs (the same as ESIGELEC's, with a JavaScript "twist"
+specific to this course) are described in Appendix B of the Portuguese
+edition.
+
+## How to Use This Textbook {.unnumbered}
+
+Each chapter corresponds to one theoretical class of the course. Students
+are advised to read a chapter before the corresponding class, and to use
+this text as support for independent study, to review concepts and
+clarify doubts. Reading does not replace attendance in class, nor
+participation in the practical LABs.
+
+## Author {.unnumbered}
+
+**João Pavão** — UTAD, course lecturer, theoretical component

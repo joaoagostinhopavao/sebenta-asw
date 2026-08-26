@@ -46,6 +46,7 @@ book:
 
   page-footer:
     left: "Aplicações e Serviços Web — UTAD"
+    right: "[🇬🇧 English](/en/)"
 
 format:
   html:

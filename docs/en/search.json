@@ -1,0 +1,202 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Web Applications and Services",
+    "section": "",
+    "text": "Preface\nThis textbook is a self-study resource for the theoretical component of Web Applications and Services (ASW), Master’s in Electrical and Computer Engineering (MEEC), covering Web application architecture, best development practices, the HTTP protocol, HTML and CSS, server-side and client-side programming, database access, and REST Web Services, with Java EE as the case study.\nThis course follows closely the material and practical work of an equivalent course already taught at ESIGELEC (international partner), with one important difference: ESIGELEC students already have an HTML/CSS and database background, UTAD students do not. For this reason, the first chapters cover that foundation before converging on the same Java EE material.",
+    "crumbs": [
+      "Preface"
+    ]
+  },
+  {
+    "objectID": "index.html#organisation",
+    "href": "index.html#organisation",
+    "title": "Web Applications and Services",
+    "section": "Organisation",
+    "text": "Organisation\nThe textbook is organised into three thematic blocks:\n\nWeb Foundations — client-server architecture, HTML, CSS and the HTTP protocol\nClassic Java EE — Servlets, the stateful model and session management\nWeb Services — security and filters, and REST Web Services, including consuming an API from JavaScript in the browser\n\nThe practical LABs (the same as ESIGELEC’s, with a JavaScript “twist” specific to this course) are described in Appendix B of the Portuguese edition.",
+    "crumbs": [
+      "Preface"
+    ]
+  },
+  {
+    "objectID": "index.html#how-to-use-this-textbook",
+    "href": "index.html#how-to-use-this-textbook",
+    "title": "Web Applications and Services",
+    "section": "How to Use This Textbook",
+    "text": "How to Use This Textbook\nEach chapter corresponds to one theoretical class of the course. Students are advised to read a chapter before the corresponding class, and to use this text as support for independent study, to review concepts and clarify doubts. Reading does not replace attendance in class, nor participation in the practical LABs.",
+    "crumbs": [
+      "Preface"
+    ]
+  },
+  {
+    "objectID": "index.html#author",
+    "href": "index.html#author",
+    "title": "Web Applications and Services",
+    "section": "Author",
+    "text": "Author\nJoão Pavão — UTAD, course lecturer, theoretical component",
+    "crumbs": [
+      "Preface"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap01.html",
+    "href": "capitulos/cap01.html",
+    "title": "1  Course Introduction and Web Application Architecture",
+    "section": "",
+    "text": "1.1 Introduction and Client-Server Architecture",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Course Introduction and Web Application Architecture</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap01.html#sec-01-intro-en",
+    "href": "capitulos/cap01.html#sec-01-intro-en",
+    "title": "1  Course Introduction and Web Application Architecture",
+    "section": "",
+    "text": "Content to be developed. Planned topics:\n\nCourse syllabus and assessment model\nClient-server architecture\nFront-end vs. back-end\nJava EE as this course’s case study\nCourse overview: from HTML/CSS to REST",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Course Introduction and Web Application Architecture</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap02.html",
+    "href": "capitulos/cap02.html",
+    "title": "2  HTML, CSS and Bootstrap",
+    "section": "",
+    "text": "2.1 HTML Structure and Styling with CSS",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>HTML, CSS and Bootstrap</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap02.html#sec-02-html-css-en",
+    "href": "capitulos/cap02.html#sec-02-html-css-en",
+    "title": "2  HTML, CSS and Bootstrap",
+    "section": "",
+    "text": "Content to be developed. Planned topics:\n\nHTML5 structure\nCSS selectors and the box model\nGrid / Flexbox\nBootstrap components (navbar, form, grid)",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>HTML, CSS and Bootstrap</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap03.html",
+    "href": "capitulos/cap03.html",
+    "title": "3  The HTTP Protocol",
+    "section": "",
+    "text": "3.1 Requests, Responses and Status Codes",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>The HTTP Protocol</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap03.html#sec-03-http-en",
+    "href": "capitulos/cap03.html#sec-03-http-en",
+    "title": "3  The HTTP Protocol",
+    "section": "",
+    "text": "Content to be developed. Planned topics:\n\nHTTP request/response structure\nGET / POST methods\nHTTP headers\nStatus codes (2xx / 3xx / 4xx / 5xx)\nStatelessness (introduction, revisited in Chapters 5 and 7)",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>The HTTP Protocol</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap04.html",
+    "href": "capitulos/cap04.html",
+    "title": "4  Java EE and Servlet Fundamentals",
+    "section": "",
+    "text": "4.1 The Web Container and the First Servlet",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Java EE and Servlet Fundamentals</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap04.html#sec-04-servlets-en",
+    "href": "capitulos/cap04.html#sec-04-servlets-en",
+    "title": "4  Java EE and Servlet Fundamentals",
+    "section": "",
+    "text": "Content to be developed, aligned with ESIGELEC’s Lecture 1 (Java EE and Servlet Fundamentals). Planned topics:\n\nJakarta EE / Java EE\nWeb Container (Tomcat)\nServlet lifecycle\nHttpServletRequest / HttpServletResponse\ndoGet() and doPost()\nHTTP parameters, Content-Type\nManual JSON generation",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Java EE and Servlet Fundamentals</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap05.html",
+    "href": "capitulos/cap05.html",
+    "title": "5  Stateful Model: Sessions and JSP",
+    "section": "",
+    "text": "5.1 Sessions, Cookies and Authentication",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Stateful Model: Sessions and JSP</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap05.html#sec-05-sessions-en",
+    "href": "capitulos/cap05.html#sec-05-sessions-en",
+    "title": "5  Stateful Model: Sessions and JSP",
+    "section": "",
+    "text": "Content to be developed, aligned with ESIGELEC’s Lecture 2 (Traditional Java Web, Stateful Model). Planned topics:\n\nJSP\nTraditional MVC (Servlet + JSP)\nRequestDispatcher\nHttpSession\nCookies, JSESSIONID\nSession-based authentication\nLogout (session.invalidate())",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Stateful Model: Sessions and JSP</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap06.html",
+    "href": "capitulos/cap06.html",
+    "title": "6  Security and Filters",
+    "section": "",
+    "text": "6.1 Authentication, Authorization and the Filter",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Security and Filters</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap06.html#sec-06-filters-en",
+    "href": "capitulos/cap06.html#sec-06-filters-en",
+    "title": "6  Security and Filters",
+    "section": "",
+    "text": "Content to be developed, aligned with ESIGELEC’s Lecture 3 (Security and Filters). Planned topics:\n\nAuthentication vs. authorization\nFilter (Jakarta Servlet)\nRequest interception\nFilterChain\nSeparation of responsibilities\nHTTP 401 vs. 403\nClean architecture: Servlet vs. Filter",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Security and Filters</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap07.html",
+    "href": "capitulos/cap07.html",
+    "title": "7  REST Web Services and Stateless Architecture (Part 1)",
+    "section": "",
+    "text": "7.1 What is a Web Service",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>REST Web Services and Stateless Architecture (Part 1)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap07.html#sec-07-rest-en",
+    "href": "capitulos/cap07.html#sec-07-rest-en",
+    "title": "7  REST Web Services and Stateless Architecture (Part 1)",
+    "section": "",
+    "text": "Content to be developed, aligned with the first half of ESIGELEC’s Lecture 4 (REST Web Services and Stateless Architecture). Planned topics:\n\nWhat is a Web Service\nREST (conceptual level)\nResources and endpoints\nJSON as a data interchange format\nThe HTTP contract as the API contract\nStateful vs. Stateless",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>REST Web Services and Stateless Architecture (Part 1)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap08.html",
+    "href": "capitulos/cap08.html",
+    "title": "8  REST Web Services (Part 2) and the JavaScript Client",
+    "section": "",
+    "text": "8.1 JWT, Scalability and Consuming the API in JavaScript",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>REST Web Services (Part 2) and the JavaScript Client</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap08.html#sec-08-jwt-js-en",
+    "href": "capitulos/cap08.html#sec-08-jwt-js-en",
+    "title": "8  REST Web Services (Part 2) and the JavaScript Client",
+    "section": "",
+    "text": "Content to be developed, aligned with the second half of ESIGELEC’s Lecture 4 + UTAD’s own JavaScript “twist”. Planned topics:\n\nSession limitations in distributed systems\nAuthorization header\nJWT (header, payload, signature)\nHorizontal scalability\nfetch() and client-side JSON\nThe DOM as the browser’s “View”",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>REST Web Services (Part 2) and the JavaScript Client</span>"
+    ]
+  }
+]

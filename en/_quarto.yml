@@ -1,0 +1,56 @@
+project:
+  type: book
+  output-dir: ../docs/en
+
+lang: en-GB
+
+bibliography: ../referencias.bib
+
+book:
+  title: "Web Applications and Services"
+  subtitle: "Course Textbook"
+  author:
+    - name: "João Pavão"
+      affiliation: "University of Trás-os-Montes e Alto Douro"
+  date: last-modified
+
+  chapters:
+    - index.qmd
+    - capitulos/cap01.qmd
+    - capitulos/cap02.qmd
+    - capitulos/cap03.qmd
+    - capitulos/cap04.qmd
+    - capitulos/cap05.qmd
+    - capitulos/cap06.qmd
+    - capitulos/cap07.qmd
+    - capitulos/cap08.qmd
+    - references.qmd
+
+  sidebar:
+    search: true
+
+  page-footer:
+    left: "Web Applications and Services — MEEC · UTAD"
+    right: "[🇵🇹 Português](/)"
+
+format:
+  html:
+    theme:
+      light: litera
+      dark: darkly
+    css: /assets/css/custom.css
+    toc: true
+    toc-depth: 3
+    smooth-scroll: true
+    number-sections: true
+    number-depth: 3
+    highlight-style: github
+    code-fold: false
+    code-tools: false
+    code-line-numbers: true
+    fig-align: center
+
+execute:
+  echo: true
+  warning: false
+  message: false
