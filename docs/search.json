@@ -1,0 +1,289 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Aplicações e Serviços Web",
+    "section": "",
+    "text": "Prefácio\nEste documento é um documento de apoio ao estudo autónomo para a componente teórica da disciplina de Aplicações e Serviços Web (ASW), Mestrado em Engenharia Eletrotécnica e de Computadores (MEEC), cobrindo a arquitetura de aplicações Web, boas práticas de desenvolvimento, o protocolo HTTP, HTML e CSS, programação do lado do servidor e do lado do cliente, acesso a bases de dados, e Web Services REST, com o Java EE como caso de estudo.\nEsta UC segue de perto a matéria e os trabalhos práticos de uma UC homóloga já lecionada no ESIGELEC (parceiro internacional), com uma diferença importante: os alunos do ESIGELEC já chegam com base em HTML/CSS e bases de dados, os da UTAD não. Por isso, os primeiros capítulos cobrem essa base antes de convergir para a mesma matéria de Java EE.",
+    "crumbs": [
+      "Prefácio"
+    ]
+  },
+  {
+    "objectID": "index.html#organização-do-documento",
+    "href": "index.html#organização-do-documento",
+    "title": "Aplicações e Serviços Web",
+    "section": "Organização do documento",
+    "text": "Organização do documento\nO texto está organizado em três blocos temáticos:\n\nFundamentos da Web — arquitetura cliente-servidor, HTML, CSS e o protocolo HTTP\nJava EE Clássico — Servlets, o modelo stateful e a gestão de sessões\nWeb Services — segurança e filtros, e Web Services REST, incluindo o consumo de uma API a partir de JavaScript no browser\n\nOs trabalhos práticos (os mesmos LABs do ESIGELEC, com um “twist” de JavaScript próprio desta UC) estão descritos no Apêndice B.",
+    "crumbs": [
+      "Prefácio"
+    ]
+  },
+  {
+    "objectID": "index.html#fonte-e-atualização",
+    "href": "index.html#fonte-e-atualização",
+    "title": "Aplicações e Serviços Web",
+    "section": "Fonte e atualização",
+    "text": "Fonte e atualização\nOs conteúdos deste documento de apoio ao estudo baseiam-se no programa oficial da UC e nos materiais do ESIGELEC (slides e LABs de Java EE) e da UTAD (HTTP, HTML/CSS/Bootstrap, Servlets), organizados e adaptados para o ano letivo 2026/2027. A bibliografia de referência da UC está indicada em cada capítulo e compilada no ficheiro referencias.bib.",
+    "crumbs": [
+      "Prefácio"
+    ]
+  },
+  {
+    "objectID": "index.html#como-usar-este-texto-de-apoio",
+    "href": "index.html#como-usar-este-texto-de-apoio",
+    "title": "Aplicações e Serviços Web",
+    "section": "Como usar este texto de apoio",
+    "text": "Como usar este texto de apoio\nCada capítulo corresponde a uma aula teórica da UC. A recomendação é que os alunos leiam um capítulo antes da aula respetiva, e que usem este texto como apoio ao estudo autónomo, para rever conceitos e esclarecer dúvidas. A leitura não substitui a presença nas aulas, nem a participação nos LABs práticos.",
+    "crumbs": [
+      "Prefácio"
+    ]
+  },
+  {
+    "objectID": "index.html#autor",
+    "href": "index.html#autor",
+    "title": "Aplicações e Serviços Web",
+    "section": "Autor",
+    "text": "Autor\nJoão Pavão — UTAD, docente responsável, componente teórica",
+    "crumbs": [
+      "Prefácio"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap01.html",
+    "href": "capitulos/cap01.html",
+    "title": "1  Apresentação da UC e Arquitetura de Aplicações Web",
+    "section": "",
+    "text": "1.1 Apresentação e Arquitetura Cliente-Servidor",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Apresentação da UC e Arquitetura de Aplicações Web</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap01.html#sec-01-apresentacao",
+    "href": "capitulos/cap01.html#sec-01-apresentacao",
+    "title": "1  Apresentação da UC e Arquitetura de Aplicações Web",
+    "section": "",
+    "text": "Conteúdo a desenvolver. Tópicos previstos:\n\nPrograma e modelo de avaliação da UC\nArquitetura cliente-servidor\nFront-end vs. back-end\nJava EE como caso de estudo desta UC\nVisão geral do semestre: de HTML/CSS até REST",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Apresentação da UC e Arquitetura de Aplicações Web</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap02.html",
+    "href": "capitulos/cap02.html",
+    "title": "2  HTML, CSS e Bootstrap",
+    "section": "",
+    "text": "2.1 Estrutura HTML e Apresentação com CSS",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>HTML, CSS e Bootstrap</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap02.html#sec-02-html-css",
+    "href": "capitulos/cap02.html#sec-02-html-css",
+    "title": "2  HTML, CSS e Bootstrap",
+    "section": "",
+    "text": "Conteúdo a desenvolver. Tópicos previstos:\n\nEstrutura HTML5\nSeletores e box model CSS\nGrid / Flexbox\nComponentes Bootstrap (navbar, form, grid)",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>HTML, CSS e Bootstrap</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap03.html",
+    "href": "capitulos/cap03.html",
+    "title": "3  O Protocolo HTTP",
+    "section": "",
+    "text": "3.1 Pedidos, Respostas e Códigos de Estado",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>O Protocolo HTTP</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap03.html#sec-03-http",
+    "href": "capitulos/cap03.html#sec-03-http",
+    "title": "3  O Protocolo HTTP",
+    "section": "",
+    "text": "Conteúdo a desenvolver. Tópicos previstos:\n\nEstrutura do pedido/resposta HTTP\nMétodos GET / POST\nCabeçalhos HTTP\nCódigos de estado (2xx / 3xx / 4xx / 5xx)\nStateless (introdução, retomado nos Caps. 5 e 7)",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>O Protocolo HTTP</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap04.html",
+    "href": "capitulos/cap04.html",
+    "title": "4  Java EE e Fundamentos de Servlets",
+    "section": "",
+    "text": "4.1 O Web Container e o Primeiro Servlet",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Java EE e Fundamentos de Servlets</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap04.html#sec-04-servlets",
+    "href": "capitulos/cap04.html#sec-04-servlets",
+    "title": "4  Java EE e Fundamentos de Servlets",
+    "section": "",
+    "text": "Conteúdo a desenvolver, alinhado com a Lecture 1 do ESIGELEC (Java EE and Servlet Fundamentals). Tópicos previstos:\n\nJakarta EE / Java EE\nWeb Container (Tomcat)\nCiclo de vida de um Servlet\nHttpServletRequest / HttpServletResponse\ndoGet() e doPost()\nParâmetros HTTP, Content-Type\nGeração manual de JSON",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Java EE e Fundamentos de Servlets</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap05.html",
+    "href": "capitulos/cap05.html",
+    "title": "5  Modelo Stateful: Sessões e JSP",
+    "section": "",
+    "text": "5.1 Sessões, Cookies e Autenticação",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Modelo Stateful: Sessões e JSP</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap05.html#sec-05-sessoes",
+    "href": "capitulos/cap05.html#sec-05-sessoes",
+    "title": "5  Modelo Stateful: Sessões e JSP",
+    "section": "",
+    "text": "Conteúdo a desenvolver, alinhado com a Lecture 2 do ESIGELEC (Traditional Java Web, Stateful Model). Tópicos previstos:\n\nJSP\nMVC tradicional (Servlet + JSP)\nRequestDispatcher\nHttpSession\nCookies, JSESSIONID\nAutenticação baseada em sessão\nLogout (session.invalidate())",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Modelo Stateful: Sessões e JSP</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap06.html",
+    "href": "capitulos/cap06.html",
+    "title": "6  Segurança e Filters",
+    "section": "",
+    "text": "6.1 Autenticação, Autorização e o Filter",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Segurança e Filters</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap06.html#sec-06-filters",
+    "href": "capitulos/cap06.html#sec-06-filters",
+    "title": "6  Segurança e Filters",
+    "section": "",
+    "text": "Conteúdo a desenvolver, alinhado com a Lecture 3 do ESIGELEC (Security and Filters). Tópicos previstos:\n\nAutenticação vs. autorização\nFilter (Jakarta Servlet)\nInterceção de pedidos\nFilterChain\nSeparação de responsabilidades\nHTTP 401 vs. 403\nArquitetura limpa: Servlet vs. Filter",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Segurança e Filters</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap07.html",
+    "href": "capitulos/cap07.html",
+    "title": "7  Web Services REST e Arquitetura Stateless (Parte 1)",
+    "section": "",
+    "text": "7.1 O Que é um Web Service",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Web Services REST e Arquitetura Stateless (Parte 1)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap07.html#sec-07-rest",
+    "href": "capitulos/cap07.html#sec-07-rest",
+    "title": "7  Web Services REST e Arquitetura Stateless (Parte 1)",
+    "section": "",
+    "text": "Conteúdo a desenvolver, alinhado com a primeira metade da Lecture 4 do ESIGELEC (REST Web Services and Stateless Architecture). Tópicos previstos:\n\nO que é um Web Service\nREST (nível conceptual)\nRecursos e endpoints\nJSON como formato de troca de dados\nO contrato HTTP como contrato da API\nStateful vs. Stateless",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Web Services REST e Arquitetura Stateless (Parte 1)</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap08.html",
+    "href": "capitulos/cap08.html",
+    "title": "8  Web Services REST (Parte 2) e o Cliente em JavaScript",
+    "section": "",
+    "text": "8.1 JWT, Escalabilidade e o Consumo da API em JavaScript",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Web Services REST (Parte 2) e o Cliente em JavaScript</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap08.html#sec-08-jwt-js",
+    "href": "capitulos/cap08.html#sec-08-jwt-js",
+    "title": "8  Web Services REST (Parte 2) e o Cliente em JavaScript",
+    "section": "",
+    "text": "Conteúdo a desenvolver, alinhado com a segunda metade da Lecture 4 do ESIGELEC + o “twist” de JavaScript próprio da UTAD. Tópicos previstos:\n\nLimitações de sessões em sistemas distribuídos\nCabeçalho Authorization\nJWT (header, payload, assinatura)\nEscalabilidade horizontal\nfetch() e JSON do lado do cliente\nO DOM como “View” do browser",
+    "crumbs": [
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Web Services REST (Parte 2) e o Cliente em JavaScript</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/apendiceA.html",
+    "href": "capitulos/apendiceA.html",
+    "title": "Apêndice A — Configuração do Ambiente de Desenvolvimento",
+    "section": "",
+    "text": "A.1 Introdução",
+    "crumbs": [
+      "Apêndices",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Configuração do Ambiente de Desenvolvimento</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/apendiceA.html#sec-apA-intro",
+    "href": "capitulos/apendiceA.html#sec-apA-intro",
+    "title": "Apêndice A — Configuração do Ambiente de Desenvolvimento",
+    "section": "",
+    "text": "Conteúdo a desenvolver: configuração do Eclipse IDE for Enterprise Java and Web Developers, instalação do Apache Tomcat, e criação do primeiro Dynamic Web Project — passo 1.1 a 1.2 do LAB1-EN.pdf (ESIGELEC).",
+    "crumbs": [
+      "Apêndices",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Configuração do Ambiente de Desenvolvimento</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/apendiceB.html",
+    "href": "capitulos/apendiceB.html",
+    "title": "Apêndice B — LABs Práticos",
+    "section": "",
+    "text": "B.1 Introdução\nOs LABs práticos desta UC são os mesmos do ESIGELEC (a “World Capitals API”), com um “twist” de JavaScript próprio da UTAD: onde o ESIGELEC pede formulários HTML crus como test clients da API, aqui esses formulários são substituídos por um front-office com fetch(), sem alargar o âmbito do trabalho prático.",
+    "crumbs": [
+      "Apêndices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>LABs Práticos</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/apendiceB.html#sec-apB-lab1",
+    "href": "capitulos/apendiceB.html#sec-apB-lab1",
+    "title": "Apêndice B — LABs Práticos",
+    "section": "B.2 LAB1: Primeiro Endpoint e DAO Simulado",
+    "text": "B.2 LAB1: Primeiro Endpoint e DAO Simulado\n\nConteúdo a desenvolver a partir de LAB1-EN.pdf (ESIGELEC), sem alterações ao enunciado. Ainda sem front-office — é só backend.",
+    "crumbs": [
+      "Apêndices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>LABs Práticos</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/apendiceB.html#sec-apB-lab2",
+    "href": "capitulos/apendiceB.html#sec-apB-lab2",
+    "title": "Apêndice B — LABs Práticos",
+    "section": "B.3 LAB2: Login e Sessão",
+    "text": "B.3 LAB2: Login e Sessão\n\nConteúdo a desenvolver a partir de LAB2-EN.pdf (ESIGELEC). Twist JavaScript: substituir o login.html cru por uma versão com fetch() (POST assíncrono, sem reload, com feedback visual de sucesso/erro).",
+    "crumbs": [
+      "Apêndices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>LABs Práticos</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/apendiceB.html#sec-apB-lab3",
+    "href": "capitulos/apendiceB.html#sec-apB-lab3",
+    "title": "Apêndice B — LABs Práticos",
+    "section": "B.4 LAB3: AuthenticationFilter e Logout",
+    "text": "B.4 LAB3: AuthenticationFilter e Logout\n\nConteúdo a desenvolver a partir de LAB3-EN.pdf (ESIGELEC) — ainda por analisar em detalhe. Twist JavaScript: o front-office passa a mostrar/esconder secções consoante o estado de sessão.",
+    "crumbs": [
+      "Apêndices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>LABs Práticos</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/apendiceB.html#sec-apB-lab4",
+    "href": "capitulos/apendiceB.html#sec-apB-lab4",
+    "title": "Apêndice B — LABs Práticos",
+    "section": "B.5 LAB4: JDBC e CRUD Completo",
+    "text": "B.5 LAB4: JDBC e CRUD Completo\n\nConteúdo a desenvolver a partir de LAB4-EN.pdf (ESIGELEC). Twist JavaScript: substituir os formulários crus de insert/update/delete por um mini front-office (lista de países + formulário fetch() para CRUD).\nLAB5 do ESIGELEC (“Subject treated in slides”, opcional) fica de fora do calendário fixo.",
+    "crumbs": [
+      "Apêndices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>LABs Práticos</span>"
+    ]
+  }
+]

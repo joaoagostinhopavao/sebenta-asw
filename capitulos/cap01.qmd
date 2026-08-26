@@ -1,0 +1,16 @@
+---
+title: "Apresentação da UC e Arquitetura de Aplicações Web"
+author: "João Pavão"
+date: 2026-08-26
+lang: pt-PT
+---
+
+## Apresentação e Arquitetura Cliente-Servidor {#sec-01-apresentacao}
+
+> Conteúdo a desenvolver. Tópicos previstos:
+>
+> - Programa e modelo de avaliação da UC
+> - Arquitetura cliente-servidor
+> - Front-end vs. back-end
+> - Java EE como caso de estudo desta UC
+> - Visão geral do semestre: de HTML/CSS até REST

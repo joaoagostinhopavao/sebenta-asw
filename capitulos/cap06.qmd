@@ -1,0 +1,19 @@
+---
+title: "Segurança e Filters"
+author: "João Pavão"
+date: 2026-08-26
+lang: pt-PT
+---
+
+## Autenticação, Autorização e o Filter {#sec-06-filters}
+
+> Conteúdo a desenvolver, alinhado com a Lecture 3 do ESIGELEC (Security and
+> Filters). Tópicos previstos:
+>
+> - Autenticação vs. autorização
+> - Filter (Jakarta Servlet)
+> - Interceção de pedidos
+> - FilterChain
+> - Separação de responsabilidades
+> - HTTP 401 vs. 403
+> - Arquitetura limpa: Servlet vs. Filter

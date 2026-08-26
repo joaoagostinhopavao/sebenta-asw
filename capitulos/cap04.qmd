@@ -1,0 +1,19 @@
+---
+title: "Java EE e Fundamentos de Servlets"
+author: "João Pavão"
+date: 2026-08-26
+lang: pt-PT
+---
+
+## O Web Container e o Primeiro Servlet {#sec-04-servlets}
+
+> Conteúdo a desenvolver, alinhado com a Lecture 1 do ESIGELEC (Java EE and
+> Servlet Fundamentals). Tópicos previstos:
+>
+> - Jakarta EE / Java EE
+> - Web Container (Tomcat)
+> - Ciclo de vida de um Servlet
+> - HttpServletRequest / HttpServletResponse
+> - doGet() e doPost()
+> - Parâmetros HTTP, Content-Type
+> - Geração manual de JSON

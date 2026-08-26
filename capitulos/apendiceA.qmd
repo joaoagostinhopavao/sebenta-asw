@@ -1,0 +1,12 @@
+---
+title: "Configuração do Ambiente de Desenvolvimento"
+author: "João Pavão"
+date: 2026-08-26
+lang: pt-PT
+---
+
+## Introdução {#sec-apA-intro}
+
+> Conteúdo a desenvolver: configuração do Eclipse IDE for Enterprise Java
+> and Web Developers, instalação do Apache Tomcat, e criação do primeiro
+> Dynamic Web Project — passo 1.1 a 1.2 do LAB1-EN.pdf (ESIGELEC).

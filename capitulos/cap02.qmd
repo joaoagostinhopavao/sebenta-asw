@@ -1,0 +1,15 @@
+---
+title: "HTML, CSS e Bootstrap"
+author: "João Pavão"
+date: 2026-08-26
+lang: pt-PT
+---
+
+## Estrutura HTML e Apresentação com CSS {#sec-02-html-css}
+
+> Conteúdo a desenvolver. Tópicos previstos:
+>
+> - Estrutura HTML5
+> - Seletores e box model CSS
+> - Grid / Flexbox
+> - Componentes Bootstrap (navbar, form, grid)

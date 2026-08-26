@@ -1,0 +1,19 @@
+---
+title: "Modelo Stateful: Sessões e JSP"
+author: "João Pavão"
+date: 2026-08-26
+lang: pt-PT
+---
+
+## Sessões, Cookies e Autenticação {#sec-05-sessoes}
+
+> Conteúdo a desenvolver, alinhado com a Lecture 2 do ESIGELEC (Traditional
+> Java Web, Stateful Model). Tópicos previstos:
+>
+> - JSP
+> - MVC tradicional (Servlet + JSP)
+> - RequestDispatcher
+> - HttpSession
+> - Cookies, JSESSIONID
+> - Autenticação baseada em sessão
+> - Logout (session.invalidate())

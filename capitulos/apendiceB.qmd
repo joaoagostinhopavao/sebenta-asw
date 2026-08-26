@@ -1,0 +1,40 @@
+---
+title: "LABs Práticos"
+author: "João Pavão"
+date: 2026-08-26
+lang: pt-PT
+---
+
+## Introdução {#sec-apB-intro}
+
+Os LABs práticos desta UC são os mesmos do ESIGELEC (a "World Capitals
+API"), com um "twist" de JavaScript próprio da UTAD: onde o ESIGELEC pede
+formulários HTML crus como *test clients* da API, aqui esses formulários são
+substituídos por um front-office com `fetch()`, sem alargar o âmbito do
+trabalho prático.
+
+## LAB1: Primeiro Endpoint e DAO Simulado {#sec-apB-lab1}
+
+> Conteúdo a desenvolver a partir de LAB1-EN.pdf (ESIGELEC), sem alterações
+> ao enunciado. Ainda sem *front-office* — é só backend.
+
+## LAB2: Login e Sessão {#sec-apB-lab2}
+
+> Conteúdo a desenvolver a partir de LAB2-EN.pdf (ESIGELEC). Twist
+> JavaScript: substituir o `login.html` cru por uma versão com `fetch()`
+> (POST assíncrono, sem reload, com feedback visual de sucesso/erro).
+
+## LAB3: AuthenticationFilter e Logout {#sec-apB-lab3}
+
+> Conteúdo a desenvolver a partir de LAB3-EN.pdf (ESIGELEC) — ainda por
+> analisar em detalhe. Twist JavaScript: o front-office passa a
+> mostrar/esconder secções consoante o estado de sessão.
+
+## LAB4: JDBC e CRUD Completo {#sec-apB-lab4}
+
+> Conteúdo a desenvolver a partir de LAB4-EN.pdf (ESIGELEC). Twist
+> JavaScript: substituir os formulários crus de insert/update/delete por um
+> mini front-office (lista de países + formulário `fetch()` para CRUD).
+>
+> LAB5 do ESIGELEC ("Subject treated in slides", opcional) fica de fora do
+> calendário fixo.

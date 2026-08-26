@@ -1,0 +1,18 @@
+---
+title: "Web Services REST (Parte 2) e o Cliente em JavaScript"
+author: "João Pavão"
+date: 2026-08-26
+lang: pt-PT
+---
+
+## JWT, Escalabilidade e o Consumo da API em JavaScript {#sec-08-jwt-js}
+
+> Conteúdo a desenvolver, alinhado com a segunda metade da Lecture 4 do
+> ESIGELEC + o "twist" de JavaScript próprio da UTAD. Tópicos previstos:
+>
+> - Limitações de sessões em sistemas distribuídos
+> - Cabeçalho Authorization
+> - JWT (header, payload, assinatura)
+> - Escalabilidade horizontal
+> - fetch() e JSON do lado do cliente
+> - O DOM como "View" do browser
