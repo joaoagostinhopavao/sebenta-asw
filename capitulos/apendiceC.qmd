@@ -43,6 +43,8 @@ Esta estrutura não é exigida pelo *browser*: um ficheiro `.html` isolado, aber
 
 ## `index.html`: Listagem de Países {#sec-apC-index}
 
+A página seguinte tem uma barra de navegação no topo e uma tabela com países. O Bootstrap é carregado por CDN.
+
 ```html
 <!DOCTYPE html>
 <html lang="pt">

@@ -270,128 +270,13 @@ Todas as páginas partilham a mesma barra de navegação:
 </nav>
 ```
 
-### Listagem de Países (`index.html`)
+A partir desta *navbar* comum, constroem-se quatro páginas:
 
-Uma tabela *Bootstrap*, com alguns países fixos no HTML, a título de exemplo. Nos LABs, esta tabela passa a ser preenchida dinamicamente a partir do resultado de `/country`.
-
-```html
-<main class="container my-4">
-  <h1 class="display-6">Países</h1>
-  <table class="table table-striped">
-    <thead>
-      <tr><th>Código</th><th>País</th><th>Capital</th></tr>
-    </thead>
-    <tbody>
-      <tr><td>PT</td><td>Portugal</td><td>Lisboa</td></tr>
-      <tr><td>FR</td><td>França</td><td>Paris</td></tr>
-      <tr><td>EN</td><td>Reino Unido</td><td>Londres</td></tr>
-    </tbody>
-  </table>
-</main>
-```
-
-### Autenticação (`login.html`)
-
-Um formulário com os campos `user` e `pass`, com os mesmos nomes que o *endpoint* `/login` espera receber:
-
-```html
-<main class="container my-4">
-  <h1 class="display-6">Entrar</h1>
-  <form class="row g-3 col-lg-6" method="POST" action="/login">
-    <div class="col-12">
-      <label for="user" class="form-label">Utilizador</label>
-      <input id="user" name="user" type="text" class="form-control">
-    </div>
-    <div class="col-12">
-      <label for="pass" class="form-label">Palavra-passe</label>
-      <input id="pass" name="pass" type="password" class="form-control">
-    </div>
-    <div class="col-12">
-      <button class="btn btn-primary" type="submit">Entrar</button>
-    </div>
-  </form>
-</main>
-```
-
-### Consulta de Capital (`capital.html`)
-
-Um formulário simples, com um único campo `countrycode`, alinhado com o exemplo já apresentado no [Capítulo 1](cap01.qmd):
-
-```html
-<main class="container my-4">
-  <h1 class="display-6">Consultar Capital</h1>
-  <form class="row g-3 col-lg-6" method="GET" action="/capital">
-    <div class="col-12">
-      <label for="countrycode" class="form-label">Código do país</label>
-      <input id="countrycode" name="countrycode" type="text" maxlength="2" class="form-control">
-    </div>
-    <div class="col-12">
-      <button class="btn btn-primary" type="submit">Consultar</button>
-    </div>
-  </form>
-</main>
-```
-
-### Gestão de Países (`paises-editar.html`)
-
-Três formulários distintos, um por operação, todos a apontar para o mesmo *endpoint* `/countryEdit`, distinguidos pelo campo escondido `operation` (ver a nota sobre este desenho no [Capítulo 6](cap06.qmd)):
-
-```html
-<main class="container my-4">
-  <h1 class="display-6">Gerir Países</h1>
-
-  <h2 class="h5 mt-4">Inserir país</h2>
-  <form class="row g-3 col-lg-6" method="POST" action="/countryEdit">
-    <input type="hidden" name="operation" value="insert">
-    <div class="col-12">
-      <label for="code-i" class="form-label">Código</label>
-      <input id="code-i" name="code" type="text" maxlength="2" required class="form-control">
-    </div>
-    <div class="col-12">
-      <label for="name-i" class="form-label">Nome</label>
-      <input id="name-i" name="name" type="text" required class="form-control">
-    </div>
-    <div class="col-12">
-      <label for="capital-i" class="form-label">Capital</label>
-      <input id="capital-i" name="capital" type="text" required class="form-control">
-    </div>
-    <div class="col-12">
-      <button class="btn btn-success" type="submit">Inserir</button>
-    </div>
-  </form>
-
-  <h2 class="h5 mt-4">Atualizar país</h2>
-  <form class="row g-3 col-lg-6" method="POST" action="/countryEdit">
-    <input type="hidden" name="operation" value="update">
-    <div class="col-12">
-      <label for="code-u" class="form-label">Código</label>
-      <input id="code-u" name="code" type="text" maxlength="2" required class="form-control">
-    </div>
-    <div class="col-12">
-      <label for="name-u" class="form-label">Nome</label>
-      <input id="name-u" name="name" type="text" required class="form-control">
-    </div>
-    <div class="col-12">
-      <label for="capital-u" class="form-label">Capital</label>
-      <input id="capital-u" name="capital" type="text" required class="form-control">
-    </div>
-    <div class="col-12">
-      <button class="btn btn-warning" type="submit">Atualizar</button>
-    </div>
-  </form>
-
-  <h2 class="h5 mt-4">Remover país</h2>
-  <form class="row g-3 col-lg-6" method="POST" action="/countryEdit">
-    <input type="hidden" name="operation" value="delete">
-    <div class="col-12">
-      <label for="code-d" class="form-label">Código</label>
-      <input id="code-d" name="code" type="text" maxlength="2" required class="form-control">
-    </div>
-    <div class="col-12">
-      <button class="btn btn-danger" type="submit">Remover</button>
-    </div>
-  </form>
-</main>
-```
+- **Listagem de países** (`index.html`): uma tabela *Bootstrap*, com alguns países fixos no HTML a título de exemplo. Nos LABs, esta tabela passa a ser preenchida dinamicamente a partir do resultado de `/country`.
+- **Autenticação** (`login.html`): um formulário com os campos `user` e `pass`, com os mesmos nomes que o *endpoint* `/login` espera receber.
+- **Consulta de capital** (`capital.html`): um formulário simples, com um único campo `countrycode`, alinhado com o exemplo já apresentado no [Capítulo 1](cap01.qmd).
+- **Gestão de países** (`paises-editar.html`): três formulários distintos, um por operação, todos a apontar para o mesmo *endpoint* `/countryEdit`, distinguidos pelo campo escondido `operation` (ver a nota sobre este desenho no [Capítulo 6](cap06.qmd)).
 
 Estas quatro páginas, ligadas entre si pela barra de navegação comum, constituem já um pequeno sítio Web completo e funcional, mesmo sem qualquer lógica do lado do servidor: é possível navegar entre elas, preencher os formulários e submetê-los. O que falta, ainda, é haver um servidor a responder a esses pedidos, e é isso que a matéria dos capítulos seguintes vai fornecer.
+
+O código completo e autónomo das quatro páginas, pronto a copiar para um editor e a abrir diretamente no *browser*, está reunido no [Apêndice C](apendiceC.qmd).

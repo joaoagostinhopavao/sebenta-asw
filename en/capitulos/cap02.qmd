@@ -261,128 +261,13 @@ All pages share the same navigation bar:
 </nav>
 ```
 
-### Country Listing (`index.html`)
+Building on this shared navbar, four pages are put together:
 
-A Bootstrap table, with a few countries fixed in the HTML, as an example. In the LABs, this table is dynamically filled in from the result of `/country`.
-
-```html
-<main class="container my-4">
-  <h1 class="display-6">Countries</h1>
-  <table class="table table-striped">
-    <thead>
-      <tr><th>Code</th><th>Country</th><th>Capital</th></tr>
-    </thead>
-    <tbody>
-      <tr><td>PT</td><td>Portugal</td><td>Lisbon</td></tr>
-      <tr><td>FR</td><td>France</td><td>Paris</td></tr>
-      <tr><td>EN</td><td>United Kingdom</td><td>London</td></tr>
-    </tbody>
-  </table>
-</main>
-```
-
-### Authentication (`login.html`)
-
-A form with the fields `user` and `pass`, using the same names the `/login` endpoint expects to receive:
-
-```html
-<main class="container my-4">
-  <h1 class="display-6">Log In</h1>
-  <form class="row g-3 col-lg-6" method="POST" action="/login">
-    <div class="col-12">
-      <label for="user" class="form-label">Username</label>
-      <input id="user" name="user" type="text" class="form-control">
-    </div>
-    <div class="col-12">
-      <label for="pass" class="form-label">Password</label>
-      <input id="pass" name="pass" type="password" class="form-control">
-    </div>
-    <div class="col-12">
-      <button class="btn btn-primary" type="submit">Log in</button>
-    </div>
-  </form>
-</main>
-```
-
-### Capital Look-up (`capital.html`)
-
-A simple form, with a single `countrycode` field, matching the example already shown in [Chapter 1](cap01.qmd):
-
-```html
-<main class="container my-4">
-  <h1 class="display-6">Look Up Capital</h1>
-  <form class="row g-3 col-lg-6" method="GET" action="/capital">
-    <div class="col-12">
-      <label for="countrycode" class="form-label">Country code</label>
-      <input id="countrycode" name="countrycode" type="text" maxlength="2" class="form-control">
-    </div>
-    <div class="col-12">
-      <button class="btn btn-primary" type="submit">Look up</button>
-    </div>
-  </form>
-</main>
-```
-
-### Managing Countries (`countries-edit.html`)
-
-Three separate forms, one per operation, all pointing to the same `/countryEdit` endpoint, distinguished by the hidden `operation` field (see the note on this design in [Chapter 6](cap06.qmd)):
-
-```html
-<main class="container my-4">
-  <h1 class="display-6">Manage Countries</h1>
-
-  <h2 class="h5 mt-4">Insert country</h2>
-  <form class="row g-3 col-lg-6" method="POST" action="/countryEdit">
-    <input type="hidden" name="operation" value="insert">
-    <div class="col-12">
-      <label for="code-i" class="form-label">Code</label>
-      <input id="code-i" name="code" type="text" maxlength="2" required class="form-control">
-    </div>
-    <div class="col-12">
-      <label for="name-i" class="form-label">Name</label>
-      <input id="name-i" name="name" type="text" required class="form-control">
-    </div>
-    <div class="col-12">
-      <label for="capital-i" class="form-label">Capital</label>
-      <input id="capital-i" name="capital" type="text" required class="form-control">
-    </div>
-    <div class="col-12">
-      <button class="btn btn-success" type="submit">Insert</button>
-    </div>
-  </form>
-
-  <h2 class="h5 mt-4">Update country</h2>
-  <form class="row g-3 col-lg-6" method="POST" action="/countryEdit">
-    <input type="hidden" name="operation" value="update">
-    <div class="col-12">
-      <label for="code-u" class="form-label">Code</label>
-      <input id="code-u" name="code" type="text" maxlength="2" required class="form-control">
-    </div>
-    <div class="col-12">
-      <label for="name-u" class="form-label">Name</label>
-      <input id="name-u" name="name" type="text" required class="form-control">
-    </div>
-    <div class="col-12">
-      <label for="capital-u" class="form-label">Capital</label>
-      <input id="capital-u" name="capital" type="text" required class="form-control">
-    </div>
-    <div class="col-12">
-      <button class="btn btn-warning" type="submit">Update</button>
-    </div>
-  </form>
-
-  <h2 class="h5 mt-4">Delete country</h2>
-  <form class="row g-3 col-lg-6" method="POST" action="/countryEdit">
-    <input type="hidden" name="operation" value="delete">
-    <div class="col-12">
-      <label for="code-d" class="form-label">Code</label>
-      <input id="code-d" name="code" type="text" maxlength="2" required class="form-control">
-    </div>
-    <div class="col-12">
-      <button class="btn btn-danger" type="submit">Delete</button>
-    </div>
-  </form>
-</main>
-```
+- **Country listing** (`index.html`): a Bootstrap table, with a few countries fixed in the HTML as an example. In the LABs, this table is dynamically filled in from the result of `/country`.
+- **Authentication** (`login.html`): a form with the fields `user` and `pass`, using the same names the `/login` endpoint expects to receive.
+- **Capital look-up** (`capital.html`): a simple form, with a single `countrycode` field, matching the example already shown in [Chapter 1](cap01.qmd).
+- **Managing countries** (`countries-edit.html`): three separate forms, one per operation, all pointing to the same `/countryEdit` endpoint, distinguished by the hidden `operation` field (see the note on this design in [Chapter 6](cap06.qmd)).
 
 These four pages, linked together by the shared navigation bar, already form a small but complete and functional Web site, even without any server-side logic: it is possible to navigate between them, fill in the forms and submit them. What is still missing is a server to answer these requests, and that is what the following chapters provide.
+
+The complete, standalone code for all four pages, ready to copy into an editor and open directly in the browser, is available in the Portuguese edition's Appendix C (`apendiceC.qmd`), which does not yet have an English counterpart.
