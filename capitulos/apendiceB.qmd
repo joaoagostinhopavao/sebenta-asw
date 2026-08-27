@@ -16,8 +16,10 @@ trabalho prático.
 As páginas visuais desta mesma aplicação (listagem de países, login,
 consulta de capital, formulários de CRUD) já foram construídas em
 HTML/CSS/Bootstrap no [Capítulo 2](cap02.qmd), com os nomes de
-campos alinhados com os da API. Nos LABs, o trabalho é essencialmente
-acrescentar o `fetch()` necessário a esse código já existente.
+campos alinhados com os da API, e estão disponíveis como ficheiros
+completos e prontos a copiar no [Apêndice C](apendiceC.qmd). Nos LABs, o
+trabalho é essencialmente acrescentar o `fetch()` necessário a esse código
+já existente.
 
 ## LAB1: Primeiro Endpoint e DAO Simulado {#sec-apB-lab1}
 

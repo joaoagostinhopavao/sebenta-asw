@@ -1,0 +1,278 @@
+---
+title: "Código Completo: Páginas Estáticas \"World Capitals\""
+author: "João Pavão"
+date: 2026-08-26
+lang: pt-PT
+---
+
+## Introdução {#sec-apC-intro}
+
+Este apêndice reúne, em ficheiros completos e autónomos, o código apresentado por partes no [Capítulo 2](cap02.qmd). Cada bloco abaixo é um ficheiro `.html` independente, pronto a copiar para um editor (VSCode ou WebStorm) e a abrir diretamente no *browser*, sem qualquer instalação ou configuração de servidor: o *Bootstrap* é carregado por *CDN*, e os dados apresentados estão fixos no próprio HTML.
+
+Este código serve dois propósitos:
+
+- Em aula, como demonstração imediata: copiar, abrir no *browser*, e ter desde logo um pequeno sítio Web funcional a navegar
+- Nos LABs práticos ([Apêndice B](apendiceB.qmd)), como *boilerplate*: o ponto de partida ao qual se acrescenta o JavaScript necessário para consumir a API REST, sem reescrever HTML de raiz
+
+Os quatro ficheiros partilham a mesma barra de navegação e devem ser guardados na mesma pasta, para que as ligações entre eles funcionem: `index.html`, `login.html`, `capital.html` e `paises-editar.html`.
+
+## Estrutura Inicial do Projeto {#sec-apC-estrutura}
+
+Antes de copiar o código, cria-se a estrutura de pastas que vai acompanhar o projeto ao longo de toda a UC, dos ficheiros estáticos deste apêndice até ao *front-office* em JavaScript que os LABs práticos lhe vão acrescentar:
+
+1. Criar uma pasta de projeto (por exemplo, `world-capitals/`)
+2. Dentro dela, colocar os quatro ficheiros `.html` deste apêndice
+3. Criar três subpastas, ainda vazias: `css/`, `js/` e `assets/`
+
+```
+world-capitals/
+├── index.html
+├── login.html
+├── capital.html
+├── paises-editar.html
+├── css/
+├── js/
+└── assets/
+```
+
+- `css/`: guarda folhas de estilo ligadas às páginas `html`. Pode também conter ajustes ao *Bootstrap* carregado por *CDN*, por exemplo um `custom.css` com ajustes visuais específicos desta aplicação. Um só ficheiro  de estilos pode ser usado para todas as páginas, ou cada página pode ter o seu.
+- `js/`: para guardar os ficheiros *javascript*. Fica vazia por agora; é aqui que, nos LABs práticos, vai entrar o código `fetch()` que liga estas páginas à API REST
+- `assets/`: imagens, ícones ou outros ficheiros estáticos de que a aplicação venha a precisar
+
+Esta estrutura não é exigida pelo *browser*: um ficheiro `.html` isolado, aberto diretamente, já funciona, como se pode confirmar nas secções seguintes. É, no entanto, a organização que qualquer projeto Web real acaba por adotar, e vale a pena te-lo em consideração desde já.
+
+## `index.html`: Listagem de Países {#sec-apC-index}
+
+```html
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>World Capitals</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar navbar-expand-md bg-light border-bottom">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">World Capitals</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav1">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="nav1" class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto gap-2">
+          <li class="nav-item"><a class="nav-link active" href="index.html">Países</a></li>
+          <li class="nav-item"><a class="nav-link" href="capital.html">Consultar Capital</a></li>
+          <li class="nav-item"><a class="nav-link" href="paises-editar.html">Gerir Países</a></li>
+          <li class="nav-item"><a class="nav-link" href="login.html">Entrar</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container my-4">
+    <h1 class="display-6">Países</h1>
+    <table class="table table-striped">
+      <thead>
+        <tr><th>Código</th><th>País</th><th>Capital</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>PT</td><td>Portugal</td><td>Lisboa</td></tr>
+        <tr><td>FR</td><td>França</td><td>Paris</td></tr>
+        <tr><td>EN</td><td>Reino Unido</td><td>Londres</td></tr>
+      </tbody>
+    </table>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+```
+
+## `login.html`: Autenticação {#sec-apC-login}
+
+```html
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>World Capitals — Entrar</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar navbar-expand-md bg-light border-bottom">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">World Capitals</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav1">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="nav1" class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto gap-2">
+          <li class="nav-item"><a class="nav-link" href="index.html">Países</a></li>
+          <li class="nav-item"><a class="nav-link" href="capital.html">Consultar Capital</a></li>
+          <li class="nav-item"><a class="nav-link" href="paises-editar.html">Gerir Países</a></li>
+          <li class="nav-item"><a class="nav-link active" href="login.html">Entrar</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container my-4">
+    <h1 class="display-6">Entrar</h1>
+    <form class="row g-3 col-lg-6" method="POST" action="/login">
+      <div class="col-12">
+        <label for="user" class="form-label">Utilizador</label>
+        <input id="user" name="user" type="text" class="form-control">
+      </div>
+      <div class="col-12">
+        <label for="pass" class="form-label">Palavra-passe</label>
+        <input id="pass" name="pass" type="password" class="form-control">
+      </div>
+      <div class="col-12">
+        <button class="btn btn-primary" type="submit">Entrar</button>
+      </div>
+    </form>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+```
+
+## `capital.html`: Consulta de Capital {#sec-apC-capital}
+
+```html
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>World Capitals — Consultar Capital</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar navbar-expand-md bg-light border-bottom">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">World Capitals</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav1">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="nav1" class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto gap-2">
+          <li class="nav-item"><a class="nav-link" href="index.html">Países</a></li>
+          <li class="nav-item"><a class="nav-link active" href="capital.html">Consultar Capital</a></li>
+          <li class="nav-item"><a class="nav-link" href="paises-editar.html">Gerir Países</a></li>
+          <li class="nav-item"><a class="nav-link" href="login.html">Entrar</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container my-4">
+    <h1 class="display-6">Consultar Capital</h1>
+    <form class="row g-3 col-lg-6" method="GET" action="/capital">
+      <div class="col-12">
+        <label for="countrycode" class="form-label">Código do país</label>
+        <input id="countrycode" name="countrycode" type="text" maxlength="2" class="form-control">
+      </div>
+      <div class="col-12">
+        <button class="btn btn-primary" type="submit">Consultar</button>
+      </div>
+    </form>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+```
+
+## `paises-editar.html`: Gestão de Países {#sec-apC-paises-editar}
+
+```html
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>World Capitals — Gerir Países</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar navbar-expand-md bg-light border-bottom">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">World Capitals</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav1">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="nav1" class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto gap-2">
+          <li class="nav-item"><a class="nav-link" href="index.html">Países</a></li>
+          <li class="nav-item"><a class="nav-link" href="capital.html">Consultar Capital</a></li>
+          <li class="nav-item"><a class="nav-link active" href="paises-editar.html">Gerir Países</a></li>
+          <li class="nav-item"><a class="nav-link" href="login.html">Entrar</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container my-4">
+    <h1 class="display-6">Gerir Países</h1>
+
+    <h2 class="h5 mt-4">Inserir país</h2>
+    <form class="row g-3 col-lg-6" method="POST" action="/countryEdit">
+      <input type="hidden" name="operation" value="insert">
+      <div class="col-12">
+        <label for="code-i" class="form-label">Código</label>
+        <input id="code-i" name="code" type="text" maxlength="2" required class="form-control">
+      </div>
+      <div class="col-12">
+        <label for="name-i" class="form-label">Nome</label>
+        <input id="name-i" name="name" type="text" required class="form-control">
+      </div>
+      <div class="col-12">
+        <label for="capital-i" class="form-label">Capital</label>
+        <input id="capital-i" name="capital" type="text" required class="form-control">
+      </div>
+      <div class="col-12">
+        <button class="btn btn-success" type="submit">Inserir</button>
+      </div>
+    </form>
+
+    <h2 class="h5 mt-4">Atualizar país</h2>
+    <form class="row g-3 col-lg-6" method="POST" action="/countryEdit">
+      <input type="hidden" name="operation" value="update">
+      <div class="col-12">
+        <label for="code-u" class="form-label">Código</label>
+        <input id="code-u" name="code" type="text" maxlength="2" required class="form-control">
+      </div>
+      <div class="col-12">
+        <label for="name-u" class="form-label">Nome</label>
+        <input id="name-u" name="name" type="text" required class="form-control">
+      </div>
+      <div class="col-12">
+        <label for="capital-u" class="form-label">Capital</label>
+        <input id="capital-u" name="capital" type="text" required class="form-control">
+      </div>
+      <div class="col-12">
+        <button class="btn btn-warning" type="submit">Atualizar</button>
+      </div>
+    </form>
+
+    <h2 class="h5 mt-4">Remover país</h2>
+    <form class="row g-3 col-lg-6" method="POST" action="/countryEdit">
+      <input type="hidden" name="operation" value="delete">
+      <div class="col-12">
+        <label for="code-d" class="form-label">Código</label>
+        <input id="code-d" name="code" type="text" maxlength="2" required class="form-control">
+      </div>
+      <div class="col-12">
+        <button class="btn btn-danger" type="submit">Remover</button>
+      </div>
+    </form>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+```

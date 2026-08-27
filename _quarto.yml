@@ -39,6 +39,7 @@ book:
   appendices:
     - capitulos/apendiceA.qmd
     - capitulos/apendiceB.qmd
+    - capitulos/apendiceC.qmd
 
   sidebar:
     search: true

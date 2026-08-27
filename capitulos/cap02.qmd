@@ -5,24 +5,393 @@ date: 2026-08-26
 lang: pt-PT
 ---
 
-## Estrutura HTML e Apresentação com CSS {#sec-02-html-css}
+## Estrutura HTML {#sec-02-html-css}
 
-> Conteúdo a desenvolver. Tópicos previstos:
->
-> - Estrutura HTML5
-> - Seletores e box model CSS
-> - Grid / Flexbox
-> - Componentes Bootstrap (navbar, form, grid)
+Um documento HTML mínimo tem sempre a mesma forma: uma declaração de tipo de documento, seguida de um elemento `html`, dividido num `head` (metadados, não visíveis) e num `body` (o conteúdo visível):
 
-## Exercício: as páginas estáticas da aplicação "World Capitals" {#sec-02-world-capitals}
+```html
+<!DOCTYPE html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8">
+    <title>A Minha Página</title>
+  </head>
+  <body>
+    <h1>Bem-vindo</h1>
+    <p>Primeira versão da página.</p>
+  </body>
+</html>
+```
 
-> Conteúdo a desenvolver. Tópicos previstos:
->
-> - Construção, em HTML/CSS/Bootstrap puro (sem JavaScript), das páginas
->   visuais da aplicação usada nos LABs práticos (ver [Apêndice
->   B](apendiceB.qmd)): listagem de países, formulário de login, formulário
->   de consulta de capital por código de país, e formulários de
->   inserir/editar/remover país
-> - Nomes de campos alinhados desde já com os que a API REST vai esperar
->   (`code`, `name`, `capital`, `user`, `pass`), para que mais tarde baste
->   ligar estes formulários aos endpoints com `fetch()`, sem reescrever HTML
+Para além dos elementos genéricos como `div`, o HTML5 oferece elementos semânticos, que descrevem o papel de cada zona da página em vez de a tratarem como um bloco indiferenciado: `header` para o cabeçalho, `nav` para a navegação, `main` para o conteúdo principal, `section` para uma secção temática e `footer` para o rodapé.
+
+```html
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Página de Exemplo</title>
+</head>
+<body>
+  <header>
+    <h1>Título do Site</h1>
+    <!-- outros elementos no header-->
+  </header>
+  <nav><!-- menu aqui --></nav>
+  <main>
+    <section>
+      <h2>Introdução</h2>
+      <p>Conteúdo inicial.</p>
+    </section>
+    <section>
+      <h2>Outra secção</h2>
+      <p>Podem colocar-se quantas secções se quiser.</p>
+    </section>
+  </main>
+  <footer>© 2026</footer>
+</body>
+</html>
+```
+
+Dois elementos usam-se com particular frequência numa aplicação Web: uma lista de ligações dentro de `nav`, para a navegação, e um `form`, para recolher dados de quem usa a página.
+
+```html
+<nav>
+  <ul>
+    <li><a href="#home">Início</a></li>
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+</nav>
+```
+
+```html
+<section>
+  <h2>Formulário de contacto</h2>
+  <form>
+    <label for="nome">Nome</label>
+    <input id="nome" name="nome" type="text">
+    <label for="email">Email</label>
+    <input id="email" name="email" type="email">
+    <button type="submit">Enviar</button>
+  </form>
+</section>
+```
+
+Note-se o atributo `for` de cada `label`, que corresponde ao `id` do respetivo `input`: é o que liga visualmente uma etiqueta ao seu campo, e o que permite a um leitor de ecrã anunciar corretamente o formulário.
+
+## CSS: Três Formas de Aplicar Estilos {#sec-02-css-formas}
+
+O HTML mínimo apresentado acima descreve apenas a estrutura da página; a apresentação visual é responsabilidade do CSS (*Cascading Style Sheets*), que pode ser associado ao HTML de três formas distintas.
+
+**Inline**, diretamente no atributo `style` de um elemento:
+
+```html
+<h1 style="color:#0d6efd; margin:0.5rem 0;">Título do Site</h1>
+```
+
+**Interno**, num bloco `<style>` dentro do `<head>`:
+
+```html
+<head>
+  <meta charset="UTF-8">
+  <style>
+    :root { --brand:#0d6efd; }
+    body { font-family: system-ui, sans-serif; line-height:1.5; }
+    nav ul { list-style:none; display:flex; gap:1rem; padding:0; }
+    nav a { text-decoration:none; padding:0.4rem 0.6rem; }
+    nav a:hover { background:var(--brand); }
+  </style>
+</head>
+```
+
+**Externo**, num ficheiro `.css` à parte, ligado por `<link>`:
+
+```html
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="styles.css">
+</head>
+```
+
+```css
+/* styles.css */
+:root { --brand:#0d6efd; }
+body { font-family: system-ui, sans-serif; line-height:1.5; }
+nav ul { list-style:none; display:flex; gap:1rem; padding:0; }
+nav a { text-decoration:none; padding:0.4rem 0.6rem; }
+nav a:hover { background: var(--brand); }
+```
+
+Das três, o CSS externo é, em geral, a melhor prática: separa claramente a estrutura (HTML) da apresentação (CSS), permite reutilizar o mesmo ficheiro em várias páginas, e mantém cada documento mais curto e mais fácil de ler.
+
+## Classes, IDs e Especificidade {#sec-02-css-classes-especificidade}
+
+Para aplicar estilos a grupos de elementos, o CSS usa dois seletores principais: a classe (`class`), que se pode repetir em vários elementos, e o identificador (`id`), que deve ser único na página.
+
+```html
+<h1 id="titulo" class="titulo">Título do Site</h1>
+<nav class="menu">
+  <ul>
+    <li><a class="menu__link ativo" href="#home">Início</a></li>
+    <li><a class="menu__link" href="#sobre">Sobre</a></li>
+    <li><a class="menu__link" href="#contacto">Contacto</a></li>
+  </ul>
+</nav>
+```
+
+```css
+#titulo { color: var(--brand); }              /* id: único por página */
+.menu { border-block: 1px solid #eee; padding: 0.75rem 0; }
+.menu__link { text-decoration: none; padding: 0.4rem 0.6rem; }
+.menu__link.ativo { font-weight: 600; }
+```
+
+Quando duas regras CSS entram em conflito sobre o mesmo elemento, quem vence é determinado pela sua especificidade, por ordem decrescente:
+
+1. `!important` (a evitar; torna o CSS difícil de manter)
+2. Estilo *inline* (`style="..."`)
+3. Identificador (`#id`)
+4. Classe (`.classe`), atributo ou pseudoclasse
+5. Elemento (`h1`, `p`, `a`, ...)
+
+```css
+h1 { color: black; }
+.titulo { color: blue; }
+#titulo { color: green; }  /* vence as duas regras anteriores */
+```
+
+## Bootstrap: um Framework CSS {#sec-02-bootstrap}
+
+Escrever e manter todo o CSS de uma aplicação a partir do zero é um trabalho considerável, sobretudo quando se pretende que o resultado seja responsivo (ajustado a diferentes tamanhos de ecrã) e visualmente consistente. Um *framework* CSS como o *Bootstrap* resolve este problema, fornecendo:
+
+- Produtividade e consistência visual, através de classes utilitárias prontas a usar
+- Responsividade já implementada, através de uma grelha (*grid*) e de classes de espaçamento
+- Componentes testados e acessíveis (formulários, barras de navegação, botões, entre outros)
+
+O *Bootstrap* pode ser incluído diretamente por *CDN* (*Content Delivery Network*), sem necessidade de instalação: uma folha de estilos no `<head>`, e um ficheiro JavaScript (para os componentes interativos) antes do fecho de `</body>`.
+
+```html
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <!-- conteúdo da página -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+```
+
+Uma barra de navegação (*navbar*), com o *Bootstrap*, fica pronta em poucas linhas, já responsiva (colapsa num menu para ecrãs estreitos):
+
+```html
+<nav class="navbar navbar-expand-md bg-light border-bottom">
+  <div class="container">
+    <a class="navbar-brand" href="#">Meu Site</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav1">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div id="nav1" class="collapse navbar-collapse">
+      <ul class="navbar-nav ms-auto gap-2">
+        <li class="nav-item"><a class="nav-link" href="#home">Início</a></li>
+        <li class="nav-item"><a class="nav-link" href="#sobre">Sobre</a></li>
+        <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+```
+
+Um formulário ganha o mesmo tratamento visual através das classes `form-label` e `form-control`:
+
+```html
+<section class="container my-4">
+  <h2>Formulário de contacto</h2>
+  <form class="row g-3 col-lg-6">
+    <div class="col-12">
+      <label for="nome" class="form-label">Nome</label>
+      <input id="nome" name="nome" type="text" class="form-control">
+    </div>
+    <div class="col-12">
+      <label for="email" class="form-label">Email</label>
+      <input id="email" name="email" type="email" class="form-control">
+    </div>
+    <div class="col-12">
+      <button class="btn btn-primary" type="submit">Enviar</button>
+    </div>
+  </form>
+</section>
+```
+
+E o mesmo sistema de grelha organiza o conteúdo principal em colunas, que se reorganizam automaticamente consoante a largura do ecrã (`col-12` a largura total em ecrãs pequenos, `col-md-8` oito das doze colunas a partir de ecrãs médios):
+
+```html
+<main class="container my-4">
+  <div class="row">
+    <div class="col-12 col-md-8">
+      <p>Conteúdo principal…</p>
+    </div>
+    <aside class="col-12 col-md-4">
+      <p>Barra lateral…</p>
+    </aside>
+  </div>
+</main>
+```
+
+## Boas Práticas {#sec-02-boas-praticas}
+
+- Preferir CSS externo; evitar `!important` e o excesso de estilos *inline*
+- Usar uma nomenclatura consistente para classes (por exemplo, a convenção *BEM*: `bloco__elemento--modificador`)
+- Pensar em acessibilidade desde o início: contraste de cores, `label` associado a cada `input`, ordem lógica de navegação por teclado
+- Testar sempre a responsividade da página, em diferentes larguras de ecrã
+
+## Exercício: as Páginas Estáticas da Aplicação "World Capitals" {#sec-02-world-capitals}
+
+Aplicando o que foi apresentado nas secções anteriores, constroem-se agora as páginas visuais da aplicação usada ao longo dos LABs práticos (ver [Apêndice B](apendiceB.qmd)): uma API que serve informação sobre países e as respetivas capitais. Nesta fase, as páginas são inteiramente estáticas, em HTML/CSS/Bootstrap, sem qualquer JavaScript: os dados apresentados são fixos no próprio HTML, e os formulários ainda não estão ligados a nenhum servidor. É esse o trabalho reservado aos LABs, que se limitarão a acrescentar `fetch()` a este código já pronto.
+
+Todas as páginas partilham a mesma barra de navegação:
+
+```html
+<nav class="navbar navbar-expand-md bg-light border-bottom">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">World Capitals</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav1">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div id="nav1" class="collapse navbar-collapse">
+      <ul class="navbar-nav ms-auto gap-2">
+        <li class="nav-item"><a class="nav-link" href="index.html">Países</a></li>
+        <li class="nav-item"><a class="nav-link" href="capital.html">Consultar Capital</a></li>
+        <li class="nav-item"><a class="nav-link" href="paises-editar.html">Gerir Países</a></li>
+        <li class="nav-item"><a class="nav-link" href="login.html">Entrar</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+```
+
+### Listagem de Países (`index.html`)
+
+Uma tabela *Bootstrap*, com alguns países fixos no HTML, a título de exemplo. Nos LABs, esta tabela passa a ser preenchida dinamicamente a partir do resultado de `/country`.
+
+```html
+<main class="container my-4">
+  <h1 class="display-6">Países</h1>
+  <table class="table table-striped">
+    <thead>
+      <tr><th>Código</th><th>País</th><th>Capital</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>PT</td><td>Portugal</td><td>Lisboa</td></tr>
+      <tr><td>FR</td><td>França</td><td>Paris</td></tr>
+      <tr><td>EN</td><td>Reino Unido</td><td>Londres</td></tr>
+    </tbody>
+  </table>
+</main>
+```
+
+### Autenticação (`login.html`)
+
+Um formulário com os campos `user` e `pass`, com os mesmos nomes que o *endpoint* `/login` espera receber:
+
+```html
+<main class="container my-4">
+  <h1 class="display-6">Entrar</h1>
+  <form class="row g-3 col-lg-6" method="POST" action="/login">
+    <div class="col-12">
+      <label for="user" class="form-label">Utilizador</label>
+      <input id="user" name="user" type="text" class="form-control">
+    </div>
+    <div class="col-12">
+      <label for="pass" class="form-label">Palavra-passe</label>
+      <input id="pass" name="pass" type="password" class="form-control">
+    </div>
+    <div class="col-12">
+      <button class="btn btn-primary" type="submit">Entrar</button>
+    </div>
+  </form>
+</main>
+```
+
+### Consulta de Capital (`capital.html`)
+
+Um formulário simples, com um único campo `countrycode`, alinhado com o exemplo já apresentado no [Capítulo 1](cap01.qmd):
+
+```html
+<main class="container my-4">
+  <h1 class="display-6">Consultar Capital</h1>
+  <form class="row g-3 col-lg-6" method="GET" action="/capital">
+    <div class="col-12">
+      <label for="countrycode" class="form-label">Código do país</label>
+      <input id="countrycode" name="countrycode" type="text" maxlength="2" class="form-control">
+    </div>
+    <div class="col-12">
+      <button class="btn btn-primary" type="submit">Consultar</button>
+    </div>
+  </form>
+</main>
+```
+
+### Gestão de Países (`paises-editar.html`)
+
+Três formulários distintos, um por operação, todos a apontar para o mesmo *endpoint* `/countryEdit`, distinguidos pelo campo escondido `operation` (ver a nota sobre este desenho no [Capítulo 6](cap06.qmd)):
+
+```html
+<main class="container my-4">
+  <h1 class="display-6">Gerir Países</h1>
+
+  <h2 class="h5 mt-4">Inserir país</h2>
+  <form class="row g-3 col-lg-6" method="POST" action="/countryEdit">
+    <input type="hidden" name="operation" value="insert">
+    <div class="col-12">
+      <label for="code-i" class="form-label">Código</label>
+      <input id="code-i" name="code" type="text" maxlength="2" required class="form-control">
+    </div>
+    <div class="col-12">
+      <label for="name-i" class="form-label">Nome</label>
+      <input id="name-i" name="name" type="text" required class="form-control">
+    </div>
+    <div class="col-12">
+      <label for="capital-i" class="form-label">Capital</label>
+      <input id="capital-i" name="capital" type="text" required class="form-control">
+    </div>
+    <div class="col-12">
+      <button class="btn btn-success" type="submit">Inserir</button>
+    </div>
+  </form>
+
+  <h2 class="h5 mt-4">Atualizar país</h2>
+  <form class="row g-3 col-lg-6" method="POST" action="/countryEdit">
+    <input type="hidden" name="operation" value="update">
+    <div class="col-12">
+      <label for="code-u" class="form-label">Código</label>
+      <input id="code-u" name="code" type="text" maxlength="2" required class="form-control">
+    </div>
+    <div class="col-12">
+      <label for="name-u" class="form-label">Nome</label>
+      <input id="name-u" name="name" type="text" required class="form-control">
+    </div>
+    <div class="col-12">
+      <label for="capital-u" class="form-label">Capital</label>
+      <input id="capital-u" name="capital" type="text" required class="form-control">
+    </div>
+    <div class="col-12">
+      <button class="btn btn-warning" type="submit">Atualizar</button>
+    </div>
+  </form>
+
+  <h2 class="h5 mt-4">Remover país</h2>
+  <form class="row g-3 col-lg-6" method="POST" action="/countryEdit">
+    <input type="hidden" name="operation" value="delete">
+    <div class="col-12">
+      <label for="code-d" class="form-label">Código</label>
+      <input id="code-d" name="code" type="text" maxlength="2" required class="form-control">
+    </div>
+    <div class="col-12">
+      <button class="btn btn-danger" type="submit">Remover</button>
+    </div>
+  </form>
+</main>
+```
+
+Estas quatro páginas, ligadas entre si pela barra de navegação comum, constituem já um pequeno sítio Web completo e funcional, mesmo sem qualquer lógica do lado do servidor: é possível navegar entre elas, preencher os formulários e submetê-los. O que falta, ainda, é haver um servidor a responder a esses pedidos, e é isso que a matéria dos capítulos seguintes vai fornecer.

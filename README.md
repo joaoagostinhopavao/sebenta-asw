@@ -18,7 +18,8 @@ Sebenta-ASW/
 │   ├── cap06.qmd         # Web Services REST e Arquitetura Stateless (Parte 1)
 │   ├── cap07.qmd         # Web Services REST (Parte 2) e o Cliente em JavaScript
 │   ├── apendiceA.qmd     # Configuração do Ambiente de Desenvolvimento
-│   └── apendiceB.qmd     # LABs Práticos (mesmos do ESIGELEC, com twist de JS)
+│   ├── apendiceB.qmd     # LABs Práticos (mesmos do ESIGELEC, com twist de JS)
+│   └── apendiceC.qmd     # Código completo "World Capitals" (4 .html prontos a copiar)
 ├── assets/
 │   ├── css/custom.css    # Estilos personalizados (paleta azul-petróleo)
 │   ├── images/           # Imagens e figuras (heroes/, capa/Web/, capa/PDF/ — por preencher)
