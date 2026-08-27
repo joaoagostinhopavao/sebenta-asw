@@ -15,3 +15,11 @@ lang: en-GB
 > - JSON as a data interchange format
 > - The HTTP contract as the API contract
 > - Stateful vs. Stateless
+
+::: {.callout-note}
+## `POST` + `operation` as an Alternative to "Pure" HTTP Verbs
+
+This course's practical LABs (LAB4) implement creating, updating and removing a country through a single endpoint (`/countryEdit`), always received via `POST`, distinguishing the intended operation through an `operation` parameter (`insert`, `update`, `delete`). This runs against the "pure" HTTP verb semantics presented in [Chapter 1](cap01.qmd) (`POST` to create, `PUT` to update, `DELETE` to remove), but it is a pragmatic simplification, common in teaching code: it avoids configuring additional Servlets mapped to `PUT`/`DELETE`, and keeps everything testable with plain HTML forms, with no need for JavaScript.
+
+This is left as a possible future implementation exercise for more advanced students: rewrite `/countryEdit` as three separate endpoints, one per HTTP verb (for instance, `PUT /country/{code}` to update and `DELETE /country/{code}` to remove), bringing the API closer to a more conventional REST design.
+:::

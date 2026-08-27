@@ -216,6 +216,20 @@ ul.task-list li input[type="checkbox"] {
 <li>Stateful vs.&nbsp;Stateless</li>
 </ul>
 </blockquote>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<code>POST</code> + <code>operation</code> as an Alternative to “Pure” HTTP Verbs
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This course’s practical LABs (LAB4) implement creating, updating and removing a country through a single endpoint (<code>/countryEdit</code>), always received via <code>POST</code>, distinguishing the intended operation through an <code>operation</code> parameter (<code>insert</code>, <code>update</code>, <code>delete</code>). This runs against the “pure” HTTP verb semantics presented in <a href="../capitulos/cap01.html">Chapter 1</a> (<code>POST</code> to create, <code>PUT</code> to update, <code>DELETE</code> to remove), but it is a pragmatic simplification, common in teaching code: it avoids configuring additional Servlets mapped to <code>PUT</code>/<code>DELETE</code>, and keeps everything testable with plain HTML forms, with no need for JavaScript.</p>
+<p>This is left as a possible future implementation exercise for more advanced students: rewrite <code>/countryEdit</code> as three separate endpoints, one per HTTP verb (for instance, <code>PUT /country/{code}</code> to update and <code>DELETE /country/{code}</code> to remove), bringing the API closer to a more conventional REST design.</p>
+</div>
+</div>
 
 
 </section>

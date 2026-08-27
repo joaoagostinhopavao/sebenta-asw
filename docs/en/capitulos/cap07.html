@@ -178,6 +178,7 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#sec-07-jwt-js-en" id="toc-sec-07-jwt-js-en" class="nav-link active" data-scroll-target="#sec-07-jwt-js-en"><span class="header-section-number">7.1</span> JWT, Scalability and Consuming the API in JavaScript</a></li>
+  <li><a href="#sec-07-distributed-mvc-en" id="toc-sec-07-distributed-mvc-en" class="nav-link" data-scroll-target="#sec-07-distributed-mvc-en"><span class="header-section-number">7.2</span> Distributed MVC: the Pattern Splits Across Server and Client</a></li>
   </ul>
 </nav>
     </div>
@@ -216,6 +217,13 @@ ul.task-list li input[type="checkbox"] {
 <li>The DOM as the browser’s “View”</li>
 </ul>
 </blockquote>
+</section>
+<section id="sec-07-distributed-mvc-en" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="sec-07-distributed-mvc-en"><span class="header-section-number">7.2</span> Distributed MVC: the Pattern Splits Across Server and Client</h2>
+<p>In a presentation-oriented application, the MVC pattern (see <a href="../capitulos/cap01.html">Chapter 1</a>) lives entirely on the server side: one component acts as Controller, and another, responsible for generating HTML, as View. In a REST API, that organisation stops making sense: the server no longer generates HTML, and the View, as defined in classic MVC, disappears from the server side.</p>
+<p>On the server side, only the Model (data access) and the Controller (the endpoint that receives the HTTP request and returns JSON) remain. The role of View moves entirely to the client: it is the JavaScript code, running in the browser, that interprets the received JSON and manipulates the DOM to present it to whoever is using the application.</p>
+<p>This split can be read as a second application of the same pattern, now on the client side: the JavaScript that handles the response and updates the page acts, itself, as both Controller (deciding what to do with the received response) and View (generating the HTML shown); the JSON returned by the API is the Model, kept on the server and synchronised on every <code>fetch()</code> request.</p>
+<p>This is why a JavaScript front-office connected to a REST API is not an alternative to MVC, but rather the same pattern distributed across two machines instead of one.</p>
 
 
 </section>

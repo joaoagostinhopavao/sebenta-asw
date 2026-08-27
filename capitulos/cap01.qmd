@@ -49,6 +49,21 @@ Dentro da camada Web, uma aplicação pode seguir duas orientações distintas, 
 
 Esta distinção corresponde, em larga medida, à separação entre *front-end* (a parte da aplicação que interage diretamente com quem a usa) e *back-end* (a parte que processa a lógica e os dados). Uma aplicação orientada à apresentação tende a confundir estas duas responsabilidades num único componente do lado do servidor; uma aplicação orientada a serviço separa-as claramente, deixando o *front-end* inteiramente a cargo do cliente.
 
+## O Padrão MVC {#sec-01-mvc}
+
+Organizar todo o código de uma aplicação num único bloco indiferenciado rapidamente se torna insustentável: o código que processa o pedido, o que acede aos dados e o que gera a resposta acabam misturados, difíceis de testar e de alterar em separado. O padrão *Model-View-Controller* (MVC) resolve este problema, dividindo a aplicação em três responsabilidades distintas:
+
+**Model** (Modelo)
+: Representa os dados e a lógica de negócio da aplicação, independentemente de como são apresentados. Numa aplicação Web, o Model é tipicamente responsável por aceder à base de dados e devolver a informação já validada.
+
+**View** (Vista)
+: Responsável por apresentar os dados a quem os pede, sem conter lógica de negócio. Numa aplicação orientada à apresentação, a View gera HTML; numa aplicação orientada a serviço, não existe, de facto, View do lado do servidor: a resposta é apenas dados estruturados (JSON), e é o cliente que decide como os apresentar.
+
+**Controller** (Controlador)
+: Recebe o pedido, decide que operação realizar sobre o Model, e escolhe a View (ou o formato de resposta) a devolver. É o Controller que faz a ponte entre o pedido HTTP recebido e a lógica da aplicação.
+
+Esta separação de responsabilidades é um dos princípios de desenho mais recorrentes de toda esta matéria. Manifesta-se de forma clássica quando um componente do lado do servidor funciona como Controller e delega a apresentação a outro, que funciona como View; e manifesta-se de forma bem menos óbvia quando a View deixa de existir do lado do servidor e passa a ser reconstruída no *browser*, a partir de dados JSON.
+
 ## O Modelo Cliente-Servidor {#sec-01-cliente-servidor}
 
 Toda esta comunicação, seja ela orientada à apresentação ou a serviço, assenta no modelo cliente-servidor: um cliente (tipicamente um *browser*) envia um pedido através da rede, e um servidor processa esse pedido e devolve uma resposta.
@@ -98,7 +113,7 @@ Considere-se um formulário HTML simples, usado para consultar a capital de um p
 
 Ao ser submetido com o valor `PT`, o *browser* gera o seguinte pedido HTTP:
 
-```
+```bash
 GET /capital?countrycode=PT HTTP/1.1
 Host: localhost:8080
 ```
@@ -107,12 +122,39 @@ Note-se que, por se tratar de um método `GET`, o parâmetro `countrycode` é en
 
 O servidor, ao processar este pedido, devolve uma resposta HTTP como a seguinte:
 
-```
+```bash
 HTTP/1.1 200 OK
 Content-Type: application/json
 
 {"country": "Portugal", "capital": "Lisboa", "ccode": "PT"}
 ```
+
+### Exemplo: um Pedido `POST` com Corpo
+
+Considere-se agora um formulário de autenticação, com os campos `user` e `pass`:
+
+```html
+<form method="POST" action="/login">
+  <label for="user">Utilizador</label>
+  <input type="text" id="user" name="user">
+  <label for="pass">Palavra-passe</label>
+  <input type="password" id="pass" name="pass">
+  <button type="submit">Entrar</button>
+</form>
+```
+
+Ao ser submetido, este formulário gera o seguinte pedido HTTP:
+
+```bash
+POST /login HTTP/1.1
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 21
+
+user=javaee&pass=esigelec2026
+```
+
+Ao contrário do exemplo anterior, os parâmetros já não vão na *URL*: seguem no corpo do pedido, depois de uma linha em branco que separa os cabeçalhos do corpo. É por isso que credenciais e outros dados sensíveis se enviam tipicamente por `POST`, nunca por `GET`: o corpo de um pedido não fica registado nos históricos de navegação nem nos ficheiros de registo (*logs*) do servidor, ao contrário do que acontece com os parâmetros de uma *URL*.
 
 ## HTTP em Detalhe: Códigos de Estado {#sec-01-http-codigos-estado}
 
@@ -131,6 +173,7 @@ Dentro destas categorias, alguns códigos surgem com particular frequência no d
 | Código | Significado |
 |---|---|
 | `200 OK` | O pedido foi processado com sucesso |
+| `201 Created` | Um novo recurso foi criado com sucesso |
 | `400 Bad Request` | O pedido está malformado ou falta um parâmetro obrigatório |
 | `403 Forbidden` | O cliente não tem permissão para aceder ao recurso |
 | `404 Not Found` | O recurso pedido não existe |

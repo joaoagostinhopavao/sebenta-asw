@@ -246,6 +246,20 @@ ul.task-list li input[type="checkbox"] {
 <li>Stateful vs.&nbsp;Stateless</li>
 </ul>
 </blockquote>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<code>POST</code> + <code>operation</code> como alternativa aos verbos HTTP “puros”
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Os LABs práticos desta UC (ver <a href="../capitulos/apendiceB.html">Apêndice B</a>, LAB4) implementam a criação, atualização e remoção de um país através de um único <em>endpoint</em> (<code>/countryEdit</code>), recebido sempre por <code>POST</code>, distinguindo a operação pretendida através de um parâmetro <code>operation</code> (<code>insert</code>, <code>update</code>, <code>delete</code>). Isto contraria a semântica “pura” dos verbos HTTP apresentada no <a href="../capitulos/cap01.html">Capítulo 1</a> (<code>POST</code> para criar, <code>PUT</code> para atualizar, <code>DELETE</code> para remover), mas é uma simplificação pragmática, comum em código de formação: evita configurar <em>Servlets</em> adicionais mapeados a <code>PUT</code>/<code>DELETE</code>, e mantém tudo testável com formulários HTML simples, sem recorrer a JavaScript.</p>
+<p>Fica como sugestão de implementação futura, possível para os alunos mais avançados: reescrever <code>/countryEdit</code> como três <em>endpoints</em> distintos, um por verbo HTTP (por exemplo, <code>PUT /country/{code}</code> para atualizar e <code>DELETE /country/{code}</code> para remover), aproximando a API de um desenho REST mais convencional.</p>
+</div>
+</div>
 
 
 </section>

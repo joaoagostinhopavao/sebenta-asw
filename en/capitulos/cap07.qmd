@@ -14,3 +14,13 @@ lang: en-GB
 > - Horizontal scalability
 > - fetch() and client-side JSON
 > - The DOM as the browser's "View"
+
+## Distributed MVC: the Pattern Splits Across Server and Client {#sec-07-distributed-mvc-en}
+
+In a presentation-oriented application, the MVC pattern (see [Chapter 1](cap01.qmd)) lives entirely on the server side: one component acts as Controller, and another, responsible for generating HTML, as View. In a REST API, that organisation stops making sense: the server no longer generates HTML, and the View, as defined in classic MVC, disappears from the server side.
+
+On the server side, only the Model (data access) and the Controller (the endpoint that receives the HTTP request and returns JSON) remain. The role of View moves entirely to the client: it is the JavaScript code, running in the browser, that interprets the received JSON and manipulates the DOM to present it to whoever is using the application.
+
+This split can be read as a second application of the same pattern, now on the client side: the JavaScript that handles the response and updates the page acts, itself, as both Controller (deciding what to do with the received response) and View (generating the HTML shown); the JSON returned by the API is the Model, kept on the server and synchronised on every `fetch()` request.
+
+This is why a JavaScript front-office connected to a REST API is not an alternative to MVC, but rather the same pattern distributed across two machines instead of one.

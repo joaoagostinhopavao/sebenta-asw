@@ -16,3 +16,13 @@ lang: pt-PT
 > - Escalabilidade horizontal
 > - fetch() e JSON do lado do cliente
 > - O DOM como "View" do browser
+
+## MVC Distribuído: o Padrão Divide-se entre Servidor e Cliente {#sec-07-mvc-distribuido}
+
+Numa aplicação orientada à apresentação, o padrão MVC (ver [Capítulo 1](cap01.qmd)) vive inteiramente do lado do servidor: um componente funciona como Controller, e outro, responsável por gerar HTML, como View. Numa API REST, essa organização deixa de fazer sentido: o servidor já não gera HTML, e a View, tal como definida no MVC clássico, desaparece do lado do servidor.
+
+Do lado do servidor ficam apenas o Model (o acesso aos dados) e o Controller (o *endpoint* que recebe o pedido HTTP e devolve JSON). O papel de View passa integralmente para o cliente: é o código JavaScript, a correr no *browser*, que interpreta o JSON recebido e manipula o *DOM* para o apresentar a quem usa a aplicação.
+
+Esta divisão pode ler-se como uma segunda aplicação do mesmo padrão, agora do lado do cliente: o JavaScript que trata a resposta e atualiza a página funciona, ele próprio, como Controller (decide o que fazer com a resposta recebida) e como View (gera o HTML mostrado); o JSON devolvido pela API é o Model, mantido no servidor e sincronizado a cada pedido `fetch()`.
+
+É esta a razão pela qual um *front-office* em JavaScript ligado a uma API REST não é uma alternativa ao MVC, mas sim o mesmo padrão distribuído por duas máquinas em vez de uma.

@@ -215,13 +215,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#sec-01-jakarta-ee-en" id="toc-sec-01-jakarta-ee-en" class="nav-link" data-scroll-target="#sec-01-jakarta-ee-en"><span class="header-section-number">1.2</span> The Jakarta EE Platform</a></li>
   <li><a href="#sec-01-layered-architecture-en" id="toc-sec-01-layered-architecture-en" class="nav-link" data-scroll-target="#sec-01-layered-architecture-en"><span class="header-section-number">1.3</span> Layered Architecture</a></li>
   <li><a href="#sec-01-frontend-backend-en" id="toc-sec-01-frontend-backend-en" class="nav-link" data-scroll-target="#sec-01-frontend-backend-en"><span class="header-section-number">1.4</span> Web Tier Applications: Presentation vs.&nbsp;Service</a></li>
-  <li><a href="#sec-01-client-server-en" id="toc-sec-01-client-server-en" class="nav-link" data-scroll-target="#sec-01-client-server-en"><span class="header-section-number">1.5</span> The Client-Server Model</a></li>
-  <li><a href="#sec-01-http-methods-en" id="toc-sec-01-http-methods-en" class="nav-link" data-scroll-target="#sec-01-http-methods-en"><span class="header-section-number">1.6</span> HTTP in Detail: Methods</a></li>
-  <li><a href="#sec-01-http-message-format-en" id="toc-sec-01-http-message-format-en" class="nav-link" data-scroll-target="#sec-01-http-message-format-en"><span class="header-section-number">1.7</span> HTTP in Detail: Message Format</a>
+  <li><a href="#sec-01-mvc-en" id="toc-sec-01-mvc-en" class="nav-link" data-scroll-target="#sec-01-mvc-en"><span class="header-section-number">1.5</span> The MVC Pattern</a></li>
+  <li><a href="#sec-01-client-server-en" id="toc-sec-01-client-server-en" class="nav-link" data-scroll-target="#sec-01-client-server-en"><span class="header-section-number">1.6</span> The Client-Server Model</a></li>
+  <li><a href="#sec-01-http-methods-en" id="toc-sec-01-http-methods-en" class="nav-link" data-scroll-target="#sec-01-http-methods-en"><span class="header-section-number">1.7</span> HTTP in Detail: Methods</a></li>
+  <li><a href="#sec-01-http-message-format-en" id="toc-sec-01-http-message-format-en" class="nav-link" data-scroll-target="#sec-01-http-message-format-en"><span class="header-section-number">1.8</span> HTTP in Detail: Message Format</a>
   <ul class="collapse">
-  <li><a href="#example-from-a-form-to-an-http-request" id="toc-example-from-a-form-to-an-http-request" class="nav-link" data-scroll-target="#example-from-a-form-to-an-http-request"><span class="header-section-number">1.7.1</span> Example: From a Form to an HTTP Request</a></li>
+  <li><a href="#example-from-a-form-to-an-http-request" id="toc-example-from-a-form-to-an-http-request" class="nav-link" data-scroll-target="#example-from-a-form-to-an-http-request"><span class="header-section-number">1.8.1</span> Example: From a Form to an HTTP Request</a></li>
+  <li><a href="#example-a-post-request-with-a-body" id="toc-example-a-post-request-with-a-body" class="nav-link" data-scroll-target="#example-a-post-request-with-a-body"><span class="header-section-number">1.8.2</span> Example: a <code>POST</code> Request with a Body</a></li>
   </ul></li>
-  <li><a href="#sec-01-http-status-codes-en" id="toc-sec-01-http-status-codes-en" class="nav-link" data-scroll-target="#sec-01-http-status-codes-en"><span class="header-section-number">1.8</span> HTTP in Detail: Status Codes</a></li>
+  <li><a href="#sec-01-http-status-codes-en" id="toc-sec-01-http-status-codes-en" class="nav-link" data-scroll-target="#sec-01-http-status-codes-en"><span class="header-section-number">1.9</span> HTTP in Detail: Status Codes</a></li>
   </ul>
 </nav>
     </div>
@@ -321,8 +323,27 @@ Implements the endpoint of a Web service, typically returning structured data in
 </dl>
 <p>This distinction largely maps onto the split between front-end (the part of the application that interacts directly with whoever uses it) and back-end (the part that processes logic and data). A presentation-oriented application tends to blend these two responsibilities into a single server-side component; a service-oriented application separates them clearly, leaving the front-end entirely up to the client.</p>
 </section>
-<section id="sec-01-client-server-en" class="level2" data-number="1.5">
-<h2 data-number="1.5" class="anchored" data-anchor-id="sec-01-client-server-en"><span class="header-section-number">1.5</span> The Client-Server Model</h2>
+<section id="sec-01-mvc-en" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="sec-01-mvc-en"><span class="header-section-number">1.5</span> The MVC Pattern</h2>
+<p>Organising all of an application’s code as a single undifferentiated block quickly becomes unmanageable: the code that processes the request, the code that accesses data, and the code that generates the response end up tangled together, hard to test or change independently. The Model-View-Controller (MVC) pattern solves this by splitting the application into three distinct responsibilities:</p>
+<dl>
+<dt><strong>Model</strong></dt>
+<dd>
+Represents the application’s data and business logic, independently of how it is presented. In a Web application, the Model is typically responsible for accessing the database and returning already-validated information.
+</dd>
+<dt><strong>View</strong></dt>
+<dd>
+Responsible for presenting the data to whoever requests it, without containing business logic. In a presentation-oriented application, the View generates HTML; in a service-oriented application, there is, in fact, no server-side View at all: the response is just structured data (JSON), and it is the client that decides how to present it.
+</dd>
+<dt><strong>Controller</strong></dt>
+<dd>
+Receives the request, decides which operation to perform on the Model, and chooses the View (or response format) to return. The Controller is what bridges the incoming HTTP request and the application’s logic.
+</dd>
+</dl>
+<p>This separation of responsibilities is one of the most recurring design principles throughout this subject. It shows up in its classic form when a server-side component acts as Controller and delegates presentation to another, which acts as View; and it shows up in a far less obvious form when the View stops existing on the server side and is instead rebuilt in the browser, from JSON data.</p>
+</section>
+<section id="sec-01-client-server-en" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="sec-01-client-server-en"><span class="header-section-number">1.6</span> The Client-Server Model</h2>
 <p>All of this communication, whether presentation-oriented or service-oriented, rests on the client-server model: a client (typically a browser) sends a request over the network, and a server processes that request and returns a response.</p>
 <p>This exchange takes place through the HTTP protocol (HyperText Transfer Protocol), which has two fundamental characteristics:</p>
 <ul>
@@ -331,8 +352,8 @@ Implements the endpoint of a Web service, typically returning structured data in
 </ul>
 <p>The absence of state at the protocol level does not prevent an application from needing to retain information across requests, for instance to know that a user is authenticated. That need is addressed at the application level, not the protocol level, through mechanisms such as sessions and cookies.</p>
 </section>
-<section id="sec-01-http-methods-en" class="level2" data-number="1.6">
-<h2 data-number="1.6" class="anchored" data-anchor-id="sec-01-http-methods-en"><span class="header-section-number">1.6</span> HTTP in Detail: Methods</h2>
+<section id="sec-01-http-methods-en" class="level2" data-number="1.7">
+<h2 data-number="1.7" class="anchored" data-anchor-id="sec-01-http-methods-en"><span class="header-section-number">1.7</span> HTTP in Detail: Methods</h2>
 <p>Every HTTP request indicates, through a method, the operation it intends to perform on a resource:</p>
 <table class="caption-top table">
 <thead>
@@ -366,8 +387,8 @@ Implements the endpoint of a Web service, typically returning structured data in
 </table>
 <p>These five methods cover the vast majority of operations performed by a Web application; the first two (<code>GET</code> and <code>POST</code>) are by far the most common in traditional HTML forms, while <code>PUT</code> and <code>DELETE</code> become more important in resource-oriented services.</p>
 </section>
-<section id="sec-01-http-message-format-en" class="level2" data-number="1.7">
-<h2 data-number="1.7" class="anchored" data-anchor-id="sec-01-http-message-format-en"><span class="header-section-number">1.7</span> HTTP in Detail: Message Format</h2>
+<section id="sec-01-http-message-format-en" class="level2" data-number="1.8">
+<h2 data-number="1.8" class="anchored" data-anchor-id="sec-01-http-message-format-en"><span class="header-section-number">1.8</span> HTTP in Detail: Message Format</h2>
 <p>Both a request and a response follow the same general structure:</p>
 <ol type="1">
 <li>A first line, differing between a request (method, URL and HTTP version) and a response (HTTP version, status code and reason)</li>
@@ -375,8 +396,8 @@ Implements the endpoint of a Web service, typically returning structured data in
 <li>An optional body, holding the actual data</li>
 </ol>
 <p>A <code>GET</code> request typically has no body: all the data it carries goes in the URL itself, as parameters. A <code>POST</code> request carries its data in the message body, outside the URL.</p>
-<section id="example-from-a-form-to-an-http-request" class="level3" data-number="1.7.1">
-<h3 data-number="1.7.1" class="anchored" data-anchor-id="example-from-a-form-to-an-http-request"><span class="header-section-number">1.7.1</span> Example: From a Form to an HTTP Request</h3>
+<section id="example-from-a-form-to-an-http-request" class="level3" data-number="1.8.1">
+<h3 data-number="1.8.1" class="anchored" data-anchor-id="example-from-a-form-to-an-http-request"><span class="header-section-number">1.8.1</span> Example: From a Form to an HTTP Request</h3>
 <p>Consider a simple HTML form used to look up a country’s capital from its code:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1"></a><span class="dt">&lt;</span><span class="kw">form</span><span class="ot"> method</span><span class="op">=</span><span class="st">"GET"</span><span class="ot"> action</span><span class="op">=</span><span class="st">"/capital"</span><span class="dt">&gt;</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a>  <span class="dt">&lt;</span><span class="kw">label</span><span class="ot"> for</span><span class="op">=</span><span class="st">"countrycode"</span><span class="dt">&gt;</span>Country code<span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
@@ -393,9 +414,28 @@ Content-Type: application/json
 
 {"country": "Portugal", "capital": "Lisboa", "ccode": "PT"}</code></pre>
 </section>
+<section id="example-a-post-request-with-a-body" class="level3" data-number="1.8.2">
+<h3 data-number="1.8.2" class="anchored" data-anchor-id="example-a-post-request-with-a-body"><span class="header-section-number">1.8.2</span> Example: a <code>POST</code> Request with a Body</h3>
+<p>Consider now a login form, with the fields <code>user</code> and <code>pass</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb4-1"><a href="#cb4-1"></a><span class="dt">&lt;</span><span class="kw">form</span><span class="ot"> method</span><span class="op">=</span><span class="st">"POST"</span><span class="ot"> action</span><span class="op">=</span><span class="st">"/login"</span><span class="dt">&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>  <span class="dt">&lt;</span><span class="kw">label</span><span class="ot"> for</span><span class="op">=</span><span class="st">"user"</span><span class="dt">&gt;</span>Username<span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>  <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"text"</span><span class="ot"> id</span><span class="op">=</span><span class="st">"user"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"user"</span><span class="dt">&gt;</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a>  <span class="dt">&lt;</span><span class="kw">label</span><span class="ot"> for</span><span class="op">=</span><span class="st">"pass"</span><span class="dt">&gt;</span>Password<span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a>  <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"password"</span><span class="ot"> id</span><span class="op">=</span><span class="st">"pass"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"pass"</span><span class="dt">&gt;</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a>  <span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> type</span><span class="op">=</span><span class="st">"submit"</span><span class="dt">&gt;</span>Log in<span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="dt">&lt;/</span><span class="kw">form</span><span class="dt">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>When submitted, this form generates the following HTTP request:</p>
+<pre><code>POST /login HTTP/1.1
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 21
+
+user=javaee&amp;pass=esigelec2026</code></pre>
+<p>Unlike the previous example, the parameters no longer travel in the URL: they follow in the request body, after a blank line separating the headers from the body. This is why credentials and other sensitive data are typically sent via <code>POST</code>, never <code>GET</code>: a request body is not recorded in browser history or in the server’s logs, unlike URL parameters.</p>
 </section>
-<section id="sec-01-http-status-codes-en" class="level2" data-number="1.8">
-<h2 data-number="1.8" class="anchored" data-anchor-id="sec-01-http-status-codes-en"><span class="header-section-number">1.8</span> HTTP in Detail: Status Codes</h2>
+</section>
+<section id="sec-01-http-status-codes-en" class="level2" data-number="1.9">
+<h2 data-number="1.9" class="anchored" data-anchor-id="sec-01-http-status-codes-en"><span class="header-section-number">1.9</span> HTTP in Detail: Status Codes</h2>
 <p>Every HTTP response includes a numeric status code, briefly indicating the outcome of the request. Codes are grouped into five categories, based on the leading digit:</p>
 <table class="caption-top table">
 <thead>
@@ -445,18 +485,22 @@ Content-Type: application/json
 <td>The request was processed successfully</td>
 </tr>
 <tr class="even">
+<td><code>201 Created</code></td>
+<td>A new resource was successfully created</td>
+</tr>
+<tr class="odd">
 <td><code>400 Bad Request</code></td>
 <td>The request is malformed, or a required parameter is missing</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>403 Forbidden</code></td>
 <td>The client lacks permission to access the resource</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>404 Not Found</code></td>
 <td>The requested resource does not exist</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>500 Internal Server Error</code></td>
 <td>An unhandled error occurred on the server side</td>
 </tr>

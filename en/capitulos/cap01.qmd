@@ -47,6 +47,21 @@ Within the Web tier, an application can follow two distinct orientations, depend
 
 This distinction largely maps onto the split between front-end (the part of the application that interacts directly with whoever uses it) and back-end (the part that processes logic and data). A presentation-oriented application tends to blend these two responsibilities into a single server-side component; a service-oriented application separates them clearly, leaving the front-end entirely up to the client.
 
+## The MVC Pattern {#sec-01-mvc-en}
+
+Organising all of an application's code as a single undifferentiated block quickly becomes unmanageable: the code that processes the request, the code that accesses data, and the code that generates the response end up tangled together, hard to test or change independently. The Model-View-Controller (MVC) pattern solves this by splitting the application into three distinct responsibilities:
+
+**Model**
+: Represents the application's data and business logic, independently of how it is presented. In a Web application, the Model is typically responsible for accessing the database and returning already-validated information.
+
+**View**
+: Responsible for presenting the data to whoever requests it, without containing business logic. In a presentation-oriented application, the View generates HTML; in a service-oriented application, there is, in fact, no server-side View at all: the response is just structured data (JSON), and it is the client that decides how to present it.
+
+**Controller**
+: Receives the request, decides which operation to perform on the Model, and chooses the View (or response format) to return. The Controller is what bridges the incoming HTTP request and the application's logic.
+
+This separation of responsibilities is one of the most recurring design principles throughout this subject. It shows up in its classic form when a server-side component acts as Controller and delegates presentation to another, which acts as View; and it shows up in a far less obvious form when the View stops existing on the server side and is instead rebuilt in the browser, from JSON data.
+
 ## The Client-Server Model {#sec-01-client-server-en}
 
 All of this communication, whether presentation-oriented or service-oriented, rests on the client-server model: a client (typically a browser) sends a request over the network, and a server processes that request and returns a response.
@@ -112,6 +127,33 @@ Content-Type: application/json
 {"country": "Portugal", "capital": "Lisboa", "ccode": "PT"}
 ```
 
+### Example: a `POST` Request with a Body
+
+Consider now a login form, with the fields `user` and `pass`:
+
+```html
+<form method="POST" action="/login">
+  <label for="user">Username</label>
+  <input type="text" id="user" name="user">
+  <label for="pass">Password</label>
+  <input type="password" id="pass" name="pass">
+  <button type="submit">Log in</button>
+</form>
+```
+
+When submitted, this form generates the following HTTP request:
+
+```
+POST /login HTTP/1.1
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 21
+
+user=javaee&pass=esigelec2026
+```
+
+Unlike the previous example, the parameters no longer travel in the URL: they follow in the request body, after a blank line separating the headers from the body. This is why credentials and other sensitive data are typically sent via `POST`, never `GET`: a request body is not recorded in browser history or in the server's logs, unlike URL parameters.
+
 ## HTTP in Detail: Status Codes {#sec-01-http-status-codes-en}
 
 Every HTTP response includes a numeric status code, briefly indicating the outcome of the request. Codes are grouped into five categories, based on the leading digit:
@@ -129,6 +171,7 @@ Within these categories, a handful of codes come up particularly often when buil
 | Code | Meaning |
 |---|---|
 | `200 OK` | The request was processed successfully |
+| `201 Created` | A new resource was successfully created |
 | `400 Bad Request` | The request is malformed, or a required parameter is missing |
 | `403 Forbidden` | The client lacks permission to access the resource |
 | `404 Not Found` | The requested resource does not exist |
