@@ -8,7 +8,7 @@
 
 <meta name="author" content="João Pavão">
 
-<title>3&nbsp; O Protocolo HTTP – Aplicações e Serviços Web</title>
+<title>3&nbsp; Java EE e Fundamentos de Servlets – Aplicações e Serviços Web</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -86,7 +86,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../capitulos/cap03.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">O Protocolo HTTP</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../capitulos/cap03.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Java EE e Fundamentos de Servlets</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Procurar" onclick="window.quartoOpenSearch();">
@@ -123,7 +123,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap01.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Apresentação da UC e Arquitetura de Aplicações Web</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Arquitetura de Aplicações Web</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -135,37 +135,31 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap03.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">O Protocolo HTTP</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Java EE e Fundamentos de Servlets</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap04.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Java EE e Fundamentos de Servlets</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelo Stateful: Sessões e JSP</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap05.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Modelo Stateful: Sessões e JSP</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Segurança e Filters</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap06.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Segurança e Filters</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Web Services REST e Arquitetura Stateless (Parte 1)</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap07.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Web Services REST e Arquitetura Stateless (Parte 1)</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../capitulos/cap08.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Web Services REST (Parte 2) e o Cliente em JavaScript</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Web Services REST (Parte 2) e o Cliente em JavaScript</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -201,7 +195,7 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Índice</h2>
    
   <ul>
-  <li><a href="#sec-03-http" id="toc-sec-03-http" class="nav-link active" data-scroll-target="#sec-03-http"><span class="header-section-number">3.1</span> Pedidos, Respostas e Códigos de Estado</a></li>
+  <li><a href="#sec-03-servlets" id="toc-sec-03-servlets" class="nav-link active" data-scroll-target="#sec-03-servlets"><span class="header-section-number">3.1</span> O Web Container e o Primeiro Servlet</a></li>
   </ul>
 </nav>
     </div>
@@ -210,7 +204,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">O Protocolo HTTP</span></h1>
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Java EE e Fundamentos de Servlets</span></h1>
 </div>
 
 
@@ -239,16 +233,18 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="sec-03-http" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="sec-03-http"><span class="header-section-number">3.1</span> Pedidos, Respostas e Códigos de Estado</h2>
+<section id="sec-03-servlets" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="sec-03-servlets"><span class="header-section-number">3.1</span> O Web Container e o Primeiro Servlet</h2>
 <blockquote class="blockquote">
-<p>Conteúdo a desenvolver. Tópicos previstos:</p>
+<p>Conteúdo a desenvolver, alinhado com a Lecture 1 do ESIGELEC (Java EE and Servlet Fundamentals). Tópicos previstos:</p>
 <ul>
-<li>Estrutura do pedido/resposta HTTP</li>
-<li>Métodos GET / POST</li>
-<li>Cabeçalhos HTTP</li>
-<li>Códigos de estado (2xx / 3xx / 4xx / 5xx)</li>
-<li>Stateless (introdução, retomado nos Caps. 5 e 7)</li>
+<li>Jakarta EE / Java EE</li>
+<li>Web Container (Tomcat)</li>
+<li>Ciclo de vida de um Servlet</li>
+<li>HttpServletRequest / HttpServletResponse</li>
+<li>doGet() e doPost()</li>
+<li>Parâmetros HTTP, Content-Type</li>
+<li>Geração manual de JSON</li>
 </ul>
 </blockquote>
 
@@ -824,8 +820,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../capitulos/cap04.html" class="pagination-link" aria-label="Java EE e Fundamentos de Servlets">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Java EE e Fundamentos de Servlets</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../capitulos/cap04.html" class="pagination-link" aria-label="Modelo Stateful: Sessões e JSP">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelo Stateful: Sessões e JSP</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

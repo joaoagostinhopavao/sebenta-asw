@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>7&nbsp; REST Web Services and Stateless Architecture (Part 1) – Web Applications and Services</title>
+<title>7&nbsp; REST Web Services (Part 2) and the JavaScript Client – Web Applications and Services</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,7 +30,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../capitulos/cap08.html" rel="next">
+<link href="../references.html" rel="next">
 <link href="../capitulos/cap06.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -85,7 +85,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../capitulos/cap07.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">REST Web Services and Stateless Architecture (Part 1)</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../capitulos/cap07.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">REST Web Services (Part 2) and the JavaScript Client</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -122,7 +122,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap01.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Course Introduction and Web Application Architecture</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Web Application Architecture</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -134,37 +134,31 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap03.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The HTTP Protocol</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Java EE and Servlet Fundamentals</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap04.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Java EE and Servlet Fundamentals</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Stateful Model: Sessions and JSP</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap05.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Stateful Model: Sessions and JSP</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Security and Filters</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap06.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Security and Filters</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">REST Web Services and Stateless Architecture (Part 1)</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap07.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">REST Web Services and Stateless Architecture (Part 1)</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../capitulos/cap08.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">REST Web Services (Part 2) and the JavaScript Client</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">REST Web Services (Part 2) and the JavaScript Client</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -183,7 +177,7 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#sec-07-rest-en" id="toc-sec-07-rest-en" class="nav-link active" data-scroll-target="#sec-07-rest-en"><span class="header-section-number">7.1</span> What is a Web Service</a></li>
+  <li><a href="#sec-07-jwt-js-en" id="toc-sec-07-jwt-js-en" class="nav-link active" data-scroll-target="#sec-07-jwt-js-en"><span class="header-section-number">7.1</span> JWT, Scalability and Consuming the API in JavaScript</a></li>
   </ul>
 </nav>
     </div>
@@ -192,7 +186,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">REST Web Services and Stateless Architecture (Part 1)</span></h1>
+<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">REST Web Services (Part 2) and the JavaScript Client</span></h1>
 </div>
 
 
@@ -209,17 +203,17 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="sec-07-rest-en" class="level2" data-number="7.1">
-<h2 data-number="7.1" class="anchored" data-anchor-id="sec-07-rest-en"><span class="header-section-number">7.1</span> What is a Web Service</h2>
+<section id="sec-07-jwt-js-en" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="sec-07-jwt-js-en"><span class="header-section-number">7.1</span> JWT, Scalability and Consuming the API in JavaScript</h2>
 <blockquote class="blockquote">
-<p>Content to be developed, aligned with the first half of ESIGELEC’s Lecture 4 (REST Web Services and Stateless Architecture). Planned topics:</p>
+<p>Content to be developed, aligned with the second half of ESIGELEC’s Lecture 4 + UTAD’s own JavaScript “twist”. Planned topics:</p>
 <ul>
-<li>What is a Web Service</li>
-<li>REST (conceptual level)</li>
-<li>Resources and endpoints</li>
-<li>JSON as a data interchange format</li>
-<li>The HTTP contract as the API contract</li>
-<li>Stateful vs.&nbsp;Stateless</li>
+<li>Session limitations in distributed systems</li>
+<li>Authorization header</li>
+<li>JWT (header, payload, signature)</li>
+<li>Horizontal scalability</li>
+<li>fetch() and client-side JSON</li>
+<li>The DOM as the browser’s “View”</li>
 </ul>
 </blockquote>
 
@@ -790,13 +784,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../capitulos/cap06.html" class="pagination-link" aria-label="Security and Filters">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Security and Filters</span></span>
+      <a href="../capitulos/cap06.html" class="pagination-link" aria-label="REST Web Services and Stateless Architecture (Part 1)">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">REST Web Services and Stateless Architecture (Part 1)</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../capitulos/cap08.html" class="pagination-link" aria-label="REST Web Services (Part 2) and the JavaScript Client">
-        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">REST Web Services (Part 2) and the JavaScript Client</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../references.html" class="pagination-link" aria-label="References">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

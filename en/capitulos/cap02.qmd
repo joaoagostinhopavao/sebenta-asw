@@ -11,3 +11,15 @@ lang: en-GB
 > - CSS selectors and the box model
 > - Grid / Flexbox
 > - Bootstrap components (navbar, form, grid)
+
+## Exercise: the static pages of the "World Capitals" application {#sec-02-world-capitals-en}
+
+> Content to be developed. Planned topics:
+>
+> - Building, in plain HTML/CSS/Bootstrap (no JavaScript yet), the visual
+>   pages of the same application used in the practical LABs: a country
+>   listing, a login form, a capital lookup form (by country code), and
+>   forms to insert/update/delete a country
+> - Field names already aligned with what the REST API will expect
+>   (`code`, `name`, `capital`, `user`, `pass`), so that later it is enough
+>   to wire these forms up with `fetch()`, without rewriting the HTML

@@ -122,7 +122,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap01.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Course Introduction and Web Application Architecture</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Web Application Architecture</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -134,37 +134,31 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap03.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The HTTP Protocol</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Java EE and Servlet Fundamentals</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap04.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Java EE and Servlet Fundamentals</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Stateful Model: Sessions and JSP</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap05.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Stateful Model: Sessions and JSP</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Security and Filters</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap06.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Security and Filters</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">REST Web Services and Stateless Architecture (Part 1)</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap07.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">REST Web Services and Stateless Architecture (Part 1)</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../capitulos/cap08.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">REST Web Services (Part 2) and the JavaScript Client</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">REST Web Services (Part 2) and the JavaScript Client</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -184,6 +178,7 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#sec-02-html-css-en" id="toc-sec-02-html-css-en" class="nav-link active" data-scroll-target="#sec-02-html-css-en"><span class="header-section-number">2.1</span> HTML Structure and Styling with CSS</a></li>
+  <li><a href="#sec-02-world-capitals-en" id="toc-sec-02-world-capitals-en" class="nav-link" data-scroll-target="#sec-02-world-capitals-en"><span class="header-section-number">2.2</span> Exercise: the static pages of the “World Capitals” application</a></li>
   </ul>
 </nav>
     </div>
@@ -218,6 +213,16 @@ ul.task-list li input[type="checkbox"] {
 <li>CSS selectors and the box model</li>
 <li>Grid / Flexbox</li>
 <li>Bootstrap components (navbar, form, grid)</li>
+</ul>
+</blockquote>
+</section>
+<section id="sec-02-world-capitals-en" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="sec-02-world-capitals-en"><span class="header-section-number">2.2</span> Exercise: the static pages of the “World Capitals” application</h2>
+<blockquote class="blockquote">
+<p>Content to be developed. Planned topics:</p>
+<ul>
+<li>Building, in plain HTML/CSS/Bootstrap (no JavaScript yet), the visual pages of the same application used in the practical LABs: a country listing, a login form, a capital lookup form (by country code), and forms to insert/update/delete a country</li>
+<li>Field names already aligned with what the REST API will expect (<code>code</code>, <code>name</code>, <code>capital</code>, <code>user</code>, <code>pass</code>), so that later it is enough to wire these forms up with <code>fetch()</code>, without rewriting the HTML</li>
 </ul>
 </blockquote>
 
@@ -788,13 +793,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../capitulos/cap01.html" class="pagination-link" aria-label="Course Introduction and Web Application Architecture">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Course Introduction and Web Application Architecture</span></span>
+      <a href="../capitulos/cap01.html" class="pagination-link" aria-label="Web Application Architecture">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Web Application Architecture</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../capitulos/cap03.html" class="pagination-link" aria-label="The HTTP Protocol">
-        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The HTTP Protocol</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../capitulos/cap03.html" class="pagination-link" aria-label="Java EE and Servlet Fundamentals">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Java EE and Servlet Fundamentals</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>1&nbsp; Course Introduction and Web Application Architecture – Web Applications and Services</title>
+<title>1&nbsp; Web Application Architecture – Web Applications and Services</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -85,7 +119,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../capitulos/cap01.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Course Introduction and Web Application Architecture</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../capitulos/cap01.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Web Application Architecture</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -122,7 +156,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap01.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Course Introduction and Web Application Architecture</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Web Application Architecture</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -134,37 +168,31 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap03.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The HTTP Protocol</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Java EE and Servlet Fundamentals</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap04.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Java EE and Servlet Fundamentals</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Stateful Model: Sessions and JSP</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap05.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Stateful Model: Sessions and JSP</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Security and Filters</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap06.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Security and Filters</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">REST Web Services and Stateless Architecture (Part 1)</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap07.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">REST Web Services and Stateless Architecture (Part 1)</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../capitulos/cap08.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">REST Web Services (Part 2) and the JavaScript Client</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">REST Web Services (Part 2) and the JavaScript Client</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -183,7 +211,17 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#sec-01-intro-en" id="toc-sec-01-intro-en" class="nav-link active" data-scroll-target="#sec-01-intro-en"><span class="header-section-number">1.1</span> Introduction and Client-Server Architecture</a></li>
+  <li><a href="#sec-01-problem-en" id="toc-sec-01-problem-en" class="nav-link active" data-scroll-target="#sec-01-problem-en"><span class="header-section-number">1.1</span> The Problem: Building a Web Application from Scratch</a></li>
+  <li><a href="#sec-01-jakarta-ee-en" id="toc-sec-01-jakarta-ee-en" class="nav-link" data-scroll-target="#sec-01-jakarta-ee-en"><span class="header-section-number">1.2</span> The Jakarta EE Platform</a></li>
+  <li><a href="#sec-01-layered-architecture-en" id="toc-sec-01-layered-architecture-en" class="nav-link" data-scroll-target="#sec-01-layered-architecture-en"><span class="header-section-number">1.3</span> Layered Architecture</a></li>
+  <li><a href="#sec-01-frontend-backend-en" id="toc-sec-01-frontend-backend-en" class="nav-link" data-scroll-target="#sec-01-frontend-backend-en"><span class="header-section-number">1.4</span> Web Tier Applications: Presentation vs.&nbsp;Service</a></li>
+  <li><a href="#sec-01-client-server-en" id="toc-sec-01-client-server-en" class="nav-link" data-scroll-target="#sec-01-client-server-en"><span class="header-section-number">1.5</span> The Client-Server Model</a></li>
+  <li><a href="#sec-01-http-methods-en" id="toc-sec-01-http-methods-en" class="nav-link" data-scroll-target="#sec-01-http-methods-en"><span class="header-section-number">1.6</span> HTTP in Detail: Methods</a></li>
+  <li><a href="#sec-01-http-message-format-en" id="toc-sec-01-http-message-format-en" class="nav-link" data-scroll-target="#sec-01-http-message-format-en"><span class="header-section-number">1.7</span> HTTP in Detail: Message Format</a>
+  <ul class="collapse">
+  <li><a href="#example-from-a-form-to-an-http-request" id="toc-example-from-a-form-to-an-http-request" class="nav-link" data-scroll-target="#example-from-a-form-to-an-http-request"><span class="header-section-number">1.7.1</span> Example: From a Form to an HTTP Request</a></li>
+  </ul></li>
+  <li><a href="#sec-01-http-status-codes-en" id="toc-sec-01-http-status-codes-en" class="nav-link" data-scroll-target="#sec-01-http-status-codes-en"><span class="header-section-number">1.8</span> HTTP in Detail: Status Codes</a></li>
   </ul>
 </nav>
     </div>
@@ -192,7 +230,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Course Introduction and Web Application Architecture</span></h1>
+<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Web Application Architecture</span></h1>
 </div>
 
 
@@ -209,18 +247,222 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="sec-01-intro-en" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="sec-01-intro-en"><span class="header-section-number">1.1</span> Introduction and Client-Server Architecture</h2>
-<blockquote class="blockquote">
-<p>Content to be developed. Planned topics:</p>
+<section id="sec-01-problem-en" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="sec-01-problem-en"><span class="header-section-number">1.1</span> The Problem: Building a Web Application from Scratch</h2>
+<p>A Web application is not simply a program that runs on a single computer: it is a program that answers requests coming from multiple clients, simultaneously, over the network. Built from scratch, with no supporting platform, an application of this kind would have to solve, on its own, a set of problems common to any system of this sort:</p>
 <ul>
-<li>Course syllabus and assessment model</li>
-<li>Client-server architecture</li>
-<li>Front-end vs.&nbsp;back-end</li>
-<li>Java EE as this course’s case study</li>
-<li>Course overview: from HTML/CSS to REST</li>
+<li>Receiving and interpreting requests coming from the network</li>
+<li>Building and returning responses in the format expected by the client</li>
+<li>Handling multiple concurrent requests (multi-threading)</li>
+<li>Managing database connections</li>
+<li>Retaining information across successive requests from the same user</li>
+<li>Protecting resources from unauthorised access</li>
 </ul>
-</blockquote>
+<p>Solving all of these problems again and again, application after application, would be a waste of effort. This is precisely why enterprise platforms such as <em>Jakarta EE</em> exist.</p>
+</section>
+<section id="sec-01-jakarta-ee-en" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="sec-01-jakarta-ee-en"><span class="header-section-number">1.2</span> The Jakarta EE Platform</h2>
+<p><em>Jakarta EE</em> (formerly known as <em>Java EE</em>, renamed in 2019) is a platform that provides a ready-made set of services and <em>APIs</em> to deal with the problems identified above, freeing developers to focus on the business logic of the application.</p>
+<p>The platform builds on the Java language and the <em>Java Virtual Machine</em> (JVM), which means any component written for <em>Jakarta EE</em> benefits from the portability and automatic memory management already familiar from the language.</p>
+</section>
+<section id="sec-01-layered-architecture-en" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="sec-01-layered-architecture-en"><span class="header-section-number">1.3</span> Layered Architecture</h2>
+<p>The <em>Jakarta EE</em> platform organises an application according to a distributed, multitiered model, with each tier serving a well-defined purpose and typically installed on a different machine:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Tier</th>
+<th>Where it resides</th>
+<th>Typical components</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Client Tier</td>
+<td>Client machine</td>
+<td>Web pages (browser), client applications</td>
+</tr>
+<tr class="even">
+<td>Web Tier</td>
+<td>Jakarta EE server</td>
+<td>Servlets, JavaServer Pages, Web Services</td>
+</tr>
+<tr class="odd">
+<td>Business Tier</td>
+<td>Jakarta EE server</td>
+<td>Enterprise Beans (business logic)</td>
+</tr>
+<tr class="even">
+<td>EIS Tier (Enterprise Information System)</td>
+<td>Database server</td>
+<td>Databases, enterprise information systems</td>
+</tr>
+</tbody>
+</table>
+<p>This layering allows each component to evolve relatively independently of the others: changing the database does not require rewriting the business logic, and changing the client interface does not require changing the server.</p>
+</section>
+<section id="sec-01-frontend-backend-en" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="sec-01-frontend-backend-en"><span class="header-section-number">1.4</span> Web Tier Applications: Presentation vs.&nbsp;Service</h2>
+<p>Within the Web tier, an application can follow two distinct orientations, depending on the kind of response it produces:</p>
+<dl>
+<dt><strong>Presentation-oriented</strong></dt>
+<dd>
+Generates interactive Web pages (HTML, CSS and dynamic content) in response to each request. This is the traditional Web application model, meant to be consumed directly by a human user through a browser.
+</dd>
+<dt><strong>Service-oriented</strong></dt>
+<dd>
+Implements the endpoint of a Web service, typically returning structured data in JSON or XML format instead of HTML. This model is meant to be consumed by another program: a mobile application, a single-page application, or another service.
+</dd>
+</dl>
+<p>This distinction largely maps onto the split between front-end (the part of the application that interacts directly with whoever uses it) and back-end (the part that processes logic and data). A presentation-oriented application tends to blend these two responsibilities into a single server-side component; a service-oriented application separates them clearly, leaving the front-end entirely up to the client.</p>
+</section>
+<section id="sec-01-client-server-en" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="sec-01-client-server-en"><span class="header-section-number">1.5</span> The Client-Server Model</h2>
+<p>All of this communication, whether presentation-oriented or service-oriented, rests on the client-server model: a client (typically a browser) sends a request over the network, and a server processes that request and returns a response.</p>
+<p>This exchange takes place through the HTTP protocol (HyperText Transfer Protocol), which has two fundamental characteristics:</p>
+<ul>
+<li>It is transaction-oriented: each interaction consists of a request followed by a response</li>
+<li>It is stateless: the server does not, by itself, retain any memory of a client’s previous requests</li>
+</ul>
+<p>The absence of state at the protocol level does not prevent an application from needing to retain information across requests, for instance to know that a user is authenticated. That need is addressed at the application level, not the protocol level, through mechanisms such as sessions and cookies.</p>
+</section>
+<section id="sec-01-http-methods-en" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="sec-01-http-methods-en"><span class="header-section-number">1.6</span> HTTP in Detail: Methods</h2>
+<p>Every HTTP request indicates, through a method, the operation it intends to perform on a resource:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Typical semantics</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>GET</code></td>
+<td>Retrieve a resource</td>
+</tr>
+<tr class="even">
+<td><code>POST</code></td>
+<td>Create a resource</td>
+</tr>
+<tr class="odd">
+<td><code>PUT</code></td>
+<td>Update or replace a resource</td>
+</tr>
+<tr class="even">
+<td><code>DELETE</code></td>
+<td>Remove a resource</td>
+</tr>
+<tr class="odd">
+<td><code>HEAD</code></td>
+<td>Retrieve headers only, no body</td>
+</tr>
+</tbody>
+</table>
+<p>These five methods cover the vast majority of operations performed by a Web application; the first two (<code>GET</code> and <code>POST</code>) are by far the most common in traditional HTML forms, while <code>PUT</code> and <code>DELETE</code> become more important in resource-oriented services.</p>
+</section>
+<section id="sec-01-http-message-format-en" class="level2" data-number="1.7">
+<h2 data-number="1.7" class="anchored" data-anchor-id="sec-01-http-message-format-en"><span class="header-section-number">1.7</span> HTTP in Detail: Message Format</h2>
+<p>Both a request and a response follow the same general structure:</p>
+<ol type="1">
+<li>A first line, differing between a request (method, URL and HTTP version) and a response (HTTP version, status code and reason)</li>
+<li>A set of headers, carrying metadata about the message (for instance, the destination host, the content type, or its length)</li>
+<li>An optional body, holding the actual data</li>
+</ol>
+<p>A <code>GET</code> request typically has no body: all the data it carries goes in the URL itself, as parameters. A <code>POST</code> request carries its data in the message body, outside the URL.</p>
+<section id="example-from-a-form-to-an-http-request" class="level3" data-number="1.7.1">
+<h3 data-number="1.7.1" class="anchored" data-anchor-id="example-from-a-form-to-an-http-request"><span class="header-section-number">1.7.1</span> Example: From a Form to an HTTP Request</h3>
+<p>Consider a simple HTML form used to look up a country’s capital from its code:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1"></a><span class="dt">&lt;</span><span class="kw">form</span><span class="ot"> method</span><span class="op">=</span><span class="st">"GET"</span><span class="ot"> action</span><span class="op">=</span><span class="st">"/capital"</span><span class="dt">&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a>  <span class="dt">&lt;</span><span class="kw">label</span><span class="ot"> for</span><span class="op">=</span><span class="st">"countrycode"</span><span class="dt">&gt;</span>Country code<span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>  <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"text"</span><span class="ot"> id</span><span class="op">=</span><span class="st">"countrycode"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"countrycode"</span><span class="dt">&gt;</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a>  <span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> type</span><span class="op">=</span><span class="st">"submit"</span><span class="dt">&gt;</span>Look up<span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="dt">&lt;/</span><span class="kw">form</span><span class="dt">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>When submitted with the value <code>PT</code>, the browser generates the following HTTP request:</p>
+<pre><code>GET /capital?countrycode=PT HTTP/1.1
+Host: localhost:8080</code></pre>
+<p>Because this is a <code>GET</code> request, the <code>countrycode</code> parameter is sent as part of the URL (after the <code>?</code>), and there is no body in the message. If the same form used <code>method="POST"</code>, the parameter would instead travel in the request body, and the URL would stay clean (<code>/capital</code>).</p>
+<p>The server, upon processing this request, returns an HTTP response such as the following:</p>
+<pre><code>HTTP/1.1 200 OK
+Content-Type: application/json
+
+{"country": "Portugal", "capital": "Lisboa", "ccode": "PT"}</code></pre>
+</section>
+</section>
+<section id="sec-01-http-status-codes-en" class="level2" data-number="1.8">
+<h2 data-number="1.8" class="anchored" data-anchor-id="sec-01-http-status-codes-en"><span class="header-section-number">1.8</span> HTTP in Detail: Status Codes</h2>
+<p>Every HTTP response includes a numeric status code, briefly indicating the outcome of the request. Codes are grouped into five categories, based on the leading digit:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Range</th>
+<th>Category</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>1xx</code></td>
+<td>Informational</td>
+</tr>
+<tr class="even">
+<td><code>2xx</code></td>
+<td>Success</td>
+</tr>
+<tr class="odd">
+<td><code>3xx</code></td>
+<td>Redirection</td>
+</tr>
+<tr class="even">
+<td><code>4xx</code></td>
+<td>Client error</td>
+</tr>
+<tr class="odd">
+<td><code>5xx</code></td>
+<td>Server error</td>
+</tr>
+</tbody>
+</table>
+<p>Within these categories, a handful of codes come up particularly often when building Web services:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Code</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>200 OK</code></td>
+<td>The request was processed successfully</td>
+</tr>
+<tr class="even">
+<td><code>400 Bad Request</code></td>
+<td>The request is malformed, or a required parameter is missing</td>
+</tr>
+<tr class="odd">
+<td><code>403 Forbidden</code></td>
+<td>The client lacks permission to access the resource</td>
+</tr>
+<tr class="even">
+<td><code>404 Not Found</code></td>
+<td>The requested resource does not exist</td>
+</tr>
+<tr class="odd">
+<td><code>500 Internal Server Error</code></td>
+<td>An unhandled error occurred on the server side</td>
+</tr>
+</tbody>
+</table>
+<p>Choosing the right status code for each situation is an essential part of designing a Web service: the code, by itself, conveys information the client can use to decide how to react, without needing to parse the response body.</p>
 
 
 </section>

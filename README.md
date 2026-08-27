@@ -10,14 +10,13 @@ Sebenta-ASW/
 ├── _quarto.yml          # Configuração do projecto
 ├── index.qmd             # Prefácio
 ├── capitulos/
-│   ├── cap01.qmd         # Apresentação da UC e Arquitetura de Aplicações Web
+│   ├── cap01.qmd         # Arquitetura de Aplicações Web e Protocolo HTTP
 │   ├── cap02.qmd         # HTML, CSS e Bootstrap
-│   ├── cap03.qmd         # O Protocolo HTTP
-│   ├── cap04.qmd         # Java EE e Fundamentos de Servlets
-│   ├── cap05.qmd         # Modelo Stateful: Sessões e JSP
-│   ├── cap06.qmd         # Segurança e Filters
-│   ├── cap07.qmd         # Web Services REST e Arquitetura Stateless (Parte 1)
-│   ├── cap08.qmd         # Web Services REST (Parte 2) e o Cliente em JavaScript
+│   ├── cap03.qmd         # Java EE e Fundamentos de Servlets
+│   ├── cap04.qmd         # Modelo Stateful: Sessões e JSP
+│   ├── cap05.qmd         # Segurança e Filters
+│   ├── cap06.qmd         # Web Services REST e Arquitetura Stateless (Parte 1)
+│   ├── cap07.qmd         # Web Services REST (Parte 2) e o Cliente em JavaScript
 │   ├── apendiceA.qmd     # Configuração do Ambiente de Desenvolvimento
 │   └── apendiceB.qmd     # LABs Práticos (mesmos do ESIGELEC, com twist de JS)
 ├── assets/
@@ -28,7 +27,7 @@ Sebenta-ASW/
 │   ├── _quarto.yml
 │   ├── index.qmd
 │   ├── references.qmd
-│   ├── capitulos/         # cap01.qmd … cap08.qmd, em inglês
+│   ├── capitulos/         # cap01.qmd … cap07.qmd, em inglês
 │   └── assets/css/custom.css  # cópia do CSS principal (ver nota abaixo)
 └── referencias.bib        # Bibliografia (a partir da ficha oficial da UC)
 ```
@@ -63,10 +62,14 @@ principal for alterado, replicar a alteração também aqui.
 
 ## Estado
 
-Projecto criado em 2026-08-26. Estrutura dos 8 capítulos + 2 apêndices
+Projecto criado em 2026-08-26. Estrutura de 7 capítulos + 2 apêndices
 definida a partir do planeamento em
-`Planeamento de UUCC/ASW/Planeamento ASW.canvas`. Capítulos ainda por
-escrever (esqueleto com tópicos-chave por secção).
+`Planeamento de UUCC/ASW/Planeamento ASW.canvas` (originalmente 8
+capítulos; o Cap03 "O Protocolo HTTP" foi absorvido pelo Cap01, por fazer
+mais sentido como leitura contínua, mesmo que na calendarização das aulas
+a matéria continue dividida em duas sessões — Aula 1 e Aula 3). Cap01 e
+Cap02 já têm conteúdo real; os restantes ainda são esqueleto (tópicos-chave
+por secção).
 
 A matéria e os trabalhos práticos seguem de perto uma UC homóloga já
 lecionada no ESIGELEC (parceiro internacional) — ver `Team Inbox/Team-ASW/`

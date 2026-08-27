@@ -1,19 +1,18 @@
 ---
-title: "Web Services REST e Arquitetura Stateless (Parte 1)"
+title: "Web Services REST (Parte 2) e o Cliente em JavaScript"
 author: "João Pavão"
 date: 2026-08-26
 lang: pt-PT
 ---
 
-## O Que é um Web Service {#sec-07-rest}
+## JWT, Escalabilidade e o Consumo da API em JavaScript {#sec-07-jwt-js}
 
-> Conteúdo a desenvolver, alinhado com a primeira metade da Lecture 4 do
-> ESIGELEC (REST Web Services and Stateless Architecture). Tópicos
-> previstos:
+> Conteúdo a desenvolver, alinhado com a segunda metade da Lecture 4 do
+> ESIGELEC + o "twist" de JavaScript próprio da UTAD. Tópicos previstos:
 >
-> - O que é um Web Service
-> - REST (nível conceptual)
-> - Recursos e endpoints
-> - JSON como formato de troca de dados
-> - O contrato HTTP como contrato da API
-> - Stateful vs. Stateless
+> - Limitações de sessões em sistemas distribuídos
+> - Cabeçalho Authorization
+> - JWT (header, payload, assinatura)
+> - Escalabilidade horizontal
+> - fetch() e JSON do lado do cliente
+> - O DOM como "View" do browser

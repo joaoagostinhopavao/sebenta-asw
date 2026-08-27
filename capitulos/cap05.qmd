@@ -1,19 +1,19 @@
 ---
-title: "Modelo Stateful: Sessões e JSP"
+title: "Segurança e Filters"
 author: "João Pavão"
 date: 2026-08-26
 lang: pt-PT
 ---
 
-## Sessões, Cookies e Autenticação {#sec-05-sessoes}
+## Autenticação, Autorização e o Filter {#sec-05-filters}
 
-> Conteúdo a desenvolver, alinhado com a Lecture 2 do ESIGELEC (Traditional
-> Java Web, Stateful Model). Tópicos previstos:
+> Conteúdo a desenvolver, alinhado com a Lecture 3 do ESIGELEC (Security and
+> Filters). Tópicos previstos:
 >
-> - JSP
-> - MVC tradicional (Servlet + JSP)
-> - RequestDispatcher
-> - HttpSession
-> - Cookies, JSESSIONID
-> - Autenticação baseada em sessão
-> - Logout (session.invalidate())
+> - Autenticação vs. autorização
+> - Filter (Jakarta Servlet)
+> - Interceção de pedidos
+> - FilterChain
+> - Separação de responsabilidades
+> - HTTP 401 vs. 403
+> - Arquitetura limpa: Servlet vs. Filter

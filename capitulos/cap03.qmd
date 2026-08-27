@@ -1,16 +1,19 @@
 ---
-title: "O Protocolo HTTP"
+title: "Java EE e Fundamentos de Servlets"
 author: "João Pavão"
 date: 2026-08-26
 lang: pt-PT
 ---
 
-## Pedidos, Respostas e Códigos de Estado {#sec-03-http}
+## O Web Container e o Primeiro Servlet {#sec-03-servlets}
 
-> Conteúdo a desenvolver. Tópicos previstos:
+> Conteúdo a desenvolver, alinhado com a Lecture 1 do ESIGELEC (Java EE and
+> Servlet Fundamentals). Tópicos previstos:
 >
-> - Estrutura do pedido/resposta HTTP
-> - Métodos GET / POST
-> - Cabeçalhos HTTP
-> - Códigos de estado (2xx / 3xx / 4xx / 5xx)
-> - Stateless (introdução, retomado nos Caps. 5 e 7)
+> - Jakarta EE / Java EE
+> - Web Container (Tomcat)
+> - Ciclo de vida de um Servlet
+> - HttpServletRequest / HttpServletResponse
+> - doGet() e doPost()
+> - Parâmetros HTTP, Content-Type
+> - Geração manual de JSON

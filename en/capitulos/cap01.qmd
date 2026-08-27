@@ -1,14 +1,137 @@
 ---
-title: "Course Introduction and Web Application Architecture"
+title: "Web Application Architecture"
 lang: en-GB
 ---
 
-## Introduction and Client-Server Architecture {#sec-01-intro-en}
+## The Problem: Building a Web Application from Scratch {#sec-01-problem-en}
 
-> Content to be developed. Planned topics:
->
-> - Course syllabus and assessment model
-> - Client-server architecture
-> - Front-end vs. back-end
-> - Java EE as this course's case study
-> - Course overview: from HTML/CSS to REST
+A Web application is not simply a program that runs on a single computer: it is a program that answers requests coming from multiple clients, simultaneously, over the network. Built from scratch, with no supporting platform, an application of this kind would have to solve, on its own, a set of problems common to any system of this sort:
+
+- Receiving and interpreting requests coming from the network
+- Building and returning responses in the format expected by the client
+- Handling multiple concurrent requests (multi-threading)
+- Managing database connections
+- Retaining information across successive requests from the same user
+- Protecting resources from unauthorised access
+
+Solving all of these problems again and again, application after application, would be a waste of effort. This is precisely why enterprise platforms such as *Jakarta EE* exist.
+
+## The Jakarta EE Platform {#sec-01-jakarta-ee-en}
+
+*Jakarta EE* (formerly known as *Java EE*, renamed in 2019) is a platform that provides a ready-made set of services and *APIs* to deal with the problems identified above, freeing developers to focus on the business logic of the application.
+
+The platform builds on the Java language and the *Java Virtual Machine* (JVM), which means any component written for *Jakarta EE* benefits from the portability and automatic memory management already familiar from the language.
+
+## Layered Architecture {#sec-01-layered-architecture-en}
+
+The *Jakarta EE* platform organises an application according to a distributed, multitiered model, with each tier serving a well-defined purpose and typically installed on a different machine:
+
+| Tier | Where it resides | Typical components |
+|---|---|---|
+| Client Tier | Client machine | Web pages (browser), client applications |
+| Web Tier | Jakarta EE server | Servlets, JavaServer Pages, Web Services |
+| Business Tier | Jakarta EE server | Enterprise Beans (business logic) |
+| EIS Tier (Enterprise Information System) | Database server | Databases, enterprise information systems |
+
+This layering allows each component to evolve relatively independently of the others: changing the database does not require rewriting the business logic, and changing the client interface does not require changing the server.
+
+## Web Tier Applications: Presentation vs. Service {#sec-01-frontend-backend-en}
+
+Within the Web tier, an application can follow two distinct orientations, depending on the kind of response it produces:
+
+**Presentation-oriented**
+: Generates interactive Web pages (HTML, CSS and dynamic content) in response to each request. This is the traditional Web application model, meant to be consumed directly by a human user through a browser.
+
+**Service-oriented**
+: Implements the endpoint of a Web service, typically returning structured data in JSON or XML format instead of HTML. This model is meant to be consumed by another program: a mobile application, a single-page application, or another service.
+
+This distinction largely maps onto the split between front-end (the part of the application that interacts directly with whoever uses it) and back-end (the part that processes logic and data). A presentation-oriented application tends to blend these two responsibilities into a single server-side component; a service-oriented application separates them clearly, leaving the front-end entirely up to the client.
+
+## The Client-Server Model {#sec-01-client-server-en}
+
+All of this communication, whether presentation-oriented or service-oriented, rests on the client-server model: a client (typically a browser) sends a request over the network, and a server processes that request and returns a response.
+
+This exchange takes place through the HTTP protocol (HyperText Transfer Protocol), which has two fundamental characteristics:
+
+- It is transaction-oriented: each interaction consists of a request followed by a response
+- It is stateless: the server does not, by itself, retain any memory of a client's previous requests
+
+The absence of state at the protocol level does not prevent an application from needing to retain information across requests, for instance to know that a user is authenticated. That need is addressed at the application level, not the protocol level, through mechanisms such as sessions and cookies.
+
+## HTTP in Detail: Methods {#sec-01-http-methods-en}
+
+Every HTTP request indicates, through a method, the operation it intends to perform on a resource:
+
+| Method | Typical semantics |
+|---|---|
+| `GET` | Retrieve a resource |
+| `POST` | Create a resource |
+| `PUT` | Update or replace a resource |
+| `DELETE` | Remove a resource |
+| `HEAD` | Retrieve headers only, no body |
+
+These five methods cover the vast majority of operations performed by a Web application; the first two (`GET` and `POST`) are by far the most common in traditional HTML forms, while `PUT` and `DELETE` become more important in resource-oriented services.
+
+## HTTP in Detail: Message Format {#sec-01-http-message-format-en}
+
+Both a request and a response follow the same general structure:
+
+1. A first line, differing between a request (method, URL and HTTP version) and a response (HTTP version, status code and reason)
+2. A set of headers, carrying metadata about the message (for instance, the destination host, the content type, or its length)
+3. An optional body, holding the actual data
+
+A `GET` request typically has no body: all the data it carries goes in the URL itself, as parameters. A `POST` request carries its data in the message body, outside the URL.
+
+### Example: From a Form to an HTTP Request
+
+Consider a simple HTML form used to look up a country's capital from its code:
+
+```html
+<form method="GET" action="/capital">
+  <label for="countrycode">Country code</label>
+  <input type="text" id="countrycode" name="countrycode">
+  <button type="submit">Look up</button>
+</form>
+```
+
+When submitted with the value `PT`, the browser generates the following HTTP request:
+
+```
+GET /capital?countrycode=PT HTTP/1.1
+Host: localhost:8080
+```
+
+Because this is a `GET` request, the `countrycode` parameter is sent as part of the URL (after the `?`), and there is no body in the message. If the same form used `method="POST"`, the parameter would instead travel in the request body, and the URL would stay clean (`/capital`).
+
+The server, upon processing this request, returns an HTTP response such as the following:
+
+```
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{"country": "Portugal", "capital": "Lisboa", "ccode": "PT"}
+```
+
+## HTTP in Detail: Status Codes {#sec-01-http-status-codes-en}
+
+Every HTTP response includes a numeric status code, briefly indicating the outcome of the request. Codes are grouped into five categories, based on the leading digit:
+
+| Range | Category |
+|---|---|
+| `1xx` | Informational |
+| `2xx` | Success |
+| `3xx` | Redirection |
+| `4xx` | Client error |
+| `5xx` | Server error |
+
+Within these categories, a handful of codes come up particularly often when building Web services:
+
+| Code | Meaning |
+|---|---|
+| `200 OK` | The request was processed successfully |
+| `400 Bad Request` | The request is malformed, or a required parameter is missing |
+| `403 Forbidden` | The client lacks permission to access the resource |
+| `404 Not Found` | The requested resource does not exist |
+| `500 Internal Server Error` | An unhandled error occurred on the server side |
+
+Choosing the right status code for each situation is an essential part of designing a Web service: the code, by itself, conveys information the client can use to decide how to react, without needing to parse the response body.

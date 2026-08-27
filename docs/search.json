@@ -52,21 +52,91 @@
   {
     "objectID": "capitulos/cap01.html",
     "href": "capitulos/cap01.html",
-    "title": "1  Apresentação da UC e Arquitetura de Aplicações Web",
+    "title": "1  Arquitetura de Aplicações Web",
     "section": "",
-    "text": "1.1 Apresentação e Arquitetura Cliente-Servidor",
+    "text": "1.1 O Problema: Construir uma Aplicação Web de Raiz\nUma aplicação Web não é apenas um programa que corre num computador: é um programa que responde a pedidos vindos de múltiplos clientes, em simultâneo, através da rede. Construída de raiz, sem qualquer apoio de plataforma, uma aplicação deste tipo teria de resolver, por si só, um conjunto de problemas comuns a qualquer sistema deste género:\nResolver todos estes problemas repetidamente, aplicação a aplicação, seria um desperdício de esforço. É exactamente para evitar essa repetição que existem plataformas empresariais como a Jakarta EE.",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Apresentação da UC e Arquitetura de Aplicações Web</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Arquitetura de Aplicações Web</span>"
     ]
   },
   {
-    "objectID": "capitulos/cap01.html#sec-01-apresentacao",
-    "href": "capitulos/cap01.html#sec-01-apresentacao",
-    "title": "1  Apresentação da UC e Arquitetura de Aplicações Web",
+    "objectID": "capitulos/cap01.html#sec-01-problema",
+    "href": "capitulos/cap01.html#sec-01-problema",
+    "title": "1  Arquitetura de Aplicações Web",
     "section": "",
-    "text": "Conteúdo a desenvolver. Tópicos previstos:\n\nPrograma e modelo de avaliação da UC\nArquitetura cliente-servidor\nFront-end vs. back-end\nJava EE como caso de estudo desta UC\nVisão geral do semestre: de HTML/CSS até REST",
+    "text": "Receber e interpretar pedidos vindos da rede\nConstruir e devolver respostas no formato esperado pelo cliente\nSuportar múltiplos pedidos em simultâneo (multi-threading)\nGerir a ligação a bases de dados\nManter informação entre pedidos sucessivos do mesmo utilizador\nProteger recursos de acessos não autorizados",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Apresentação da UC e Arquitetura de Aplicações Web</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Arquitetura de Aplicações Web</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap01.html#sec-01-jakarta-ee",
+    "href": "capitulos/cap01.html#sec-01-jakarta-ee",
+    "title": "1  Arquitetura de Aplicações Web",
+    "section": "1.2 A Plataforma Jakarta EE",
+    "text": "1.2 A Plataforma Jakarta EE\nA Jakarta EE (anteriormente conhecida como Java EE, até ser renomeada em 2019) é uma plataforma que fornece um conjunto de serviços e APIs prontos a usar para lidar com os problemas identificados acima, libertando quem desenvolve para se concentrar na lógica de negócio da aplicação.\nA plataforma assenta na linguagem Java e na Java Virtual Machine (JVM), o que significa que qualquer componente escrito para Jakarta EE beneficia da portabilidade e da gestão automática de memória já conhecidas da linguagem.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Arquitetura de Aplicações Web</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap01.html#sec-01-arquitetura-camadas",
+    "href": "capitulos/cap01.html#sec-01-arquitetura-camadas",
+    "title": "1  Arquitetura de Aplicações Web",
+    "section": "1.3 Arquitetura em Camadas",
+    "text": "1.3 Arquitetura em Camadas\nA plataforma Jakarta EE organiza uma aplicação segundo um modelo distribuído em várias camadas (tiers), cada uma com uma função bem definida e instalada, tipicamente, em máquinas diferentes:\n\n\n\n\n\n\n\n\nCamada\nOnde reside\nComponentes típicos\n\n\n\n\nClient Tier\nMáquina do cliente\nPáginas Web (browser), aplicações cliente\n\n\nWeb Tier\nServidor Jakarta EE\nServlets, JavaServer Pages, Web Services\n\n\nBusiness Tier\nServidor Jakarta EE\nEnterprise Beans (lógica de negócio)\n\n\nEIS Tier (Enterprise Information System)\nServidor de base de dados\nBases de dados, sistemas de informação empresarial\n\n\n\nEsta separação por camadas permite que cada componente evolua de forma relativamente independente das restantes: alterar a base de dados não obriga a reescrever a lógica de negócio, e alterar a interface do cliente não obriga a alterar o servidor.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Arquitetura de Aplicações Web</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap01.html#sec-01-frontend-backend",
+    "href": "capitulos/cap01.html#sec-01-frontend-backend",
+    "title": "1  Arquitetura de Aplicações Web",
+    "section": "1.4 Aplicações da Camada Web: Apresentação vs. Serviço",
+    "text": "1.4 Aplicações da Camada Web: Apresentação vs. Serviço\nDentro da camada Web, uma aplicação pode seguir duas orientações distintas, consoante o tipo de resposta que produz:\n\nOrientada à apresentação (presentation-oriented)\n\nGera páginas Web interativas (HTML, CSS e conteúdo dinâmico) em resposta a cada pedido. É o modelo tradicional de uma aplicação Web, pensada para ser consumida diretamente por um utilizador humano através de um browser.\n\nOrientada a serviço (service-oriented)\n\nImplementa o ponto de acesso (endpoint) de um serviço Web, tipicamente devolvendo dados estruturados em formato JSON ou XML, em vez de HTML. Este modelo é pensado para ser consumido por outro programa, seja ele uma aplicação móvel, uma single-page application ou outro serviço.\n\n\nEsta distinção corresponde, em larga medida, à separação entre front-end (a parte da aplicação que interage diretamente com quem a usa) e back-end (a parte que processa a lógica e os dados). Uma aplicação orientada à apresentação tende a confundir estas duas responsabilidades num único componente do lado do servidor; uma aplicação orientada a serviço separa-as claramente, deixando o front-end inteiramente a cargo do cliente.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Arquitetura de Aplicações Web</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap01.html#sec-01-cliente-servidor",
+    "href": "capitulos/cap01.html#sec-01-cliente-servidor",
+    "title": "1  Arquitetura de Aplicações Web",
+    "section": "1.5 O Modelo Cliente-Servidor",
+    "text": "1.5 O Modelo Cliente-Servidor\nToda esta comunicação, seja ela orientada à apresentação ou a serviço, assenta no modelo cliente-servidor: um cliente (tipicamente um browser) envia um pedido através da rede, e um servidor processa esse pedido e devolve uma resposta.\nEsta troca é feita através do protocolo HTTP (HyperText Transfer Protocol), que tem duas características fundamentais:\n\nÉ orientado a transações: cada interação é composta por um pedido (request) seguido de uma resposta (response)\nÉ stateless (sem estado): o servidor não guarda, por si só, qualquer memória de pedidos anteriores do mesmo cliente\n\nA ausência de estado no protocolo não impede que uma aplicação precise de reter informação entre pedidos (por exemplo, para saber que um utilizador está autenticado). Essa necessidade é resolvida ao nível da aplicação, não do protocolo, através de mecanismos como sessões e cookies.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Arquitetura de Aplicações Web</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap01.html#sec-01-http-metodos",
+    "href": "capitulos/cap01.html#sec-01-http-metodos",
+    "title": "1  Arquitetura de Aplicações Web",
+    "section": "1.6 HTTP em Detalhe: Métodos",
+    "text": "1.6 HTTP em Detalhe: Métodos\nCada pedido HTTP indica, através de um método, a operação que pretende realizar sobre um recurso:\n\n\n\nMétodo\nSemântica típica\n\n\n\n\nGET\nObter um recurso\n\n\nPOST\nCriar um recurso\n\n\nPUT\nAtualizar ou substituir um recurso\n\n\nDELETE\nRemover um recurso\n\n\nHEAD\nObter apenas os cabeçalhos, sem corpo\n\n\n\nEstes cinco métodos cobrem a generalidade das operações realizadas por uma aplicação Web; os dois primeiros (GET e POST) são, de longe, os mais usados em formulários HTML tradicionais, enquanto PUT e DELETE ganham importância sobretudo em serviços orientados a recursos.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Arquitetura de Aplicações Web</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap01.html#sec-01-http-formato-mensagem",
+    "href": "capitulos/cap01.html#sec-01-http-formato-mensagem",
+    "title": "1  Arquitetura de Aplicações Web",
+    "section": "1.7 HTTP em Detalhe: Formato de uma Mensagem",
+    "text": "1.7 HTTP em Detalhe: Formato de uma Mensagem\nTanto um pedido como uma resposta HTTP seguem a mesma estrutura geral:\n\nUma primeira linha, diferente consoante se trate de um pedido (método, URL e versão de HTTP) ou de uma resposta (versão de HTTP, código de estado e motivo)\nUm conjunto de cabeçalhos (headers), que transportam metadados sobre a mensagem (por exemplo, o anfitrião de destino, o tipo de conteúdo ou o seu comprimento)\nUm corpo (body), opcional, com os dados propriamente ditos\n\nUm pedido GET não tem, tipicamente, corpo: todos os dados que transporta vão na própria URL, sob a forma de parâmetros. Um pedido POST transporta os dados no corpo da mensagem, fora da URL.\n\n1.7.1 Exemplo: de um Formulário a um Pedido HTTP\nConsidere-se um formulário HTML simples, usado para consultar a capital de um país a partir do respetivo código:\n&lt;form method=\"GET\" action=\"/capital\"&gt;\n  &lt;label for=\"countrycode\"&gt;Código do país&lt;/label&gt;\n  &lt;input type=\"text\" id=\"countrycode\" name=\"countrycode\"&gt;\n  &lt;button type=\"submit\"&gt;Consultar&lt;/button&gt;\n&lt;/form&gt;\nAo ser submetido com o valor PT, o browser gera o seguinte pedido HTTP:\nGET /capital?countrycode=PT HTTP/1.1\nHost: localhost:8080\nNote-se que, por se tratar de um método GET, o parâmetro countrycode é enviado como parte da URL (depois do ?), e não existe corpo na mensagem. Se o mesmo formulário usasse method=\"POST\", o parâmetro seguiria antes no corpo do pedido, e a URL manter-se-ia limpa (/capital).\nO servidor, ao processar este pedido, devolve uma resposta HTTP como a seguinte:\nHTTP/1.1 200 OK\nContent-Type: application/json\n\n{\"country\": \"Portugal\", \"capital\": \"Lisboa\", \"ccode\": \"PT\"}",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Arquitetura de Aplicações Web</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap01.html#sec-01-http-codigos-estado",
+    "href": "capitulos/cap01.html#sec-01-http-codigos-estado",
+    "title": "1  Arquitetura de Aplicações Web",
+    "section": "1.8 HTTP em Detalhe: Códigos de Estado",
+    "text": "1.8 HTTP em Detalhe: Códigos de Estado\nToda a resposta HTTP inclui um código de estado numérico, que indica sucintamente o resultado do pedido. Os códigos agrupam-se em cinco categorias, consoante a centena:\n\n\n\nIntervalo\nCategoria\n\n\n\n\n1xx\nInformativo\n\n\n2xx\nSucesso\n\n\n3xx\nRedirecionamento\n\n\n4xx\nErro do cliente\n\n\n5xx\nErro do servidor\n\n\n\nDentro destas categorias, alguns códigos surgem com particular frequência no desenvolvimento de serviços Web:\n\n\n\n\n\n\n\nCódigo\nSignificado\n\n\n\n\n200 OK\nO pedido foi processado com sucesso\n\n\n400 Bad Request\nO pedido está malformado ou falta um parâmetro obrigatório\n\n\n403 Forbidden\nO cliente não tem permissão para aceder ao recurso\n\n\n404 Not Found\nO recurso pedido não existe\n\n\n500 Internal Server Error\nOcorreu um erro não tratado do lado do servidor\n\n\n\nEscolher o código de estado correto para cada situação é uma parte essencial do desenho de um serviço Web: o código transmite, por si só, informação que o cliente pode usar para decidir como reagir, sem precisar de interpretar o corpo da resposta.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Arquitetura de Aplicações Web</span>"
     ]
   },
   {
@@ -90,123 +160,113 @@
     ]
   },
   {
-    "objectID": "capitulos/cap03.html",
-    "href": "capitulos/cap03.html",
-    "title": "3  O Protocolo HTTP",
-    "section": "",
-    "text": "3.1 Pedidos, Respostas e Códigos de Estado",
+    "objectID": "capitulos/cap02.html#sec-02-world-capitals",
+    "href": "capitulos/cap02.html#sec-02-world-capitals",
+    "title": "2  HTML, CSS e Bootstrap",
+    "section": "2.2 Exercício: as páginas estáticas da aplicação “World Capitals”",
+    "text": "2.2 Exercício: as páginas estáticas da aplicação “World Capitals”\n\nConteúdo a desenvolver. Tópicos previstos:\n\nConstrução, em HTML/CSS/Bootstrap puro (sem JavaScript), das páginas visuais da aplicação usada nos LABs práticos (ver Apêndice B): listagem de países, formulário de login, formulário de consulta de capital por código de país, e formulários de inserir/editar/remover país\nNomes de campos alinhados desde já com os que a API REST vai esperar (code, name, capital, user, pass), para que mais tarde baste ligar estes formulários aos endpoints com fetch(), sem reescrever HTML",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>O Protocolo HTTP</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>HTML, CSS e Bootstrap</span>"
     ]
   },
   {
-    "objectID": "capitulos/cap03.html#sec-03-http",
-    "href": "capitulos/cap03.html#sec-03-http",
-    "title": "3  O Protocolo HTTP",
+    "objectID": "capitulos/cap03.html",
+    "href": "capitulos/cap03.html",
+    "title": "3  Java EE e Fundamentos de Servlets",
     "section": "",
-    "text": "Conteúdo a desenvolver. Tópicos previstos:\n\nEstrutura do pedido/resposta HTTP\nMétodos GET / POST\nCabeçalhos HTTP\nCódigos de estado (2xx / 3xx / 4xx / 5xx)\nStateless (introdução, retomado nos Caps. 5 e 7)",
+    "text": "3.1 O Web Container e o Primeiro Servlet",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>O Protocolo HTTP</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Java EE e Fundamentos de Servlets</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap03.html#sec-03-servlets",
+    "href": "capitulos/cap03.html#sec-03-servlets",
+    "title": "3  Java EE e Fundamentos de Servlets",
+    "section": "",
+    "text": "Conteúdo a desenvolver, alinhado com a Lecture 1 do ESIGELEC (Java EE and Servlet Fundamentals). Tópicos previstos:\n\nJakarta EE / Java EE\nWeb Container (Tomcat)\nCiclo de vida de um Servlet\nHttpServletRequest / HttpServletResponse\ndoGet() e doPost()\nParâmetros HTTP, Content-Type\nGeração manual de JSON",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Java EE e Fundamentos de Servlets</span>"
     ]
   },
   {
     "objectID": "capitulos/cap04.html",
     "href": "capitulos/cap04.html",
-    "title": "4  Java EE e Fundamentos de Servlets",
+    "title": "4  Modelo Stateful: Sessões e JSP",
     "section": "",
-    "text": "4.1 O Web Container e o Primeiro Servlet",
+    "text": "4.1 Sessões, Cookies e Autenticação",
     "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Java EE e Fundamentos de Servlets</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Modelo Stateful: Sessões e JSP</span>"
     ]
   },
   {
-    "objectID": "capitulos/cap04.html#sec-04-servlets",
-    "href": "capitulos/cap04.html#sec-04-servlets",
-    "title": "4  Java EE e Fundamentos de Servlets",
+    "objectID": "capitulos/cap04.html#sec-04-sessoes",
+    "href": "capitulos/cap04.html#sec-04-sessoes",
+    "title": "4  Modelo Stateful: Sessões e JSP",
     "section": "",
-    "text": "Conteúdo a desenvolver, alinhado com a Lecture 1 do ESIGELEC (Java EE and Servlet Fundamentals). Tópicos previstos:\n\nJakarta EE / Java EE\nWeb Container (Tomcat)\nCiclo de vida de um Servlet\nHttpServletRequest / HttpServletResponse\ndoGet() e doPost()\nParâmetros HTTP, Content-Type\nGeração manual de JSON",
+    "text": "Conteúdo a desenvolver, alinhado com a Lecture 2 do ESIGELEC (Traditional Java Web, Stateful Model). Tópicos previstos:\n\nJSP\nMVC tradicional (Servlet + JSP)\nRequestDispatcher\nHttpSession\nCookies, JSESSIONID\nAutenticação baseada em sessão\nLogout (session.invalidate())",
     "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Java EE e Fundamentos de Servlets</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Modelo Stateful: Sessões e JSP</span>"
     ]
   },
   {
     "objectID": "capitulos/cap05.html",
     "href": "capitulos/cap05.html",
-    "title": "5  Modelo Stateful: Sessões e JSP",
+    "title": "5  Segurança e Filters",
     "section": "",
-    "text": "5.1 Sessões, Cookies e Autenticação",
+    "text": "5.1 Autenticação, Autorização e o Filter",
     "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Modelo Stateful: Sessões e JSP</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Segurança e Filters</span>"
     ]
   },
   {
-    "objectID": "capitulos/cap05.html#sec-05-sessoes",
-    "href": "capitulos/cap05.html#sec-05-sessoes",
-    "title": "5  Modelo Stateful: Sessões e JSP",
+    "objectID": "capitulos/cap05.html#sec-05-filters",
+    "href": "capitulos/cap05.html#sec-05-filters",
+    "title": "5  Segurança e Filters",
     "section": "",
-    "text": "Conteúdo a desenvolver, alinhado com a Lecture 2 do ESIGELEC (Traditional Java Web, Stateful Model). Tópicos previstos:\n\nJSP\nMVC tradicional (Servlet + JSP)\nRequestDispatcher\nHttpSession\nCookies, JSESSIONID\nAutenticação baseada em sessão\nLogout (session.invalidate())",
+    "text": "Conteúdo a desenvolver, alinhado com a Lecture 3 do ESIGELEC (Security and Filters). Tópicos previstos:\n\nAutenticação vs. autorização\nFilter (Jakarta Servlet)\nInterceção de pedidos\nFilterChain\nSeparação de responsabilidades\nHTTP 401 vs. 403\nArquitetura limpa: Servlet vs. Filter",
     "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Modelo Stateful: Sessões e JSP</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Segurança e Filters</span>"
     ]
   },
   {
     "objectID": "capitulos/cap06.html",
     "href": "capitulos/cap06.html",
-    "title": "6  Segurança e Filters",
+    "title": "6  Web Services REST e Arquitetura Stateless (Parte 1)",
     "section": "",
-    "text": "6.1 Autenticação, Autorização e o Filter",
+    "text": "6.1 O Que é um Web Service",
     "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Segurança e Filters</span>"
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Web Services REST e Arquitetura Stateless (Parte 1)</span>"
     ]
   },
   {
-    "objectID": "capitulos/cap06.html#sec-06-filters",
-    "href": "capitulos/cap06.html#sec-06-filters",
-    "title": "6  Segurança e Filters",
+    "objectID": "capitulos/cap06.html#sec-06-rest",
+    "href": "capitulos/cap06.html#sec-06-rest",
+    "title": "6  Web Services REST e Arquitetura Stateless (Parte 1)",
     "section": "",
-    "text": "Conteúdo a desenvolver, alinhado com a Lecture 3 do ESIGELEC (Security and Filters). Tópicos previstos:\n\nAutenticação vs. autorização\nFilter (Jakarta Servlet)\nInterceção de pedidos\nFilterChain\nSeparação de responsabilidades\nHTTP 401 vs. 403\nArquitetura limpa: Servlet vs. Filter",
+    "text": "Conteúdo a desenvolver, alinhado com a primeira metade da Lecture 4 do ESIGELEC (REST Web Services and Stateless Architecture). Tópicos previstos:\n\nO que é um Web Service\nREST (nível conceptual)\nRecursos e endpoints\nJSON como formato de troca de dados\nO contrato HTTP como contrato da API\nStateful vs. Stateless",
     "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Segurança e Filters</span>"
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Web Services REST e Arquitetura Stateless (Parte 1)</span>"
     ]
   },
   {
     "objectID": "capitulos/cap07.html",
     "href": "capitulos/cap07.html",
-    "title": "7  Web Services REST e Arquitetura Stateless (Parte 1)",
+    "title": "7  Web Services REST (Parte 2) e o Cliente em JavaScript",
     "section": "",
-    "text": "7.1 O Que é um Web Service",
+    "text": "7.1 JWT, Escalabilidade e o Consumo da API em JavaScript",
     "crumbs": [
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Web Services REST e Arquitetura Stateless (Parte 1)</span>"
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Web Services REST (Parte 2) e o Cliente em JavaScript</span>"
     ]
   },
   {
-    "objectID": "capitulos/cap07.html#sec-07-rest",
-    "href": "capitulos/cap07.html#sec-07-rest",
-    "title": "7  Web Services REST e Arquitetura Stateless (Parte 1)",
-    "section": "",
-    "text": "Conteúdo a desenvolver, alinhado com a primeira metade da Lecture 4 do ESIGELEC (REST Web Services and Stateless Architecture). Tópicos previstos:\n\nO que é um Web Service\nREST (nível conceptual)\nRecursos e endpoints\nJSON como formato de troca de dados\nO contrato HTTP como contrato da API\nStateful vs. Stateless",
-    "crumbs": [
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Web Services REST e Arquitetura Stateless (Parte 1)</span>"
-    ]
-  },
-  {
-    "objectID": "capitulos/cap08.html",
-    "href": "capitulos/cap08.html",
-    "title": "8  Web Services REST (Parte 2) e o Cliente em JavaScript",
-    "section": "",
-    "text": "8.1 JWT, Escalabilidade e o Consumo da API em JavaScript",
-    "crumbs": [
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Web Services REST (Parte 2) e o Cliente em JavaScript</span>"
-    ]
-  },
-  {
-    "objectID": "capitulos/cap08.html#sec-08-jwt-js",
-    "href": "capitulos/cap08.html#sec-08-jwt-js",
-    "title": "8  Web Services REST (Parte 2) e o Cliente em JavaScript",
+    "objectID": "capitulos/cap07.html#sec-07-jwt-js",
+    "href": "capitulos/cap07.html#sec-07-jwt-js",
+    "title": "7  Web Services REST (Parte 2) e o Cliente em JavaScript",
     "section": "",
     "text": "Conteúdo a desenvolver, alinhado com a segunda metade da Lecture 4 do ESIGELEC + o “twist” de JavaScript próprio da UTAD. Tópicos previstos:\n\nLimitações de sessões em sistemas distribuídos\nCabeçalho Authorization\nJWT (header, payload, assinatura)\nEscalabilidade horizontal\nfetch() e JSON do lado do cliente\nO DOM como “View” do browser",
     "crumbs": [
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Web Services REST (Parte 2) e o Cliente em JavaScript</span>"
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Web Services REST (Parte 2) e o Cliente em JavaScript</span>"
     ]
   },
   {
@@ -236,7 +296,7 @@
     "href": "capitulos/apendiceB.html",
     "title": "Apêndice B — LABs Práticos",
     "section": "",
-    "text": "B.1 Introdução\nOs LABs práticos desta UC são os mesmos do ESIGELEC (a “World Capitals API”), com um “twist” de JavaScript próprio da UTAD: onde o ESIGELEC pede formulários HTML crus como test clients da API, aqui esses formulários são substituídos por um front-office com fetch(), sem alargar o âmbito do trabalho prático.",
+    "text": "B.1 Introdução\nOs LABs práticos desta UC são os mesmos do ESIGELEC (a “World Capitals API”), com um “twist” de JavaScript próprio da UTAD: onde o ESIGELEC pede formulários HTML crus como test clients da API, aqui esses formulários são substituídos por um front-office com fetch(), sem alargar o âmbito do trabalho prático.\nAs páginas visuais desta mesma aplicação (listagem de países, login, consulta de capital, formulários de CRUD) já foram construídas em HTML/CSS/Bootstrap no Capítulo 2, com os nomes de campos alinhados com os da API. Nos LABs, o trabalho é essencialmente acrescentar o fetch() necessário a esse código já existente.",
     "crumbs": [
       "Apêndices",
       "<span class='chapter-number'>B</span>  <span class='chapter-title'>LABs Práticos</span>"

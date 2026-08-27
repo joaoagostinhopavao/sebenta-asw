@@ -1,17 +1,17 @@
 ---
-title: "Java EE and Servlet Fundamentals"
+title: "Stateful Model: Sessions and JSP"
 lang: en-GB
 ---
 
-## The Web Container and the First Servlet {#sec-04-servlets-en}
+## Sessions, Cookies and Authentication {#sec-04-sessions-en}
 
-> Content to be developed, aligned with ESIGELEC's Lecture 1 (Java EE and
-> Servlet Fundamentals). Planned topics:
+> Content to be developed, aligned with ESIGELEC's Lecture 2 (Traditional
+> Java Web, Stateful Model). Planned topics:
 >
-> - Jakarta EE / Java EE
-> - Web Container (Tomcat)
-> - Servlet lifecycle
-> - HttpServletRequest / HttpServletResponse
-> - doGet() and doPost()
-> - HTTP parameters, Content-Type
-> - Manual JSON generation
+> - JSP
+> - Traditional MVC (Servlet + JSP)
+> - RequestDispatcher
+> - HttpSession
+> - Cookies, JSESSIONID
+> - Session-based authentication
+> - Logout (session.invalidate())

@@ -1,16 +1,139 @@
 ---
-title: "Apresentação da UC e Arquitetura de Aplicações Web"
+title: "Arquitetura de Aplicações Web"
 author: "João Pavão"
 date: 2026-08-26
 lang: pt-PT
 ---
 
-## Apresentação e Arquitetura Cliente-Servidor {#sec-01-apresentacao}
+## O Problema: Construir uma Aplicação Web de Raiz {#sec-01-problema}
 
-> Conteúdo a desenvolver. Tópicos previstos:
->
-> - Programa e modelo de avaliação da UC
-> - Arquitetura cliente-servidor
-> - Front-end vs. back-end
-> - Java EE como caso de estudo desta UC
-> - Visão geral do semestre: de HTML/CSS até REST
+Uma aplicação Web não é apenas um programa que corre num computador: é um programa que responde a pedidos vindos de múltiplos clientes, em simultâneo, através da rede. Construída de raiz, sem qualquer apoio de plataforma, uma aplicação deste tipo teria de resolver, por si só, um conjunto de problemas comuns a qualquer sistema deste género:
+
+- Receber e interpretar pedidos vindos da rede
+- Construir e devolver respostas no formato esperado pelo cliente
+- Suportar múltiplos pedidos em simultâneo (*multi-threading*)
+- Gerir a ligação a bases de dados
+- Manter informação entre pedidos sucessivos do mesmo utilizador
+- Proteger recursos de acessos não autorizados
+
+Resolver todos estes problemas repetidamente, aplicação a aplicação, seria um desperdício de esforço. É exactamente para evitar essa repetição que existem plataformas empresariais como a *Jakarta EE*.
+
+## A Plataforma Jakarta EE {#sec-01-jakarta-ee}
+
+A *Jakarta EE* (anteriormente conhecida como *Java EE*, até ser renomeada em 2019) é uma plataforma que fornece um conjunto de serviços e *APIs* prontos a usar para lidar com os problemas identificados acima, libertando quem desenvolve para se concentrar na lógica de negócio da aplicação.
+
+A plataforma assenta na linguagem Java e na *Java Virtual Machine* (JVM), o que significa que qualquer componente escrito para *Jakarta EE* beneficia da portabilidade e da gestão automática de memória já conhecidas da linguagem.
+
+## Arquitetura em Camadas {#sec-01-arquitetura-camadas}
+
+A plataforma *Jakarta EE* organiza uma aplicação segundo um modelo distribuído em várias camadas (*tiers*), cada uma com uma função bem definida e instalada, tipicamente, em máquinas diferentes:
+
+| Camada | Onde reside | Componentes típicos |
+|---|---|---|
+| *Client Tier* | Máquina do cliente | Páginas Web (browser), aplicações cliente |
+| *Web Tier* | Servidor *Jakarta EE* | *Servlets*, *JavaServer Pages*, *Web Services* |
+| *Business Tier* | Servidor *Jakarta EE* | *Enterprise Beans* (lógica de negócio) |
+| *EIS Tier* (*Enterprise Information System*) | Servidor de base de dados | Bases de dados, sistemas de informação empresarial |
+
+Esta separação por camadas permite que cada componente evolua de forma relativamente independente das restantes: alterar a base de dados não obriga a reescrever a lógica de negócio, e alterar a interface do cliente não obriga a alterar o servidor.
+
+## Aplicações da Camada Web: Apresentação vs. Serviço {#sec-01-frontend-backend}
+
+Dentro da camada Web, uma aplicação pode seguir duas orientações distintas, consoante o tipo de resposta que produz:
+
+**Orientada à apresentação** (*presentation-oriented*)
+: Gera páginas Web interativas (HTML, CSS e conteúdo dinâmico) em resposta a cada pedido. É o modelo tradicional de uma aplicação Web, pensada para ser consumida diretamente por um utilizador humano através de um *browser*.
+
+**Orientada a serviço** (*service-oriented*)
+: Implementa o ponto de acesso (*endpoint*) de um serviço Web, tipicamente devolvendo dados estruturados em formato JSON ou XML, em vez de HTML. Este modelo é pensado para ser consumido por outro programa, seja ele uma aplicação móvel, uma *single-page application* ou outro serviço.
+
+Esta distinção corresponde, em larga medida, à separação entre *front-end* (a parte da aplicação que interage diretamente com quem a usa) e *back-end* (a parte que processa a lógica e os dados). Uma aplicação orientada à apresentação tende a confundir estas duas responsabilidades num único componente do lado do servidor; uma aplicação orientada a serviço separa-as claramente, deixando o *front-end* inteiramente a cargo do cliente.
+
+## O Modelo Cliente-Servidor {#sec-01-cliente-servidor}
+
+Toda esta comunicação, seja ela orientada à apresentação ou a serviço, assenta no modelo cliente-servidor: um cliente (tipicamente um *browser*) envia um pedido através da rede, e um servidor processa esse pedido e devolve uma resposta.
+
+Esta troca é feita através do protocolo HTTP (*HyperText Transfer Protocol*), que tem duas características fundamentais:
+
+- É orientado a transações: cada interação é composta por um pedido (*request*) seguido de uma resposta (*response*)
+- É *stateless* (sem estado): o servidor não guarda, por si só, qualquer memória de pedidos anteriores do mesmo cliente
+
+A ausência de estado no protocolo não impede que uma aplicação precise de reter informação entre pedidos (por exemplo, para saber que um utilizador está autenticado). Essa necessidade é resolvida ao nível da aplicação, não do protocolo, através de mecanismos como sessões e *cookies*.
+
+## HTTP em Detalhe: Métodos {#sec-01-http-metodos}
+
+Cada pedido HTTP indica, através de um método, a operação que pretende realizar sobre um recurso:
+
+| Método | Semântica típica |
+|---|---|
+| `GET` | Obter um recurso |
+| `POST` | Criar um recurso |
+| `PUT` | Atualizar ou substituir um recurso |
+| `DELETE` | Remover um recurso |
+| `HEAD` | Obter apenas os cabeçalhos, sem corpo |
+
+Estes cinco métodos cobrem a generalidade das operações realizadas por uma aplicação Web; os dois primeiros (`GET` e `POST`) são, de longe, os mais usados em formulários HTML tradicionais, enquanto `PUT` e `DELETE` ganham importância sobretudo em serviços orientados a recursos.
+
+## HTTP em Detalhe: Formato de uma Mensagem {#sec-01-http-formato-mensagem}
+
+Tanto um pedido como uma resposta HTTP seguem a mesma estrutura geral:
+
+1. Uma primeira linha, diferente consoante se trate de um pedido (método, *URL* e versão de HTTP) ou de uma resposta (versão de HTTP, código de estado e motivo)
+2. Um conjunto de cabeçalhos (*headers*), que transportam metadados sobre a mensagem (por exemplo, o anfitrião de destino, o tipo de conteúdo ou o seu comprimento)
+3. Um corpo (*body*), opcional, com os dados propriamente ditos
+
+Um pedido `GET` não tem, tipicamente, corpo: todos os dados que transporta vão na própria *URL*, sob a forma de parâmetros. Um pedido `POST` transporta os dados no corpo da mensagem, fora da *URL*.
+
+### Exemplo: de um Formulário a um Pedido HTTP
+
+Considere-se um formulário HTML simples, usado para consultar a capital de um país a partir do respetivo código:
+
+```html
+<form method="GET" action="/capital">
+  <label for="countrycode">Código do país</label>
+  <input type="text" id="countrycode" name="countrycode">
+  <button type="submit">Consultar</button>
+</form>
+```
+
+Ao ser submetido com o valor `PT`, o *browser* gera o seguinte pedido HTTP:
+
+```
+GET /capital?countrycode=PT HTTP/1.1
+Host: localhost:8080
+```
+
+Note-se que, por se tratar de um método `GET`, o parâmetro `countrycode` é enviado como parte da *URL* (depois do `?`), e não existe corpo na mensagem. Se o mesmo formulário usasse `method="POST"`, o parâmetro seguiria antes no corpo do pedido, e a *URL* manter-se-ia limpa (`/capital`).
+
+O servidor, ao processar este pedido, devolve uma resposta HTTP como a seguinte:
+
+```
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{"country": "Portugal", "capital": "Lisboa", "ccode": "PT"}
+```
+
+## HTTP em Detalhe: Códigos de Estado {#sec-01-http-codigos-estado}
+
+Toda a resposta HTTP inclui um código de estado numérico, que indica sucintamente o resultado do pedido. Os códigos agrupam-se em cinco categorias, consoante a centena:
+
+| Intervalo | Categoria |
+|---|---|
+| `1xx` | Informativo |
+| `2xx` | Sucesso |
+| `3xx` | Redirecionamento |
+| `4xx` | Erro do cliente |
+| `5xx` | Erro do servidor |
+
+Dentro destas categorias, alguns códigos surgem com particular frequência no desenvolvimento de serviços Web:
+
+| Código | Significado |
+|---|---|
+| `200 OK` | O pedido foi processado com sucesso |
+| `400 Bad Request` | O pedido está malformado ou falta um parâmetro obrigatório |
+| `403 Forbidden` | O cliente não tem permissão para aceder ao recurso |
+| `404 Not Found` | O recurso pedido não existe |
+| `500 Internal Server Error` | Ocorreu um erro não tratado do lado do servidor |
+
+Escolher o código de estado correto para cada situação é uma parte essencial do desenho de um serviço Web: o código transmite, por si só, informação que o cliente pode usar para decidir como reagir, sem precisar de interpretar o corpo da resposta.

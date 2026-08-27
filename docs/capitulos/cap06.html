@@ -8,7 +8,7 @@
 
 <meta name="author" content="João Pavão">
 
-<title>6&nbsp; Segurança e Filters – Aplicações e Serviços Web</title>
+<title>6&nbsp; Web Services REST e Arquitetura Stateless (Parte 1) – Aplicações e Serviços Web</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -86,7 +86,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../capitulos/cap06.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Segurança e Filters</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../capitulos/cap06.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Web Services REST e Arquitetura Stateless (Parte 1)</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Procurar" onclick="window.quartoOpenSearch();">
@@ -123,7 +123,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap01.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Apresentação da UC e Arquitetura de Aplicações Web</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Arquitetura de Aplicações Web</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -135,37 +135,31 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap03.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">O Protocolo HTTP</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Java EE e Fundamentos de Servlets</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap04.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Java EE e Fundamentos de Servlets</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelo Stateful: Sessões e JSP</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap05.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Modelo Stateful: Sessões e JSP</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Segurança e Filters</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap06.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Segurança e Filters</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Web Services REST e Arquitetura Stateless (Parte 1)</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap07.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Web Services REST e Arquitetura Stateless (Parte 1)</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../capitulos/cap08.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Web Services REST (Parte 2) e o Cliente em JavaScript</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Web Services REST (Parte 2) e o Cliente em JavaScript</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -201,7 +195,7 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Índice</h2>
    
   <ul>
-  <li><a href="#sec-06-filters" id="toc-sec-06-filters" class="nav-link active" data-scroll-target="#sec-06-filters"><span class="header-section-number">6.1</span> Autenticação, Autorização e o Filter</a></li>
+  <li><a href="#sec-06-rest" id="toc-sec-06-rest" class="nav-link active" data-scroll-target="#sec-06-rest"><span class="header-section-number">6.1</span> O Que é um Web Service</a></li>
   </ul>
 </nav>
     </div>
@@ -210,7 +204,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Segurança e Filters</span></h1>
+<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Web Services REST e Arquitetura Stateless (Parte 1)</span></h1>
 </div>
 
 
@@ -239,18 +233,17 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="sec-06-filters" class="level2" data-number="6.1">
-<h2 data-number="6.1" class="anchored" data-anchor-id="sec-06-filters"><span class="header-section-number">6.1</span> Autenticação, Autorização e o Filter</h2>
+<section id="sec-06-rest" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="sec-06-rest"><span class="header-section-number">6.1</span> O Que é um Web Service</h2>
 <blockquote class="blockquote">
-<p>Conteúdo a desenvolver, alinhado com a Lecture 3 do ESIGELEC (Security and Filters). Tópicos previstos:</p>
+<p>Conteúdo a desenvolver, alinhado com a primeira metade da Lecture 4 do ESIGELEC (REST Web Services and Stateless Architecture). Tópicos previstos:</p>
 <ul>
-<li>Autenticação vs.&nbsp;autorização</li>
-<li>Filter (Jakarta Servlet)</li>
-<li>Interceção de pedidos</li>
-<li>FilterChain</li>
-<li>Separação de responsabilidades</li>
-<li>HTTP 401 vs.&nbsp;403</li>
-<li>Arquitetura limpa: Servlet vs.&nbsp;Filter</li>
+<li>O que é um Web Service</li>
+<li>REST (nível conceptual)</li>
+<li>Recursos e endpoints</li>
+<li>JSON como formato de troca de dados</li>
+<li>O contrato HTTP como contrato da API</li>
+<li>Stateful vs.&nbsp;Stateless</li>
 </ul>
 </blockquote>
 
@@ -821,13 +814,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../capitulos/cap05.html" class="pagination-link" aria-label="Modelo Stateful: Sessões e JSP">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Modelo Stateful: Sessões e JSP</span></span>
+      <a href="../capitulos/cap05.html" class="pagination-link" aria-label="Segurança e Filters">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Segurança e Filters</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../capitulos/cap07.html" class="pagination-link" aria-label="Web Services REST e Arquitetura Stateless (Parte 1)">
-        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Web Services REST e Arquitetura Stateless (Parte 1)</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../capitulos/cap07.html" class="pagination-link" aria-label="Web Services REST (Parte 2) e o Cliente em JavaScript">
+        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Web Services REST (Parte 2) e o Cliente em JavaScript</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

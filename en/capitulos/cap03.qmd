@@ -1,14 +1,17 @@
 ---
-title: "The HTTP Protocol"
+title: "Java EE and Servlet Fundamentals"
 lang: en-GB
 ---
 
-## Requests, Responses and Status Codes {#sec-03-http-en}
+## The Web Container and the First Servlet {#sec-03-servlets-en}
 
-> Content to be developed. Planned topics:
+> Content to be developed, aligned with ESIGELEC's Lecture 1 (Java EE and
+> Servlet Fundamentals). Planned topics:
 >
-> - HTTP request/response structure
-> - GET / POST methods
-> - HTTP headers
-> - Status codes (2xx / 3xx / 4xx / 5xx)
-> - Statelessness (introduction, revisited in Chapters 5 and 7)
+> - Jakarta EE / Java EE
+> - Web Container (Tomcat)
+> - Servlet lifecycle
+> - HttpServletRequest / HttpServletResponse
+> - doGet() and doPost()
+> - HTTP parameters, Content-Type
+> - Manual JSON generation

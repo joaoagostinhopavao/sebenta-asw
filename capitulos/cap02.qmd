@@ -13,3 +13,16 @@ lang: pt-PT
 > - Seletores e box model CSS
 > - Grid / Flexbox
 > - Componentes Bootstrap (navbar, form, grid)
+
+## Exercício: as páginas estáticas da aplicação "World Capitals" {#sec-02-world-capitals}
+
+> Conteúdo a desenvolver. Tópicos previstos:
+>
+> - Construção, em HTML/CSS/Bootstrap puro (sem JavaScript), das páginas
+>   visuais da aplicação usada nos LABs práticos (ver [Apêndice
+>   B](apendiceB.qmd)): listagem de países, formulário de login, formulário
+>   de consulta de capital por código de país, e formulários de
+>   inserir/editar/remover país
+> - Nomes de campos alinhados desde já com os que a API REST vai esperar
+>   (`code`, `name`, `capital`, `user`, `pass`), para que mais tarde baste
+>   ligar estes formulários aos endpoints com `fetch()`, sem reescrever HTML

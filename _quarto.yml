@@ -35,7 +35,6 @@ book:
     - capitulos/cap05.qmd
     - capitulos/cap06.qmd
     - capitulos/cap07.qmd
-    - capitulos/cap08.qmd
 
   appendices:
     - capitulos/apendiceA.qmd

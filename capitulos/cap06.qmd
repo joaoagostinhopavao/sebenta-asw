@@ -1,19 +1,19 @@
 ---
-title: "Segurança e Filters"
+title: "Web Services REST e Arquitetura Stateless (Parte 1)"
 author: "João Pavão"
 date: 2026-08-26
 lang: pt-PT
 ---
 
-## Autenticação, Autorização e o Filter {#sec-06-filters}
+## O Que é um Web Service {#sec-06-rest}
 
-> Conteúdo a desenvolver, alinhado com a Lecture 3 do ESIGELEC (Security and
-> Filters). Tópicos previstos:
+> Conteúdo a desenvolver, alinhado com a primeira metade da Lecture 4 do
+> ESIGELEC (REST Web Services and Stateless Architecture). Tópicos
+> previstos:
 >
-> - Autenticação vs. autorização
-> - Filter (Jakarta Servlet)
-> - Interceção de pedidos
-> - FilterChain
-> - Separação de responsabilidades
-> - HTTP 401 vs. 403
-> - Arquitetura limpa: Servlet vs. Filter
+> - O que é um Web Service
+> - REST (nível conceptual)
+> - Recursos e endpoints
+> - JSON como formato de troca de dados
+> - O contrato HTTP como contrato da API
+> - Stateful vs. Stateless
