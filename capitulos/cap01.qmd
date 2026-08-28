@@ -32,7 +32,7 @@ Esta distinção corresponde, em larga medida, à separação entre *front-end* 
 
 ## O Padrão MVC {#sec-01-mvc}
 
-Organizar todo o código de uma aplicação num único bloco indiferenciado rapidamente se torna insustentável: o código que processa o pedido, o que acede aos dados e o que gera a resposta acabam misturados, difíceis de testar e de alterar em separado. O padrão *Model-View-Controller* (MVC) resolve este problema, dividindo a aplicação em três responsabilidades distintas:
+Organizar todo o código de uma aplicação num único bloco indiferenciado rapidamente se torna insustentável: o código que processa o pedido, o que acede aos dados e o que gera a resposta acabam misturados, difíceis de testar e de alterar em separado. O padrão [*Model-View-Controller*](https://developer.mozilla.org/en-US/docs/Glossary/MVC) (MVC) resolve este problema, dividindo a aplicação em três responsabilidades distintas:
 
 **Model** (Modelo)
 : Representa os dados e a lógica de negócio da aplicação, independentemente de como são apresentados. Numa aplicação Web, o Model é tipicamente responsável por aceder à base de dados e devolver a informação já validada.
@@ -45,9 +45,24 @@ Organizar todo o código de uma aplicação num único bloco indiferenciado rapi
 
 Esta separação de responsabilidades é um dos princípios de desenho mais recorrentes de toda esta matéria. Manifesta-se de forma clássica quando um componente do lado do servidor funciona como Controller e delega a apresentação a outro, que funciona como View; e manifesta-se de forma bem menos óbvia quando a View deixa de existir do lado do servidor e passa a ser reconstruída no *browser*, a partir de dados JSON.
 
+## Três Peças: Frontend, Middleware e Backend {#sec-01-tres-pecas}
+
+Tanto a distinção entre apresentação e serviço como o padrão MVC descrevem a mesma ideia central, vista de ângulos diferentes: uma aplicação Web não é um bloco único, mas sim um conjunto de peças com papéis distintos, que comunicam entre si. Ao longo desta UC, essas peças reduzem-se sempre às mesmas três:
+
+**Frontend**
+: A parte da aplicação que corre do lado do cliente (tipicamente um *browser*), responsável por apresentar informação e recolher a interação de quem a usa. Corresponde, em larga medida, à View do MVC.
+
+**Middleware**
+: O protocolo que liga o Frontend ao Backend, transportando pedidos e respostas entre os dois. Nesta UC, esse protocolo é sempre o HTTP.
+
+**Backend**
+: A parte da aplicação que corre do lado do servidor, responsável pela lógica de negócio e pelo acesso aos dados. Corresponde, em larga medida, ao Model e ao Controller do MVC.
+
+Esta divisão em três peças é o mapa para todo o resto desta obra: primeiro constrói-se o Frontend ([Capítulo 2](cap02.qmd), em HTML/CSS/Bootstrap), depois estuda-se em detalhe o Middleware que o liga ao servidor ([Capítulo 3](cap03.qmd), o protocolo HTTP), e só depois se constrói o Backend que efetivamente responde a esses pedidos (a partir do [Capítulo 4](cap04.qmd), com *Servlets* e, mais tarde, com APIs REST).
+
 ## O Modelo Cliente-Servidor {#sec-01-cliente-servidor}
 
-Toda esta comunicação, seja ela orientada à apresentação ou a serviço, assenta no modelo cliente-servidor: um cliente (tipicamente um *browser*) envia um pedido através da rede, e um servidor processa esse pedido e devolve uma resposta.
+O Middleware que liga o Frontend ao Backend assenta no modelo cliente-servidor: o Frontend (tipicamente um *browser*) envia um pedido através da rede, e o Backend processa esse pedido e devolve uma resposta.
 
 ![O cliente (por exemplo, um browser) envia um pedido HTTP; o servidor processa-o e devolve uma resposta. A troca repete-se a cada interação, sem que o servidor guarde, por si só, memória da anterior.](../assets/images/capitulos/cap01/Modelo_cliente_servidor.png){#fig-01-cliente-servidor width="70%"}
 
@@ -56,112 +71,6 @@ Esta troca é feita através do protocolo HTTP (*HyperText Transfer Protocol*), 
 - É orientado a transações: cada interação é composta por um pedido (*request*) seguido de uma resposta (*response*)
 - É *stateless* (sem estado): o servidor não guarda, por si só, qualquer memória de pedidos anteriores do mesmo cliente
 
-A ausência de estado no protocolo não impede que uma aplicação precise de reter informação entre pedidos (por exemplo, para saber que um utilizador está autenticado). Essa necessidade é resolvida ao nível da aplicação, não do protocolo, através de mecanismos como sessões e *cookies*.
+A ausência de estado no protocolo não impede que uma aplicação precise de reter informação entre pedidos (por exemplo, para saber que um utilizador está autenticado). Essa necessidade é resolvida ao nível da aplicação, não do protocolo, através de mecanismos como sessões e *cookies* (ver [Capítulo 5](cap05.qmd)).
 
-## HTTP em Detalhe: Métodos {#sec-01-http-metodos}
-
-Cada pedido HTTP indica, através de um método, a operação que pretende realizar sobre um recurso:
-
-| Método | Semântica típica |
-|---|---|
-| `GET` | Obter um recurso |
-| `POST` | Criar um recurso |
-| `PUT` | Atualizar ou substituir um recurso |
-| `DELETE` | Remover um recurso |
-| `HEAD` | Obter apenas os cabeçalhos, sem corpo |
-
-Estes cinco métodos cobrem a generalidade das operações realizadas por uma aplicação Web; os dois primeiros (`GET` e `POST`) são, de longe, os mais usados em formulários HTML tradicionais, enquanto `PUT` e `DELETE` ganham importância sobretudo em serviços orientados a recursos.
-
-## HTTP em Detalhe: Formato de uma Mensagem {#sec-01-http-formato-mensagem}
-
-Tanto um pedido como uma resposta HTTP seguem a mesma estrutura geral:
-
-1. Uma primeira linha, diferente consoante se trate de um pedido (método, *URL* e versão de HTTP) ou de uma resposta (versão de HTTP, código de estado e motivo)
-2. Um conjunto de cabeçalhos (*headers*), que transportam metadados sobre a mensagem (por exemplo, o anfitrião de destino, o tipo de conteúdo ou o seu comprimento)
-3. Um corpo (*body*), opcional, com os dados propriamente ditos
-
-Um pedido `GET` não tem, tipicamente, corpo: todos os dados que transporta vão na própria *URL*, sob a forma de parâmetros. Um pedido `POST` transporta os dados no corpo da mensagem, fora da *URL*.
-
-![O formato geral de uma mensagem HTTP: a primeira linha (diferente para pedido e resposta), seguida dos vários grupos de cabeçalhos, e por fim o corpo.](../assets/images/capitulos/cap01/HTTP_message_request_format.png){#fig-01-http-formato-mensagem width="60%"}
-
-### Exemplo: de um Formulário a um Pedido HTTP
-
-Considere-se um formulário HTML simples, usado para consultar a capital de um país a partir do respetivo código:
-
-```html
-<form method="GET" action="/capital">
-  <label for="countrycode">Código do país</label>
-  <input type="text" id="countrycode" name="countrycode">
-  <button type="submit">Consultar</button>
-</form>
-```
-
-Ao ser submetido com o valor `PT`, o *browser* gera o seguinte pedido HTTP:
-
-```bash
-GET /capital?countrycode=PT HTTP/1.1
-Host: localhost:8080
-```
-
-Note-se que, por se tratar de um método `GET`, o parâmetro `countrycode` é enviado como parte da *URL* (depois do `?`), e não existe corpo na mensagem. Se o mesmo formulário usasse `method="POST"`, o parâmetro seguiria antes no corpo do pedido, e a *URL* manter-se-ia limpa (`/capital`).
-
-O servidor, ao processar este pedido, devolve uma resposta HTTP como a seguinte:
-
-```bash
-HTTP/1.1 200 OK
-Content-Type: application/json
-
-{"country": "Portugal", "capital": "Lisboa", "ccode": "PT"}
-```
-
-### Exemplo: um Pedido `POST` com Corpo
-
-Considere-se agora um formulário de autenticação, com os campos `user` e `pass`:
-
-```html
-<form method="POST" action="/login">
-  <label for="user">Utilizador</label>
-  <input type="text" id="user" name="user">
-  <label for="pass">Palavra-passe</label>
-  <input type="password" id="pass" name="pass">
-  <button type="submit">Entrar</button>
-</form>
-```
-
-Ao ser submetido, este formulário gera o seguinte pedido HTTP:
-
-```bash
-POST /login HTTP/1.1
-Host: localhost:8080
-Content-Type: application/x-www-form-urlencoded
-Content-Length: 21
-
-user=javaee&pass=esigelec2026
-```
-
-Ao contrário do exemplo anterior, os parâmetros já não vão na *URL*: seguem no corpo do pedido, depois de uma linha em branco que separa os cabeçalhos do corpo. É por isso que credenciais e outros dados sensíveis se enviam tipicamente por `POST`, nunca por `GET`: o corpo de um pedido não fica registado nos históricos de navegação nem nos ficheiros de registo (*logs*) do servidor, ao contrário do que acontece com os parâmetros de uma *URL*.
-
-## HTTP em Detalhe: Códigos de Estado {#sec-01-http-codigos-estado}
-
-Toda a resposta HTTP inclui um código de estado numérico, que indica sucintamente o resultado do pedido. Os códigos agrupam-se em cinco categorias, consoante a centena:
-
-| Intervalo | Categoria |
-|---|---|
-| `1xx` | Informativo |
-| `2xx` | Sucesso |
-| `3xx` | Redirecionamento |
-| `4xx` | Erro do cliente |
-| `5xx` | Erro do servidor |
-
-Dentro destas categorias, alguns códigos surgem com particular frequência no desenvolvimento de serviços Web:
-
-| Código | Significado |
-|---|---|
-| `200 OK` | O pedido foi processado com sucesso |
-| `201 Created` | Um novo recurso foi criado com sucesso |
-| `400 Bad Request` | O pedido está malformado ou falta um parâmetro obrigatório |
-| `403 Forbidden` | O cliente não tem permissão para aceder ao recurso |
-| `404 Not Found` | O recurso pedido não existe |
-| `500 Internal Server Error` | Ocorreu um erro não tratado do lado do servidor |
-
-Escolher o código de estado correto para cada situação é uma parte essencial do desenho de um serviço Web: o código transmite, por si só, informação que o cliente pode usar para decidir como reagir, sem precisar de interpretar o corpo da resposta.
+Os detalhes deste protocolo, o Middleware que liga estas duas peças, são o tema do [Capítulo 3](cap03.qmd).

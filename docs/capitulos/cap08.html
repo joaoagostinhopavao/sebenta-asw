@@ -8,7 +8,7 @@
 
 <meta name="author" content="João Pavão">
 
-<title>Apêndice A — Configuração do Ambiente de Desenvolvimento – Aplicações e Serviços Web</title>
+<title>8&nbsp; Web Services REST (Parte 2) e o Cliente em JavaScript – Aplicações e Serviços Web</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -31,8 +31,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../capitulos/apendiceB.html" rel="next">
-<link href="../capitulos/cap08.html" rel="prev">
+<link href="../capitulos/apendiceA.html" rel="next">
+<link href="../capitulos/cap07.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -86,7 +86,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../capitulos/apendiceA.html">Apêndices</a></li><li class="breadcrumb-item"><a href="../capitulos/apendiceA.html"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Configuração do Ambiente de Desenvolvimento</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../capitulos/cap08.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Web Services REST (Parte 2) e o Cliente em JavaScript</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Procurar" onclick="window.quartoOpenSearch();">
@@ -164,7 +164,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../capitulos/cap08.html" class="sidebar-item-text sidebar-link">
+  <a href="../capitulos/cap08.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Web Services REST (Parte 2) e o Cliente em JavaScript</span></span></a>
   </div>
 </li>
@@ -179,7 +179,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../capitulos/apendiceA.html" class="sidebar-item-text sidebar-link active">
+  <a href="../capitulos/apendiceA.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Configuração do Ambiente de Desenvolvimento</span></span></a>
   </div>
 </li>
@@ -207,16 +207,17 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Índice</h2>
    
   <ul>
-  <li><a href="#sec-apA-intro" id="toc-sec-apA-intro" class="nav-link active" data-scroll-target="#sec-apA-intro"><span class="header-section-number">A.1</span> Introdução</a></li>
+  <li><a href="#sec-08-jwt-js" id="toc-sec-08-jwt-js" class="nav-link active" data-scroll-target="#sec-08-jwt-js"><span class="header-section-number">8.1</span> JWT, Escalabilidade e o Consumo da API em JavaScript</a></li>
+  <li><a href="#sec-08-mvc-distribuido" id="toc-sec-08-mvc-distribuido" class="nav-link" data-scroll-target="#sec-08-mvc-distribuido"><span class="header-section-number">8.2</span> MVC Distribuído: o Padrão Divide-se entre Servidor e Cliente</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../capitulos/apendiceA.html">Apêndices</a></li><li class="breadcrumb-item"><a href="../capitulos/apendiceA.html"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Configuração do Ambiente de Desenvolvimento</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Apêndice A — Configuração do Ambiente de Desenvolvimento</h1>
+<h1 class="title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Web Services REST (Parte 2) e o Cliente em JavaScript</span></h1>
 </div>
 
 
@@ -245,11 +246,26 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="sec-apA-intro" class="level2" data-number="A.1">
-<h2 data-number="A.1" class="anchored" data-anchor-id="sec-apA-intro"><span class="header-section-number">A.1</span> Introdução</h2>
+<section id="sec-08-jwt-js" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="sec-08-jwt-js"><span class="header-section-number">8.1</span> JWT, Escalabilidade e o Consumo da API em JavaScript</h2>
 <blockquote class="blockquote">
-<p>Conteúdo a desenvolver: configuração do Eclipse IDE for Enterprise Java and Web Developers, instalação do Apache Tomcat, e criação do primeiro Dynamic Web Project — passo 1.1 a 1.2 do LAB1-EN.pdf (ESIGELEC).</p>
+<p>Conteúdo a desenvolver, alinhado com a segunda metade da Lecture 4 do ESIGELEC + o “twist” de JavaScript próprio da UTAD. Tópicos previstos:</p>
+<ul>
+<li>Limitações de sessões em sistemas distribuídos</li>
+<li>Cabeçalho Authorization</li>
+<li>JWT (header, payload, assinatura)</li>
+<li>Escalabilidade horizontal</li>
+<li>fetch() e JSON do lado do cliente</li>
+<li>O DOM como “View” do browser</li>
+</ul>
 </blockquote>
+</section>
+<section id="sec-08-mvc-distribuido" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="sec-08-mvc-distribuido"><span class="header-section-number">8.2</span> MVC Distribuído: o Padrão Divide-se entre Servidor e Cliente</h2>
+<p>Numa aplicação orientada à apresentação, o padrão MVC (ver <a href="../capitulos/cap01.html">Capítulo 1</a>) vive inteiramente do lado do servidor: um componente funciona como Controller, e outro, responsável por gerar HTML, como View. Numa API REST, essa organização deixa de fazer sentido: o servidor já não gera HTML, e a View, tal como definida no MVC clássico, desaparece do lado do servidor.</p>
+<p>Do lado do servidor ficam apenas o Model (o acesso aos dados) e o Controller (o <em>endpoint</em> que recebe o pedido HTTP e devolve JSON). O papel de View passa integralmente para o cliente: é o código <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a>, a correr no <em>browser</em>, que interpreta o JSON recebido e manipula o <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model"><em>DOM</em></a> para o apresentar a quem usa a aplicação.</p>
+<p>Esta divisão pode ler-se como uma segunda aplicação do mesmo padrão, agora do lado do cliente: o JavaScript que trata a resposta e atualiza a página funciona, ele próprio, como Controller (decide o que fazer com a resposta recebida) e como View (gera o HTML mostrado); o JSON devolvido pela API é o Model, mantido no servidor e sincronizado a cada pedido <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API"><code>fetch()</code></a>.</p>
+<p>É esta a razão pela qual um <em>front-office</em> em JavaScript ligado a uma API REST não é uma alternativa ao MVC, mas sim o mesmo padrão distribuído por duas máquinas em vez de uma.</p>
 
 
 </section>
@@ -818,13 +834,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../capitulos/cap08.html" class="pagination-link" aria-label="Web Services REST (Parte 2) e o Cliente em JavaScript">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Web Services REST (Parte 2) e o Cliente em JavaScript</span></span>
+      <a href="../capitulos/cap07.html" class="pagination-link" aria-label="Web Services REST e Arquitetura Stateless (Parte 1)">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Web Services REST e Arquitetura Stateless (Parte 1)</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../capitulos/apendiceB.html" class="pagination-link" aria-label="LABs Práticos">
-        <span class="nav-page-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">LABs Práticos</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../capitulos/apendiceA.html" class="pagination-link" aria-label="Configuração do Ambiente de Desenvolvimento">
+        <span class="nav-page-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Configuração do Ambiente de Desenvolvimento</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

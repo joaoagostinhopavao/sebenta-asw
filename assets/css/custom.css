@@ -173,6 +173,47 @@ div.sourceCode code {
   line-height: 1.45;
 }
 
+/* Mensagens HTTP (pedido/resposta em bruto) — texto simples, não código:
+   sem fundo tingido nem realce de sintaxe, só uma borda para não se
+   diluir no fundo da página. */
+div.httpmsg {
+  border: 1px solid #c3cacd;
+  border-radius: 4px;
+  padding: 0.85rem 1.1rem;
+  margin: 1.25rem 0;
+  background-color: #f2f3f4;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+div.httpmsg p {
+  margin: 0 0 0.75rem;
+  font-family: var(--bs-font-monospace, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace) !important;
+}
+
+div.httpmsg p:last-child {
+  margin-bottom: 0;
+}
+
+/* Screenshots de formulário renderizado no browser (ex.: form1.png) —
+   sombra mais pronunciada do que as restantes figuras, para dar um
+   efeito de "janela" a flutuar sobre a página. Desliga o cartão
+   branco/sombra ligeira que .quarto-figure aplica por omissão a todas
+   as figuras, para não duplicar a moldura. Só tem efeito em HTML — o
+   PDF mostra a imagem normal, sem sombra (LaTeX não traduz classes
+   CSS arbitrárias). */
+.quarto-figure:has(img.browser-shot) {
+  background: none;
+  box-shadow: none;
+  padding: 0;
+  border-radius: 0;
+}
+
+img.browser-shot {
+  border-radius: 8px;
+  box-shadow: 0 16px 32px rgba(10, 20, 32, 0.2), 0 4px 10px rgba(10, 20, 32, 0.14);
+}
+
 /* ============================================================
    Cabeçalho de capítulo — banner colorido
    ============================================================ */

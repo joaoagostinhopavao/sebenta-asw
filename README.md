@@ -10,13 +10,14 @@ Sebenta-ASW/
 ├── _quarto.yml          # Configuração do projecto
 ├── index.qmd             # Prefácio
 ├── capitulos/
-│   ├── cap01.qmd         # Arquitetura de Aplicações Web e Protocolo HTTP
-│   ├── cap02.qmd         # HTML, CSS e Bootstrap
-│   ├── cap03.qmd         # Java EE e Fundamentos de Servlets
-│   ├── cap04.qmd         # Modelo Stateful: Sessões e JSP
-│   ├── cap05.qmd         # Segurança e Filtros
-│   ├── cap06.qmd         # Web Services REST e Arquitetura Stateless (Parte 1)
-│   ├── cap07.qmd         # Web Services REST (Parte 2) e o Cliente em JavaScript
+│   ├── cap01.qmd         # Arquitetura de Aplicações Web (as 3 peças: Frontend/Middleware/Backend)
+│   ├── cap02.qmd         # HTML, CSS e Bootstrap (Frontend)
+│   ├── cap03.qmd         # O Protocolo HTTP (Middleware)
+│   ├── cap04.qmd         # Java EE e Fundamentos de Servlets (Backend)
+│   ├── cap05.qmd         # Modelo Stateful: Sessões e JSP
+│   ├── cap06.qmd         # Segurança e Filtros
+│   ├── cap07.qmd         # Web Services REST e Arquitetura Stateless (Parte 1)
+│   ├── cap08.qmd         # Web Services REST (Parte 2) e o Cliente em JavaScript
 │   ├── apendiceA.qmd     # Configuração do Ambiente de Desenvolvimento
 │   ├── apendiceB.qmd     # LABs Práticos (mesmos do ESIGELEC, com twist de JS)
 │   └── apendiceC.qmd     # Código completo "World Capitals" (4 .html prontos a copiar)
@@ -28,7 +29,7 @@ Sebenta-ASW/
 │   ├── _quarto.yml
 │   ├── index.qmd
 │   ├── references.qmd
-│   ├── capitulos/         # cap01.qmd … cap07.qmd, em inglês
+│   ├── capitulos/         # cap01.qmd … cap07.qmd, em inglês (ainda 7 capítulos, desatualizado — ver Estado)
 │   └── assets/css/custom.css  # cópia do CSS principal (ver nota abaixo)
 └── referencias.bib        # Bibliografia (a partir da ficha oficial da UC)
 ```
@@ -63,14 +64,19 @@ principal for alterado, replicar a alteração também aqui.
 
 ## Estado
 
-Projecto criado em 2026-08-26. Estrutura de 7 capítulos + 2 apêndices
+Projecto criado em 2026-08-26. Estrutura de 8 capítulos + 2 apêndices
 definida a partir do planeamento em
-`Planeamento de UUCC/ASW/Planeamento ASW.canvas` (originalmente 8
-capítulos; o Cap03 "O Protocolo HTTP" foi absorvido pelo Cap01, por fazer
-mais sentido como leitura contínua, mesmo que na calendarização das aulas
-a matéria continue dividida em duas sessões — Aula 1 e Aula 3). Cap01 e
-Cap02 já têm conteúdo real; os restantes ainda são esqueleto (tópicos-chave
-por secção).
+`Planeamento de UUCC/ASW/Planeamento ASW.canvas`. A estrutura passou por
+duas revisões: primeiro o Cap03 "O Protocolo HTTP" foi absorvido pelo
+Cap01 (8→7 capítulos); depois, ao rever a sequência pedagógica, voltou a
+sair como capítulo próprio, mas agora posicionado depois do Cap02
+(HTML/CSS), não antes (7→8 capítulos de novo). A razão: o Cap01 passou a
+terminar numa síntese explícita — "três peças: Frontend, Middleware,
+Backend" — que serve de mapa ao resto do livro; o HTML só faz sentido como
+a primeira peça concretizada, e o HTTP só é motivado depois de existir um
+formulário HTML concreto a que se possa recorrer como exemplo (os mesmos
+`capital.html`/`login.html` do Cap02). Cap01 a Cap06 já têm conteúdo real;
+Cap07 e Cap08 ainda são esqueleto (tópicos-chave por secção).
 
 A matéria e os trabalhos práticos seguem de perto uma UC homóloga já
 lecionada no ESIGELEC (parceiro internacional) — ver `Team Inbox/Team-ASW/`

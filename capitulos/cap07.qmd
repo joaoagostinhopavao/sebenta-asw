@@ -1,28 +1,27 @@
 ---
-title: "Web Services REST (Parte 2) e o Cliente em JavaScript"
+title: "Web Services REST e Arquitetura Stateless (Parte 1)"
 author: "João Pavão"
 date: 2026-08-26
 lang: pt-PT
 ---
 
-## JWT, Escalabilidade e o Consumo da API em JavaScript {#sec-07-jwt-js}
+## O Que é um Web Service {#sec-07-rest}
 
-> Conteúdo a desenvolver, alinhado com a segunda metade da Lecture 4 do
-> ESIGELEC + o "twist" de JavaScript próprio da UTAD. Tópicos previstos:
+> Conteúdo a desenvolver, alinhado com a primeira metade da Lecture 4 do
+> ESIGELEC (REST Web Services and Stateless Architecture). Tópicos
+> previstos:
 >
-> - Limitações de sessões em sistemas distribuídos
-> - Cabeçalho Authorization
-> - JWT (header, payload, assinatura)
-> - Escalabilidade horizontal
-> - fetch() e JSON do lado do cliente
-> - O DOM como "View" do browser
+> - O que é um Web Service
+> - REST (nível conceptual)
+> - Recursos e endpoints
+> - JSON como formato de troca de dados
+> - O contrato HTTP como contrato da API
+> - Stateful vs. Stateless
 
-## MVC Distribuído: o Padrão Divide-se entre Servidor e Cliente {#sec-07-mvc-distribuido}
+::: {.callout-note}
+## `POST` + `operation` como alternativa aos verbos HTTP "puros"
 
-Numa aplicação orientada à apresentação, o padrão MVC (ver [Capítulo 1](cap01.qmd)) vive inteiramente do lado do servidor: um componente funciona como Controller, e outro, responsável por gerar HTML, como View. Numa API REST, essa organização deixa de fazer sentido: o servidor já não gera HTML, e a View, tal como definida no MVC clássico, desaparece do lado do servidor.
+Os LABs práticos desta UC (ver [Apêndice B](apendiceB.qmd), LAB4) implementam a criação, atualização e remoção de um país através de um único *endpoint* (`/countryEdit`), recebido sempre por `POST`, distinguindo a operação pretendida através de um parâmetro `operation` (`insert`, `update`, `delete`). Isto contraria a semântica "pura" dos verbos HTTP apresentada no [Capítulo 3](cap03.qmd) (`POST` para criar, `PUT` para atualizar, `DELETE` para remover), mas é uma simplificação pragmática, comum em código de formação: evita configurar *Servlets* adicionais mapeadas a `PUT`/`DELETE`, e mantém tudo testável com formulários HTML simples, sem recorrer a JavaScript.
 
-Do lado do servidor ficam apenas o Model (o acesso aos dados) e o Controller (o *endpoint* que recebe o pedido HTTP e devolve JSON). O papel de View passa integralmente para o cliente: é o código JavaScript, a correr no *browser*, que interpreta o JSON recebido e manipula o *DOM* para o apresentar a quem usa a aplicação.
-
-Esta divisão pode ler-se como uma segunda aplicação do mesmo padrão, agora do lado do cliente: o JavaScript que trata a resposta e atualiza a página funciona, ele próprio, como Controller (decide o que fazer com a resposta recebida) e como View (gera o HTML mostrado); o JSON devolvido pela API é o Model, mantido no servidor e sincronizado a cada pedido `fetch()`.
-
-É esta a razão pela qual um *front-office* em JavaScript ligado a uma API REST não é uma alternativa ao MVC, mas sim o mesmo padrão distribuído por duas máquinas em vez de uma.
+Fica como sugestão de implementação futura, possível para os alunos mais avançados: reescrever `/countryEdit` como três *endpoints* distintos, um por verbo HTTP (por exemplo, `PUT /country/{code}` para atualizar e `DELETE /country/{code}` para remover), aproximando a API de um desenho REST mais convencional.
+:::

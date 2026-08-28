@@ -1,179 +1,153 @@
 ---
-title: "Java EE e Fundamentos de Servlets"
+title: "O Protocolo HTTP"
 author: "João Pavão"
 date: 2026-08-26
 lang: pt-PT
 ---
 
-## A Plataforma Jakarta EE {#sec-03-jakarta-ee}
+## O Middleware que Liga Frontend e Backend {#sec-03-middleware-intro}
 
-A *Jakarta EE* (anteriormente conhecida como *Java EE*, até ser renomeada em 2019) é uma plataforma que fornece um conjunto de serviços e *APIs* prontos a usar para lidar com os problemas comuns a qualquer aplicação Web (ver [Capítulo 1](cap01.qmd)), libertando quem desenvolve para se concentrar na lógica de negócio da aplicação.
+O [Capítulo 1](cap01.qmd) identificou três componentes em qualquer aplicação Web: *Frontend*, *Middleware* e *Backend*. O [Capítulo 2](cap02.qmd) dedicou-se à primeira, um conjunto de páginas HTML com formulários, entre eles o de consulta de capital (`capital.html`) e o de autenticação (`login.html`). Esses formulários, por si só, não fazem nada: precisam de um protocolo que leve os dados que o utilizador preenche até um servidor, e que traga de volta uma resposta. Esse protocolo, o *Middleware* usado nas aplicações *web* é o HTTP (*HyperText Transfer Protocol*). Este capítulo detalha o seu funcionamento.
 
-A plataforma assenta na linguagem Java e na *Java Virtual Machine* (JVM), o que significa que qualquer componente escrito para *Jakarta EE* beneficia da portabilidade e da gestão automática de memória já conhecidas da linguagem.
+## O Modelo TCP/IP {#sec-03-modelo-tcpip}
 
-## Arquitetura em Camadas {#sec-03-arquitetura-camadas}
+Antes de entrar no detalhe do HTTP propriamente dito, vale a pena recordar onde é que este protocolo encaixa na pilha de comunicações. O modelo TCP/IP organiza essa pilha em quatro camadas, cada uma responsável por um aspeto diferente da comunicação em rede:
 
-A plataforma *Jakarta EE* organiza uma aplicação segundo um modelo distribuído em várias camadas (*tiers*), cada uma com uma função bem definida e instalada, tipicamente, em máquinas diferentes:
-
-| Camada | Onde reside | Componentes típicos |
+| Camada | Responsabilidade | Exemplos de protocolos |
 |---|---|---|
-| *Client Tier* | Máquina do cliente | Páginas Web (browser), aplicações cliente |
-| *Web Tier* | Servidor *Jakarta EE* | *Servlets*, *JavaServer Pages*, *Web Services* |
-| *Business Tier* | Servidor *Jakarta EE* | *Enterprise Beans* (lógica de negócio) |
-| *EIS Tier* (*Enterprise Information System*) | Servidor de base de dados | Bases de dados, sistemas de informação empresarial |
+| Aplicação | O formato dos dados trocados entre aplicações | HTTP, FTP, SMTP, DNS |
+| Transporte | Entrega dos dados entre processos, fiável (TCP) ou não (UDP) | TCP, UDP |
+| Internet | Encaminhamento dos dados entre redes, por endereço IP | IP |
+| Acesso à Rede | Transmissão física dos dados no meio local | Ethernet, Wi-Fi |
 
-Esta separação por camadas permite que cada componente evolua de forma relativamente independente das restantes: alterar a base de dados não obriga a reescrever a lógica de negócio, e alterar a interface do cliente não obriga a alterar o servidor.
+![O modelo TCP/IP em quatro camadas. O HTTP vive na camada de Aplicação, e assenta sobre o TCP (camada de Transporte) para garantir que os dados chegam de forma fiável e pela ordem correta.](../assets/images/capitulos/cap03/Modelo_TCP_IP.png){#fig-03-modelo-tcpip width="80%"}
 
-![A arquitetura em camadas da Jakarta EE: o cliente comunica apenas com a Web Tier, que por sua vez recorre à Business Tier e, através dela, à base de dados na EIS Tier.](../assets/images/capitulos/cap03/Arquitetura_JAVA_EE.png){#fig-03-arquitetura-jakarta-ee width="70%"}
+O HTTP é, portanto, um protocolo da camada de Aplicação: não se preocupa em saber como é que os dados chegam ao destino, apenas define o formato do pedido e da resposta. Essa entrega fica a cargo do TCP, na camada de Transporte, que garante que os dados chegam completos, sem erros e pela ordem em que foram enviados — uma garantia de que o HTTP depende, sem nunca a implementar diretamente.
 
-::: {.callout-note}
-## Tomcat não é um servidor Jakarta EE completo
+## O HTTP {#sec-03-o-http}
 
-O *Apache Tomcat*, usado ao longo desta UC, é um *Servlet Container*: implementa apenas a *Web Tier* (Servlets, JSP). Não inclui suporte para *Enterprise Beans* nem para a *Business Tier* propriamente dita, ao contrário de um servidor de aplicações *Jakarta EE* completo (por exemplo, *WildFly*, *WebSphere* ou *GlassFish*). Na prática, isto significa que a lógica de negócio que, na arquitetura formal, pertenceria à *Business Tier*, é implementada aqui diretamente em classes Java comuns (como os *DAO* usados nos LABs práticos), e não em *Enterprise Beans*.
+O [HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP) (*HyperText Transfer Protocol*) é um protocolo de texto, baseado no modelo pedido-resposta: o cliente envia um pedido, o servidor devolve uma resposta, e a ligação entre os dois não guarda memória de pedidos anteriores — cada pedido é tratado de forma independente, isto é, o HTTP não tem estado (é *stateless*). Esta secção detalha os três aspetos que definem um pedido e uma resposta: os métodos, o formato geral da mensagem e os códigos de estado.
+
+### Métodos
+
+Cada pedido do cliente ao servidor é feito no formato HTTP e indica, através de um método, a operação que se pretende realizar sobre um determinado recurso. O "recurso" no contexto das aplicações *web* pode ser uma página `html`, uma imagem, um `PDF`, ou qualquer outro suscetível de ser manipulado digitalmente:
+
+| Método | Semântica típica |
+|---|---|
+| `GET` | Obter um recurso |
+| `POST` | Criar um recurso |
+| `PUT` | Atualizar ou substituir um recurso |
+| `DELETE` | Remover um recurso |
+| `HEAD` | Obter apenas os cabeçalhos, sem corpo |
+
+Estes cinco métodos cobrem a generalidade das operações realizadas por uma aplicação Web; os dois primeiros (`GET` e `POST`) são, de longe, os mais usados em páginas *web*, enquanto `PUT` e `DELETE` ganham importância sobretudo nos serviços *web*.
+
+### Formato de uma Mensagem {#sec-03-formato-mensagem}
+
+Quando a aplicação no computador do cliente quer comunicar com o servidor, ativa a camada de Aplicação da pilha protocolar de comunicações, a qual formata o pedido de acordo com o protocolo HTTP. Tanto um pedido como a resposta que se lhe segue apresentam uma estrutura geral de uma mensagem semelhante:
+
+1. Uma primeira linha, diferente consoante se trate de um pedido (método, *URL* e versão de HTTP) ou de uma resposta (versão de HTTP, código de estado e motivo)
+2. Um conjunto de cabeçalhos (*headers*), que transportam metadados sobre a mensagem (por exemplo, o anfitrião de destino, o tipo de conteúdo ou o seu comprimento)
+3. Um corpo (*body*), opcional, com os dados propriamente ditos
+
+Um pedido `GET` não tem, tipicamente, corpo: todos os dados que transporta vão na própria *URL*, sob a forma de parâmetros. Um pedido `POST` transporta os dados no corpo da mensagem, fora da *URL*.
+
+![O formato geral de uma mensagem HTTP: a primeira linha (diferente para pedido e resposta), seguida dos vários grupos de cabeçalhos, e por fim o corpo.](../assets/images/capitulos/cap03/HTTP_message_request_format.png){#fig-03-http-formato-mensagem width="90%" .column-body-outset}
+
+#### Exemplo: do Formulário de Consulta de Capital a um Pedido HTTP
+
+Recorde-se o formulário de consulta de capital construído no [Capítulo 2](cap02.qmd) (`capital.html`):
+
+```html
+<form method="GET" action="/capital">
+  <label for="countrycode">Código do país</label>
+  <input type="text" id="countrycode" name="countrycode">
+  <button type="submit">Consultar</button>
+</form>
+```
+Este código `HTML`renderiza no *browser* como mostrado na figura @fig-03-form-capital:
+
+![O formulário de consulta de capital (`capital.html`), tal como é apresentado no *browser*.](../assets/images/capitulos/cap03/form1.png){#fig-03-form-capital width="50%" .browser-shot}
+
+Ao ser submetido (clicando no botáo *Consultar*) com o valor `PT` no `input`, o *browser* gera a seguinte mensagem `GET` de pedido HTTP:
+
+::: {.httpmsg}
+GET /capital?countrycode=PT HTTP/1.1\
+Host: localhost:8080
 :::
 
-## Porquê Servlets? {#sec-03-porque-servlets}
+Note-se que, por se tratar de um método `GET`, o parâmetro `countrycode` é enviado como parte da *URL* (depois do `?`), e não existe corpo na mensagem. Se o mesmo formulário usasse `method="POST"`, o parâmetro seguiria antes no corpo do pedido, e a *URL* manter-se-ia limpa (`/capital`).
 
-Implementar, de raiz, um programa Java capaz de responder a pedidos HTTP obrigaria a resolver, sozinho, um conjunto de problemas comuns a qualquer servidor Web: interpretar a mensagem HTTP recebida, gerir várias ligações em simultâneo (cada uma num *thread* próprio), controlar o ciclo de vida das instâncias em memória, e empacotar tudo isto num formato que um servidor de aplicações saiba instalar e arrancar.
+O servidor, ao processar este pedido, devolve uma resposta HTTP como a seguinte:
 
-Uma *Servlet* é uma classe Java que corre dentro de um *Servlet Container* (por exemplo, o *Apache Tomcat*) e que recebe, automaticamente, todo este trabalho já feito:
+::: {.httpmsg}
+HTTP/1.1 200 OK\
+Content-Type: application/json
 
-- Interpretação (*parsing*) do pedido HTTP
-- Gestão de *threads*, uma por pedido
-- Gestão do ciclo de vida da própria *Servlet*
-- Um modelo de implantação (*deployment*) próprio, empacotado num ficheiro `.war` (*Web Application Archive*)
-
-O *Servlet Container* corresponde, na arquitetura em camadas apresentada acima, à *Web Tier*: é aí que as *Servlets* residem, entre o cliente e a camada de negócio.
-
-![Do ponto de vista do cliente, uma Servlet é apenas mais um destino de pedidos HTTP: recebe um pedido, devolve uma resposta.](../assets/images/capitulos/cap03/Servlet_HTTP.png){#fig-03-servlet-http width="70%"}
-
-## O Ciclo de Vida de uma Servlet {#sec-03-ciclo-vida}
-
-Quando um pedido é encaminhado para uma *Servlet*, o contentor segue sempre a mesma sequência:
-
-1. Se ainda não existir uma instância dessa *Servlet* em memória, o contentor carrega a classe, cria uma instância e chama o método `init()`
-2. Para cada pedido recebido, o contentor invoca o método `service()`, que despacha para `doGet()`, `doPost()`, ou outro método consoante o verbo HTTP usado, passando-lhe os objetos `request` e `response`
-3. Se o contentor precisar de remover a *Servlet* (por exemplo, ao desligar o servidor), invoca o método `destroy()`
-
-Um pormenor importante decorre daqui: existe **uma única instância** de cada *Servlet* em memória, mesmo que existam N clientes a usar o mesmo serviço em simultâneo. Cada pedido é atendido por um *thread* diferente, mas todos esses *threads* partilham a mesma instância. Na prática, isto significa:
-
-::: {.callout-warning}
-## Cuidado com o estado partilhado
-
-Nunca guardar dados de um pedido específico em atributos de instância da *Servlet*: como a instância é partilhada por todos os *threads*, um pedido pode ler ou sobrescrever dados de outro pedido em curso. Variáveis locais, declaradas dentro de `doGet()` ou `doPost()`, são seguras, porque cada *thread* tem a sua própria cópia.
+{\"country\": \"Portugal\", \"capital\": \"Lisboa\", \"ccode\": \"PT\"}
 :::
 
-![O contentor carrega a classe da Servlet uma única vez; cada pedido recebido é despachado para um thread próprio, que invoca `service()` sobre essa mesma instância partilhada.](../assets/images/capitulos/cap03/Servlet_live_cycle.png){#fig-03-servlet-ciclo-vida width="80%"}
+#### Exemplo: do Formulário de Autenticação a um Pedido `POST` com Corpo
 
-## Da Mensagem HTTP ao Método Java {#sec-03-mapeamento-http-servlet}
+Recorde-se agora o formulário de autenticação, também do [Capítulo 2](cap02.qmd) (`login.html`), com os campos `user` e `pass`:
 
-Uma *Servlet* liga-se a uma *URL* através da anotação `@WebServlet`, que faz o mapeamento entre um caminho e a classe que o vai tratar:
-
-```java
-@WebServlet("/country")
-public class CountryServlet extends HttpServlet {
-    // ...
-}
+```html
+<form method="POST" action="/login">
+  <label for="user">Utilizador</label>
+  <input type="text" id="user" name="user">
+  <label for="pass">Palavra-passe</label>
+  <input type="password" id="pass" name="pass">
+  <button type="submit">Entrar</button>
+</form>
 ```
+Este código `HTML`renderiza no *browser* como mostrado na figura @fig-03-form-login:
 
-Um pedido a `http://localhost:8080/country` é assim encaminhado para a classe `CountryServlet`. Dentro dela, os elementos da mensagem HTTP (ver [Capítulo 1](cap01.qmd)) correspondem a métodos concretos dos objetos `request` e `response`:
+![O formulário de autenticação (`login.html`), tal como é apresentado no *browser*.](../assets/images/capitulos/cap03/form_login.png){#fig-03-form-login width="90%" .browser-shot}
 
-| Elemento HTTP | Acesso em Java |
+Ao ser submetido, este formulário gera o seguinte pedido HTTP:
+
+::: {.httpmsg}
+POST /login HTTP/1.1\
+Host: localhost:8080\
+Content-Type: application/x-www-form-urlencoded\
+Content-Length: 21
+
+user=javaee&pass=esigelec2026
+:::
+
+Ao contrário do exemplo anterior, os parâmetros já não vão na *URL*: seguem no corpo do pedido, depois de uma linha em branco que separa os cabeçalhos do corpo. É por isso que credenciais e outros dados sensíveis se enviam tipicamente por `POST`, nunca por `GET`: o corpo de um pedido não fica registado nos históricos de navegação nem nos ficheiros de registo (*logs*) do servidor, ao contrário do que acontece com os parâmetros de uma *URL*.
+
+O servidor, ao validar as credenciais com sucesso, devolve uma resposta HTTP como a seguinte — neste caso, uma aplicação orientada à apresentação (ver [Capítulo 1](cap01.qmd)), que responde no corpo da resposta código HTML que vai renderizar no *browser*. Se a aplicação for orientada ao serviço no corpo da resposta viria JSON em vez de HTML:
+
+::: {.httpmsg}
+HTTP/1.1 200 OK\
+Content-Type: text/html
+
+&lt;h1&gt;Bem-vindo, javaee&lt;/h1&gt;\
+&lt;p&gt;Sessão iniciada com sucesso.&lt;/p&gt;
+:::
+
+### Códigos de Estado {#sec-03-codigos-estado}
+
+Toda a resposta HTTP inclui um código de estado numérico, que indica sucintamente o resultado do pedido. Os códigos agrupam-se em cinco categorias, consoante a centena:
+
+| Intervalo | Categoria |
 |---|---|
-| Cabeçalhos do pedido | `request.getHeader(nome)` |
-| Parâmetros (*query string* ou corpo) | `request.getParameter(nome)` |
-| Corpo do pedido (JSON, dados em bruto) | `request.getInputStream()` |
-| Escrever a resposta | `response.getWriter()` ou `response.getOutputStream()` |
+| `1xx` | Informativo |
+| `2xx` | Sucesso |
+| `3xx` | Redirecionamento |
+| `4xx` | Erro do cliente |
+| `5xx` | Erro do servidor |
 
-```java
-protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-    String countryCode = request.getParameter("countrycode");
-    // ...
-}
-```
+Dentro destas categorias, alguns códigos surgem com particular frequência no desenvolvimento de serviços Web:
 
-![Dentro do servidor Jakarta EE, o pedido chega encapsulado num `HttpServletRequest`, é processado pelo componente Web (a Servlet), que pode consultar recursos de dados, e a resposta sai encapsulada num `HttpServletResponse`.](../assets/images/capitulos/cap03/HTTP_Request_server_3.png){#fig-03-http-request-server width="80%"}
-
-## Content-Type e a Forma da Resposta {#sec-03-content-type}
-
-Antes de escrever qualquer coisa na resposta, é essencial definir o seu `Content-Type`: é este cabeçalho que diz ao cliente como deve interpretar os bytes que se seguem, seja como página HTML, seja como dados JSON.
-
-```java
-response.setContentType("text/html");
-PrintWriter out = response.getWriter();
-out.println("<html><body>");
-out.println("<h1>Hello João</h1>");
-out.println("</body></html>");
-```
-
-```java
-response.setContentType("application/json");
-PrintWriter out = response.getWriter();
-out.print("{\"name\":\"João\",\"role\":\"admin\"}");
-```
-
-Na ausência de uma biblioteca dedicada à geração de JSON, o mais direto é construir a *String* manualmente, tendo o cuidado de escapar as aspas internas com `\"`:
-
-```java
-String jsonResponse = "{\"country\": \"Portugal\", \"capital\": \"Lisboa\", \"ccode\": \"PT\"}";
-out.print(jsonResponse);
-out.flush();
-```
-
-Para definir o código de estado da resposta (ver [Capítulo 1](cap01.qmd)), a classe `HttpServletResponse` disponibiliza uma constante para cada código, evitando o uso de números "mágicos" diretamente no código:
-
-| Código HTTP | Constante Java |
+| Código | Significado |
 |---|---|
-| `200` | `HttpServletResponse.SC_OK` |
-| `201` | `HttpServletResponse.SC_CREATED` |
-| `400` | `HttpServletResponse.SC_BAD_REQUEST` |
-| `403` | `HttpServletResponse.SC_FORBIDDEN` |
-| `404` | `HttpServletResponse.SC_NOT_FOUND` |
-| `500` | `HttpServletResponse.SC_INTERNAL_SERVER_ERROR` |
+| `200 OK` | O pedido foi processado com sucesso |
+| `201 Created` | Um novo recurso foi criado com sucesso |
+| `400 Bad Request` | O pedido está malformado ou falta um parâmetro obrigatório |
+| `403 Forbidden` | O cliente não tem permissão para aceder ao recurso |
+| `404 Not Found` | O recurso pedido não existe |
+| `500 Internal Server Error` | Ocorreu um erro não tratado do lado do servidor |
 
-```java
-response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-```
-
-## Uma Primeira Servlet: "World Capitals" {#sec-03-primeiro-servlet}
-
-Aplicando o que foi apresentado, uma primeira *Servlet* pode servir como simples verificação de estado (*health check*) da API:
-
-```java
-@WebServlet("/status")
-public class StatusServlet extends HttpServlet {
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/plain");
-        PrintWriter out = response.getWriter();
-        out.print("OK");
-    }
-}
-```
-
-E um segundo, já a devolver dados fixos em formato JSON, é o primeiro passo da aplicação "World Capitals" usada ao longo desta UC:
-
-```java
-@WebServlet("/countrycapital")
-public class CountryCapitalServlet extends HttpServlet {
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("application/json");
-        PrintWriter out = response.getWriter();
-
-        String jsonResponse = "{\"country\": \"Portugal\", \"capital\": \"Lisboa\", \"ccode\": \"PT\"}";
-        out.print(jsonResponse);
-        out.flush();
-    }
-}
-```
-
-Esta *Servlet* devolve sempre o mesmo país, com os dados fixos diretamente no código. É deliberadamente uma simplificação: o [Apêndice B](apendiceB.qmd) (LAB1) retoma exatamente este ponto, substituindo os dados fixos por um objeto dedicado ao acesso a dados (*DAO*), preparando o terreno para, mais tarde, ligar a um servidor de base de dados real.
-
-## Servlets e o Padrão MVC: Falta a View {#sec-03-servlets-mvc}
-
-As *Servlets* apresentadas neste capítulo devolvem sempre JSON: são orientadas a serviço, e não têm, de facto, nenhuma View (ver [Capítulo 1](cap01.qmd)). Numa aplicação orientada à apresentação, porém, a mesma *Servlet* que funciona como Controller pode delegar a geração de HTML a uma página dedicada, mantendo a separação de responsabilidades do MVC:
-
-![Na realização clássica do MVC em Jakarta EE, a Servlet funciona como Controller, uma JavaServer Page como View, e uma classe Java simples como Model.](../assets/images/capitulos/cap03/Arquitetura_MVC.png){#fig-03-mvc-servlet-jsp width="70%"}
-
-Essa página dedicada, a *JavaServer Page* (JSP), é abordada em detalhe no [Capítulo 4](cap04.qmd).
+Escolher o código de estado correto para cada situação é uma parte essencial do desenho de um serviço Web: o código transmite, por si só, informação que o cliente pode usar para decidir como reagir, sem precisar de interpretar o corpo da resposta.

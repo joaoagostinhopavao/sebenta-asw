@@ -8,7 +8,7 @@
 
 <meta name="author" content="João Pavão">
 
-<title>5&nbsp; Segurança e Filtros – Aplicações e Serviços Web</title>
+<title>5&nbsp; Modelo Stateful: Sessões e JSP – Aplicações e Serviços Web</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -120,7 +120,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../capitulos/cap05.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Segurança e Filtros</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../capitulos/cap05.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Modelo Stateful: Sessões e JSP</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Procurar" onclick="window.quartoOpenSearch();">
@@ -169,31 +169,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap03.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Java EE e Fundamentos de Servlets</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">O Protocolo HTTP</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap04.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelo Stateful: Sessões e JSP</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Java EE e Fundamentos de Servlets</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap05.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Segurança e Filtros</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Modelo Stateful: Sessões e JSP</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap06.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Web Services REST e Arquitetura Stateless (Parte 1)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Segurança e Filtros</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap07.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Web Services REST (Parte 2) e o Cliente em JavaScript</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Web Services REST e Arquitetura Stateless (Parte 1)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/cap08.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Web Services REST (Parte 2) e o Cliente em JavaScript</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -235,15 +241,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Índice</h2>
    
   <ul>
-  <li><a href="#sec-05-problema" id="toc-sec-05-problema" class="nav-link active" data-scroll-target="#sec-05-problema"><span class="header-section-number">5.1</span> O Problema: Segurança Repetida em Cada <em>Servlet</em></a></li>
-  <li><a href="#sec-05-autenticacao-autorizacao" id="toc-sec-05-autenticacao-autorizacao" class="nav-link" data-scroll-target="#sec-05-autenticacao-autorizacao"><span class="header-section-number">5.2</span> Autenticação vs.&nbsp;Autorização</a></li>
-  <li><a href="#sec-05-o-que-e-um-filter" id="toc-sec-05-o-que-e-um-filter" class="nav-link" data-scroll-target="#sec-05-o-que-e-um-filter"><span class="header-section-number">5.3</span> O que é um Filtro</a></li>
-  <li><a href="#sec-05-onde-situa" id="toc-sec-05-onde-situa" class="nav-link" data-scroll-target="#sec-05-onde-situa"><span class="header-section-number">5.4</span> Onde um Filtro se Situa no Pedido</a></li>
-  <li><a href="#sec-05-ciclo-vida-filter" id="toc-sec-05-ciclo-vida-filter" class="nav-link" data-scroll-target="#sec-05-ciclo-vida-filter"><span class="header-section-number">5.5</span> Ciclo de Vida de um Filtro</a></li>
-  <li><a href="#sec-05-separacao-responsabilidades" id="toc-sec-05-separacao-responsabilidades" class="nav-link" data-scroll-target="#sec-05-separacao-responsabilidades"><span class="header-section-number">5.6</span> <em>Servlet</em> e Filtro: Separação de Responsabilidades</a></li>
-  <li><a href="#sec-05-declarar-filter" id="toc-sec-05-declarar-filter" class="nav-link" data-scroll-target="#sec-05-declarar-filter"><span class="header-section-number">5.7</span> Declarar e Implementar um Filtro</a></li>
-  <li><a href="#sec-05-redirect-vs-401" id="toc-sec-05-redirect-vs-401" class="nav-link" data-scroll-target="#sec-05-redirect-vs-401"><span class="header-section-number">5.8</span> Redirecionamento vs.&nbsp;<code>401</code>: uma Diferença Arquitetural</a></li>
-  <li><a href="#sec-05-preparacao-sem-estado" id="toc-sec-05-preparacao-sem-estado" class="nav-link" data-scroll-target="#sec-05-preparacao-sem-estado"><span class="header-section-number">5.9</span> Preparação para uma Segurança Sem Estado</a></li>
+  <li><a href="#sec-05-problema-estado" id="toc-sec-05-problema-estado" class="nav-link active" data-scroll-target="#sec-05-problema-estado"><span class="header-section-number">5.1</span> HTTP é Sem Estado: o Problema</a></li>
+  <li><a href="#sec-05-cookies" id="toc-sec-05-cookies" class="nav-link" data-scroll-target="#sec-05-cookies"><span class="header-section-number">5.2</span> <em>Cookies</em></a></li>
+  <li><a href="#sec-05-sessoes-http" id="toc-sec-05-sessoes-http" class="nav-link" data-scroll-target="#sec-05-sessoes-http"><span class="header-section-number">5.3</span> Sessões (<code>HttpSession</code>)</a></li>
+  <li><a href="#sec-05-autenticacao-sessao" id="toc-sec-05-autenticacao-sessao" class="nav-link" data-scroll-target="#sec-05-autenticacao-sessao"><span class="header-section-number">5.4</span> Autenticação Baseada em Sessão</a></li>
+  <li><a href="#sec-05-mvc-jsp" id="toc-sec-05-mvc-jsp" class="nav-link" data-scroll-target="#sec-05-mvc-jsp"><span class="header-section-number">5.5</span> O Padrão MVC com <em>Servlet</em> e JSP</a></li>
+  <li><a href="#sec-05-exemplo-jsp" id="toc-sec-05-exemplo-jsp" class="nav-link" data-scroll-target="#sec-05-exemplo-jsp"><span class="header-section-number">5.6</span> Um Exemplo Simples de JSP</a></li>
+  <li><a href="#sec-05-ciclo-vida-jsp" id="toc-sec-05-ciclo-vida-jsp" class="nav-link" data-scroll-target="#sec-05-ciclo-vida-jsp"><span class="header-section-number">5.7</span> Ciclo de Vida e Objetos Implícitos</a></li>
+  <li><a href="#sec-05-scopes" id="toc-sec-05-scopes" class="nav-link" data-scroll-target="#sec-05-scopes"><span class="header-section-number">5.8</span> <em>Scopes</em>: Partilhar Informação Dentro do Servidor</a></li>
   </ul>
 </nav>
     </div>
@@ -252,7 +257,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Segurança e Filtros</span></h1>
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Modelo Stateful: Sessões e JSP</span></h1>
 </div>
 
 
@@ -281,168 +286,213 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="sec-05-problema" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="sec-05-problema"><span class="header-section-number">5.1</span> O Problema: Segurança Repetida em Cada <em>Servlet</em></h2>
-<p>Com o que foi apresentado até aqui (ver <a href="../capitulos/cap04.html">Capítulo 4</a>), a autenticação está resolvida: a <code>LoginServlet</code> valida as credenciais e grava o utilizador na sessão, e cada <em>endpoint</em> protegido verifica essa sessão no início do seu <code>doGet()</code> ou <code>doPost()</code>. Isto funciona, mas tem um custo escondido: a lógica de autenticação vive, duplicada, dentro de <strong>cada</strong> <em>Servlet</em> protegida.</p>
-<p>Esta duplicação traz consigo vários problemas:</p>
+<section id="sec-05-problema-estado" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="sec-05-problema-estado"><span class="header-section-number">5.1</span> HTTP é Sem Estado: o Problema</h2>
+<p>O protocolo HTTP é <em>stateless</em> (ver <a href="../capitulos/cap01.html">Capítulo 1</a>): cada pedido é independente, e o servidor não guarda, por si só, qualquer memória de pedidos anteriores. Não existe, ao nível do protocolo, nenhuma noção de “utilizador com sessão iniciada”.</p>
+<p>Isto levanta um problema prático imediato: se um utilizador se autentica num pedido, como é que um pedido seguinte, minutos depois, sabe que esse utilizador continua autenticado? A resposta passa por dois mecanismos complementares:</p>
 <ul>
-<li>A mesma verificação de sessão está repetida em todos os <em>endpoints</em> protegidos</li>
-<li>Existe risco real de inconsistência entre essas cópias</li>
-<li>É fácil esquecer a proteção ao criar um novo <em>endpoint</em></li>
-</ul>
-<p>Dito de outra forma, esta duplicação viola o princípio <em>DRY</em> (<em>Don’t Repeat Yourself</em>): uma responsabilidade deveria viver num único sítio, e lógica repetida aumenta o custo de manutenção sempre que essa lógica precisa de mudar. Mais concretamente, este desenho viola o <strong>Princípio da Responsabilidade Única</strong>: cada <em>Servlet</em> passa a ter duas responsabilidades distintas, a lógica de negócio que lhe é própria, e a lógica de segurança que lhe é imposta. Isto torna as políticas de segurança difíceis de fazer evoluir, e o desenho pouco escalável, quer em número de <em>endpoints</em>, quer em complexidade das regras de acesso.</p>
-</section>
-<section id="sec-05-autenticacao-autorizacao" class="level2" data-number="5.2">
-<h2 data-number="5.2" class="anchored" data-anchor-id="sec-05-autenticacao-autorizacao"><span class="header-section-number">5.2</span> Autenticação vs.&nbsp;Autorização</h2>
-<p>Antes de resolver o problema, vale a pena precisar dois conceitos frequentemente confundidos:</p>
-<dl>
-<dt><strong>Autenticação</strong></dt>
-<dd>
-Responde a “quem é o utilizador?”. É a verificação de identidade, tipicamente feita no momento do <em>login</em>.
-</dd>
-</dl>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb1-1"><a href="#cb1-1"></a><span class="cf">if</span> <span class="op">(</span>username<span class="op">.</span><span class="fu">equals</span><span class="op">(</span><span class="st">"admin"</span><span class="op">)</span> <span class="op">&amp;&amp;</span> password<span class="op">.</span><span class="fu">equals</span><span class="op">(</span><span class="st">"1234"</span><span class="op">))</span> <span class="op">{</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a>    HttpSession session <span class="op">=</span> request<span class="op">.</span><span class="fu">getSession</span><span class="op">(</span><span class="kw">true</span><span class="op">);</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a>    session<span class="op">.</span><span class="fu">setAttribute</span><span class="op">(</span><span class="st">"UserName"</span><span class="op">,</span> username<span class="op">);</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<dl>
-<dt><strong>Autorização</strong></dt>
-<dd>
-Responde a “o que é que este utilizador tem permissão para aceder?”. É a verificação de permissões, feita depois de a identidade já estar confirmada.
-</dd>
-</dl>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb2-1"><a href="#cb2-1"></a><span class="cf">if</span> <span class="op">(</span>session<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"UserRole"</span><span class="op">).</span><span class="fu">equals</span><span class="op">(</span><span class="st">"ADMIN"</span><span class="op">))</span> <span class="op">{</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a>    <span class="co">// acesso permitido</span></span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>A autenticação acontece sempre primeiro: não faz sentido verificar permissões de alguém cuja identidade ainda não foi confirmada. Esta distinção reflete-se diretamente nos códigos de estado HTTP usados na resposta (ver <a href="../capitulos/cap01.html">Capítulo 1</a>):</p>
-<ul>
-<li><code>401 Unauthorized</code>: o pedido não está autenticado</li>
-<li><code>403 Forbidden</code>: o pedido está autenticado, mas não tem permissão para o recurso pedido</li>
+<li><strong><em>Cookies</em></strong>: um pequeno pedaço de informação guardado do lado do <strong>cliente</strong>, reenviado automaticamente pelo <em>browser</em> em cada pedido seguinte</li>
+<li><strong><code>HttpSession</code></strong>: um objeto guardado do lado do <strong>servidor</strong>, associado a um identificador que o cliente devolve a cada pedido</li>
 </ul>
 </section>
-<section id="sec-05-o-que-e-um-filter" class="level2" data-number="5.3">
-<h2 data-number="5.3" class="anchored" data-anchor-id="sec-05-o-que-e-um-filter"><span class="header-section-number">5.3</span> O que é um Filtro</h2>
-<p>A pergunta que fica por responder é onde deve viver a lógica de segurança: dentro de cada <em>Servlet</em>? Duplicada por todos os <em>endpoints</em>? Ou centralizada num único componente? Segurança é, por natureza, uma preocupação transversal (<em>cross-cutting concern</em>): atravessa toda a aplicação, em vez de pertencer a um único módulo. É exatamente para isto que existe o Filtro.</p>
-<p>Um Filtro é um componente do lado do servidor que intercepta pedidos HTTP:</p>
+<section id="sec-05-cookies" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="sec-05-cookies"><span class="header-section-number">5.2</span> <em>Cookies</em></h2>
+<p>Um <em>cookie</em> é um par chave/valor guardado no <em>browser</em>. Quando o servidor envia um <em>cookie</em>, espera que o cliente o devolva em todos os pedidos HTTP seguintes, dirigidos ao mesmo domínio.</p>
+<p>Distinguem-se dois tipos, consoante a sua persistência:</p>
 <ul>
-<li>É executado <strong>antes</strong> da <em>Servlet</em> de destino</li>
-<li>Pode também ser executado <strong>depois</strong> da <em>Servlet</em> (sobre a resposta)</li>
-<li>Pode bloquear, redirecionar ou modificar o pedido ou a resposta</li>
+<li><strong><em>Session cookies</em></strong>: mantidos pelo cliente apenas durante a sessão de navegação (<code>setMaxAge(-1)</code>)</li>
+<li><strong><em>Permanent cookies</em></strong>: guardados de forma persistente, com um tempo de vida definido (<code>setMaxAge(60*60*24*30)</code> para 30 dias, por exemplo)</li>
 </ul>
-<p>Além da autenticação e da autorização, os Filtros são o mecanismo natural para outras preocupações transversais: registo de atividade (<em>logging</em>), <em>CORS</em> (<em>Cross-Origin Resource Sharing</em>), ou validação de entrada. Um Filtro separa estas preocupações da lógica de negócio, que fica exclusivamente na <em>Servlet</em>.</p>
+<p>Criar um <em>cookie</em>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb1-1"><a href="#cb1-1"></a>Cookie cookie <span class="op">=</span> <span class="kw">new</span> <span class="fu">Cookie</span><span class="op">(</span><span class="st">"userName"</span><span class="op">,</span> <span class="st">"Pedro"</span><span class="op">);</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a>cookie<span class="op">.</span><span class="fu">setMaxAge</span><span class="op">(-</span><span class="dv">1</span><span class="op">);</span> <span class="co">// session cookie</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>response<span class="op">.</span><span class="fu">addCookie</span><span class="op">(</span>cookie<span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Ler um <em>cookie</em> recebido num pedido:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb2-1"><a href="#cb2-1"></a>Cookie<span class="op">[]</span> cookies <span class="op">=</span> request<span class="op">.</span><span class="fu">getCookies</span><span class="op">();</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="bu">String</span> user <span class="op">=</span> <span class="kw">null</span><span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="cf">for</span> <span class="op">(</span>Cookie c <span class="op">:</span> cookies<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a>    <span class="cf">if</span> <span class="op">(</span>c<span class="op">.</span><span class="fu">getName</span><span class="op">().</span><span class="fu">equals</span><span class="op">(</span><span class="st">"userName"</span><span class="op">))</span> <span class="op">{</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a>        user <span class="op">=</span> c<span class="op">.</span><span class="fu">getValue</span><span class="op">();</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a>    <span class="op">}</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="sec-05-onde-situa" class="level2" data-number="5.4">
-<h2 data-number="5.4" class="anchored" data-anchor-id="sec-05-onde-situa"><span class="header-section-number">5.4</span> Onde um Filtro se Situa no Pedido</h2>
-<p>Um ou mais Filtros podem ser encadeados entre o cliente e a <em>Servlet</em> que trata efetivamente o pedido:</p>
-<pre><code>Cliente → Filtro 1 → ... → Filtro N → Servlet (lógica de negócio) → Resposta</code></pre>
-<div id="fig-05-filter-chain" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-05-filter-chain-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../assets/images/capitulos/cap05/Filter_Chain.png" class="img-fluid figure-img" style="width:80.0%">
+<section id="sec-05-sessoes-http" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="sec-05-sessoes-http"><span class="header-section-number">5.3</span> Sessões (<code>HttpSession</code>)</h2>
+<p>Guardar estado do lado do servidor exige um objeto próprio para o efeito: a <code>HttpSession</code>. Uma sessão obtém-se, ou cria-se, a partir do pedido:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb3-1"><a href="#cb3-1"></a>HttpSession session <span class="op">=</span> request<span class="op">.</span><span class="fu">getSession</span><span class="op">();</span>          <span class="co">// cria se não existir</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a>HttpSession session <span class="op">=</span> request<span class="op">.</span><span class="fu">getSession</span><span class="op">(</span><span class="kw">true</span><span class="op">);</span>      <span class="co">// equivalente, explícito</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a>HttpSession session <span class="op">=</span> request<span class="op">.</span><span class="fu">getSession</span><span class="op">(</span><span class="kw">false</span><span class="op">);</span>     <span class="co">// NUNCA cria; devolve null se não houver</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Uma vez obtida, a sessão guarda e devolve informação através de atributos, e pode ser terminada explicitamente:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb4-1"><a href="#cb4-1"></a>session<span class="op">.</span><span class="fu">setAttribute</span><span class="op">(</span><span class="st">"email"</span><span class="op">,</span> <span class="st">"foo@fool.com"</span><span class="op">);</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="bu">String</span> email <span class="op">=</span> <span class="op">(</span><span class="bu">String</span><span class="op">)</span> session<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"email"</span><span class="op">);</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>session<span class="op">.</span><span class="fu">invalidate</span><span class="op">();</span>                    <span class="co">// termina a sessão</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a>session<span class="op">.</span><span class="fu">setMaxInactiveInterval</span><span class="op">(</span><span class="dv">1800</span><span class="op">);</span>     <span class="co">// tempo de inatividade, em segundos</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Falta uma peça: se HTTP não tem memória de pedidos anteriores, como é que o servidor sabe que dois pedidos sucessivos pertencem à mesma sessão? A resposta são, de novo, os <em>cookies</em>: por convenção, o identificador de sessão viaja num <em>cookie</em> chamado <code>JSESSIONID</code>, criado automaticamente pelo <em>Servlet Container</em> na primeira chamada a <code>getSession()</code>.</p>
+<div class="httpmsg">
+<p>JSESSIONID=22562577CE80EF3B1DAAA0E48F2B6392</p>
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-05-filter-chain-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;5.1: Um pedido atravessa a cadeia de Filtros antes de chegar à Servlet; cada Filtro pode bloquear o pedido (vermelho), modificá-lo (amarelo) ou deixá-lo prosseguir (verde, chamando chain.doFilter()).
+<p>Quando o cliente não aceita <em>cookies</em>, existe uma alternativa: codificar o identificador de sessão diretamente na <em>URL</em>.</p>
+<div class="httpmsg">
+<p>http://localhost:8080/CapitaisAPI/country;jsessionid=829F8836C240B51DD2F074259F242833</p>
+</div>
+<p>É boa prática chamar sempre <code>response.encodeURL(url)</code> ao construir uma <em>URL</em> de destino: se os <em>cookies</em> estiverem ativos, o método devolve a <em>URL</em> inalterada; se não estiverem, acrescenta automaticamente o <code>jsessionid</code>.</p>
+</section>
+<section id="sec-05-autenticacao-sessao" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="sec-05-autenticacao-sessao"><span class="header-section-number">5.4</span> Autenticação Baseada em Sessão</h2>
+<p>Juntando os dois mecanismos anteriores, obtém-se o padrão clássico de autenticação por sessão, usado no LAB2 desta UC (ver <a href="../capitulos/apendiceB.html">Apêndice B</a>). Depois de validar as credenciais, a <code>LoginServlet</code> cria uma sessão e guarda nela o identificador do utilizador:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb5-1"><a href="#cb5-1"></a><span class="at">@WebServlet</span><span class="op">(</span><span class="st">"/login"</span><span class="op">)</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="kw">public</span> <span class="kw">class</span> LoginServlet <span class="kw">extends</span> HttpServlet <span class="op">{</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a>    <span class="kw">protected</span> <span class="dt">void</span> <span class="fu">doPost</span><span class="op">(</span>HttpServletRequest request<span class="op">,</span> HttpServletResponse response<span class="op">)</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a>            <span class="kw">throws</span> ServletException<span class="op">,</span> <span class="bu">IOException</span> <span class="op">{</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a>        <span class="bu">String</span> user <span class="op">=</span> request<span class="op">.</span><span class="fu">getParameter</span><span class="op">(</span><span class="st">"user"</span><span class="op">);</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a>        <span class="bu">String</span> pass <span class="op">=</span> request<span class="op">.</span><span class="fu">getParameter</span><span class="op">(</span><span class="st">"pass"</span><span class="op">);</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a></span>
+<span id="cb5-8"><a href="#cb5-8"></a>        <span class="cf">if</span> <span class="op">(</span>dao<span class="op">.</span><span class="fu">validateUserCredentials</span><span class="op">(</span>user<span class="op">,</span> pass<span class="op">))</span> <span class="op">{</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a>            HttpSession session <span class="op">=</span> request<span class="op">.</span><span class="fu">getSession</span><span class="op">(</span><span class="kw">true</span><span class="op">);</span></span>
+<span id="cb5-10"><a href="#cb5-10"></a>            session<span class="op">.</span><span class="fu">setAttribute</span><span class="op">(</span><span class="st">"UserName"</span><span class="op">,</span> user<span class="op">);</span></span>
+<span id="cb5-11"><a href="#cb5-11"></a></span>
+<span id="cb5-12"><a href="#cb5-12"></a>            response<span class="op">.</span><span class="fu">setContentType</span><span class="op">(</span><span class="st">"application/json"</span><span class="op">);</span></span>
+<span id="cb5-13"><a href="#cb5-13"></a>            response<span class="op">.</span><span class="fu">getWriter</span><span class="op">().</span><span class="fu">print</span><span class="op">(</span><span class="st">"{</span><span class="sc">\"</span><span class="st">message</span><span class="sc">\"</span><span class="st">:</span><span class="sc">\"</span><span class="st">OK</span><span class="sc">\"</span><span class="st">,</span><span class="sc">\"</span><span class="st">user</span><span class="sc">\"</span><span class="st">:</span><span class="sc">\"</span><span class="st">"</span> <span class="op">+</span> user <span class="op">+</span> <span class="st">"</span><span class="sc">\"</span><span class="st">}"</span><span class="op">);</span></span>
+<span id="cb5-14"><a href="#cb5-14"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb5-15"><a href="#cb5-15"></a>            response<span class="op">.</span><span class="fu">setStatus</span><span class="op">(</span>HttpServletResponse<span class="op">.</span><span class="fu">SC_FORBIDDEN</span><span class="op">);</span></span>
+<span id="cb5-16"><a href="#cb5-16"></a>            response<span class="op">.</span><span class="fu">getWriter</span><span class="op">().</span><span class="fu">print</span><span class="op">(</span><span class="st">"{</span><span class="sc">\"</span><span class="st">message</span><span class="sc">\"</span><span class="st">:</span><span class="sc">\"</span><span class="st">FORBIDDEN</span><span class="sc">\"</span><span class="st">,</span><span class="sc">\"</span><span class="st">error</span><span class="sc">\"</span><span class="st">:</span><span class="sc">\"</span><span class="st">Invalid login or password</span><span class="sc">\"</span><span class="st">}"</span><span class="op">);</span></span>
+<span id="cb5-17"><a href="#cb5-17"></a>        <span class="op">}</span></span>
+<span id="cb5-18"><a href="#cb5-18"></a>    <span class="op">}</span></span>
+<span id="cb5-19"><a href="#cb5-19"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Qualquer <em>endpoint</em> protegido verifica, no início do seu próprio <code>doGet()</code> ou <code>doPost()</code>, se existe uma sessão válida com esse atributo:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb6-1"><a href="#cb6-1"></a>HttpSession session <span class="op">=</span> request<span class="op">.</span><span class="fu">getSession</span><span class="op">(</span><span class="kw">false</span><span class="op">);</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="cf">if</span> <span class="op">(</span>session <span class="op">==</span> <span class="kw">null</span> <span class="op">||</span> session<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"UserName"</span><span class="op">)</span> <span class="op">==</span> <span class="kw">null</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a>    response<span class="op">.</span><span class="fu">setStatus</span><span class="op">(</span>HttpServletResponse<span class="op">.</span><span class="fu">SC_FORBIDDEN</span><span class="op">);</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a>    response<span class="op">.</span><span class="fu">getWriter</span><span class="op">().</span><span class="fu">print</span><span class="op">(</span><span class="st">"{</span><span class="sc">\"</span><span class="st">error</span><span class="sc">\"</span><span class="st">:</span><span class="sc">\"</span><span class="st">Authentication required</span><span class="sc">\"</span><span class="st">}"</span><span class="op">);</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a>    <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="op">}</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="co">// pedido autenticado: continuar o processamento normal</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>O logout resume-se a terminar a sessão:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb7-1"><a href="#cb7-1"></a>session<span class="op">.</span><span class="fu">invalidate</span><span class="op">();</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="sec-05-mvc-jsp" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="sec-05-mvc-jsp"><span class="header-section-number">5.5</span> O Padrão MVC com <em>Servlet</em> e JSP</h2>
+<p>O <a href="../capitulos/cap01.html">Capítulo 1</a> apresentou o padrão MVC a nível conceptual, e o <a href="../capitulos/cap04.html">Capítulo 4</a> mostrou como uma <em>Servlet</em> funciona como Controller. Falta a peça final: a View.</p>
+<div id="fig-05-mvc-geral" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-05-mvc-geral-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap05/Modelo_MVC_Geral.png" class="img-fluid figure-img" style="width:55.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-05-mvc-geral-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;5.1: O modelo geral do MVC, aplicável a qualquer interface (não só Web): o Controller atualiza o Model e a apresentação; a View lê o Model para se apresentar.
 </figcaption>
 </figure>
 </div>
-<p>Cada Filtro na cadeia tem, essencialmente, três comportamentos possíveis:</p>
-<ul>
-<li><strong>Bloquear o pedido</strong>: por exemplo, <code>400</code> (dados inválidos), <code>401</code> (identidade inválida) ou <code>403</code> (autenticado mas sem permissão)</li>
-<li><strong>Modificar o pedido</strong>: normalização e validação de dados, registo de atividade, entre outros</li>
-<li><strong>Deixar prosseguir</strong>: chamando <code>chain.doFilter(request, response)</code>, passando o controlo ao próximo elemento da cadeia</li>
-</ul>
+<p>Numa aplicação orientada à apresentação, a <em>Servlet</em> recebe o pedido e decide <strong>o quê</strong> mostrar, mas delega a <strong>geração do HTML</strong> propriamente dita a uma <a href="https://jakarta.ee/specifications/pages/"><em>JavaServer Page</em></a> (JSP). O Model, por sua vez, é uma classe Java comum (por exemplo, um <em>DAO</em>), independente de ambos.</p>
+<p>A <em>Servlet</em> liga-se à JSP através de um <code>RequestDispatcher</code>: coloca os dados a mostrar num atributo do pedido, e encaminha (<em>forward</em>) o próprio pedido para a página:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb8-1"><a href="#cb8-1"></a>request<span class="op">.</span><span class="fu">setAttribute</span><span class="op">(</span><span class="st">"user"</span><span class="op">,</span> user<span class="op">);</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a>request<span class="op">.</span><span class="fu">getRequestDispatcher</span><span class="op">(</span><span class="st">"/home.jsp"</span><span class="op">).</span><span class="fu">forward</span><span class="op">(</span>request<span class="op">,</span> response<span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Uma JSP é um documento de texto que mistura dois tipos de conteúdo: HTML estático e elementos de <em>script</em> dinâmico. Na primeira vez que é pedida, o <em>Servlet Container</em> converte-a automaticamente numa classe <em>Servlet</em>, que passa a comportar-se, dali em diante, exatamente como qualquer outra <em>Servlet</em>.</p>
 </section>
-<section id="sec-05-ciclo-vida-filter" class="level2" data-number="5.5">
-<h2 data-number="5.5" class="anchored" data-anchor-id="sec-05-ciclo-vida-filter"><span class="header-section-number">5.5</span> Ciclo de Vida de um Filtro</h2>
-<p>O ciclo de vida de um Filtro segue o mesmo modelo já apresentado para as <em>Servlets</em> (ver <a href="../capitulos/cap03.html">Capítulo 3</a>):</p>
+<section id="sec-05-exemplo-jsp" class="level2" data-number="5.6">
+<h2 data-number="5.6" class="anchored" data-anchor-id="sec-05-exemplo-jsp"><span class="header-section-number">5.6</span> Um Exemplo Simples de JSP</h2>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource jsp number-lines code-with-copy"><code class="sourceCode jsp"><span id="cb9-1"><a href="#cb9-1"></a><span class="bu">&lt;%@ page</span><span class="ot"> language</span>=<span class="st">"java"</span><span class="ot"> contentType</span>=<span class="st">"text/html; charset=UTF-8"</span><span class="ot"> pageEncoding</span>=<span class="st">"UTF-8"</span><span class="bu">%&gt;</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a></span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="pp">&lt;%</span> <span class="bu">String</span> name <span class="op">=</span> <span class="op">(</span><span class="bu">String</span><span class="op">)</span> request<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"userName"</span><span class="op">);</span> <span class="pp">%&gt;</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a></span>
+<span id="cb9-5"><a href="#cb9-5"></a>&lt;<span class="ot">!DOCTYPE html</span>&gt;</span>
+<span id="cb9-6"><a href="#cb9-6"></a>&lt;html&gt;</span>
+<span id="cb9-7"><a href="#cb9-7"></a>&lt;head&gt;</span>
+<span id="cb9-8"><a href="#cb9-8"></a>  &lt;meta<span class="ot"> http-equiv</span>=<span class="dt">"Content-Type"</span><span class="ot"> content</span>=<span class="dt">"text/html; charset=UTF-8"</span>&gt;</span>
+<span id="cb9-9"><a href="#cb9-9"></a>  &lt;title&gt;Uma Página JSP&lt;/title&gt;</span>
+<span id="cb9-10"><a href="#cb9-10"></a>&lt;/head&gt;</span>
+<span id="cb9-11"><a href="#cb9-11"></a>&lt;body&gt;</span>
+<span id="cb9-12"><a href="#cb9-12"></a>  &lt;h1&gt;Olá, <span class="pp">&lt;%=</span> name <span class="pp">%&gt;</span>!&lt;/h1&gt;</span>
+<span id="cb9-13"><a href="#cb9-13"></a>&lt;/body&gt;</span>
+<span id="cb9-14"><a href="#cb9-14"></a>&lt;/html&gt;</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>O bloco <code>&lt;% ... %&gt;</code> (<em>scriptlet</em>) contém código Java arbitrário; o bloco <code>&lt;%= ... %&gt;</code> (expressão) insere o valor de uma expressão Java diretamente no HTML gerado. É exatamente este atributo <code>userName</code>, colocado no pedido pela <em>Servlet</em> através de <code>request.setAttribute(...)</code>, que a JSP aqui recupera.</p>
+</section>
+<section id="sec-05-ciclo-vida-jsp" class="level2" data-number="5.7">
+<h2 data-number="5.7" class="anchored" data-anchor-id="sec-05-ciclo-vida-jsp"><span class="header-section-number">5.7</span> Ciclo de Vida e Objetos Implícitos</h2>
+<p>O ciclo de vida de uma JSP segue o mesmo modelo da <em>Servlet</em> em que é convertida (ver <a href="../capitulos/cap04.html">Capítulo 4</a>), com dois pormenores próprios:</p>
 <ul>
-<li><code>init()</code>: executado uma única vez, quando o contentor coloca o Filtro em serviço</li>
-<li><code>doFilter()</code>: executado a cada pedido; pode inspecionar, bloquear ou modificar o pedido e a resposta, e deve chamar <code>chain.doFilter()</code> para continuar a cadeia</li>
-<li><code>destroy()</code>: executado uma única vez, quando o Filtro é retirado de serviço, para libertar recursos</li>
+<li>O contentor recompila a JSP automaticamente sempre que o ficheiro <code>.jsp</code> é alterado</li>
+<li>Em vez de <code>init()</code> e <code>destroy()</code>, a JSP oferece os métodos <code>jspInit()</code> e <code>jspDestroy()</code></li>
 </ul>
-<p>Tal como uma <em>Servlet</em>, existe <strong>uma única instância</strong> de cada Filtro, partilhada por múltiplos pedidos concorrentes: aplica-se aqui exatamente o mesmo cuidado já referido no Capítulo 3, evitar estado mutável partilhado, e preferir variáveis locais dentro de <code>doFilter()</code>.</p>
-<div id="fig-05-filter-lifecycle" class="quarto-float quarto-figure quarto-figure-center anchored">
+<p>Outra diferença prática: dentro de uma JSP, um conjunto de objetos está disponível automaticamente, sem qualquer declaração prévia, chamados objetos implícitos:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Objeto implícito</th>
+<th>Tipo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>out</code></td>
+<td><code>JspWriter</code></td>
+</tr>
+<tr class="even">
+<td><code>request</code></td>
+<td><code>HttpServletRequest</code></td>
+</tr>
+<tr class="odd">
+<td><code>response</code></td>
+<td><code>HttpServletResponse</code></td>
+</tr>
+<tr class="even">
+<td><code>session</code></td>
+<td><code>HttpSession</code></td>
+</tr>
+<tr class="odd">
+<td><code>page</code></td>
+<td><code>Object</code></td>
+</tr>
+</tbody>
+</table>
+<p>Por causa do objeto implícito <code>out</code>, uma JSP nunca precisa de obter explicitamente um <code>PrintWriter</code>: usa-se <code>out</code> diretamente.</p>
+</section>
+<section id="sec-05-scopes" class="level2" data-number="5.8">
+<h2 data-number="5.8" class="anchored" data-anchor-id="sec-05-scopes"><span class="header-section-number">5.8</span> <em>Scopes</em>: Partilhar Informação Dentro do Servidor</h2>
+<p>Tal como as <em>Servlets</em> podem partilhar informação com outros módulos através de atributos (ver <a href="../capitulos/cap04.html">Capítulo 4</a>), esses atributos existem sempre dentro de um determinado âmbito, ou <em>scope</em>. Existem quatro classes de <em>scope</em>:</p>
+<ul>
+<li><strong><em>Web context</em></strong> (ou <em>application context</em>): um único por aplicação, partilhado por todos os módulos e todos os utilizadores</li>
+<li><strong><em>Session</em></strong>: um por utilizador, mantido entre vários pedidos desse utilizador</li>
+<li><strong><em>Request</em></strong>: um por pedido, perdido assim que a resposta é enviada</li>
+<li><strong><em>Page</em></strong>: exclusivo de JSP, não é usado nesta UC</li>
+</ul>
+<p>Todos os <em>scopes</em> seguem a mesma interface: métodos <code>setAttribute</code>/<code>getAttribute</code>, e <code>getAttributeNames()</code> para listar tudo o que lá está guardado.</p>
+<p><strong>Web context</strong>, partilhado por toda a aplicação:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb10-1"><a href="#cb10-1"></a>ServletContext context <span class="op">=</span> request<span class="op">.</span><span class="fu">getServletContext</span><span class="op">();</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a>context<span class="op">.</span><span class="fu">setAttribute</span><span class="op">(</span><span class="st">"dbHost"</span><span class="op">,</span> <span class="st">"localhost"</span><span class="op">);</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="bu">String</span> dbHost <span class="op">=</span> <span class="op">(</span><span class="bu">String</span><span class="op">)</span> context<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"dbHost"</span><span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Session</strong>, já apresentado, partilhado apenas pelo mesmo utilizador:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb11-1"><a href="#cb11-1"></a>HttpSession session <span class="op">=</span> request<span class="op">.</span><span class="fu">getSession</span><span class="op">();</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a>session<span class="op">.</span><span class="fu">setAttribute</span><span class="op">(</span><span class="st">"email"</span><span class="op">,</span> <span class="st">"foo@fool.com"</span><span class="op">);</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="bu">String</span> email <span class="op">=</span> <span class="op">(</span><span class="bu">String</span><span class="op">)</span> session<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"email"</span><span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Request</strong>, o mais restrito de todos, partilhado apenas entre módulos que processam o mesmo pedido (por exemplo, entre uma <em>Servlet</em> e a JSP para a qual reencaminha):</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb12-1"><a href="#cb12-1"></a>request<span class="op">.</span><span class="fu">setAttribute</span><span class="op">(</span><span class="st">"email"</span><span class="op">,</span> <span class="st">"foo@fool.com"</span><span class="op">);</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="bu">String</span> email <span class="op">=</span> <span class="op">(</span><span class="bu">String</span><span class="op">)</span> request<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"email"</span><span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Os quatro <em>scopes</em> formam uma hierarquia de inclusão, do mais lato ao mais restrito: <em>Application</em> contém <em>Session</em>, que contém <em>Request</em>, que contém <em>Page</em>. Quanto maior o <em>scope</em>, mais partilhada fica a informação, e maior a responsabilidade de a gerir corretamente (por exemplo, de a remover quando deixa de ser necessária).</p>
+<div id="fig-05-scopes-comparacao" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-05-filter-lifecycle-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../assets/images/capitulos/cap05/Filter_Lifecycle.png" class="img-fluid figure-img" style="width:85.0%">
+<div aria-describedby="fig-05-scopes-comparacao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap05/Comparacao_Scopes.png" class="img-fluid figure-img" style="width:60.0%">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-05-filter-lifecycle-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;5.2: O ciclo de vida de um Filtro espelha o de uma Servlet: init() e destroy() correm uma única vez, doFilter() corre a cada pedido, para múltiplos pedidos concorrentes.
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-05-scopes-comparacao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;5.2: Os quatro scopes, do mais lato (Application) ao mais restrito (Page): cada um contém o seguinte, e um scope maior implica mais partilha, mas também mais responsabilidade na sua gestão.
 </figcaption>
 </figure>
 </div>
-</section>
-<section id="sec-05-separacao-responsabilidades" class="level2" data-number="5.6">
-<h2 data-number="5.6" class="anchored" data-anchor-id="sec-05-separacao-responsabilidades"><span class="header-section-number">5.6</span> <em>Servlet</em> e Filtro: Separação de Responsabilidades</h2>
-<p>Centralizar a segurança num Filtro reorganiza as responsabilidades de toda a aplicação:</p>
-<div id="fig-05-servlet-vs-filter" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-05-servlet-vs-filter-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../assets/images/capitulos/cap05/Servlet_vs_Filter.png" class="img-fluid figure-img" style="width:75.0%">
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-05-servlet-vs-filter-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;5.3: Sem Filtro, cada Servlet acumula autenticação, logging, validação e lógica de negócio. Com um Filtro, essas preocupações transversais concentram-se num único sítio, e cada Servlet fica só com a sua lógica de negócio.
-</figcaption>
-</figure>
+<div class="callout-title-container flex-fill">
+<em>Scopes</em> não se instanciam
 </div>
-<p>Esta reorganização traz vantagens concretas:</p>
-<ul>
-<li>A lógica de autenticação é escrita <strong>uma única vez</strong> (princípio <em>DRY</em>)</li>
-<li>A política de segurança é aplicada de forma consistente a todos os <em>endpoints</em></li>
-<li>Deixa de haver risco de “esquecer” a proteção numa <em>Servlet</em> nova</li>
-<li>Fica clara a separação entre preocupações transversais (Filtro) e lógica de negócio (<em>Servlet</em>)</li>
-</ul>
-</section>
-<section id="sec-05-declarar-filter" class="level2" data-number="5.7">
-<h2 data-number="5.7" class="anchored" data-anchor-id="sec-05-declarar-filter"><span class="header-section-number">5.7</span> Declarar e Implementar um Filtro</h2>
-<p>Um Filtro declara-se com a anotação <code>@WebFilter</code>, indicando o padrão de <em>URLs</em> a que se aplica:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb4-1"><a href="#cb4-1"></a><span class="at">@WebFilter</span><span class="op">(</span><span class="st">"/*"</span><span class="op">)</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="kw">public</span> <span class="kw">class</span> AuthenticationFilter <span class="kw">implements</span> <span class="bu">Filter</span> <span class="op">{</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a>    <span class="co">// ...</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>O padrão <code>"/*"</code> intercepta todos os pedidos, sem exceção. A classe tem de implementar <code>jakarta.servlet.Filter</code>, e o contentor descobre-a automaticamente no momento da implantação (<em>deployment</em>). Tal como as <em>Servlets</em>, um Filtro também pode ser declarado de forma equivalente, embora considerada préterita, no ficheiro <code>web.xml</code>.</p>
-<p>Um <code>doFilter()</code> típico, que protege todos os pedidos exigindo uma sessão válida, tem esta forma:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">public</span> <span class="dt">void</span> <span class="fu">doFilter</span><span class="op">(</span>ServletRequest request<span class="op">,</span> ServletResponse response<span class="op">,</span> FilterChain chain<span class="op">)</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a>        <span class="kw">throws</span> <span class="bu">IOException</span><span class="op">,</span> ServletException <span class="op">{</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a></span>
-<span id="cb5-4"><a href="#cb5-4"></a>    HttpServletRequest req <span class="op">=</span> <span class="op">(</span>HttpServletRequest<span class="op">)</span> request<span class="op">;</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a>    HttpServletResponse res <span class="op">=</span> <span class="op">(</span>HttpServletResponse<span class="op">)</span> response<span class="op">;</span></span>
-<span id="cb5-6"><a href="#cb5-6"></a></span>
-<span id="cb5-7"><a href="#cb5-7"></a>    HttpSession session <span class="op">=</span> req<span class="op">.</span><span class="fu">getSession</span><span class="op">(</span><span class="kw">false</span><span class="op">);</span></span>
-<span id="cb5-8"><a href="#cb5-8"></a></span>
-<span id="cb5-9"><a href="#cb5-9"></a>    <span class="cf">if</span> <span class="op">(</span>session <span class="op">==</span> <span class="kw">null</span> <span class="op">||</span> session<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"UserName"</span><span class="op">)</span> <span class="op">==</span> <span class="kw">null</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb5-10"><a href="#cb5-10"></a>        res<span class="op">.</span><span class="fu">sendError</span><span class="op">(</span>HttpServletResponse<span class="op">.</span><span class="fu">SC_UNAUTHORIZED</span><span class="op">);</span> <span class="co">// 401</span></span>
-<span id="cb5-11"><a href="#cb5-11"></a>        <span class="cf">return</span><span class="op">;</span></span>
-<span id="cb5-12"><a href="#cb5-12"></a>    <span class="op">}</span></span>
-<span id="cb5-13"><a href="#cb5-13"></a></span>
-<span id="cb5-14"><a href="#cb5-14"></a>    chain<span class="op">.</span><span class="fu">doFilter</span><span class="op">(</span>request<span class="op">,</span> response<span class="op">);</span></span>
-<span id="cb5-15"><a href="#cb5-15"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Na prática, nem todos os pedidos devem ser protegidos: o próprio <code>/login</code>, e recursos estáticos como <code>/css</code>, <code>/js</code> ou <code>/images</code>, precisam de ficar acessíveis sem autenticação, sob pena de o utilizador nunca conseguir sequer chegar ao formulário de <em>login</em>.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb6-1"><a href="#cb6-1"></a><span class="bu">String</span> path <span class="op">=</span> req<span class="op">.</span><span class="fu">getRequestURI</span><span class="op">();</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a></span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="dt">boolean</span> isLogin <span class="op">=</span> path<span class="op">.</span><span class="fu">endsWith</span><span class="op">(</span><span class="st">"/login"</span><span class="op">);</span></span>
-<span id="cb6-4"><a href="#cb6-4"></a><span class="dt">boolean</span> isStatic <span class="op">=</span> path<span class="op">.</span><span class="fu">startsWith</span><span class="op">(</span>req<span class="op">.</span><span class="fu">getContextPath</span><span class="op">()</span> <span class="op">+</span> <span class="st">"/css"</span><span class="op">)</span></span>
-<span id="cb6-5"><a href="#cb6-5"></a>                 <span class="op">||</span> path<span class="op">.</span><span class="fu">startsWith</span><span class="op">(</span>req<span class="op">.</span><span class="fu">getContextPath</span><span class="op">()</span> <span class="op">+</span> <span class="st">"/js"</span><span class="op">)</span></span>
-<span id="cb6-6"><a href="#cb6-6"></a>                 <span class="op">||</span> path<span class="op">.</span><span class="fu">startsWith</span><span class="op">(</span>req<span class="op">.</span><span class="fu">getContextPath</span><span class="op">()</span> <span class="op">+</span> <span class="st">"/images"</span><span class="op">);</span></span>
-<span id="cb6-7"><a href="#cb6-7"></a></span>
-<span id="cb6-8"><a href="#cb6-8"></a><span class="cf">if</span> <span class="op">(</span>isLogin <span class="op">||</span> isStatic<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb6-9"><a href="#cb6-9"></a>    chain<span class="op">.</span><span class="fu">doFilter</span><span class="op">(</span>request<span class="op">,</span> response<span class="op">);</span></span>
-<span id="cb6-10"><a href="#cb6-10"></a>    <span class="cf">return</span><span class="op">;</span></span>
-<span id="cb6-11"><a href="#cb6-11"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="sec-05-redirect-vs-401" class="level2" data-number="5.8">
-<h2 data-number="5.8" class="anchored" data-anchor-id="sec-05-redirect-vs-401"><span class="header-section-number">5.8</span> Redirecionamento vs.&nbsp;<code>401</code>: uma Diferença Arquitetural</h2>
-<p>A forma correta de reagir a uma falha de autenticação depende do tipo de aplicação:</p>
-<ul>
-<li>Numa aplicação Web tradicional, orientada à apresentação (ver <a href="../capitulos/cap01.html">Capítulo 1</a>), a resposta natural é um <strong>redirecionamento</strong> para a página de <em>login</em> (código <code>302</code>)</li>
-<li>Numa API REST, cujo contrato é JSON (ver <a href="../capitulos/cap06.html">Capítulos 6</a> e <a href="../capitulos/cap07.html">7</a>), a resposta correta é devolver <strong><code>401</code></strong>, sem qualquer redirecionamento</li>
-</ul>
-<p>A diferença resume-se a uma frase: numa aplicação Web tradicional, uma falha de autenticação muda a página mostrada; numa API REST, muda apenas o código de estado devolvido. É o cliente, não o servidor, quem decide o que fazer a seguir com esse <code>401</code>.</p>
-</section>
-<section id="sec-05-preparacao-sem-estado" class="level2" data-number="5.9">
-<h2 data-number="5.9" class="anchored" data-anchor-id="sec-05-preparacao-sem-estado"><span class="header-section-number">5.9</span> Preparação para uma Segurança Sem Estado</h2>
-<p>O modelo apresentado neste capítulo assenta inteiramente em sessão: o servidor guarda o estado do utilizador autenticado (<code>HttpSession</code>), e o Filtro verifica essa sessão em cada pedido. Este modelo tem uma limitação: exige que o servidor mantenha memória de cada utilizador, o que se torna problemático assim que existe mais do que uma instância do servidor (ver <a href="../capitulos/cap07.html">Capítulo 7</a>).</p>
-<p>A alternativa é a autenticação baseada em <em>token</em>: em vez de o servidor guardar sessão nenhuma, o próprio pedido transporta, em cada chamada, toda a informação necessária para se autenticar. Esta mudança, de um modelo com estado (<em>stateful</em>) para um modelo sem estado (<em>stateless</em>), é o tema dos capítulos seguintes.</p>
+</div>
+<div class="callout-body-container callout-body">
+<p>Os objetos de <em>scope</em> (<code>ServletContext</code>, <code>HttpSession</code>, <code>ServletRequest</code>) são fornecidos automaticamente pelo contentor. Nunca se cria uma instância nova com <code>new</code>: se um deles ainda não existe, os métodos apropriados (<code>getServletContext()</code>, <code>getSession()</code>) criam-no ou devolvem o existente.</p>
+</div>
+</div>
 
 
 </section>
@@ -1011,13 +1061,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../capitulos/cap04.html" class="pagination-link" aria-label="Modelo Stateful: Sessões e JSP">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelo Stateful: Sessões e JSP</span></span>
+      <a href="../capitulos/cap04.html" class="pagination-link" aria-label="Java EE e Fundamentos de Servlets">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Java EE e Fundamentos de Servlets</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../capitulos/cap06.html" class="pagination-link" aria-label="Web Services REST e Arquitetura Stateless (Parte 1)">
-        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Web Services REST e Arquitetura Stateless (Parte 1)</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../capitulos/cap06.html" class="pagination-link" aria-label="Segurança e Filtros">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Segurança e Filtros</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

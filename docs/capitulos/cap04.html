@@ -8,7 +8,7 @@
 
 <meta name="author" content="João Pavão">
 
-<title>4&nbsp; Modelo Stateful: Sessões e JSP – Aplicações e Serviços Web</title>
+<title>4&nbsp; Java EE e Fundamentos de Servlets – Aplicações e Serviços Web</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -120,7 +120,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../capitulos/cap04.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelo Stateful: Sessões e JSP</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../capitulos/cap04.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Java EE e Fundamentos de Servlets</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Procurar" onclick="window.quartoOpenSearch();">
@@ -169,31 +169,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap03.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Java EE e Fundamentos de Servlets</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">O Protocolo HTTP</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap04.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelo Stateful: Sessões e JSP</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Java EE e Fundamentos de Servlets</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap05.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Segurança e Filtros</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Modelo Stateful: Sessões e JSP</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap06.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Web Services REST e Arquitetura Stateless (Parte 1)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Segurança e Filtros</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap07.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Web Services REST (Parte 2) e o Cliente em JavaScript</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Web Services REST e Arquitetura Stateless (Parte 1)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/cap08.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Web Services REST (Parte 2) e o Cliente em JavaScript</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -235,14 +241,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Índice</h2>
    
   <ul>
-  <li><a href="#sec-04-problema-estado" id="toc-sec-04-problema-estado" class="nav-link active" data-scroll-target="#sec-04-problema-estado"><span class="header-section-number">4.1</span> HTTP é Sem Estado: o Problema</a></li>
-  <li><a href="#sec-04-cookies" id="toc-sec-04-cookies" class="nav-link" data-scroll-target="#sec-04-cookies"><span class="header-section-number">4.2</span> <em>Cookies</em></a></li>
-  <li><a href="#sec-04-sessoes-http" id="toc-sec-04-sessoes-http" class="nav-link" data-scroll-target="#sec-04-sessoes-http"><span class="header-section-number">4.3</span> Sessões (<code>HttpSession</code>)</a></li>
-  <li><a href="#sec-04-autenticacao-sessao" id="toc-sec-04-autenticacao-sessao" class="nav-link" data-scroll-target="#sec-04-autenticacao-sessao"><span class="header-section-number">4.4</span> Autenticação Baseada em Sessão</a></li>
-  <li><a href="#sec-04-mvc-jsp" id="toc-sec-04-mvc-jsp" class="nav-link" data-scroll-target="#sec-04-mvc-jsp"><span class="header-section-number">4.5</span> O Padrão MVC com <em>Servlet</em> e JSP</a></li>
-  <li><a href="#sec-04-exemplo-jsp" id="toc-sec-04-exemplo-jsp" class="nav-link" data-scroll-target="#sec-04-exemplo-jsp"><span class="header-section-number">4.6</span> Um Exemplo Simples de JSP</a></li>
-  <li><a href="#sec-04-ciclo-vida-jsp" id="toc-sec-04-ciclo-vida-jsp" class="nav-link" data-scroll-target="#sec-04-ciclo-vida-jsp"><span class="header-section-number">4.7</span> Ciclo de Vida e Objetos Implícitos</a></li>
-  <li><a href="#sec-04-scopes" id="toc-sec-04-scopes" class="nav-link" data-scroll-target="#sec-04-scopes"><span class="header-section-number">4.8</span> <em>Scopes</em>: Partilhar Informação Dentro do Servidor</a></li>
+  <li><a href="#sec-04-jakarta-ee" id="toc-sec-04-jakarta-ee" class="nav-link active" data-scroll-target="#sec-04-jakarta-ee"><span class="header-section-number">4.1</span> A Plataforma Jakarta EE</a></li>
+  <li><a href="#sec-04-arquitetura-camadas" id="toc-sec-04-arquitetura-camadas" class="nav-link" data-scroll-target="#sec-04-arquitetura-camadas"><span class="header-section-number">4.2</span> Arquitetura em Camadas</a></li>
+  <li><a href="#sec-04-porque-servlets" id="toc-sec-04-porque-servlets" class="nav-link" data-scroll-target="#sec-04-porque-servlets"><span class="header-section-number">4.3</span> Porquê Servlets?</a></li>
+  <li><a href="#sec-04-ciclo-vida" id="toc-sec-04-ciclo-vida" class="nav-link" data-scroll-target="#sec-04-ciclo-vida"><span class="header-section-number">4.4</span> O Ciclo de Vida de uma Servlet</a></li>
+  <li><a href="#sec-04-mapeamento-http-servlet" id="toc-sec-04-mapeamento-http-servlet" class="nav-link" data-scroll-target="#sec-04-mapeamento-http-servlet"><span class="header-section-number">4.5</span> Da Mensagem HTTP ao Método Java</a></li>
+  <li><a href="#sec-04-content-type" id="toc-sec-04-content-type" class="nav-link" data-scroll-target="#sec-04-content-type"><span class="header-section-number">4.6</span> Content-Type e a Forma da Resposta</a></li>
+  <li><a href="#sec-04-primeiro-servlet" id="toc-sec-04-primeiro-servlet" class="nav-link" data-scroll-target="#sec-04-primeiro-servlet"><span class="header-section-number">4.7</span> Uma Primeira Servlet: “World Capitals”</a></li>
+  <li><a href="#sec-04-servlets-mvc" id="toc-sec-04-servlets-mvc" class="nav-link" data-scroll-target="#sec-04-servlets-mvc"><span class="header-section-number">4.8</span> Servlets e o Padrão MVC: Falta a View</a></li>
   </ul>
 </nav>
     </div>
@@ -251,7 +257,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelo Stateful: Sessões e JSP</span></h1>
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Java EE e Fundamentos de Servlets</span></h1>
 </div>
 
 
@@ -280,193 +286,59 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="sec-04-problema-estado" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="sec-04-problema-estado"><span class="header-section-number">4.1</span> HTTP é Sem Estado: o Problema</h2>
-<p>O protocolo HTTP é <em>stateless</em> (ver <a href="../capitulos/cap01.html">Capítulo 1</a>): cada pedido é independente, e o servidor não guarda, por si só, qualquer memória de pedidos anteriores. Não existe, ao nível do protocolo, nenhuma noção de “utilizador com sessão iniciada”.</p>
-<p>Isto levanta um problema prático imediato: se um utilizador se autentica num pedido, como é que um pedido seguinte, minutos depois, sabe que esse utilizador continua autenticado? A resposta passa por dois mecanismos complementares:</p>
-<ul>
-<li><strong><em>Cookies</em></strong>: um pequeno pedaço de informação guardado do lado do <strong>cliente</strong>, reenviado automaticamente pelo <em>browser</em> em cada pedido seguinte</li>
-<li><strong><code>HttpSession</code></strong>: um objeto guardado do lado do <strong>servidor</strong>, associado a um identificador que o cliente devolve a cada pedido</li>
-</ul>
+<section id="sec-04-jakarta-ee" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="sec-04-jakarta-ee"><span class="header-section-number">4.1</span> A Plataforma Jakarta EE</h2>
+<p>Com o Frontend construído (<a href="../capitulos/cap02.html">Capítulo 2</a>) e o Middleware detalhado (<a href="../capitulos/cap03.html">Capítulo 3</a>), falta a terceira peça identificada no <a href="../capitulos/cap01.html">Capítulo 1</a>: o Backend, que efetivamente recebe os pedidos HTTP e lhes responde. É o tema deste capítulo e dos seguintes.</p>
+<p>A <a href="https://jakarta.ee/"><em>Jakarta EE</em></a> (anteriormente conhecida como <em>Java EE</em>, até ser renomeada em 2019) é uma plataforma que fornece um conjunto de serviços e <em>APIs</em> prontos a usar para lidar com os problemas comuns a qualquer aplicação Web (ver <a href="../capitulos/cap01.html">Capítulo 1</a>), libertando quem desenvolve para se concentrar na lógica de negócio da aplicação.</p>
+<p>A plataforma assenta na linguagem Java e na <em>Java Virtual Machine</em> (JVM), o que significa que qualquer componente escrito para <em>Jakarta EE</em> beneficia da portabilidade e da gestão automática de memória já conhecidas da linguagem.</p>
 </section>
-<section id="sec-04-cookies" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="sec-04-cookies"><span class="header-section-number">4.2</span> <em>Cookies</em></h2>
-<p>Um <em>cookie</em> é um par chave/valor guardado no <em>browser</em>. Quando o servidor envia um <em>cookie</em>, espera que o cliente o devolva em todos os pedidos HTTP seguintes, dirigidos ao mesmo domínio.</p>
-<p>Distinguem-se dois tipos, consoante a sua persistência:</p>
-<ul>
-<li><strong><em>Session cookies</em></strong>: mantidos pelo cliente apenas durante a sessão de navegação (<code>setMaxAge(-1)</code>)</li>
-<li><strong><em>Permanent cookies</em></strong>: guardados de forma persistente, com um tempo de vida definido (<code>setMaxAge(60*60*24*30)</code> para 30 dias, por exemplo)</li>
-</ul>
-<p>Criar um <em>cookie</em>:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb1-1"><a href="#cb1-1"></a>Cookie cookie <span class="op">=</span> <span class="kw">new</span> <span class="fu">Cookie</span><span class="op">(</span><span class="st">"userName"</span><span class="op">,</span> <span class="st">"Pedro"</span><span class="op">);</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a>cookie<span class="op">.</span><span class="fu">setMaxAge</span><span class="op">(-</span><span class="dv">1</span><span class="op">);</span> <span class="co">// session cookie</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a>response<span class="op">.</span><span class="fu">addCookie</span><span class="op">(</span>cookie<span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Ler um <em>cookie</em> recebido num pedido:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb2-1"><a href="#cb2-1"></a>Cookie<span class="op">[]</span> cookies <span class="op">=</span> request<span class="op">.</span><span class="fu">getCookies</span><span class="op">();</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="bu">String</span> user <span class="op">=</span> <span class="kw">null</span><span class="op">;</span></span>
-<span id="cb2-3"><a href="#cb2-3"></a></span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="cf">for</span> <span class="op">(</span>Cookie c <span class="op">:</span> cookies<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb2-5"><a href="#cb2-5"></a>    <span class="cf">if</span> <span class="op">(</span>c<span class="op">.</span><span class="fu">getName</span><span class="op">().</span><span class="fu">equals</span><span class="op">(</span><span class="st">"userName"</span><span class="op">))</span> <span class="op">{</span></span>
-<span id="cb2-6"><a href="#cb2-6"></a>        user <span class="op">=</span> c<span class="op">.</span><span class="fu">getValue</span><span class="op">();</span></span>
-<span id="cb2-7"><a href="#cb2-7"></a>    <span class="op">}</span></span>
-<span id="cb2-8"><a href="#cb2-8"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="sec-04-sessoes-http" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="sec-04-sessoes-http"><span class="header-section-number">4.3</span> Sessões (<code>HttpSession</code>)</h2>
-<p>Guardar estado do lado do servidor exige um objeto próprio para o efeito: a <code>HttpSession</code>. Uma sessão obtém-se, ou cria-se, a partir do pedido:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb3-1"><a href="#cb3-1"></a>HttpSession session <span class="op">=</span> request<span class="op">.</span><span class="fu">getSession</span><span class="op">();</span>          <span class="co">// cria se não existir</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a>HttpSession session <span class="op">=</span> request<span class="op">.</span><span class="fu">getSession</span><span class="op">(</span><span class="kw">true</span><span class="op">);</span>      <span class="co">// equivalente, explícito</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a>HttpSession session <span class="op">=</span> request<span class="op">.</span><span class="fu">getSession</span><span class="op">(</span><span class="kw">false</span><span class="op">);</span>     <span class="co">// NUNCA cria; devolve null se não houver</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Uma vez obtida, a sessão guarda e devolve informação através de atributos, e pode ser terminada explicitamente:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb4-1"><a href="#cb4-1"></a>session<span class="op">.</span><span class="fu">setAttribute</span><span class="op">(</span><span class="st">"email"</span><span class="op">,</span> <span class="st">"foo@fool.com"</span><span class="op">);</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="bu">String</span> email <span class="op">=</span> <span class="op">(</span><span class="bu">String</span><span class="op">)</span> session<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"email"</span><span class="op">);</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a>session<span class="op">.</span><span class="fu">invalidate</span><span class="op">();</span>                    <span class="co">// termina a sessão</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a>session<span class="op">.</span><span class="fu">setMaxInactiveInterval</span><span class="op">(</span><span class="dv">1800</span><span class="op">);</span>     <span class="co">// tempo de inatividade, em segundos</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Falta uma peça: se HTTP não tem memória de pedidos anteriores, como é que o servidor sabe que dois pedidos sucessivos pertencem à mesma sessão? A resposta são, de novo, os <em>cookies</em>: por convenção, o identificador de sessão viaja num <em>cookie</em> chamado <code>JSESSIONID</code>, criado automaticamente pelo <em>Servlet Container</em> na primeira chamada a <code>getSession()</code>.</p>
-<pre><code>JSESSIONID=22562577CE80EF3B1DAAA0E48F2B6392</code></pre>
-<p>Quando o cliente não aceita <em>cookies</em>, existe uma alternativa: codificar o identificador de sessão diretamente na <em>URL</em>.</p>
-<pre><code>http://localhost:8080/CapitaisAPI/country;jsessionid=829F8836C240B51DD2F074259F242833</code></pre>
-<p>É boa prática chamar sempre <code>response.encodeURL(url)</code> ao construir uma <em>URL</em> de destino: se os <em>cookies</em> estiverem ativos, o método devolve a <em>URL</em> inalterada; se não estiverem, acrescenta automaticamente o <code>jsessionid</code>.</p>
-</section>
-<section id="sec-04-autenticacao-sessao" class="level2" data-number="4.4">
-<h2 data-number="4.4" class="anchored" data-anchor-id="sec-04-autenticacao-sessao"><span class="header-section-number">4.4</span> Autenticação Baseada em Sessão</h2>
-<p>Juntando os dois mecanismos anteriores, obtém-se o padrão clássico de autenticação por sessão, usado no LAB2 desta UC (ver <a href="../capitulos/apendiceB.html">Apêndice B</a>). Depois de validar as credenciais, a <code>LoginServlet</code> cria uma sessão e guarda nela o identificador do utilizador:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb7-1"><a href="#cb7-1"></a><span class="at">@WebServlet</span><span class="op">(</span><span class="st">"/login"</span><span class="op">)</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a><span class="kw">public</span> <span class="kw">class</span> LoginServlet <span class="kw">extends</span> HttpServlet <span class="op">{</span></span>
-<span id="cb7-3"><a href="#cb7-3"></a>    <span class="kw">protected</span> <span class="dt">void</span> <span class="fu">doPost</span><span class="op">(</span>HttpServletRequest request<span class="op">,</span> HttpServletResponse response<span class="op">)</span></span>
-<span id="cb7-4"><a href="#cb7-4"></a>            <span class="kw">throws</span> ServletException<span class="op">,</span> <span class="bu">IOException</span> <span class="op">{</span></span>
-<span id="cb7-5"><a href="#cb7-5"></a>        <span class="bu">String</span> user <span class="op">=</span> request<span class="op">.</span><span class="fu">getParameter</span><span class="op">(</span><span class="st">"user"</span><span class="op">);</span></span>
-<span id="cb7-6"><a href="#cb7-6"></a>        <span class="bu">String</span> pass <span class="op">=</span> request<span class="op">.</span><span class="fu">getParameter</span><span class="op">(</span><span class="st">"pass"</span><span class="op">);</span></span>
-<span id="cb7-7"><a href="#cb7-7"></a></span>
-<span id="cb7-8"><a href="#cb7-8"></a>        <span class="cf">if</span> <span class="op">(</span>dao<span class="op">.</span><span class="fu">validateUserCredentials</span><span class="op">(</span>user<span class="op">,</span> pass<span class="op">))</span> <span class="op">{</span></span>
-<span id="cb7-9"><a href="#cb7-9"></a>            HttpSession session <span class="op">=</span> request<span class="op">.</span><span class="fu">getSession</span><span class="op">(</span><span class="kw">true</span><span class="op">);</span></span>
-<span id="cb7-10"><a href="#cb7-10"></a>            session<span class="op">.</span><span class="fu">setAttribute</span><span class="op">(</span><span class="st">"UserName"</span><span class="op">,</span> user<span class="op">);</span></span>
-<span id="cb7-11"><a href="#cb7-11"></a></span>
-<span id="cb7-12"><a href="#cb7-12"></a>            response<span class="op">.</span><span class="fu">setContentType</span><span class="op">(</span><span class="st">"application/json"</span><span class="op">);</span></span>
-<span id="cb7-13"><a href="#cb7-13"></a>            response<span class="op">.</span><span class="fu">getWriter</span><span class="op">().</span><span class="fu">print</span><span class="op">(</span><span class="st">"{</span><span class="sc">\"</span><span class="st">message</span><span class="sc">\"</span><span class="st">:</span><span class="sc">\"</span><span class="st">OK</span><span class="sc">\"</span><span class="st">,</span><span class="sc">\"</span><span class="st">user</span><span class="sc">\"</span><span class="st">:</span><span class="sc">\"</span><span class="st">"</span> <span class="op">+</span> user <span class="op">+</span> <span class="st">"</span><span class="sc">\"</span><span class="st">}"</span><span class="op">);</span></span>
-<span id="cb7-14"><a href="#cb7-14"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
-<span id="cb7-15"><a href="#cb7-15"></a>            response<span class="op">.</span><span class="fu">setStatus</span><span class="op">(</span>HttpServletResponse<span class="op">.</span><span class="fu">SC_FORBIDDEN</span><span class="op">);</span></span>
-<span id="cb7-16"><a href="#cb7-16"></a>            response<span class="op">.</span><span class="fu">getWriter</span><span class="op">().</span><span class="fu">print</span><span class="op">(</span><span class="st">"{</span><span class="sc">\"</span><span class="st">message</span><span class="sc">\"</span><span class="st">:</span><span class="sc">\"</span><span class="st">FORBIDDEN</span><span class="sc">\"</span><span class="st">,</span><span class="sc">\"</span><span class="st">error</span><span class="sc">\"</span><span class="st">:</span><span class="sc">\"</span><span class="st">Invalid login or password</span><span class="sc">\"</span><span class="st">}"</span><span class="op">);</span></span>
-<span id="cb7-17"><a href="#cb7-17"></a>        <span class="op">}</span></span>
-<span id="cb7-18"><a href="#cb7-18"></a>    <span class="op">}</span></span>
-<span id="cb7-19"><a href="#cb7-19"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Qualquer <em>endpoint</em> protegido verifica, no início do seu próprio <code>doGet()</code> ou <code>doPost()</code>, se existe uma sessão válida com esse atributo:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb8-1"><a href="#cb8-1"></a>HttpSession session <span class="op">=</span> request<span class="op">.</span><span class="fu">getSession</span><span class="op">(</span><span class="kw">false</span><span class="op">);</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a><span class="cf">if</span> <span class="op">(</span>session <span class="op">==</span> <span class="kw">null</span> <span class="op">||</span> session<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"UserName"</span><span class="op">)</span> <span class="op">==</span> <span class="kw">null</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb8-3"><a href="#cb8-3"></a>    response<span class="op">.</span><span class="fu">setStatus</span><span class="op">(</span>HttpServletResponse<span class="op">.</span><span class="fu">SC_FORBIDDEN</span><span class="op">);</span></span>
-<span id="cb8-4"><a href="#cb8-4"></a>    response<span class="op">.</span><span class="fu">getWriter</span><span class="op">().</span><span class="fu">print</span><span class="op">(</span><span class="st">"{</span><span class="sc">\"</span><span class="st">error</span><span class="sc">\"</span><span class="st">:</span><span class="sc">\"</span><span class="st">Authentication required</span><span class="sc">\"</span><span class="st">}"</span><span class="op">);</span></span>
-<span id="cb8-5"><a href="#cb8-5"></a>    <span class="cf">return</span><span class="op">;</span></span>
-<span id="cb8-6"><a href="#cb8-6"></a><span class="op">}</span></span>
-<span id="cb8-7"><a href="#cb8-7"></a><span class="co">// pedido autenticado: continuar o processamento normal</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>O logout resume-se a terminar a sessão:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb9-1"><a href="#cb9-1"></a>session<span class="op">.</span><span class="fu">invalidate</span><span class="op">();</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="sec-04-mvc-jsp" class="level2" data-number="4.5">
-<h2 data-number="4.5" class="anchored" data-anchor-id="sec-04-mvc-jsp"><span class="header-section-number">4.5</span> O Padrão MVC com <em>Servlet</em> e JSP</h2>
-<p>O <a href="../capitulos/cap01.html">Capítulo 1</a> apresentou o padrão MVC a nível conceptual, e o <a href="../capitulos/cap03.html">Capítulo 3</a> mostrou como uma <em>Servlet</em> funciona como Controller. Falta a peça final: a View.</p>
-<div id="fig-04-mvc-geral" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-04-mvc-geral-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../assets/images/capitulos/cap04/Modelo_MVC_Geral.png" class="img-fluid figure-img" style="width:55.0%">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-04-mvc-geral-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;4.1: O modelo geral do MVC, aplicável a qualquer interface (não só Web): o Controller atualiza o Model e a apresentação; a View lê o Model para se apresentar.
-</figcaption>
-</figure>
-</div>
-<p>Numa aplicação orientada à apresentação, a <em>Servlet</em> recebe o pedido e decide <strong>o quê</strong> mostrar, mas delega a <strong>geração do HTML</strong> propriamente dita a uma <em>JavaServer Page</em> (JSP). O Model, por sua vez, é uma classe Java comum (por exemplo, um <em>DAO</em>), independente de ambos.</p>
-<p>A <em>Servlet</em> liga-se à JSP através de um <code>RequestDispatcher</code>: coloca os dados a mostrar num atributo do pedido, e encaminha (<em>forward</em>) o próprio pedido para a página:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb10-1"><a href="#cb10-1"></a>request<span class="op">.</span><span class="fu">setAttribute</span><span class="op">(</span><span class="st">"user"</span><span class="op">,</span> user<span class="op">);</span></span>
-<span id="cb10-2"><a href="#cb10-2"></a>request<span class="op">.</span><span class="fu">getRequestDispatcher</span><span class="op">(</span><span class="st">"/home.jsp"</span><span class="op">).</span><span class="fu">forward</span><span class="op">(</span>request<span class="op">,</span> response<span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Uma JSP é um documento de texto que mistura dois tipos de conteúdo: HTML estático e elementos de <em>script</em> dinâmico. Na primeira vez que é pedida, o <em>Servlet Container</em> converte-a automaticamente numa classe <em>Servlet</em>, que passa a comportar-se, dali em diante, exatamente como qualquer outra <em>Servlet</em>.</p>
-</section>
-<section id="sec-04-exemplo-jsp" class="level2" data-number="4.6">
-<h2 data-number="4.6" class="anchored" data-anchor-id="sec-04-exemplo-jsp"><span class="header-section-number">4.6</span> Um Exemplo Simples de JSP</h2>
-<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource jsp number-lines code-with-copy"><code class="sourceCode jsp"><span id="cb11-1"><a href="#cb11-1"></a><span class="bu">&lt;%@ page</span><span class="ot"> language</span>=<span class="st">"java"</span><span class="ot"> contentType</span>=<span class="st">"text/html; charset=UTF-8"</span><span class="ot"> pageEncoding</span>=<span class="st">"UTF-8"</span><span class="bu">%&gt;</span></span>
-<span id="cb11-2"><a href="#cb11-2"></a></span>
-<span id="cb11-3"><a href="#cb11-3"></a><span class="pp">&lt;%</span> <span class="bu">String</span> name <span class="op">=</span> <span class="op">(</span><span class="bu">String</span><span class="op">)</span> request<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"userName"</span><span class="op">);</span> <span class="pp">%&gt;</span></span>
-<span id="cb11-4"><a href="#cb11-4"></a></span>
-<span id="cb11-5"><a href="#cb11-5"></a>&lt;<span class="ot">!DOCTYPE html</span>&gt;</span>
-<span id="cb11-6"><a href="#cb11-6"></a>&lt;html&gt;</span>
-<span id="cb11-7"><a href="#cb11-7"></a>&lt;head&gt;</span>
-<span id="cb11-8"><a href="#cb11-8"></a>  &lt;meta<span class="ot"> http-equiv</span>=<span class="dt">"Content-Type"</span><span class="ot"> content</span>=<span class="dt">"text/html; charset=UTF-8"</span>&gt;</span>
-<span id="cb11-9"><a href="#cb11-9"></a>  &lt;title&gt;Uma Página JSP&lt;/title&gt;</span>
-<span id="cb11-10"><a href="#cb11-10"></a>&lt;/head&gt;</span>
-<span id="cb11-11"><a href="#cb11-11"></a>&lt;body&gt;</span>
-<span id="cb11-12"><a href="#cb11-12"></a>  &lt;h1&gt;Olá, <span class="pp">&lt;%=</span> name <span class="pp">%&gt;</span>!&lt;/h1&gt;</span>
-<span id="cb11-13"><a href="#cb11-13"></a>&lt;/body&gt;</span>
-<span id="cb11-14"><a href="#cb11-14"></a>&lt;/html&gt;</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>O bloco <code>&lt;% ... %&gt;</code> (<em>scriptlet</em>) contém código Java arbitrário; o bloco <code>&lt;%= ... %&gt;</code> (expressão) insere o valor de uma expressão Java diretamente no HTML gerado. É exatamente este atributo <code>userName</code>, colocado no pedido pela <em>Servlet</em> através de <code>request.setAttribute(...)</code>, que a JSP aqui recupera.</p>
-</section>
-<section id="sec-04-ciclo-vida-jsp" class="level2" data-number="4.7">
-<h2 data-number="4.7" class="anchored" data-anchor-id="sec-04-ciclo-vida-jsp"><span class="header-section-number">4.7</span> Ciclo de Vida e Objetos Implícitos</h2>
-<p>O ciclo de vida de uma JSP segue o mesmo modelo da <em>Servlet</em> em que é convertida (ver <a href="../capitulos/cap03.html">Capítulo 3</a>), com dois pormenores próprios:</p>
-<ul>
-<li>O contentor recompila a JSP automaticamente sempre que o ficheiro <code>.jsp</code> é alterado</li>
-<li>Em vez de <code>init()</code> e <code>destroy()</code>, a JSP oferece os métodos <code>jspInit()</code> e <code>jspDestroy()</code></li>
-</ul>
-<p>Outra diferença prática: dentro de uma JSP, um conjunto de objetos está disponível automaticamente, sem qualquer declaração prévia, chamados objetos implícitos:</p>
+<section id="sec-04-arquitetura-camadas" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="sec-04-arquitetura-camadas"><span class="header-section-number">4.2</span> Arquitetura em Camadas</h2>
+<p>A plataforma <em>Jakarta EE</em> organiza uma aplicação segundo um modelo distribuído em várias camadas (<em>tiers</em>), cada uma com uma função bem definida e instalada, tipicamente, em máquinas diferentes:</p>
 <table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
 <thead>
 <tr class="header">
-<th>Objeto implícito</th>
-<th>Tipo</th>
+<th>Camada</th>
+<th>Onde reside</th>
+<th>Componentes típicos</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>out</code></td>
-<td><code>JspWriter</code></td>
+<td><em>Client Tier</em></td>
+<td>Máquina do cliente</td>
+<td>Páginas Web (browser), aplicações cliente</td>
 </tr>
 <tr class="even">
-<td><code>request</code></td>
-<td><code>HttpServletRequest</code></td>
+<td><em>Web Tier</em></td>
+<td>Servidor <em>Jakarta EE</em></td>
+<td><em>Servlets</em>, <em>JavaServer Pages</em>, <em>Web Services</em></td>
 </tr>
 <tr class="odd">
-<td><code>response</code></td>
-<td><code>HttpServletResponse</code></td>
+<td><em>Business Tier</em></td>
+<td>Servidor <em>Jakarta EE</em></td>
+<td><em>Enterprise Beans</em> (lógica de negócio)</td>
 </tr>
 <tr class="even">
-<td><code>session</code></td>
-<td><code>HttpSession</code></td>
-</tr>
-<tr class="odd">
-<td><code>page</code></td>
-<td><code>Object</code></td>
+<td><em>EIS Tier</em> (<em>Enterprise Information System</em>)</td>
+<td>Servidor de base de dados</td>
+<td>Bases de dados, sistemas de informação empresarial</td>
 </tr>
 </tbody>
 </table>
-<p>Por causa do objeto implícito <code>out</code>, uma JSP nunca precisa de obter explicitamente um <code>PrintWriter</code>: usa-se <code>out</code> diretamente.</p>
-</section>
-<section id="sec-04-scopes" class="level2" data-number="4.8">
-<h2 data-number="4.8" class="anchored" data-anchor-id="sec-04-scopes"><span class="header-section-number">4.8</span> <em>Scopes</em>: Partilhar Informação Dentro do Servidor</h2>
-<p>Tal como as <em>Servlets</em> podem partilhar informação com outros módulos através de atributos (ver <a href="../capitulos/cap03.html">Capítulo 3</a>), esses atributos existem sempre dentro de um determinado âmbito, ou <em>scope</em>. Existem quatro classes de <em>scope</em>:</p>
-<ul>
-<li><strong><em>Web context</em></strong> (ou <em>application context</em>): um único por aplicação, partilhado por todos os módulos e todos os utilizadores</li>
-<li><strong><em>Session</em></strong>: um por utilizador, mantido entre vários pedidos desse utilizador</li>
-<li><strong><em>Request</em></strong>: um por pedido, perdido assim que a resposta é enviada</li>
-<li><strong><em>Page</em></strong>: exclusivo de JSP, não é usado nesta UC</li>
-</ul>
-<p>Todos os <em>scopes</em> seguem a mesma interface: métodos <code>setAttribute</code>/<code>getAttribute</code>, e <code>getAttributeNames()</code> para listar tudo o que lá está guardado.</p>
-<p><strong>Web context</strong>, partilhado por toda a aplicação:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb12-1"><a href="#cb12-1"></a>ServletContext context <span class="op">=</span> request<span class="op">.</span><span class="fu">getServletContext</span><span class="op">();</span></span>
-<span id="cb12-2"><a href="#cb12-2"></a>context<span class="op">.</span><span class="fu">setAttribute</span><span class="op">(</span><span class="st">"dbHost"</span><span class="op">,</span> <span class="st">"localhost"</span><span class="op">);</span></span>
-<span id="cb12-3"><a href="#cb12-3"></a><span class="bu">String</span> dbHost <span class="op">=</span> <span class="op">(</span><span class="bu">String</span><span class="op">)</span> context<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"dbHost"</span><span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><strong>Session</strong>, já apresentado, partilhado apenas pelo mesmo utilizador:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb13-1"><a href="#cb13-1"></a>HttpSession session <span class="op">=</span> request<span class="op">.</span><span class="fu">getSession</span><span class="op">();</span></span>
-<span id="cb13-2"><a href="#cb13-2"></a>session<span class="op">.</span><span class="fu">setAttribute</span><span class="op">(</span><span class="st">"email"</span><span class="op">,</span> <span class="st">"foo@fool.com"</span><span class="op">);</span></span>
-<span id="cb13-3"><a href="#cb13-3"></a><span class="bu">String</span> email <span class="op">=</span> <span class="op">(</span><span class="bu">String</span><span class="op">)</span> session<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"email"</span><span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><strong>Request</strong>, o mais restrito de todos, partilhado apenas entre módulos que processam o mesmo pedido (por exemplo, entre uma <em>Servlet</em> e a JSP para a qual reencaminha):</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb14-1"><a href="#cb14-1"></a>request<span class="op">.</span><span class="fu">setAttribute</span><span class="op">(</span><span class="st">"email"</span><span class="op">,</span> <span class="st">"foo@fool.com"</span><span class="op">);</span></span>
-<span id="cb14-2"><a href="#cb14-2"></a><span class="bu">String</span> email <span class="op">=</span> <span class="op">(</span><span class="bu">String</span><span class="op">)</span> request<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"email"</span><span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Os quatro <em>scopes</em> formam uma hierarquia de inclusão, do mais lato ao mais restrito: <em>Application</em> contém <em>Session</em>, que contém <em>Request</em>, que contém <em>Page</em>. Quanto maior o <em>scope</em>, mais partilhada fica a informação, e maior a responsabilidade de a gerir corretamente (por exemplo, de a remover quando deixa de ser necessária).</p>
-<div id="fig-04-scopes-comparacao" class="quarto-float quarto-figure quarto-figure-center anchored">
+<p>Esta separação por camadas permite que cada componente evolua de forma relativamente independente das restantes: alterar a base de dados não obriga a reescrever a lógica de negócio, e alterar a interface do cliente não obriga a alterar o servidor.</p>
+<div id="fig-04-arquitetura-jakarta-ee" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-04-scopes-comparacao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../assets/images/capitulos/cap04/Comparacao_Scopes.png" class="img-fluid figure-img" style="width:60.0%">
+<div aria-describedby="fig-04-arquitetura-jakarta-ee-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap04/Arquitetura_JAVA_EE.png" class="img-fluid figure-img" style="width:70.0%">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-04-scopes-comparacao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;4.2: Os quatro scopes, do mais lato (Application) ao mais restrito (Page): cada um contém o seguinte, e um scope maior implica mais partilha, mas também mais responsabilidade na sua gestão.
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-04-arquitetura-jakarta-ee-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;4.1: A arquitetura em camadas da Jakarta EE: o cliente comunica apenas com a Web Tier, que por sua vez recorre à Business Tier e, através dela, à base de dados na EIS Tier.
 </figcaption>
 </figure>
 </div>
@@ -476,13 +348,215 @@ Figura&nbsp;4.2: Os quatro scopes, do mais lato (Application) ao mais restrito (
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<em>Scopes</em> não se instanciam
+Tomcat não é um servidor Jakarta EE completo
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Os objetos de <em>scope</em> (<code>ServletContext</code>, <code>HttpSession</code>, <code>ServletRequest</code>) são fornecidos automaticamente pelo contentor. Nunca se cria uma instância nova com <code>new</code>: se um deles ainda não existe, os métodos apropriados (<code>getServletContext()</code>, <code>getSession()</code>) criam-no ou devolvem o existente.</p>
+<p>O <a href="https://tomcat.apache.org/"><em>Apache Tomcat</em></a>, usado ao longo desta UC, é um <em>Servlet Container</em>: implementa apenas a <em>Web Tier</em> (Servlets, JSP). Não inclui suporte para <em>Enterprise Beans</em> nem para a <em>Business Tier</em> propriamente dita, ao contrário de um servidor de aplicações <em>Jakarta EE</em> completo (por exemplo, <em>WildFly</em>, <em>WebSphere</em> ou <em>GlassFish</em>). Na prática, isto significa que a lógica de negócio que, na arquitetura formal, pertenceria à <em>Business Tier</em>, é implementada aqui diretamente em classes Java comuns (como os <em>DAO</em> usados nos LABs práticos), e não em <em>Enterprise Beans</em>.</p>
 </div>
 </div>
+</section>
+<section id="sec-04-porque-servlets" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="sec-04-porque-servlets"><span class="header-section-number">4.3</span> Porquê Servlets?</h2>
+<p>Implementar, de raiz, um programa Java capaz de responder a pedidos HTTP obrigaria a resolver, sozinho, um conjunto de problemas comuns a qualquer servidor Web: interpretar a mensagem HTTP recebida, gerir várias ligações em simultâneo (cada uma num <em>thread</em> próprio), controlar o ciclo de vida das instâncias em memória, e empacotar tudo isto num formato que um servidor de aplicações saiba instalar e arrancar.</p>
+<p>Uma <a href="https://jakarta.ee/specifications/servlet/"><em>Servlet</em></a> é uma classe Java que corre dentro de um <em>Servlet Container</em> (por exemplo, o <em>Apache Tomcat</em>) e que recebe, automaticamente, todo este trabalho já feito:</p>
+<ul>
+<li>Interpretação (<em>parsing</em>) do pedido HTTP</li>
+<li>Gestão de <em>threads</em>, uma por pedido</li>
+<li>Gestão do ciclo de vida da própria <em>Servlet</em></li>
+<li>Um modelo de implantação (<em>deployment</em>) próprio, empacotado num ficheiro <code>.war</code> (<em>Web Application Archive</em>)</li>
+</ul>
+<p>O <em>Servlet Container</em> corresponde, na arquitetura em camadas apresentada acima, à <em>Web Tier</em>: é aí que as <em>Servlets</em> residem, entre o cliente e a camada de negócio.</p>
+<div id="fig-04-servlet-http" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-04-servlet-http-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap04/Servlet_HTTP.png" class="img-fluid figure-img" style="width:70.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-04-servlet-http-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;4.2: Do ponto de vista do cliente, uma Servlet é apenas mais um destino de pedidos HTTP: recebe um pedido, devolve uma resposta.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="sec-04-ciclo-vida" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="sec-04-ciclo-vida"><span class="header-section-number">4.4</span> O Ciclo de Vida de uma Servlet</h2>
+<p>Quando um pedido é encaminhado para uma <em>Servlet</em>, o contentor segue sempre a mesma sequência:</p>
+<ol type="1">
+<li>Se ainda não existir uma instância dessa <em>Servlet</em> em memória, o contentor carrega a classe, cria uma instância e chama o método <code>init()</code></li>
+<li>Para cada pedido recebido, o contentor invoca o método <code>service()</code>, que despacha para <code>doGet()</code>, <code>doPost()</code>, ou outro método consoante o verbo HTTP usado, passando-lhe os objetos <code>request</code> e <code>response</code></li>
+<li>Se o contentor precisar de remover a <em>Servlet</em> (por exemplo, ao desligar o servidor), invoca o método <code>destroy()</code></li>
+</ol>
+<p>Um pormenor importante decorre daqui: existe <strong>uma única instância</strong> de cada <em>Servlet</em> em memória, mesmo que existam N clientes a usar o mesmo serviço em simultâneo. Cada pedido é atendido por um <em>thread</em> diferente, mas todos esses <em>threads</em> partilham a mesma instância. Na prática, isto significa:</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Cuidado com o estado partilhado
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Nunca guardar dados de um pedido específico em atributos de instância da <em>Servlet</em>: como a instância é partilhada por todos os <em>threads</em>, um pedido pode ler ou sobrescrever dados de outro pedido em curso. Variáveis locais, declaradas dentro de <code>doGet()</code> ou <code>doPost()</code>, são seguras, porque cada <em>thread</em> tem a sua própria cópia.</p>
+</div>
+</div>
+<div id="fig-04-servlet-ciclo-vida" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-04-servlet-ciclo-vida-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap04/Servlet_live_cycle.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-04-servlet-ciclo-vida-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;4.3: O contentor carrega a classe da Servlet uma única vez; cada pedido recebido é despachado para um thread próprio, que invoca <code>service()</code> sobre essa mesma instância partilhada.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="sec-04-mapeamento-http-servlet" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="sec-04-mapeamento-http-servlet"><span class="header-section-number">4.5</span> Da Mensagem HTTP ao Método Java</h2>
+<p>Uma <em>Servlet</em> liga-se a uma <em>URL</em> através da anotação <code>@WebServlet</code>, que faz o mapeamento entre um caminho e a classe que o vai tratar:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb1-1"><a href="#cb1-1"></a><span class="at">@WebServlet</span><span class="op">(</span><span class="st">"/country"</span><span class="op">)</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">public</span> <span class="kw">class</span> CountryServlet <span class="kw">extends</span> HttpServlet <span class="op">{</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>    <span class="co">// ...</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Um pedido a <code>http://localhost:8080/country</code> é assim encaminhado para a classe <code>CountryServlet</code>. Dentro dela, os elementos da mensagem HTTP (ver <a href="../capitulos/cap03.html">Capítulo 3</a>) correspondem a métodos concretos dos objetos <code>request</code> e <code>response</code>:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Elemento HTTP</th>
+<th>Acesso em Java</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Cabeçalhos do pedido</td>
+<td><code>request.getHeader(nome)</code></td>
+</tr>
+<tr class="even">
+<td>Parâmetros (<em>query string</em> ou corpo)</td>
+<td><code>request.getParameter(nome)</code></td>
+</tr>
+<tr class="odd">
+<td>Corpo do pedido (JSON, dados em bruto)</td>
+<td><code>request.getInputStream()</code></td>
+</tr>
+<tr class="even">
+<td>Escrever a resposta</td>
+<td><code>response.getWriter()</code> ou <code>response.getOutputStream()</code></td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">protected</span> <span class="dt">void</span> <span class="fu">doGet</span><span class="op">(</span>HttpServletRequest request<span class="op">,</span> HttpServletResponse response<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a>    <span class="bu">String</span> countryCode <span class="op">=</span> request<span class="op">.</span><span class="fu">getParameter</span><span class="op">(</span><span class="st">"countrycode"</span><span class="op">);</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a>    <span class="co">// ...</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="fig-04-http-request-server" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-04-http-request-server-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap04/HTTP_Request_server_3.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-04-http-request-server-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;4.4: Dentro do servidor Jakarta EE, o pedido chega encapsulado num <code>HttpServletRequest</code>, é processado pelo componente Web (a Servlet), que pode consultar recursos de dados, e a resposta sai encapsulada num <code>HttpServletResponse</code>.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="sec-04-content-type" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="sec-04-content-type"><span class="header-section-number">4.6</span> Content-Type e a Forma da Resposta</h2>
+<p>Antes de escrever qualquer coisa na resposta, é essencial definir o seu <code>Content-Type</code>: é este cabeçalho que diz ao cliente como deve interpretar os bytes que se seguem, seja como página HTML, seja como dados <a href="https://www.json.org/">JSON</a>.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb3-1"><a href="#cb3-1"></a>response<span class="op">.</span><span class="fu">setContentType</span><span class="op">(</span><span class="st">"text/html"</span><span class="op">);</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="bu">PrintWriter</span> out <span class="op">=</span> response<span class="op">.</span><span class="fu">getWriter</span><span class="op">();</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a>out<span class="op">.</span><span class="fu">println</span><span class="op">(</span><span class="st">"&lt;html&gt;&lt;body&gt;"</span><span class="op">);</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a>out<span class="op">.</span><span class="fu">println</span><span class="op">(</span><span class="st">"&lt;h1&gt;Hello João&lt;/h1&gt;"</span><span class="op">);</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a>out<span class="op">.</span><span class="fu">println</span><span class="op">(</span><span class="st">"&lt;/body&gt;&lt;/html&gt;"</span><span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb4-1"><a href="#cb4-1"></a>response<span class="op">.</span><span class="fu">setContentType</span><span class="op">(</span><span class="st">"application/json"</span><span class="op">);</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="bu">PrintWriter</span> out <span class="op">=</span> response<span class="op">.</span><span class="fu">getWriter</span><span class="op">();</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>out<span class="op">.</span><span class="fu">print</span><span class="op">(</span><span class="st">"{</span><span class="sc">\"</span><span class="st">name</span><span class="sc">\"</span><span class="st">:</span><span class="sc">\"</span><span class="st">João</span><span class="sc">\"</span><span class="st">,</span><span class="sc">\"</span><span class="st">role</span><span class="sc">\"</span><span class="st">:</span><span class="sc">\"</span><span class="st">admin</span><span class="sc">\"</span><span class="st">}"</span><span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Na ausência de uma biblioteca dedicada à geração de JSON, o mais direto é construir a <em>String</em> manualmente, tendo o cuidado de escapar as aspas internas com <code>\"</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb5-1"><a href="#cb5-1"></a><span class="bu">String</span> jsonResponse <span class="op">=</span> <span class="st">"{</span><span class="sc">\"</span><span class="st">country</span><span class="sc">\"</span><span class="st">: </span><span class="sc">\"</span><span class="st">Portugal</span><span class="sc">\"</span><span class="st">, </span><span class="sc">\"</span><span class="st">capital</span><span class="sc">\"</span><span class="st">: </span><span class="sc">\"</span><span class="st">Lisboa</span><span class="sc">\"</span><span class="st">, </span><span class="sc">\"</span><span class="st">ccode</span><span class="sc">\"</span><span class="st">: </span><span class="sc">\"</span><span class="st">PT</span><span class="sc">\"</span><span class="st">}"</span><span class="op">;</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a>out<span class="op">.</span><span class="fu">print</span><span class="op">(</span>jsonResponse<span class="op">);</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a>out<span class="op">.</span><span class="fu">flush</span><span class="op">();</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Para definir o código de estado da resposta (ver <a href="../capitulos/cap03.html">Capítulo 3</a>), a classe <code>HttpServletResponse</code> disponibiliza uma constante para cada código, evitando o uso de números “mágicos” diretamente no código:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Código HTTP</th>
+<th>Constante Java</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>200</code></td>
+<td><code>HttpServletResponse.SC_OK</code></td>
+</tr>
+<tr class="even">
+<td><code>201</code></td>
+<td><code>HttpServletResponse.SC_CREATED</code></td>
+</tr>
+<tr class="odd">
+<td><code>400</code></td>
+<td><code>HttpServletResponse.SC_BAD_REQUEST</code></td>
+</tr>
+<tr class="even">
+<td><code>403</code></td>
+<td><code>HttpServletResponse.SC_FORBIDDEN</code></td>
+</tr>
+<tr class="odd">
+<td><code>404</code></td>
+<td><code>HttpServletResponse.SC_NOT_FOUND</code></td>
+</tr>
+<tr class="even">
+<td><code>500</code></td>
+<td><code>HttpServletResponse.SC_INTERNAL_SERVER_ERROR</code></td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb6-1"><a href="#cb6-1"></a>response<span class="op">.</span><span class="fu">setStatus</span><span class="op">(</span>HttpServletResponse<span class="op">.</span><span class="fu">SC_NOT_FOUND</span><span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="sec-04-primeiro-servlet" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="sec-04-primeiro-servlet"><span class="header-section-number">4.7</span> Uma Primeira Servlet: “World Capitals”</h2>
+<p>Aplicando o que foi apresentado, uma primeira <em>Servlet</em> pode servir como simples verificação de estado (<em>health check</em>) da API:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb7-1"><a href="#cb7-1"></a><span class="at">@WebServlet</span><span class="op">(</span><span class="st">"/status"</span><span class="op">)</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="kw">public</span> <span class="kw">class</span> StatusServlet <span class="kw">extends</span> HttpServlet <span class="op">{</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a>    <span class="kw">protected</span> <span class="dt">void</span> <span class="fu">doGet</span><span class="op">(</span>HttpServletRequest request<span class="op">,</span> HttpServletResponse response<span class="op">)</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a>            <span class="kw">throws</span> ServletException<span class="op">,</span> <span class="bu">IOException</span> <span class="op">{</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a>        response<span class="op">.</span><span class="fu">setContentType</span><span class="op">(</span><span class="st">"text/plain"</span><span class="op">);</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a>        <span class="bu">PrintWriter</span> out <span class="op">=</span> response<span class="op">.</span><span class="fu">getWriter</span><span class="op">();</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a>        out<span class="op">.</span><span class="fu">print</span><span class="op">(</span><span class="st">"OK"</span><span class="op">);</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a>    <span class="op">}</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>E um segundo, já a devolver dados fixos em formato JSON, é o primeiro passo da aplicação “World Capitals” usada ao longo desta UC:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb8-1"><a href="#cb8-1"></a><span class="at">@WebServlet</span><span class="op">(</span><span class="st">"/countrycapital"</span><span class="op">)</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="kw">public</span> <span class="kw">class</span> CountryCapitalServlet <span class="kw">extends</span> HttpServlet <span class="op">{</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a>    <span class="kw">protected</span> <span class="dt">void</span> <span class="fu">doGet</span><span class="op">(</span>HttpServletRequest request<span class="op">,</span> HttpServletResponse response<span class="op">)</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a>            <span class="kw">throws</span> ServletException<span class="op">,</span> <span class="bu">IOException</span> <span class="op">{</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a>        response<span class="op">.</span><span class="fu">setContentType</span><span class="op">(</span><span class="st">"application/json"</span><span class="op">);</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a>        <span class="bu">PrintWriter</span> out <span class="op">=</span> response<span class="op">.</span><span class="fu">getWriter</span><span class="op">();</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a></span>
+<span id="cb8-8"><a href="#cb8-8"></a>        <span class="bu">String</span> jsonResponse <span class="op">=</span> <span class="st">"{</span><span class="sc">\"</span><span class="st">country</span><span class="sc">\"</span><span class="st">: </span><span class="sc">\"</span><span class="st">Portugal</span><span class="sc">\"</span><span class="st">, </span><span class="sc">\"</span><span class="st">capital</span><span class="sc">\"</span><span class="st">: </span><span class="sc">\"</span><span class="st">Lisboa</span><span class="sc">\"</span><span class="st">, </span><span class="sc">\"</span><span class="st">ccode</span><span class="sc">\"</span><span class="st">: </span><span class="sc">\"</span><span class="st">PT</span><span class="sc">\"</span><span class="st">}"</span><span class="op">;</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a>        out<span class="op">.</span><span class="fu">print</span><span class="op">(</span>jsonResponse<span class="op">);</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a>        out<span class="op">.</span><span class="fu">flush</span><span class="op">();</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a>    <span class="op">}</span></span>
+<span id="cb8-12"><a href="#cb8-12"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Esta <em>Servlet</em> devolve sempre o mesmo país, com os dados fixos diretamente no código. É deliberadamente uma simplificação: o <a href="../capitulos/apendiceB.html">Apêndice B</a> (LAB1) retoma exatamente este ponto, substituindo os dados fixos por um objeto dedicado ao acesso a dados (<em>DAO</em>), preparando o terreno para, mais tarde, ligar a um servidor de base de dados real.</p>
+</section>
+<section id="sec-04-servlets-mvc" class="level2" data-number="4.8">
+<h2 data-number="4.8" class="anchored" data-anchor-id="sec-04-servlets-mvc"><span class="header-section-number">4.8</span> Servlets e o Padrão MVC: Falta a View</h2>
+<p>As <em>Servlets</em> apresentadas neste capítulo devolvem sempre JSON: são orientadas a serviço, e não têm, de facto, nenhuma View (ver <a href="../capitulos/cap01.html">Capítulo 1</a>). Numa aplicação orientada à apresentação, porém, a mesma <em>Servlet</em> que funciona como Controller pode delegar a geração de HTML a uma página dedicada, mantendo a separação de responsabilidades do MVC:</p>
+<div id="fig-04-mvc-servlet-jsp" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-04-mvc-servlet-jsp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap04/Arquitetura_MVC.png" class="img-fluid figure-img" style="width:70.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-04-mvc-servlet-jsp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;4.5: Na realização clássica do MVC em Jakarta EE, a Servlet funciona como Controller, uma JavaServer Page como View, e uma classe Java simples como Model.
+</figcaption>
+</figure>
+</div>
+<p>Essa página dedicada, a <em>JavaServer Page</em> (JSP), é abordada em detalhe no <a href="../capitulos/cap05.html">Capítulo 5</a>.</p>
 
 
 </section>
@@ -1051,13 +1125,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../capitulos/cap03.html" class="pagination-link" aria-label="Java EE e Fundamentos de Servlets">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Java EE e Fundamentos de Servlets</span></span>
+      <a href="../capitulos/cap03.html" class="pagination-link" aria-label="O Protocolo HTTP">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">O Protocolo HTTP</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../capitulos/cap05.html" class="pagination-link" aria-label="Segurança e Filtros">
-        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Segurança e Filtros</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../capitulos/cap05.html" class="pagination-link" aria-label="Modelo Stateful: Sessões e JSP">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Modelo Stateful: Sessões e JSP</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

@@ -1,223 +1,181 @@
 ---
-title: "Modelo Stateful: Sessões e JSP"
+title: "Java EE e Fundamentos de Servlets"
 author: "João Pavão"
 date: 2026-08-26
 lang: pt-PT
 ---
 
-## HTTP é Sem Estado: o Problema {#sec-04-problema-estado}
+## A Plataforma Jakarta EE {#sec-04-jakarta-ee}
 
-O protocolo HTTP é *stateless* (ver [Capítulo 1](cap01.qmd)): cada pedido é independente, e o servidor não guarda, por si só, qualquer memória de pedidos anteriores. Não existe, ao nível do protocolo, nenhuma noção de "utilizador com sessão iniciada".
+Com o Frontend construído ([Capítulo 2](cap02.qmd)) e o Middleware detalhado ([Capítulo 3](cap03.qmd)), falta a terceira peça identificada no [Capítulo 1](cap01.qmd): o Backend, que efetivamente recebe os pedidos HTTP e lhes responde. É o tema deste capítulo e dos seguintes.
 
-Isto levanta um problema prático imediato: se um utilizador se autentica num pedido, como é que um pedido seguinte, minutos depois, sabe que esse utilizador continua autenticado? A resposta passa por dois mecanismos complementares:
+A [*Jakarta EE*](https://jakarta.ee/) (anteriormente conhecida como *Java EE*, até ser renomeada em 2019) é uma plataforma que fornece um conjunto de serviços e *APIs* prontos a usar para lidar com os problemas comuns a qualquer aplicação Web (ver [Capítulo 1](cap01.qmd)), libertando quem desenvolve para se concentrar na lógica de negócio da aplicação.
 
-- ***Cookies***: um pequeno pedaço de informação guardado do lado do **cliente**, reenviado automaticamente pelo *browser* em cada pedido seguinte
-- **`HttpSession`**: um objeto guardado do lado do **servidor**, associado a um identificador que o cliente devolve a cada pedido
+A plataforma assenta na linguagem Java e na *Java Virtual Machine* (JVM), o que significa que qualquer componente escrito para *Jakarta EE* beneficia da portabilidade e da gestão automática de memória já conhecidas da linguagem.
 
-## *Cookies* {#sec-04-cookies}
+## Arquitetura em Camadas {#sec-04-arquitetura-camadas}
 
-Um *cookie* é um par chave/valor guardado no *browser*. Quando o servidor envia um *cookie*, espera que o cliente o devolva em todos os pedidos HTTP seguintes, dirigidos ao mesmo domínio.
+A plataforma *Jakarta EE* organiza uma aplicação segundo um modelo distribuído em várias camadas (*tiers*), cada uma com uma função bem definida e instalada, tipicamente, em máquinas diferentes:
 
-Distinguem-se dois tipos, consoante a sua persistência:
+| Camada | Onde reside | Componentes típicos |
+|---|---|---|
+| *Client Tier* | Máquina do cliente | Páginas Web (browser), aplicações cliente |
+| *Web Tier* | Servidor *Jakarta EE* | *Servlets*, *JavaServer Pages*, *Web Services* |
+| *Business Tier* | Servidor *Jakarta EE* | *Enterprise Beans* (lógica de negócio) |
+| *EIS Tier* (*Enterprise Information System*) | Servidor de base de dados | Bases de dados, sistemas de informação empresarial |
 
-- **_Session cookies_**: mantidos pelo cliente apenas durante a sessão de navegação (`setMaxAge(-1)`)
-- **_Permanent cookies_**: guardados de forma persistente, com um tempo de vida definido (`setMaxAge(60*60*24*30)` para 30 dias, por exemplo)
+Esta separação por camadas permite que cada componente evolua de forma relativamente independente das restantes: alterar a base de dados não obriga a reescrever a lógica de negócio, e alterar a interface do cliente não obriga a alterar o servidor.
 
-Criar um *cookie*:
-
-```java
-Cookie cookie = new Cookie("userName", "Pedro");
-cookie.setMaxAge(-1); // session cookie
-response.addCookie(cookie);
-```
-
-Ler um *cookie* recebido num pedido:
-
-```java
-Cookie[] cookies = request.getCookies();
-String user = null;
-
-for (Cookie c : cookies) {
-    if (c.getName().equals("userName")) {
-        user = c.getValue();
-    }
-}
-```
-
-## Sessões (`HttpSession`) {#sec-04-sessoes-http}
-
-Guardar estado do lado do servidor exige um objeto próprio para o efeito: a `HttpSession`. Uma sessão obtém-se, ou cria-se, a partir do pedido:
-
-```java
-HttpSession session = request.getSession();          // cria se não existir
-HttpSession session = request.getSession(true);      // equivalente, explícito
-HttpSession session = request.getSession(false);     // NUNCA cria; devolve null se não houver
-```
-
-Uma vez obtida, a sessão guarda e devolve informação através de atributos, e pode ser terminada explicitamente:
-
-```java
-session.setAttribute("email", "foo@fool.com");
-String email = (String) session.getAttribute("email");
-session.invalidate();                    // termina a sessão
-session.setMaxInactiveInterval(1800);     // tempo de inatividade, em segundos
-```
-
-Falta uma peça: se HTTP não tem memória de pedidos anteriores, como é que o servidor sabe que dois pedidos sucessivos pertencem à mesma sessão? A resposta são, de novo, os *cookies*: por convenção, o identificador de sessão viaja num *cookie* chamado `JSESSIONID`, criado automaticamente pelo *Servlet Container* na primeira chamada a `getSession()`.
-
-```
-JSESSIONID=22562577CE80EF3B1DAAA0E48F2B6392
-```
-
-Quando o cliente não aceita *cookies*, existe uma alternativa: codificar o identificador de sessão diretamente na *URL*.
-
-```
-http://localhost:8080/CapitaisAPI/country;jsessionid=829F8836C240B51DD2F074259F242833
-```
-
-É boa prática chamar sempre `response.encodeURL(url)` ao construir uma *URL* de destino: se os *cookies* estiverem ativos, o método devolve a *URL* inalterada; se não estiverem, acrescenta automaticamente o `jsessionid`.
-
-## Autenticação Baseada em Sessão {#sec-04-autenticacao-sessao}
-
-Juntando os dois mecanismos anteriores, obtém-se o padrão clássico de autenticação por sessão, usado no LAB2 desta UC (ver [Apêndice B](apendiceB.qmd)). Depois de validar as credenciais, a `LoginServlet` cria uma sessão e guarda nela o identificador do utilizador:
-
-```java
-@WebServlet("/login")
-public class LoginServlet extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String user = request.getParameter("user");
-        String pass = request.getParameter("pass");
-
-        if (dao.validateUserCredentials(user, pass)) {
-            HttpSession session = request.getSession(true);
-            session.setAttribute("UserName", user);
-
-            response.setContentType("application/json");
-            response.getWriter().print("{\"message\":\"OK\",\"user\":\"" + user + "\"}");
-        } else {
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response.getWriter().print("{\"message\":\"FORBIDDEN\",\"error\":\"Invalid login or password\"}");
-        }
-    }
-}
-```
-
-Qualquer *endpoint* protegido verifica, no início do seu próprio `doGet()` ou `doPost()`, se existe uma sessão válida com esse atributo:
-
-```java
-HttpSession session = request.getSession(false);
-if (session == null || session.getAttribute("UserName") == null) {
-    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-    response.getWriter().print("{\"error\":\"Authentication required\"}");
-    return;
-}
-// pedido autenticado: continuar o processamento normal
-```
-
-O logout resume-se a terminar a sessão:
-
-```java
-session.invalidate();
-```
-
-## O Padrão MVC com *Servlet* e JSP {#sec-04-mvc-jsp}
-
-O [Capítulo 1](cap01.qmd) apresentou o padrão MVC a nível conceptual, e o [Capítulo 3](cap03.qmd) mostrou como uma *Servlet* funciona como Controller. Falta a peça final: a View.
-
-![O modelo geral do MVC, aplicável a qualquer interface (não só Web): o Controller atualiza o Model e a apresentação; a View lê o Model para se apresentar.](../assets/images/capitulos/cap04/Modelo_MVC_Geral.png){#fig-04-mvc-geral width="55%"}
-
-Numa aplicação orientada à apresentação, a *Servlet* recebe o pedido e decide **o quê** mostrar, mas delega a **geração do HTML** propriamente dita a uma *JavaServer Page* (JSP). O Model, por sua vez, é uma classe Java comum (por exemplo, um *DAO*), independente de ambos.
-
-A *Servlet* liga-se à JSP através de um `RequestDispatcher`: coloca os dados a mostrar num atributo do pedido, e encaminha (*forward*) o próprio pedido para a página:
-
-```java
-request.setAttribute("user", user);
-request.getRequestDispatcher("/home.jsp").forward(request, response);
-```
-
-Uma JSP é um documento de texto que mistura dois tipos de conteúdo: HTML estático e elementos de *script* dinâmico. Na primeira vez que é pedida, o *Servlet Container* converte-a automaticamente numa classe *Servlet*, que passa a comportar-se, dali em diante, exatamente como qualquer outra *Servlet*.
-
-## Um Exemplo Simples de JSP {#sec-04-exemplo-jsp}
-
-```jsp
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
-<% String name = (String) request.getAttribute("userName"); %>
-
-<!DOCTYPE html>
-<html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>Uma Página JSP</title>
-</head>
-<body>
-  <h1>Olá, <%= name %>!</h1>
-</body>
-</html>
-```
-
-O bloco `<% ... %>` (*scriptlet*) contém código Java arbitrário; o bloco `<%= ... %>` (expressão) insere o valor de uma expressão Java diretamente no HTML gerado. É exatamente este atributo `userName`, colocado no pedido pela *Servlet* através de `request.setAttribute(...)`, que a JSP aqui recupera.
-
-## Ciclo de Vida e Objetos Implícitos {#sec-04-ciclo-vida-jsp}
-
-O ciclo de vida de uma JSP segue o mesmo modelo da *Servlet* em que é convertida (ver [Capítulo 3](cap03.qmd)), com dois pormenores próprios:
-
-- O contentor recompila a JSP automaticamente sempre que o ficheiro `.jsp` é alterado
-- Em vez de `init()` e `destroy()`, a JSP oferece os métodos `jspInit()` e `jspDestroy()`
-
-Outra diferença prática: dentro de uma JSP, um conjunto de objetos está disponível automaticamente, sem qualquer declaração prévia, chamados objetos implícitos:
-
-| Objeto implícito | Tipo |
-|---|---|
-| `out` | `JspWriter` |
-| `request` | `HttpServletRequest` |
-| `response` | `HttpServletResponse` |
-| `session` | `HttpSession` |
-| `page` | `Object` |
-
-Por causa do objeto implícito `out`, uma JSP nunca precisa de obter explicitamente um `PrintWriter`: usa-se `out` diretamente.
-
-## *Scopes*: Partilhar Informação Dentro do Servidor {#sec-04-scopes}
-
-Tal como as *Servlets* podem partilhar informação com outros módulos através de atributos (ver [Capítulo 3](cap03.qmd)), esses atributos existem sempre dentro de um determinado âmbito, ou *scope*. Existem quatro classes de *scope*:
-
-- ***Web context*** (ou *application context*): um único por aplicação, partilhado por todos os módulos e todos os utilizadores
-- ***Session***: um por utilizador, mantido entre vários pedidos desse utilizador
-- ***Request***: um por pedido, perdido assim que a resposta é enviada
-- ***Page***: exclusivo de JSP, não é usado nesta UC
-
-Todos os *scopes* seguem a mesma interface: métodos `setAttribute`/`getAttribute`, e `getAttributeNames()` para listar tudo o que lá está guardado.
-
-**Web context**, partilhado por toda a aplicação:
-
-```java
-ServletContext context = request.getServletContext();
-context.setAttribute("dbHost", "localhost");
-String dbHost = (String) context.getAttribute("dbHost");
-```
-
-**Session**, já apresentado, partilhado apenas pelo mesmo utilizador:
-
-```java
-HttpSession session = request.getSession();
-session.setAttribute("email", "foo@fool.com");
-String email = (String) session.getAttribute("email");
-```
-
-**Request**, o mais restrito de todos, partilhado apenas entre módulos que processam o mesmo pedido (por exemplo, entre uma *Servlet* e a JSP para a qual reencaminha):
-
-```java
-request.setAttribute("email", "foo@fool.com");
-String email = (String) request.getAttribute("email");
-```
-
-Os quatro *scopes* formam uma hierarquia de inclusão, do mais lato ao mais restrito: *Application* contém *Session*, que contém *Request*, que contém *Page*. Quanto maior o *scope*, mais partilhada fica a informação, e maior a responsabilidade de a gerir corretamente (por exemplo, de a remover quando deixa de ser necessária).
-
-![Os quatro scopes, do mais lato (Application) ao mais restrito (Page): cada um contém o seguinte, e um scope maior implica mais partilha, mas também mais responsabilidade na sua gestão.](../assets/images/capitulos/cap04/Comparacao_Scopes.png){#fig-04-scopes-comparacao width="60%"}
+![A arquitetura em camadas da Jakarta EE: o cliente comunica apenas com a Web Tier, que por sua vez recorre à Business Tier e, através dela, à base de dados na EIS Tier.](../assets/images/capitulos/cap04/Arquitetura_JAVA_EE.png){#fig-04-arquitetura-jakarta-ee width="70%"}
 
 ::: {.callout-note}
-## *Scopes* não se instanciam
+## Tomcat não é um servidor Jakarta EE completo
 
-Os objetos de *scope* (`ServletContext`, `HttpSession`, `ServletRequest`) são fornecidos automaticamente pelo contentor. Nunca se cria uma instância nova com `new`: se um deles ainda não existe, os métodos apropriados (`getServletContext()`, `getSession()`) criam-no ou devolvem o existente.
+O [*Apache Tomcat*](https://tomcat.apache.org/), usado ao longo desta UC, é um *Servlet Container*: implementa apenas a *Web Tier* (Servlets, JSP). Não inclui suporte para *Enterprise Beans* nem para a *Business Tier* propriamente dita, ao contrário de um servidor de aplicações *Jakarta EE* completo (por exemplo, *WildFly*, *WebSphere* ou *GlassFish*). Na prática, isto significa que a lógica de negócio que, na arquitetura formal, pertenceria à *Business Tier*, é implementada aqui diretamente em classes Java comuns (como os *DAO* usados nos LABs práticos), e não em *Enterprise Beans*.
 :::
+
+## Porquê Servlets? {#sec-04-porque-servlets}
+
+Implementar, de raiz, um programa Java capaz de responder a pedidos HTTP obrigaria a resolver, sozinho, um conjunto de problemas comuns a qualquer servidor Web: interpretar a mensagem HTTP recebida, gerir várias ligações em simultâneo (cada uma num *thread* próprio), controlar o ciclo de vida das instâncias em memória, e empacotar tudo isto num formato que um servidor de aplicações saiba instalar e arrancar.
+
+Uma [*Servlet*](https://jakarta.ee/specifications/servlet/) é uma classe Java que corre dentro de um *Servlet Container* (por exemplo, o *Apache Tomcat*) e que recebe, automaticamente, todo este trabalho já feito:
+
+- Interpretação (*parsing*) do pedido HTTP
+- Gestão de *threads*, uma por pedido
+- Gestão do ciclo de vida da própria *Servlet*
+- Um modelo de implantação (*deployment*) próprio, empacotado num ficheiro `.war` (*Web Application Archive*)
+
+O *Servlet Container* corresponde, na arquitetura em camadas apresentada acima, à *Web Tier*: é aí que as *Servlets* residem, entre o cliente e a camada de negócio.
+
+![Do ponto de vista do cliente, uma Servlet é apenas mais um destino de pedidos HTTP: recebe um pedido, devolve uma resposta.](../assets/images/capitulos/cap04/Servlet_HTTP.png){#fig-04-servlet-http width="70%"}
+
+## O Ciclo de Vida de uma Servlet {#sec-04-ciclo-vida}
+
+Quando um pedido é encaminhado para uma *Servlet*, o contentor segue sempre a mesma sequência:
+
+1. Se ainda não existir uma instância dessa *Servlet* em memória, o contentor carrega a classe, cria uma instância e chama o método `init()`
+2. Para cada pedido recebido, o contentor invoca o método `service()`, que despacha para `doGet()`, `doPost()`, ou outro método consoante o verbo HTTP usado, passando-lhe os objetos `request` e `response`
+3. Se o contentor precisar de remover a *Servlet* (por exemplo, ao desligar o servidor), invoca o método `destroy()`
+
+Um pormenor importante decorre daqui: existe **uma única instância** de cada *Servlet* em memória, mesmo que existam N clientes a usar o mesmo serviço em simultâneo. Cada pedido é atendido por um *thread* diferente, mas todos esses *threads* partilham a mesma instância. Na prática, isto significa:
+
+::: {.callout-warning}
+## Cuidado com o estado partilhado
+
+Nunca guardar dados de um pedido específico em atributos de instância da *Servlet*: como a instância é partilhada por todos os *threads*, um pedido pode ler ou sobrescrever dados de outro pedido em curso. Variáveis locais, declaradas dentro de `doGet()` ou `doPost()`, são seguras, porque cada *thread* tem a sua própria cópia.
+:::
+
+![O contentor carrega a classe da Servlet uma única vez; cada pedido recebido é despachado para um thread próprio, que invoca `service()` sobre essa mesma instância partilhada.](../assets/images/capitulos/cap04/Servlet_live_cycle.png){#fig-04-servlet-ciclo-vida width="80%"}
+
+## Da Mensagem HTTP ao Método Java {#sec-04-mapeamento-http-servlet}
+
+Uma *Servlet* liga-se a uma *URL* através da anotação `@WebServlet`, que faz o mapeamento entre um caminho e a classe que o vai tratar:
+
+```java
+@WebServlet("/country")
+public class CountryServlet extends HttpServlet {
+    // ...
+}
+```
+
+Um pedido a `http://localhost:8080/country` é assim encaminhado para a classe `CountryServlet`. Dentro dela, os elementos da mensagem HTTP (ver [Capítulo 3](cap03.qmd)) correspondem a métodos concretos dos objetos `request` e `response`:
+
+| Elemento HTTP | Acesso em Java |
+|---|---|
+| Cabeçalhos do pedido | `request.getHeader(nome)` |
+| Parâmetros (*query string* ou corpo) | `request.getParameter(nome)` |
+| Corpo do pedido (JSON, dados em bruto) | `request.getInputStream()` |
+| Escrever a resposta | `response.getWriter()` ou `response.getOutputStream()` |
+
+```java
+protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+    String countryCode = request.getParameter("countrycode");
+    // ...
+}
+```
+
+![Dentro do servidor Jakarta EE, o pedido chega encapsulado num `HttpServletRequest`, é processado pelo componente Web (a Servlet), que pode consultar recursos de dados, e a resposta sai encapsulada num `HttpServletResponse`.](../assets/images/capitulos/cap04/HTTP_Request_server_3.png){#fig-04-http-request-server width="80%"}
+
+## Content-Type e a Forma da Resposta {#sec-04-content-type}
+
+Antes de escrever qualquer coisa na resposta, é essencial definir o seu `Content-Type`: é este cabeçalho que diz ao cliente como deve interpretar os bytes que se seguem, seja como página HTML, seja como dados [JSON](https://www.json.org/).
+
+```java
+response.setContentType("text/html");
+PrintWriter out = response.getWriter();
+out.println("<html><body>");
+out.println("<h1>Hello João</h1>");
+out.println("</body></html>");
+```
+
+```java
+response.setContentType("application/json");
+PrintWriter out = response.getWriter();
+out.print("{\"name\":\"João\",\"role\":\"admin\"}");
+```
+
+Na ausência de uma biblioteca dedicada à geração de JSON, o mais direto é construir a *String* manualmente, tendo o cuidado de escapar as aspas internas com `\"`:
+
+```java
+String jsonResponse = "{\"country\": \"Portugal\", \"capital\": \"Lisboa\", \"ccode\": \"PT\"}";
+out.print(jsonResponse);
+out.flush();
+```
+
+Para definir o código de estado da resposta (ver [Capítulo 3](cap03.qmd)), a classe `HttpServletResponse` disponibiliza uma constante para cada código, evitando o uso de números "mágicos" diretamente no código:
+
+| Código HTTP | Constante Java |
+|---|---|
+| `200` | `HttpServletResponse.SC_OK` |
+| `201` | `HttpServletResponse.SC_CREATED` |
+| `400` | `HttpServletResponse.SC_BAD_REQUEST` |
+| `403` | `HttpServletResponse.SC_FORBIDDEN` |
+| `404` | `HttpServletResponse.SC_NOT_FOUND` |
+| `500` | `HttpServletResponse.SC_INTERNAL_SERVER_ERROR` |
+
+```java
+response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+```
+
+## Uma Primeira Servlet: "World Capitals" {#sec-04-primeiro-servlet}
+
+Aplicando o que foi apresentado, uma primeira *Servlet* pode servir como simples verificação de estado (*health check*) da API:
+
+```java
+@WebServlet("/status")
+public class StatusServlet extends HttpServlet {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/plain");
+        PrintWriter out = response.getWriter();
+        out.print("OK");
+    }
+}
+```
+
+E um segundo, já a devolver dados fixos em formato JSON, é o primeiro passo da aplicação "World Capitals" usada ao longo desta UC:
+
+```java
+@WebServlet("/countrycapital")
+public class CountryCapitalServlet extends HttpServlet {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("application/json");
+        PrintWriter out = response.getWriter();
+
+        String jsonResponse = "{\"country\": \"Portugal\", \"capital\": \"Lisboa\", \"ccode\": \"PT\"}";
+        out.print(jsonResponse);
+        out.flush();
+    }
+}
+```
+
+Esta *Servlet* devolve sempre o mesmo país, com os dados fixos diretamente no código. É deliberadamente uma simplificação: o [Apêndice B](apendiceB.qmd) (LAB1) retoma exatamente este ponto, substituindo os dados fixos por um objeto dedicado ao acesso a dados (*DAO*), preparando o terreno para, mais tarde, ligar a um servidor de base de dados real.
+
+## Servlets e o Padrão MVC: Falta a View {#sec-04-servlets-mvc}
+
+As *Servlets* apresentadas neste capítulo devolvem sempre JSON: são orientadas a serviço, e não têm, de facto, nenhuma View (ver [Capítulo 1](cap01.qmd)). Numa aplicação orientada à apresentação, porém, a mesma *Servlet* que funciona como Controller pode delegar a geração de HTML a uma página dedicada, mantendo a separação de responsabilidades do MVC:
+
+![Na realização clássica do MVC em Jakarta EE, a Servlet funciona como Controller, uma JavaServer Page como View, e uma classe Java simples como Model.](../assets/images/capitulos/cap04/Arquitetura_MVC.png){#fig-04-mvc-servlet-jsp width="70%"}
+
+Essa página dedicada, a *JavaServer Page* (JSP), é abordada em detalhe no [Capítulo 5](cap05.qmd).

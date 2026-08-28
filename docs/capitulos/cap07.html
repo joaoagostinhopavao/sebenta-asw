@@ -8,7 +8,7 @@
 
 <meta name="author" content="João Pavão">
 
-<title>7&nbsp; Web Services REST (Parte 2) e o Cliente em JavaScript – Aplicações e Serviços Web</title>
+<title>7&nbsp; Web Services REST e Arquitetura Stateless (Parte 1) – Aplicações e Serviços Web</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -31,7 +31,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../capitulos/apendiceA.html" rel="next">
+<link href="../capitulos/cap08.html" rel="next">
 <link href="../capitulos/cap06.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -86,7 +86,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../capitulos/cap07.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Web Services REST (Parte 2) e o Cliente em JavaScript</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../capitulos/cap07.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Web Services REST e Arquitetura Stateless (Parte 1)</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Procurar" onclick="window.quartoOpenSearch();">
@@ -135,31 +135,37 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap03.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Java EE e Fundamentos de Servlets</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">O Protocolo HTTP</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap04.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelo Stateful: Sessões e JSP</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Java EE e Fundamentos de Servlets</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap05.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Segurança e Filtros</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Modelo Stateful: Sessões e JSP</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap06.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Web Services REST e Arquitetura Stateless (Parte 1)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Segurança e Filtros</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap07.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Web Services REST (Parte 2) e o Cliente em JavaScript</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Web Services REST e Arquitetura Stateless (Parte 1)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/cap08.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Web Services REST (Parte 2) e o Cliente em JavaScript</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -201,8 +207,7 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Índice</h2>
    
   <ul>
-  <li><a href="#sec-07-jwt-js" id="toc-sec-07-jwt-js" class="nav-link active" data-scroll-target="#sec-07-jwt-js"><span class="header-section-number">7.1</span> JWT, Escalabilidade e o Consumo da API em JavaScript</a></li>
-  <li><a href="#sec-07-mvc-distribuido" id="toc-sec-07-mvc-distribuido" class="nav-link" data-scroll-target="#sec-07-mvc-distribuido"><span class="header-section-number">7.2</span> MVC Distribuído: o Padrão Divide-se entre Servidor e Cliente</a></li>
+  <li><a href="#sec-07-rest" id="toc-sec-07-rest" class="nav-link active" data-scroll-target="#sec-07-rest"><span class="header-section-number">7.1</span> O Que é um Web Service</a></li>
   </ul>
 </nav>
     </div>
@@ -211,7 +216,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Web Services REST (Parte 2) e o Cliente em JavaScript</span></h1>
+<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Web Services REST e Arquitetura Stateless (Parte 1)</span></h1>
 </div>
 
 
@@ -240,26 +245,33 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="sec-07-jwt-js" class="level2" data-number="7.1">
-<h2 data-number="7.1" class="anchored" data-anchor-id="sec-07-jwt-js"><span class="header-section-number">7.1</span> JWT, Escalabilidade e o Consumo da API em JavaScript</h2>
+<section id="sec-07-rest" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="sec-07-rest"><span class="header-section-number">7.1</span> O Que é um Web Service</h2>
 <blockquote class="blockquote">
-<p>Conteúdo a desenvolver, alinhado com a segunda metade da Lecture 4 do ESIGELEC + o “twist” de JavaScript próprio da UTAD. Tópicos previstos:</p>
+<p>Conteúdo a desenvolver, alinhado com a primeira metade da Lecture 4 do ESIGELEC (REST Web Services and Stateless Architecture). Tópicos previstos:</p>
 <ul>
-<li>Limitações de sessões em sistemas distribuídos</li>
-<li>Cabeçalho Authorization</li>
-<li>JWT (header, payload, assinatura)</li>
-<li>Escalabilidade horizontal</li>
-<li>fetch() e JSON do lado do cliente</li>
-<li>O DOM como “View” do browser</li>
+<li>O que é um Web Service</li>
+<li>REST (nível conceptual)</li>
+<li>Recursos e endpoints</li>
+<li>JSON como formato de troca de dados</li>
+<li>O contrato HTTP como contrato da API</li>
+<li>Stateful vs.&nbsp;Stateless</li>
 </ul>
 </blockquote>
-</section>
-<section id="sec-07-mvc-distribuido" class="level2" data-number="7.2">
-<h2 data-number="7.2" class="anchored" data-anchor-id="sec-07-mvc-distribuido"><span class="header-section-number">7.2</span> MVC Distribuído: o Padrão Divide-se entre Servidor e Cliente</h2>
-<p>Numa aplicação orientada à apresentação, o padrão MVC (ver <a href="../capitulos/cap01.html">Capítulo 1</a>) vive inteiramente do lado do servidor: um componente funciona como Controller, e outro, responsável por gerar HTML, como View. Numa API REST, essa organização deixa de fazer sentido: o servidor já não gera HTML, e a View, tal como definida no MVC clássico, desaparece do lado do servidor.</p>
-<p>Do lado do servidor ficam apenas o Model (o acesso aos dados) e o Controller (o <em>endpoint</em> que recebe o pedido HTTP e devolve JSON). O papel de View passa integralmente para o cliente: é o código JavaScript, a correr no <em>browser</em>, que interpreta o JSON recebido e manipula o <em>DOM</em> para o apresentar a quem usa a aplicação.</p>
-<p>Esta divisão pode ler-se como uma segunda aplicação do mesmo padrão, agora do lado do cliente: o JavaScript que trata a resposta e atualiza a página funciona, ele próprio, como Controller (decide o que fazer com a resposta recebida) e como View (gera o HTML mostrado); o JSON devolvido pela API é o Model, mantido no servidor e sincronizado a cada pedido <code>fetch()</code>.</p>
-<p>É esta a razão pela qual um <em>front-office</em> em JavaScript ligado a uma API REST não é uma alternativa ao MVC, mas sim o mesmo padrão distribuído por duas máquinas em vez de uma.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<code>POST</code> + <code>operation</code> como alternativa aos verbos HTTP “puros”
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Os LABs práticos desta UC (ver <a href="../capitulos/apendiceB.html">Apêndice B</a>, LAB4) implementam a criação, atualização e remoção de um país através de um único <em>endpoint</em> (<code>/countryEdit</code>), recebido sempre por <code>POST</code>, distinguindo a operação pretendida através de um parâmetro <code>operation</code> (<code>insert</code>, <code>update</code>, <code>delete</code>). Isto contraria a semântica “pura” dos verbos HTTP apresentada no <a href="../capitulos/cap03.html">Capítulo 3</a> (<code>POST</code> para criar, <code>PUT</code> para atualizar, <code>DELETE</code> para remover), mas é uma simplificação pragmática, comum em código de formação: evita configurar <em>Servlets</em> adicionais mapeadas a <code>PUT</code>/<code>DELETE</code>, e mantém tudo testável com formulários HTML simples, sem recorrer a JavaScript.</p>
+<p>Fica como sugestão de implementação futura, possível para os alunos mais avançados: reescrever <code>/countryEdit</code> como três <em>endpoints</em> distintos, um por verbo HTTP (por exemplo, <code>PUT /country/{code}</code> para atualizar e <code>DELETE /country/{code}</code> para remover), aproximando a API de um desenho REST mais convencional.</p>
+</div>
+</div>
 
 
 </section>
@@ -828,13 +840,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../capitulos/cap06.html" class="pagination-link" aria-label="Web Services REST e Arquitetura Stateless (Parte 1)">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Web Services REST e Arquitetura Stateless (Parte 1)</span></span>
+      <a href="../capitulos/cap06.html" class="pagination-link" aria-label="Segurança e Filtros">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Segurança e Filtros</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../capitulos/apendiceA.html" class="pagination-link" aria-label="Configuração do Ambiente de Desenvolvimento">
-        <span class="nav-page-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Configuração do Ambiente de Desenvolvimento</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../capitulos/cap08.html" class="pagination-link" aria-label="Web Services REST (Parte 2) e o Cliente em JavaScript">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Web Services REST (Parte 2) e o Cliente em JavaScript</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

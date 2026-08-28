@@ -21,40 +21,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -169,31 +135,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap03.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Java EE e Fundamentos de Servlets</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">O Protocolo HTTP</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap04.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelo Stateful: Sessões e JSP</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Java EE e Fundamentos de Servlets</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap05.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Segurança e Filtros</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Modelo Stateful: Sessões e JSP</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap06.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Web Services REST e Arquitetura Stateless (Parte 1)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Segurança e Filtros</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap07.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Web Services REST (Parte 2) e o Cliente em JavaScript</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Web Services REST e Arquitetura Stateless (Parte 1)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/cap08.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Web Services REST (Parte 2) e o Cliente em JavaScript</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -238,14 +210,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#sec-01-problema" id="toc-sec-01-problema" class="nav-link active" data-scroll-target="#sec-01-problema"><span class="header-section-number">1.1</span> O Problema: Construir uma Aplicação Web de Raiz</a></li>
   <li><a href="#sec-01-frontend-backend" id="toc-sec-01-frontend-backend" class="nav-link" data-scroll-target="#sec-01-frontend-backend"><span class="header-section-number">1.2</span> Duas Orientações: Apresentação vs.&nbsp;Serviço</a></li>
   <li><a href="#sec-01-mvc" id="toc-sec-01-mvc" class="nav-link" data-scroll-target="#sec-01-mvc"><span class="header-section-number">1.3</span> O Padrão MVC</a></li>
-  <li><a href="#sec-01-cliente-servidor" id="toc-sec-01-cliente-servidor" class="nav-link" data-scroll-target="#sec-01-cliente-servidor"><span class="header-section-number">1.4</span> O Modelo Cliente-Servidor</a></li>
-  <li><a href="#sec-01-http-metodos" id="toc-sec-01-http-metodos" class="nav-link" data-scroll-target="#sec-01-http-metodos"><span class="header-section-number">1.5</span> HTTP em Detalhe: Métodos</a></li>
-  <li><a href="#sec-01-http-formato-mensagem" id="toc-sec-01-http-formato-mensagem" class="nav-link" data-scroll-target="#sec-01-http-formato-mensagem"><span class="header-section-number">1.6</span> HTTP em Detalhe: Formato de uma Mensagem</a>
-  <ul class="collapse">
-  <li><a href="#exemplo-de-um-formulário-a-um-pedido-http" id="toc-exemplo-de-um-formulário-a-um-pedido-http" class="nav-link" data-scroll-target="#exemplo-de-um-formulário-a-um-pedido-http"><span class="header-section-number">1.6.1</span> Exemplo: de um Formulário a um Pedido HTTP</a></li>
-  <li><a href="#exemplo-um-pedido-post-com-corpo" id="toc-exemplo-um-pedido-post-com-corpo" class="nav-link" data-scroll-target="#exemplo-um-pedido-post-com-corpo"><span class="header-section-number">1.6.2</span> Exemplo: um Pedido <code>POST</code> com Corpo</a></li>
-  </ul></li>
-  <li><a href="#sec-01-http-codigos-estado" id="toc-sec-01-http-codigos-estado" class="nav-link" data-scroll-target="#sec-01-http-codigos-estado"><span class="header-section-number">1.7</span> HTTP em Detalhe: Códigos de Estado</a></li>
+  <li><a href="#sec-01-tres-pecas" id="toc-sec-01-tres-pecas" class="nav-link" data-scroll-target="#sec-01-tres-pecas"><span class="header-section-number">1.4</span> Três Peças: Frontend, Middleware e Backend</a></li>
+  <li><a href="#sec-01-cliente-servidor" id="toc-sec-01-cliente-servidor" class="nav-link" data-scroll-target="#sec-01-cliente-servidor"><span class="header-section-number">1.5</span> O Modelo Cliente-Servidor</a></li>
   </ul>
 </nav>
     </div>
@@ -313,7 +279,7 @@ Implementa o ponto de acesso (<em>endpoint</em>) de um serviço Web, tipicamente
 </section>
 <section id="sec-01-mvc" class="level2" data-number="1.3">
 <h2 data-number="1.3" class="anchored" data-anchor-id="sec-01-mvc"><span class="header-section-number">1.3</span> O Padrão MVC</h2>
-<p>Organizar todo o código de uma aplicação num único bloco indiferenciado rapidamente se torna insustentável: o código que processa o pedido, o que acede aos dados e o que gera a resposta acabam misturados, difíceis de testar e de alterar em separado. O padrão <em>Model-View-Controller</em> (MVC) resolve este problema, dividindo a aplicação em três responsabilidades distintas:</p>
+<p>Organizar todo o código de uma aplicação num único bloco indiferenciado rapidamente se torna insustentável: o código que processa o pedido, o que acede aos dados e o que gera a resposta acabam misturados, difíceis de testar e de alterar em separado. O padrão <a href="https://developer.mozilla.org/en-US/docs/Glossary/MVC"><em>Model-View-Controller</em></a> (MVC) resolve este problema, dividindo a aplicação em três responsabilidades distintas:</p>
 <dl>
 <dt><strong>Model</strong> (Modelo)</dt>
 <dd>
@@ -330,9 +296,28 @@ Recebe o pedido, decide que operação realizar sobre o Model, e escolhe a View 
 </dl>
 <p>Esta separação de responsabilidades é um dos princípios de desenho mais recorrentes de toda esta matéria. Manifesta-se de forma clássica quando um componente do lado do servidor funciona como Controller e delega a apresentação a outro, que funciona como View; e manifesta-se de forma bem menos óbvia quando a View deixa de existir do lado do servidor e passa a ser reconstruída no <em>browser</em>, a partir de dados JSON.</p>
 </section>
-<section id="sec-01-cliente-servidor" class="level2" data-number="1.4">
-<h2 data-number="1.4" class="anchored" data-anchor-id="sec-01-cliente-servidor"><span class="header-section-number">1.4</span> O Modelo Cliente-Servidor</h2>
-<p>Toda esta comunicação, seja ela orientada à apresentação ou a serviço, assenta no modelo cliente-servidor: um cliente (tipicamente um <em>browser</em>) envia um pedido através da rede, e um servidor processa esse pedido e devolve uma resposta.</p>
+<section id="sec-01-tres-pecas" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="sec-01-tres-pecas"><span class="header-section-number">1.4</span> Três Peças: Frontend, Middleware e Backend</h2>
+<p>Tanto a distinção entre apresentação e serviço como o padrão MVC descrevem a mesma ideia central, vista de ângulos diferentes: uma aplicação Web não é um bloco único, mas sim um conjunto de peças com papéis distintos, que comunicam entre si. Ao longo desta UC, essas peças reduzem-se sempre às mesmas três:</p>
+<dl>
+<dt><strong>Frontend</strong></dt>
+<dd>
+A parte da aplicação que corre do lado do cliente (tipicamente um <em>browser</em>), responsável por apresentar informação e recolher a interação de quem a usa. Corresponde, em larga medida, à View do MVC.
+</dd>
+<dt><strong>Middleware</strong></dt>
+<dd>
+O protocolo que liga o Frontend ao Backend, transportando pedidos e respostas entre os dois. Nesta UC, esse protocolo é sempre o HTTP.
+</dd>
+<dt><strong>Backend</strong></dt>
+<dd>
+A parte da aplicação que corre do lado do servidor, responsável pela lógica de negócio e pelo acesso aos dados. Corresponde, em larga medida, ao Model e ao Controller do MVC.
+</dd>
+</dl>
+<p>Esta divisão em três peças é o mapa para todo o resto desta obra: primeiro constrói-se o Frontend (<a href="../capitulos/cap02.html">Capítulo 2</a>, em HTML/CSS/Bootstrap), depois estuda-se em detalhe o Middleware que o liga ao servidor (<a href="../capitulos/cap03.html">Capítulo 3</a>, o protocolo HTTP), e só depois se constrói o Backend que efetivamente responde a esses pedidos (a partir do <a href="../capitulos/cap04.html">Capítulo 4</a>, com <em>Servlets</em> e, mais tarde, com APIs REST).</p>
+</section>
+<section id="sec-01-cliente-servidor" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="sec-01-cliente-servidor"><span class="header-section-number">1.5</span> O Modelo Cliente-Servidor</h2>
+<p>O Middleware que liga o Frontend ao Backend assenta no modelo cliente-servidor: o Frontend (tipicamente um <em>browser</em>) envia um pedido através da rede, e o Backend processa esse pedido e devolve uma resposta.</p>
 <div id="fig-01-cliente-servidor" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-01-cliente-servidor-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -348,173 +333,8 @@ Figura&nbsp;1.1: O cliente (por exemplo, um browser) envia um pedido HTTP; o ser
 <li>É orientado a transações: cada interação é composta por um pedido (<em>request</em>) seguido de uma resposta (<em>response</em>)</li>
 <li>É <em>stateless</em> (sem estado): o servidor não guarda, por si só, qualquer memória de pedidos anteriores do mesmo cliente</li>
 </ul>
-<p>A ausência de estado no protocolo não impede que uma aplicação precise de reter informação entre pedidos (por exemplo, para saber que um utilizador está autenticado). Essa necessidade é resolvida ao nível da aplicação, não do protocolo, através de mecanismos como sessões e <em>cookies</em>.</p>
-</section>
-<section id="sec-01-http-metodos" class="level2" data-number="1.5">
-<h2 data-number="1.5" class="anchored" data-anchor-id="sec-01-http-metodos"><span class="header-section-number">1.5</span> HTTP em Detalhe: Métodos</h2>
-<p>Cada pedido HTTP indica, através de um método, a operação que pretende realizar sobre um recurso:</p>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Método</th>
-<th>Semântica típica</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>GET</code></td>
-<td>Obter um recurso</td>
-</tr>
-<tr class="even">
-<td><code>POST</code></td>
-<td>Criar um recurso</td>
-</tr>
-<tr class="odd">
-<td><code>PUT</code></td>
-<td>Atualizar ou substituir um recurso</td>
-</tr>
-<tr class="even">
-<td><code>DELETE</code></td>
-<td>Remover um recurso</td>
-</tr>
-<tr class="odd">
-<td><code>HEAD</code></td>
-<td>Obter apenas os cabeçalhos, sem corpo</td>
-</tr>
-</tbody>
-</table>
-<p>Estes cinco métodos cobrem a generalidade das operações realizadas por uma aplicação Web; os dois primeiros (<code>GET</code> e <code>POST</code>) são, de longe, os mais usados em formulários HTML tradicionais, enquanto <code>PUT</code> e <code>DELETE</code> ganham importância sobretudo em serviços orientados a recursos.</p>
-</section>
-<section id="sec-01-http-formato-mensagem" class="level2" data-number="1.6">
-<h2 data-number="1.6" class="anchored" data-anchor-id="sec-01-http-formato-mensagem"><span class="header-section-number">1.6</span> HTTP em Detalhe: Formato de uma Mensagem</h2>
-<p>Tanto um pedido como uma resposta HTTP seguem a mesma estrutura geral:</p>
-<ol type="1">
-<li>Uma primeira linha, diferente consoante se trate de um pedido (método, <em>URL</em> e versão de HTTP) ou de uma resposta (versão de HTTP, código de estado e motivo)</li>
-<li>Um conjunto de cabeçalhos (<em>headers</em>), que transportam metadados sobre a mensagem (por exemplo, o anfitrião de destino, o tipo de conteúdo ou o seu comprimento)</li>
-<li>Um corpo (<em>body</em>), opcional, com os dados propriamente ditos</li>
-</ol>
-<p>Um pedido <code>GET</code> não tem, tipicamente, corpo: todos os dados que transporta vão na própria <em>URL</em>, sob a forma de parâmetros. Um pedido <code>POST</code> transporta os dados no corpo da mensagem, fora da <em>URL</em>.</p>
-<div id="fig-01-http-formato-mensagem" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-01-http-formato-mensagem-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../assets/images/capitulos/cap01/HTTP_message_request_format.png" class="img-fluid figure-img" style="width:60.0%">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-01-http-formato-mensagem-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;1.2: O formato geral de uma mensagem HTTP: a primeira linha (diferente para pedido e resposta), seguida dos vários grupos de cabeçalhos, e por fim o corpo.
-</figcaption>
-</figure>
-</div>
-<section id="exemplo-de-um-formulário-a-um-pedido-http" class="level3" data-number="1.6.1">
-<h3 data-number="1.6.1" class="anchored" data-anchor-id="exemplo-de-um-formulário-a-um-pedido-http"><span class="header-section-number">1.6.1</span> Exemplo: de um Formulário a um Pedido HTTP</h3>
-<p>Considere-se um formulário HTML simples, usado para consultar a capital de um país a partir do respetivo código:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1"></a><span class="dt">&lt;</span><span class="kw">form</span><span class="ot"> method</span><span class="op">=</span><span class="st">"GET"</span><span class="ot"> action</span><span class="op">=</span><span class="st">"/capital"</span><span class="dt">&gt;</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a>  <span class="dt">&lt;</span><span class="kw">label</span><span class="ot"> for</span><span class="op">=</span><span class="st">"countrycode"</span><span class="dt">&gt;</span>Código do país<span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a>  <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"text"</span><span class="ot"> id</span><span class="op">=</span><span class="st">"countrycode"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"countrycode"</span><span class="dt">&gt;</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a>  <span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> type</span><span class="op">=</span><span class="st">"submit"</span><span class="dt">&gt;</span>Consultar<span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="dt">&lt;/</span><span class="kw">form</span><span class="dt">&gt;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Ao ser submetido com o valor <code>PT</code>, o <em>browser</em> gera o seguinte pedido HTTP:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1"></a><span class="ex">GET</span> /capital<span class="pp">?</span>countrycode=PT HTTP/1.1</span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="ex">Host:</span> localhost:8080</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Note-se que, por se tratar de um método <code>GET</code>, o parâmetro <code>countrycode</code> é enviado como parte da <em>URL</em> (depois do <code>?</code>), e não existe corpo na mensagem. Se o mesmo formulário usasse <code>method="POST"</code>, o parâmetro seguiria antes no corpo do pedido, e a <em>URL</em> manter-se-ia limpa (<code>/capital</code>).</p>
-<p>O servidor, ao processar este pedido, devolve uma resposta HTTP como a seguinte:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="ex">HTTP/1.1</span> 200 OK</span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="ex">Content-Type:</span> application/json</span>
-<span id="cb3-3"><a href="#cb3-3"></a></span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="ex">{</span><span class="st">"country"</span><span class="ex">:</span> <span class="st">"Portugal"</span>, <span class="st">"capital"</span>: <span class="st">"Lisboa"</span>, <span class="st">"ccode"</span>: <span class="st">"PT"</span>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="exemplo-um-pedido-post-com-corpo" class="level3" data-number="1.6.2">
-<h3 data-number="1.6.2" class="anchored" data-anchor-id="exemplo-um-pedido-post-com-corpo"><span class="header-section-number">1.6.2</span> Exemplo: um Pedido <code>POST</code> com Corpo</h3>
-<p>Considere-se agora um formulário de autenticação, com os campos <code>user</code> e <code>pass</code>:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb4-1"><a href="#cb4-1"></a><span class="dt">&lt;</span><span class="kw">form</span><span class="ot"> method</span><span class="op">=</span><span class="st">"POST"</span><span class="ot"> action</span><span class="op">=</span><span class="st">"/login"</span><span class="dt">&gt;</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a>  <span class="dt">&lt;</span><span class="kw">label</span><span class="ot"> for</span><span class="op">=</span><span class="st">"user"</span><span class="dt">&gt;</span>Utilizador<span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a>  <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"text"</span><span class="ot"> id</span><span class="op">=</span><span class="st">"user"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"user"</span><span class="dt">&gt;</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a>  <span class="dt">&lt;</span><span class="kw">label</span><span class="ot"> for</span><span class="op">=</span><span class="st">"pass"</span><span class="dt">&gt;</span>Palavra-passe<span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a>  <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"password"</span><span class="ot"> id</span><span class="op">=</span><span class="st">"pass"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"pass"</span><span class="dt">&gt;</span></span>
-<span id="cb4-6"><a href="#cb4-6"></a>  <span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> type</span><span class="op">=</span><span class="st">"submit"</span><span class="dt">&gt;</span>Entrar<span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
-<span id="cb4-7"><a href="#cb4-7"></a><span class="dt">&lt;/</span><span class="kw">form</span><span class="dt">&gt;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Ao ser submetido, este formulário gera o seguinte pedido HTTP:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1"></a><span class="ex">POST</span> /login HTTP/1.1</span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="ex">Host:</span> localhost:8080</span>
-<span id="cb5-3"><a href="#cb5-3"></a><span class="ex">Content-Type:</span> application/x-www-form-urlencoded</span>
-<span id="cb5-4"><a href="#cb5-4"></a><span class="ex">Content-Length:</span> 21</span>
-<span id="cb5-5"><a href="#cb5-5"></a></span>
-<span id="cb5-6"><a href="#cb5-6"></a><span class="va">user</span><span class="op">=</span>javaee<span class="kw">&amp;</span><span class="va">pass</span><span class="op">=</span>esigelec2026</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Ao contrário do exemplo anterior, os parâmetros já não vão na <em>URL</em>: seguem no corpo do pedido, depois de uma linha em branco que separa os cabeçalhos do corpo. É por isso que credenciais e outros dados sensíveis se enviam tipicamente por <code>POST</code>, nunca por <code>GET</code>: o corpo de um pedido não fica registado nos históricos de navegação nem nos ficheiros de registo (<em>logs</em>) do servidor, ao contrário do que acontece com os parâmetros de uma <em>URL</em>.</p>
-</section>
-</section>
-<section id="sec-01-http-codigos-estado" class="level2" data-number="1.7">
-<h2 data-number="1.7" class="anchored" data-anchor-id="sec-01-http-codigos-estado"><span class="header-section-number">1.7</span> HTTP em Detalhe: Códigos de Estado</h2>
-<p>Toda a resposta HTTP inclui um código de estado numérico, que indica sucintamente o resultado do pedido. Os códigos agrupam-se em cinco categorias, consoante a centena:</p>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Intervalo</th>
-<th>Categoria</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>1xx</code></td>
-<td>Informativo</td>
-</tr>
-<tr class="even">
-<td><code>2xx</code></td>
-<td>Sucesso</td>
-</tr>
-<tr class="odd">
-<td><code>3xx</code></td>
-<td>Redirecionamento</td>
-</tr>
-<tr class="even">
-<td><code>4xx</code></td>
-<td>Erro do cliente</td>
-</tr>
-<tr class="odd">
-<td><code>5xx</code></td>
-<td>Erro do servidor</td>
-</tr>
-</tbody>
-</table>
-<p>Dentro destas categorias, alguns códigos surgem com particular frequência no desenvolvimento de serviços Web:</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Código</th>
-<th>Significado</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>200 OK</code></td>
-<td>O pedido foi processado com sucesso</td>
-</tr>
-<tr class="even">
-<td><code>201 Created</code></td>
-<td>Um novo recurso foi criado com sucesso</td>
-</tr>
-<tr class="odd">
-<td><code>400 Bad Request</code></td>
-<td>O pedido está malformado ou falta um parâmetro obrigatório</td>
-</tr>
-<tr class="even">
-<td><code>403 Forbidden</code></td>
-<td>O cliente não tem permissão para aceder ao recurso</td>
-</tr>
-<tr class="odd">
-<td><code>404 Not Found</code></td>
-<td>O recurso pedido não existe</td>
-</tr>
-<tr class="even">
-<td><code>500 Internal Server Error</code></td>
-<td>Ocorreu um erro não tratado do lado do servidor</td>
-</tr>
-</tbody>
-</table>
-<p>Escolher o código de estado correto para cada situação é uma parte essencial do desenho de um serviço Web: o código transmite, por si só, informação que o cliente pode usar para decidir como reagir, sem precisar de interpretar o corpo da resposta.</p>
+<p>A ausência de estado no protocolo não impede que uma aplicação precise de reter informação entre pedidos (por exemplo, para saber que um utilizador está autenticado). Essa necessidade é resolvida ao nível da aplicação, não do protocolo, através de mecanismos como sessões e <em>cookies</em> (ver <a href="../capitulos/cap05.html">Capítulo 5</a>).</p>
+<p>Os detalhes deste protocolo, o Middleware que liga estas duas peças, são o tema do <a href="../capitulos/cap03.html">Capítulo 3</a>.</p>
 
 
 </section>

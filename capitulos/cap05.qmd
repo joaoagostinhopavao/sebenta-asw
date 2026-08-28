@@ -1,165 +1,223 @@
 ---
-title: "Segurança e Filtros"
+title: "Modelo Stateful: Sessões e JSP"
 author: "João Pavão"
 date: 2026-08-26
 lang: pt-PT
 ---
 
-## O Problema: Segurança Repetida em Cada *Servlet* {#sec-05-problema}
+## HTTP é Sem Estado: o Problema {#sec-05-problema-estado}
 
-Com o que foi apresentado até aqui (ver [Capítulo 4](cap04.qmd)), a autenticação está resolvida: a `LoginServlet` valida as credenciais e grava o utilizador na sessão, e cada *endpoint* protegido verifica essa sessão no início do seu `doGet()` ou `doPost()`. Isto funciona, mas tem um custo escondido: a lógica de autenticação vive, duplicada, dentro de **cada** *Servlet* protegida.
+O protocolo HTTP é *stateless* (ver [Capítulo 1](cap01.qmd)): cada pedido é independente, e o servidor não guarda, por si só, qualquer memória de pedidos anteriores. Não existe, ao nível do protocolo, nenhuma noção de "utilizador com sessão iniciada".
 
-Esta duplicação traz consigo vários problemas:
+Isto levanta um problema prático imediato: se um utilizador se autentica num pedido, como é que um pedido seguinte, minutos depois, sabe que esse utilizador continua autenticado? A resposta passa por dois mecanismos complementares:
 
-- A mesma verificação de sessão está repetida em todos os *endpoints* protegidos
-- Existe risco real de inconsistência entre essas cópias
-- É fácil esquecer a proteção ao criar um novo *endpoint*
+- ***Cookies***: um pequeno pedaço de informação guardado do lado do **cliente**, reenviado automaticamente pelo *browser* em cada pedido seguinte
+- **`HttpSession`**: um objeto guardado do lado do **servidor**, associado a um identificador que o cliente devolve a cada pedido
 
-Dito de outra forma, esta duplicação viola o princípio *DRY* (*Don't Repeat Yourself*): uma responsabilidade deveria viver num único sítio, e lógica repetida aumenta o custo de manutenção sempre que essa lógica precisa de mudar. Mais concretamente, este desenho viola o **Princípio da Responsabilidade Única**: cada *Servlet* passa a ter duas responsabilidades distintas, a lógica de negócio que lhe é própria, e a lógica de segurança que lhe é imposta. Isto torna as políticas de segurança difíceis de fazer evoluir, e o desenho pouco escalável, quer em número de *endpoints*, quer em complexidade das regras de acesso.
+## *Cookies* {#sec-05-cookies}
 
-## Autenticação vs. Autorização {#sec-05-autenticacao-autorizacao}
+Um *cookie* é um par chave/valor guardado no *browser*. Quando o servidor envia um *cookie*, espera que o cliente o devolva em todos os pedidos HTTP seguintes, dirigidos ao mesmo domínio.
 
-Antes de resolver o problema, vale a pena precisar dois conceitos frequentemente confundidos:
+Distinguem-se dois tipos, consoante a sua persistência:
 
-**Autenticação**
-: Responde a "quem é o utilizador?". É a verificação de identidade, tipicamente feita no momento do *login*.
+- **_Session cookies_**: mantidos pelo cliente apenas durante a sessão de navegação (`setMaxAge(-1)`)
+- **_Permanent cookies_**: guardados de forma persistente, com um tempo de vida definido (`setMaxAge(60*60*24*30)` para 30 dias, por exemplo)
 
-```java
-if (username.equals("admin") && password.equals("1234")) {
-    HttpSession session = request.getSession(true);
-    session.setAttribute("UserName", username);
-}
-```
-
-**Autorização**
-: Responde a "o que é que este utilizador tem permissão para aceder?". É a verificação de permissões, feita depois de a identidade já estar confirmada.
+Criar um *cookie*:
 
 ```java
-if (session.getAttribute("UserRole").equals("ADMIN")) {
-    // acesso permitido
-}
+Cookie cookie = new Cookie("userName", "Pedro");
+cookie.setMaxAge(-1); // session cookie
+response.addCookie(cookie);
 ```
 
-A autenticação acontece sempre primeiro: não faz sentido verificar permissões de alguém cuja identidade ainda não foi confirmada. Esta distinção reflete-se diretamente nos códigos de estado HTTP usados na resposta (ver [Capítulo 1](cap01.qmd)):
-
-- `401 Unauthorized`: o pedido não está autenticado
-- `403 Forbidden`: o pedido está autenticado, mas não tem permissão para o recurso pedido
-
-## O que é um Filtro {#sec-05-o-que-e-um-filter}
-
-A pergunta que fica por responder é onde deve viver a lógica de segurança: dentro de cada *Servlet*? Duplicada por todos os *endpoints*? Ou centralizada num único componente? Segurança é, por natureza, uma preocupação transversal (*cross-cutting concern*): atravessa toda a aplicação, em vez de pertencer a um único módulo. É exatamente para isto que existe o Filtro.
-
-Um Filtro é um componente do lado do servidor que intercepta pedidos HTTP:
-
-- É executado **antes** da *Servlet* de destino
-- Pode também ser executado **depois** da *Servlet* (sobre a resposta)
-- Pode bloquear, redirecionar ou modificar o pedido ou a resposta
-
-Além da autenticação e da autorização, os Filtros são o mecanismo natural para outras preocupações transversais: registo de atividade (*logging*), *CORS* (*Cross-Origin Resource Sharing*), ou validação de entrada. Um Filtro separa estas preocupações da lógica de negócio, que fica exclusivamente na *Servlet*.
-
-## Onde um Filtro se Situa no Pedido {#sec-05-onde-situa}
-
-Um ou mais Filtros podem ser encadeados entre o cliente e a *Servlet* que trata efetivamente o pedido:
-
-```
-Cliente → Filtro 1 → ... → Filtro N → Servlet (lógica de negócio) → Resposta
-```
-
-![Um pedido atravessa a cadeia de Filtros antes de chegar à Servlet; cada Filtro pode bloquear o pedido (vermelho), modificá-lo (amarelo) ou deixá-lo prosseguir (verde, chamando chain.doFilter()).](../assets/images/capitulos/cap05/Filter_Chain.png){#fig-05-filter-chain width="80%"}
-
-Cada Filtro na cadeia tem, essencialmente, três comportamentos possíveis:
-
-- **Bloquear o pedido**: por exemplo, `400` (dados inválidos), `401` (identidade inválida) ou `403` (autenticado mas sem permissão)
-- **Modificar o pedido**: normalização e validação de dados, registo de atividade, entre outros
-- **Deixar prosseguir**: chamando `chain.doFilter(request, response)`, passando o controlo ao próximo elemento da cadeia
-
-## Ciclo de Vida de um Filtro {#sec-05-ciclo-vida-filter}
-
-O ciclo de vida de um Filtro segue o mesmo modelo já apresentado para as *Servlets* (ver [Capítulo 3](cap03.qmd)):
-
-- `init()`: executado uma única vez, quando o contentor coloca o Filtro em serviço
-- `doFilter()`: executado a cada pedido; pode inspecionar, bloquear ou modificar o pedido e a resposta, e deve chamar `chain.doFilter()` para continuar a cadeia
-- `destroy()`: executado uma única vez, quando o Filtro é retirado de serviço, para libertar recursos
-
-Tal como uma *Servlet*, existe **uma única instância** de cada Filtro, partilhada por múltiplos pedidos concorrentes: aplica-se aqui exatamente o mesmo cuidado já referido no Capítulo 3, evitar estado mutável partilhado, e preferir variáveis locais dentro de `doFilter()`.
-
-![O ciclo de vida de um Filtro espelha o de uma Servlet: init() e destroy() correm uma única vez, doFilter() corre a cada pedido, para múltiplos pedidos concorrentes.](../assets/images/capitulos/cap05/Filter_Lifecycle.png){#fig-05-filter-lifecycle width="85%"}
-
-## *Servlet* e Filtro: Separação de Responsabilidades {#sec-05-separacao-responsabilidades}
-
-Centralizar a segurança num Filtro reorganiza as responsabilidades de toda a aplicação:
-
-![Sem Filtro, cada Servlet acumula autenticação, logging, validação e lógica de negócio. Com um Filtro, essas preocupações transversais concentram-se num único sítio, e cada Servlet fica só com a sua lógica de negócio.](../assets/images/capitulos/cap05/Servlet_vs_Filter.png){#fig-05-servlet-vs-filter width="75%"}
-
-Esta reorganização traz vantagens concretas:
-
-- A lógica de autenticação é escrita **uma única vez** (princípio *DRY*)
-- A política de segurança é aplicada de forma consistente a todos os *endpoints*
-- Deixa de haver risco de "esquecer" a proteção numa *Servlet* nova
-- Fica clara a separação entre preocupações transversais (Filtro) e lógica de negócio (*Servlet*)
-
-## Declarar e Implementar um Filtro {#sec-05-declarar-filter}
-
-Um Filtro declara-se com a anotação `@WebFilter`, indicando o padrão de *URLs* a que se aplica:
+Ler um *cookie* recebido num pedido:
 
 ```java
-@WebFilter("/*")
-public class AuthenticationFilter implements Filter {
-    // ...
-}
-```
+Cookie[] cookies = request.getCookies();
+String user = null;
 
-O padrão `"/*"` intercepta todos os pedidos, sem exceção. A classe tem de implementar `jakarta.servlet.Filter`, e o contentor descobre-a automaticamente no momento da implantação (*deployment*). Tal como as *Servlets*, um Filtro também pode ser declarado de forma equivalente, embora considerada préterita, no ficheiro `web.xml`.
-
-Um `doFilter()` típico, que protege todos os pedidos exigindo uma sessão válida, tem esta forma:
-
-```java
-public void doFilter(ServletRequest request,
-                      ServletResponse response,
-                      FilterChain chain)
-        throws IOException, ServletException {
-
-    HttpServletRequest req = (HttpServletRequest) request;
-    HttpServletResponse res = (HttpServletResponse) response;
-
-    HttpSession session = req.getSession(false);
-
-    if (session == null || session.getAttribute("UserName") == null) {
-        res.sendError(HttpServletResponse.SC_UNAUTHORIZED); // 401
-        return;
+for (Cookie c : cookies) {
+    if (c.getName().equals("userName")) {
+        user = c.getValue();
     }
-
-    chain.doFilter(request, response);
 }
 ```
 
-Na prática, nem todos os pedidos devem ser protegidos: o próprio `/login`, e recursos estáticos como `/css`, `/js` ou `/images`, precisam de ficar acessíveis sem autenticação, sob pena de o utilizador nunca conseguir sequer chegar ao formulário de *login*.
+## Sessões (`HttpSession`) {#sec-05-sessoes-http}
+
+Guardar estado do lado do servidor exige um objeto próprio para o efeito: a `HttpSession`. Uma sessão obtém-se, ou cria-se, a partir do pedido:
 
 ```java
-String path = req.getRequestURI();
+HttpSession session = request.getSession();          // cria se não existir
+HttpSession session = request.getSession(true);      // equivalente, explícito
+HttpSession session = request.getSession(false);     // NUNCA cria; devolve null se não houver
+```
 
-boolean isLogin = path.endsWith("/login");
-boolean isStatic = path.startsWith(req.getContextPath() + "/css")
-                 || path.startsWith(req.getContextPath() + "/js")
-                 || path.startsWith(req.getContextPath() + "/images");
+Uma vez obtida, a sessão guarda e devolve informação através de atributos, e pode ser terminada explicitamente:
 
-if (isLogin || isStatic) {
-    chain.doFilter(request, response);
+```java
+session.setAttribute("email", "foo@fool.com");
+String email = (String) session.getAttribute("email");
+session.invalidate();                    // termina a sessão
+session.setMaxInactiveInterval(1800);     // tempo de inatividade, em segundos
+```
+
+Falta uma peça: se HTTP não tem memória de pedidos anteriores, como é que o servidor sabe que dois pedidos sucessivos pertencem à mesma sessão? A resposta são, de novo, os *cookies*: por convenção, o identificador de sessão viaja num *cookie* chamado `JSESSIONID`, criado automaticamente pelo *Servlet Container* na primeira chamada a `getSession()`.
+
+::: {.httpmsg}
+JSESSIONID=22562577CE80EF3B1DAAA0E48F2B6392
+:::
+
+Quando o cliente não aceita *cookies*, existe uma alternativa: codificar o identificador de sessão diretamente na *URL*.
+
+::: {.httpmsg}
+http://localhost:8080/CapitaisAPI/country;jsessionid=829F8836C240B51DD2F074259F242833
+:::
+
+É boa prática chamar sempre `response.encodeURL(url)` ao construir uma *URL* de destino: se os *cookies* estiverem ativos, o método devolve a *URL* inalterada; se não estiverem, acrescenta automaticamente o `jsessionid`.
+
+## Autenticação Baseada em Sessão {#sec-05-autenticacao-sessao}
+
+Juntando os dois mecanismos anteriores, obtém-se o padrão clássico de autenticação por sessão, usado no LAB2 desta UC (ver [Apêndice B](apendiceB.qmd)). Depois de validar as credenciais, a `LoginServlet` cria uma sessão e guarda nela o identificador do utilizador:
+
+```java
+@WebServlet("/login")
+public class LoginServlet extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String user = request.getParameter("user");
+        String pass = request.getParameter("pass");
+
+        if (dao.validateUserCredentials(user, pass)) {
+            HttpSession session = request.getSession(true);
+            session.setAttribute("UserName", user);
+
+            response.setContentType("application/json");
+            response.getWriter().print("{\"message\":\"OK\",\"user\":\"" + user + "\"}");
+        } else {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.getWriter().print("{\"message\":\"FORBIDDEN\",\"error\":\"Invalid login or password\"}");
+        }
+    }
+}
+```
+
+Qualquer *endpoint* protegido verifica, no início do seu próprio `doGet()` ou `doPost()`, se existe uma sessão válida com esse atributo:
+
+```java
+HttpSession session = request.getSession(false);
+if (session == null || session.getAttribute("UserName") == null) {
+    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+    response.getWriter().print("{\"error\":\"Authentication required\"}");
     return;
 }
+// pedido autenticado: continuar o processamento normal
 ```
 
-## Redirecionamento vs. `401`: uma Diferença Arquitetural {#sec-05-redirect-vs-401}
+O logout resume-se a terminar a sessão:
 
-A forma correta de reagir a uma falha de autenticação depende do tipo de aplicação:
+```java
+session.invalidate();
+```
 
-- Numa aplicação Web tradicional, orientada à apresentação (ver [Capítulo 1](cap01.qmd)), a resposta natural é um **redirecionamento** para a página de *login* (código `302`)
-- Numa API REST, cujo contrato é JSON (ver [Capítulos 6](cap06.qmd) e [7](cap07.qmd)), a resposta correta é devolver **`401`**, sem qualquer redirecionamento
+## O Padrão MVC com *Servlet* e JSP {#sec-05-mvc-jsp}
 
-A diferença resume-se a uma frase: numa aplicação Web tradicional, uma falha de autenticação muda a página mostrada; numa API REST, muda apenas o código de estado devolvido. É o cliente, não o servidor, quem decide o que fazer a seguir com esse `401`.
+O [Capítulo 1](cap01.qmd) apresentou o padrão MVC a nível conceptual, e o [Capítulo 4](cap04.qmd) mostrou como uma *Servlet* funciona como Controller. Falta a peça final: a View.
 
-## Preparação para uma Segurança Sem Estado {#sec-05-preparacao-sem-estado}
+![O modelo geral do MVC, aplicável a qualquer interface (não só Web): o Controller atualiza o Model e a apresentação; a View lê o Model para se apresentar.](../assets/images/capitulos/cap05/Modelo_MVC_Geral.png){#fig-05-mvc-geral width="55%"}
 
-O modelo apresentado neste capítulo assenta inteiramente em sessão: o servidor guarda o estado do utilizador autenticado (`HttpSession`), e o Filtro verifica essa sessão em cada pedido. Este modelo tem uma limitação: exige que o servidor mantenha memória de cada utilizador, o que se torna problemático assim que existe mais do que uma instância do servidor (ver [Capítulo 7](cap07.qmd)).
+Numa aplicação orientada à apresentação, a *Servlet* recebe o pedido e decide **o quê** mostrar, mas delega a **geração do HTML** propriamente dita a uma [*JavaServer Page*](https://jakarta.ee/specifications/pages/) (JSP). O Model, por sua vez, é uma classe Java comum (por exemplo, um *DAO*), independente de ambos.
 
-A alternativa é a autenticação baseada em *token*: em vez de o servidor guardar sessão nenhuma, o próprio pedido transporta, em cada chamada, toda a informação necessária para se autenticar. Esta mudança, de um modelo com estado (*stateful*) para um modelo sem estado (*stateless*), é o tema dos capítulos seguintes.
+A *Servlet* liga-se à JSP através de um `RequestDispatcher`: coloca os dados a mostrar num atributo do pedido, e encaminha (*forward*) o próprio pedido para a página:
+
+```java
+request.setAttribute("user", user);
+request.getRequestDispatcher("/home.jsp").forward(request, response);
+```
+
+Uma JSP é um documento de texto que mistura dois tipos de conteúdo: HTML estático e elementos de *script* dinâmico. Na primeira vez que é pedida, o *Servlet Container* converte-a automaticamente numa classe *Servlet*, que passa a comportar-se, dali em diante, exatamente como qualquer outra *Servlet*.
+
+## Um Exemplo Simples de JSP {#sec-05-exemplo-jsp}
+
+```jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<% String name = (String) request.getAttribute("userName"); %>
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Uma Página JSP</title>
+</head>
+<body>
+  <h1>Olá, <%= name %>!</h1>
+</body>
+</html>
+```
+
+O bloco `<% ... %>` (*scriptlet*) contém código Java arbitrário; o bloco `<%= ... %>` (expressão) insere o valor de uma expressão Java diretamente no HTML gerado. É exatamente este atributo `userName`, colocado no pedido pela *Servlet* através de `request.setAttribute(...)`, que a JSP aqui recupera.
+
+## Ciclo de Vida e Objetos Implícitos {#sec-05-ciclo-vida-jsp}
+
+O ciclo de vida de uma JSP segue o mesmo modelo da *Servlet* em que é convertida (ver [Capítulo 4](cap04.qmd)), com dois pormenores próprios:
+
+- O contentor recompila a JSP automaticamente sempre que o ficheiro `.jsp` é alterado
+- Em vez de `init()` e `destroy()`, a JSP oferece os métodos `jspInit()` e `jspDestroy()`
+
+Outra diferença prática: dentro de uma JSP, um conjunto de objetos está disponível automaticamente, sem qualquer declaração prévia, chamados objetos implícitos:
+
+| Objeto implícito | Tipo |
+|---|---|
+| `out` | `JspWriter` |
+| `request` | `HttpServletRequest` |
+| `response` | `HttpServletResponse` |
+| `session` | `HttpSession` |
+| `page` | `Object` |
+
+Por causa do objeto implícito `out`, uma JSP nunca precisa de obter explicitamente um `PrintWriter`: usa-se `out` diretamente.
+
+## *Scopes*: Partilhar Informação Dentro do Servidor {#sec-05-scopes}
+
+Tal como as *Servlets* podem partilhar informação com outros módulos através de atributos (ver [Capítulo 4](cap04.qmd)), esses atributos existem sempre dentro de um determinado âmbito, ou *scope*. Existem quatro classes de *scope*:
+
+- ***Web context*** (ou *application context*): um único por aplicação, partilhado por todos os módulos e todos os utilizadores
+- ***Session***: um por utilizador, mantido entre vários pedidos desse utilizador
+- ***Request***: um por pedido, perdido assim que a resposta é enviada
+- ***Page***: exclusivo de JSP, não é usado nesta UC
+
+Todos os *scopes* seguem a mesma interface: métodos `setAttribute`/`getAttribute`, e `getAttributeNames()` para listar tudo o que lá está guardado.
+
+**Web context**, partilhado por toda a aplicação:
+
+```java
+ServletContext context = request.getServletContext();
+context.setAttribute("dbHost", "localhost");
+String dbHost = (String) context.getAttribute("dbHost");
+```
+
+**Session**, já apresentado, partilhado apenas pelo mesmo utilizador:
+
+```java
+HttpSession session = request.getSession();
+session.setAttribute("email", "foo@fool.com");
+String email = (String) session.getAttribute("email");
+```
+
+**Request**, o mais restrito de todos, partilhado apenas entre módulos que processam o mesmo pedido (por exemplo, entre uma *Servlet* e a JSP para a qual reencaminha):
+
+```java
+request.setAttribute("email", "foo@fool.com");
+String email = (String) request.getAttribute("email");
+```
+
+Os quatro *scopes* formam uma hierarquia de inclusão, do mais lato ao mais restrito: *Application* contém *Session*, que contém *Request*, que contém *Page*. Quanto maior o *scope*, mais partilhada fica a informação, e maior a responsabilidade de a gerir corretamente (por exemplo, de a remover quando deixa de ser necessária).
+
+![Os quatro scopes, do mais lato (Application) ao mais restrito (Page): cada um contém o seguinte, e um scope maior implica mais partilha, mas também mais responsabilidade na sua gestão.](../assets/images/capitulos/cap05/Comparacao_Scopes.png){#fig-05-scopes-comparacao width="60%"}
+
+::: {.callout-note}
+## *Scopes* não se instanciam
+
+Os objetos de *scope* (`ServletContext`, `HttpSession`, `ServletRequest`) são fornecidos automaticamente pelo contentor. Nunca se cria uma instância nova com `new`: se um deles ainda não existe, os métodos apropriados (`getServletContext()`, `getSession()`) criam-no ou devolvem o existente.
+:::

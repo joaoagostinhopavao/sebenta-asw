@@ -169,31 +169,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap03.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Java EE e Fundamentos de Servlets</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">O Protocolo HTTP</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap04.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelo Stateful: Sessões e JSP</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Java EE e Fundamentos de Servlets</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap05.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Segurança e Filtros</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Modelo Stateful: Sessões e JSP</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap06.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Web Services REST e Arquitetura Stateless (Parte 1)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Segurança e Filtros</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap07.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Web Services REST (Parte 2) e o Cliente em JavaScript</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Web Services REST e Arquitetura Stateless (Parte 1)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/cap08.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Web Services REST (Parte 2) e o Cliente em JavaScript</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -235,10 +241,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Índice</h2>
    
   <ul>
-  <li><a href="#sec-02-html-css" id="toc-sec-02-html-css" class="nav-link active" data-scroll-target="#sec-02-html-css"><span class="header-section-number">2.1</span> Estrutura HTML</a></li>
-  <li><a href="#sec-02-css-formas" id="toc-sec-02-css-formas" class="nav-link" data-scroll-target="#sec-02-css-formas"><span class="header-section-number">2.2</span> CSS: Três Formas de Aplicar Estilos</a></li>
-  <li><a href="#sec-02-css-classes-especificidade" id="toc-sec-02-css-classes-especificidade" class="nav-link" data-scroll-target="#sec-02-css-classes-especificidade"><span class="header-section-number">2.3</span> Classes, IDs e Especificidade</a></li>
-  <li><a href="#sec-02-bootstrap" id="toc-sec-02-bootstrap" class="nav-link" data-scroll-target="#sec-02-bootstrap"><span class="header-section-number">2.4</span> Bootstrap: um Framework CSS</a></li>
+  <li><a href="#sec-02-tags-principais" id="toc-sec-02-tags-principais" class="nav-link active" data-scroll-target="#sec-02-tags-principais"><span class="header-section-number">2.1</span> As Tags Principais do HTML</a></li>
+  <li><a href="#sec-02-html-css" id="toc-sec-02-html-css" class="nav-link" data-scroll-target="#sec-02-html-css"><span class="header-section-number">2.2</span> Estrutura HTML</a></li>
+  <li><a href="#sec-02-aplicar-estilos-diretamente" id="toc-sec-02-aplicar-estilos-diretamente" class="nav-link" data-scroll-target="#sec-02-aplicar-estilos-diretamente"><span class="header-section-number">2.3</span> Aplicar Estilos Diretamente</a>
+  <ul class="collapse">
+  <li><a href="#três-formas-de-aplicar-css" id="toc-três-formas-de-aplicar-css" class="nav-link" data-scroll-target="#três-formas-de-aplicar-css"><span class="header-section-number">2.3.1</span> Três Formas de Aplicar CSS</a></li>
+  <li><a href="#classes-ids-e-especificidade" id="toc-classes-ids-e-especificidade" class="nav-link" data-scroll-target="#classes-ids-e-especificidade"><span class="header-section-number">2.3.2</span> Classes, IDs e Especificidade</a></li>
+  </ul></li>
+  <li><a href="#sec-02-aplicar-estilos-frameworks" id="toc-sec-02-aplicar-estilos-frameworks" class="nav-link" data-scroll-target="#sec-02-aplicar-estilos-frameworks"><span class="header-section-number">2.4</span> Aplicar Estilos Usando Frameworks</a>
+  <ul class="collapse">
+  <li><a href="#bootstrap" id="toc-bootstrap" class="nav-link" data-scroll-target="#bootstrap"><span class="header-section-number">2.4.1</span> Bootstrap</a></li>
+  <li><a href="#outros-frameworks" id="toc-outros-frameworks" class="nav-link" data-scroll-target="#outros-frameworks"><span class="header-section-number">2.4.2</span> Outros Frameworks</a></li>
+  </ul></li>
   <li><a href="#sec-02-boas-praticas" id="toc-sec-02-boas-praticas" class="nav-link" data-scroll-target="#sec-02-boas-praticas"><span class="header-section-number">2.5</span> Boas Práticas</a></li>
   <li><a href="#sec-02-world-capitals" id="toc-sec-02-world-capitals" class="nav-link" data-scroll-target="#sec-02-world-capitals"><span class="header-section-number">2.6</span> Exercício: as Páginas Estáticas da Aplicação “World Capitals”</a></li>
   </ul>
@@ -278,9 +292,125 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="sec-02-html-css" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="sec-02-html-css"><span class="header-section-number">2.1</span> Estrutura HTML</h2>
-<p>Um documento HTML mínimo tem sempre a mesma forma: uma declaração de tipo de documento, seguida de um elemento <code>html</code>, dividido num <code>head</code> (metadados, não visíveis) e num <code>body</code> (o conteúdo visível):</p>
+<section id="sec-02-tags-principais" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="sec-02-tags-principais"><span class="header-section-number">2.1</span> As Tags Principais do HTML</h2>
+<p>Este capítulo constrói a primeira das três peças identificadas no <a href="../capitulos/cap01.html">Capítulo 1</a>: o Frontend. É a parte da aplicação que corre no <em>browser</em>, e é com ela que se começa, porque é a que se vê e testa mais imediatamente, mesmo sem ainda existir nenhum servidor por trás.</p>
+<p>O HTML (<em>HyperText Markup Language</em>) descreve o conteúdo de uma página através de elementos, cada um delimitado por uma <em>tag</em> de abertura e outra de fecho (por exemplo, <code>&lt;p&gt;</code> e <code>&lt;/p&gt;</code>, delimitando um parágrafo). Antes de qualquer exemplo completo, vale a pena conhecer o vocabulário: as <em>tags</em> mais usadas para conteúdo de texto são estas:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Tag</th>
+<th>Para que serve</th>
+<th>Exemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>&lt;h1&gt;</code> a <code>&lt;h6&gt;</code></td>
+<td>Títulos e subtítulos, do mais importante (<code>&lt;h1&gt;</code>) ao menos importante (<code>&lt;h6&gt;</code>). Cada página deve ter, no máximo, um <code>&lt;h1&gt;</code>.</td>
+<td><code>&lt;h1&gt;Título da Página&lt;/h1&gt;</code></td>
+</tr>
+<tr class="even">
+<td><code>&lt;p&gt;</code></td>
+<td>Um parágrafo de texto.</td>
+<td><code>&lt;p&gt;Este é um parágrafo.&lt;/p&gt;</code></td>
+</tr>
+<tr class="odd">
+<td><code>&lt;a&gt;</code></td>
+<td>Uma ligação (hiperligação) para outra página ou secção, definida pelo atributo <code>href</code>.</td>
+<td><code>&lt;a href="https://www.w3.org"&gt;W3C&lt;/a&gt;</code></td>
+</tr>
+<tr class="even">
+<td><code>&lt;ul&gt;</code></td>
+<td>Uma lista de items não ordenada (com marcadores); cada item vai dentro de um <code>&lt;li&gt;</code>.</td>
+<td><code>&lt;ul&gt;&lt;li&gt;Item1&lt;/li&gt;&lt;li&gt;Item2&lt;/li&gt;...&lt;/ul&gt;</code></td>
+</tr>
+<tr class="odd">
+<td><code>&lt;ol&gt;</code></td>
+<td>Uma lista de items ordenada (numerada); tal como <code>&lt;ul&gt;</code>, os itens vão dentro de <code>&lt;li&gt;</code>.</td>
+<td><code>&lt;ol&gt;&lt;li&gt;Primeiro item&lt;/li&gt;&lt;li&gt;Segundo item&lt;/li&gt;&lt;/ol&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<p>Para organizar estes conteúdos em blocos, o HTML oferece um contentor genérico e várias <em>tags</em> estruturais (ou semânticas). A diferença entre eles é que o contentor genérico não tem qualquer significado próprio, enquanto as <em>tags</em> semânticas descrevem o papel de cada zona da página:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Tag</th>
+<th>Para que serve</th>
+<th>Exemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>&lt;div&gt;</code></td>
+<td>Um contentor genérico, sem qualquer significado próprio; usado para agrupar outros elementos (por exemplo, para lhes aplicar um estilo comum).</td>
+<td><code>&lt;div class="cartao"&gt;...&lt;/div&gt;</code></td>
+</tr>
+<tr class="even">
+<td><code>&lt;header&gt;</code></td>
+<td>O cabeçalho da página ou de uma secção (normalmente título, logótipo, menu).</td>
+<td><code>&lt;header&gt;&lt;h1&gt;O Meu Site&lt;/h1&gt;&lt;/header&gt;</code></td>
+</tr>
+<tr class="odd">
+<td><code>&lt;nav&gt;</code></td>
+<td>Um bloco de navegação, tipicamente uma lista de ligações.</td>
+<td><code>&lt;nav&gt;&lt;a href="#inicio"&gt;Início&lt;/a&gt;&lt;/nav&gt;</code></td>
+</tr>
+<tr class="even">
+<td><code>&lt;main&gt;</code></td>
+<td>O conteúdo principal da página; existe, no máximo, um por página.</td>
+<td><code>&lt;main&gt;&lt;p&gt;Conteúdo...&lt;/p&gt;&lt;/main&gt;</code></td>
+</tr>
+<tr class="odd">
+<td><code>&lt;section&gt;</code></td>
+<td>Uma secção temática de conteúdo, normalmente com o seu próprio título.</td>
+<td><code>&lt;section&gt;&lt;h2&gt;Sobre&lt;/h2&gt;&lt;/section&gt;</code></td>
+</tr>
+<tr class="even">
+<td><code>&lt;aside&gt;</code></td>
+<td>Conteúdo relacionado, mas secundário (barra lateral, notas).</td>
+<td><code>&lt;aside&gt;&lt;p&gt;Ver também...&lt;/p&gt;&lt;/aside&gt;</code></td>
+</tr>
+<tr class="odd">
+<td><code>&lt;footer&gt;</code></td>
+<td>O rodapé da página ou de uma secção (direitos de autor, contactos).</td>
+<td><code>&lt;footer&gt;© 2026&lt;/footer&gt;</code></td>
+</tr>
+<tr class="even">
+<td><code>&lt;form&gt;</code></td>
+<td>Usado para fazer formulários de introdução de informação, em conjunto com entradas <em>input</em>.</td>
+<td><code>&lt;form&gt;&lt;input type="text"/&gt;&lt;/form&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Referência para estudo detalhado
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Esta tabela cobre apenas as <em>tags</em> mais usadas ao longo desta UC. Para a lista completa de elementos HTML, e a especificação detalhada de cada um, usar a referência <a href="https://www.w3.org/TR/html52/">W3C</a> (<em>World Wide Web Consortium</em>), o organismo internacional que normaliza o HTML.</p>
+</div>
+</div>
+</section>
+<section id="sec-02-html-css" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="sec-02-html-css"><span class="header-section-number">2.2</span> Estrutura HTML</h2>
+<p>Um documento HTML mínimo tem sempre a mesma forma: uma declaração de tipo de documento, seguida de um elemento <code>html</code>, dividido num <code>head</code> (metadados, não visíveis ao público, apenas para os programadores) e num <code>body</code> (o conteúdo visível para o público):</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1"></a><span class="dt">&lt;!DOCTYPE</span> html<span class="dt">&gt;</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="dt">&lt;</span><span class="kw">html</span><span class="ot"> lang</span><span class="op">=</span><span class="st">"pt"</span><span class="dt">&gt;</span></span>
 <span id="cb1-3"><a href="#cb1-3"></a>  <span class="dt">&lt;</span><span class="kw">head</span><span class="dt">&gt;</span></span>
@@ -292,7 +422,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-9"><a href="#cb1-9"></a>    <span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span>Primeira versão da página.<span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
 <span id="cb1-10"><a href="#cb1-10"></a>  <span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span>
 <span id="cb1-11"><a href="#cb1-11"></a><span class="dt">&lt;/</span><span class="kw">html</span><span class="dt">&gt;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Para além dos elementos genéricos como <code>div</code>, o HTML5 oferece elementos semânticos, que descrevem o papel de cada zona da página em vez de a tratarem como um bloco indiferenciado: <code>header</code> para o cabeçalho, <code>nav</code> para a navegação, <code>main</code> para o conteúdo principal, <code>section</code> para uma secção temática e <code>footer</code> para o rodapé.</p>
+<p>Este código renderiza no <em>browser</em> como mostrado na figura <a href="#fig-02-pagina-minima" class="quarto-xref">Figura&nbsp;<span>2.1</span></a>:</p>
+<div id="fig-02-pagina-minima" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-02-pagina-minima-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap02/pagina-minima.png" class="img-fluid figure-img" style="width:50.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-02-pagina-minima-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.1: A página HTML mínima, tal como é apresentada no <em>browser</em>: apenas o título e o parágrafo do <code>body</code> são visíveis.
+</figcaption>
+</figure>
+</div>
+<p>Combinando as <em>tags</em> estruturais já apresentadas, uma página ganha uma organização muito mais clara do que um único bloco de <code>div</code>s indiferenciados. Cada <em>tag</em> rotula o tipo de informação que contém:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb2-1"><a href="#cb2-1"></a><span class="dt">&lt;!DOCTYPE</span> html<span class="dt">&gt;</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="dt">&lt;</span><span class="kw">html</span><span class="ot"> lang</span><span class="op">=</span><span class="st">"pt"</span><span class="dt">&gt;</span></span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="dt">&lt;</span><span class="kw">head</span><span class="dt">&gt;</span></span>
@@ -319,6 +460,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-24"><a href="#cb2-24"></a>  <span class="dt">&lt;</span><span class="kw">footer</span><span class="dt">&gt;</span>© 2026<span class="dt">&lt;/</span><span class="kw">footer</span><span class="dt">&gt;</span></span>
 <span id="cb2-25"><a href="#cb2-25"></a><span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span>
 <span id="cb2-26"><a href="#cb2-26"></a><span class="dt">&lt;/</span><span class="kw">html</span><span class="dt">&gt;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Este código renderiza no <em>browser</em> como mostrado na figura <a href="#fig-02-estrutura-semantica" class="quarto-xref">Figura&nbsp;<span>2.2</span></a> — repare-se que, sem qualquer CSS, as <em>tags</em> estruturais não trazem estilo visual próprio; a organização em blocos existe, mas ainda não se vê:</p>
+<div id="fig-02-estrutura-semantica" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-02-estrutura-semantica-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap02/estrutura-semantica.png" class="img-fluid figure-img" style="width:50.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-02-estrutura-semantica-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.2: A página semântica anterior, sem qualquer CSS aplicado: o <code>header</code>, o <code>nav</code> e as <code>section</code> dentro do <code>main</code> organizam o conteúdo, mas visualmente não se distinguem umas das outras.
+</figcaption>
+</figure>
+</div>
 <p>Dois elementos usam-se com particular frequência numa aplicação Web: uma lista de ligações dentro de <code>nav</code>, para a navegação, e um <code>form</code>, para recolher dados de quem usa a página.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb3-1"><a href="#cb3-1"></a><span class="dt">&lt;</span><span class="kw">nav</span><span class="dt">&gt;</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a>  <span class="dt">&lt;</span><span class="kw">ul</span><span class="dt">&gt;</span></span>
@@ -327,6 +479,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-5"><a href="#cb3-5"></a>    <span class="dt">&lt;</span><span class="kw">li</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> href</span><span class="op">=</span><span class="st">"#contacto"</span><span class="dt">&gt;</span>Contacto<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
 <span id="cb3-6"><a href="#cb3-6"></a>  <span class="dt">&lt;/</span><span class="kw">ul</span><span class="dt">&gt;</span></span>
 <span id="cb3-7"><a href="#cb3-7"></a><span class="dt">&lt;/</span><span class="kw">nav</span><span class="dt">&gt;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Este código renderiza no <em>browser</em> como mostrado na figura <a href="#fig-02-nav-lista" class="quarto-xref">Figura&nbsp;<span>2.3</span></a>: sem CSS, uma lista de ligações continua a parecer uma lista, com marcadores e a formatação azul e sublinhada por omissão do <em>browser</em> para as ligações:</p>
+<div id="fig-02-nav-lista" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-02-nav-lista-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap02/nav-lista.png" class="img-fluid figure-img" style="width:25.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-02-nav-lista-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.3: A lista de navegação anterior, tal como é apresentada no <em>browser</em> por omissão, sem qualquer CSS.
+</figcaption>
+</figure>
+</div>
 <div class="sourceCode" id="cb4"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb4-1"><a href="#cb4-1"></a><span class="dt">&lt;</span><span class="kw">section</span><span class="dt">&gt;</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a>  <span class="dt">&lt;</span><span class="kw">h2</span><span class="dt">&gt;</span>Formulário de contacto<span class="dt">&lt;/</span><span class="kw">h2</span><span class="dt">&gt;</span></span>
 <span id="cb4-3"><a href="#cb4-3"></a>  <span class="dt">&lt;</span><span class="kw">form</span><span class="dt">&gt;</span></span>
@@ -337,124 +500,305 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-8"><a href="#cb4-8"></a>    <span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> type</span><span class="op">=</span><span class="st">"submit"</span><span class="dt">&gt;</span>Enviar<span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
 <span id="cb4-9"><a href="#cb4-9"></a>  <span class="dt">&lt;/</span><span class="kw">form</span><span class="dt">&gt;</span></span>
 <span id="cb4-10"><a href="#cb4-10"></a><span class="dt">&lt;/</span><span class="kw">section</span><span class="dt">&gt;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Note-se o atributo <code>for</code> de cada <code>label</code>, que corresponde ao <code>id</code> do respetivo <code>input</code>: é o que liga visualmente uma etiqueta ao seu campo, e o que permite a um leitor de ecrã anunciar corretamente o formulário.</p>
+<p>Este código renderiza no <em>browser</em> como mostrado na figura <a href="#fig-02-formulario-contacto-bare" class="quarto-xref">Figura&nbsp;<span>2.4</span></a>: mais uma vez, sem CSS, os campos e o botão aparecem com o estilo por omissão do <em>browser</em>:</p>
+<div id="fig-02-formulario-contacto-bare" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-02-formulario-contacto-bare-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap02/formulario-contacto-bare.png" class="img-fluid figure-img" style="width:75.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-02-formulario-contacto-bare-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.4: O formulário de contacto anterior, tal como é apresentado no <em>browser</em> por omissão, sem qualquer CSS.
+</figcaption>
+</figure>
+</div>
+<p>Note-se o atributo <code>for</code> de cada <code>label</code>, que corresponde ao <code>id</code> do respetivo <code>input</code>: é o que liga visualmente uma etiqueta ao seu campo, e o que permite a um leitor de ecrã anunciar corretamente o formulário. O <em>tag</em> <code>input</code>é dos poucos <em>tags</em> que não se usam com um a abertura e um fecho: <code>&lt;input&gt;</code> <code>&lt;/input&gt;</code>, apenas tem uma estrutura <code>&lt;input .../&gt;</code>, cuja parte terminal significa que este tag “abre e fecha”. Na maior parte das vezes omite-se a fórmula no final <code>/&gt;</code> e fica apenas <code>&gt;</code>, como se mostra nos exemlos de código acima.</p>
 </section>
-<section id="sec-02-css-formas" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="sec-02-css-formas"><span class="header-section-number">2.2</span> CSS: Três Formas de Aplicar Estilos</h2>
-<p>O HTML mínimo apresentado acima descreve apenas a estrutura da página; a apresentação visual é responsabilidade do CSS (<em>Cascading Style Sheets</em>), que pode ser associado ao HTML de três formas distintas.</p>
-<p><strong>Inline</strong>, diretamente no atributo <code>style</code> de um elemento:</p>
+<section id="sec-02-aplicar-estilos-diretamente" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="sec-02-aplicar-estilos-diretamente"><span class="header-section-number">2.3</span> Aplicar Estilos Diretamente</h2>
+<p>O HTML descreve a <strong>estrutura da página</strong>; <strong>a apresentação</strong> é responsabilidade do <a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a> (<em>Cascading Style Sheets</em>). Esta secção mostra as três formas de associar CSS ao HTML, e depois os dois seletores principais — classe e identificador — usados para direcionar essas regras a elementos concretos.</p>
+<section id="três-formas-de-aplicar-css" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="três-formas-de-aplicar-css"><span class="header-section-number">2.3.1</span> Três Formas de Aplicar CSS</h3>
+<p>O CSS pode ser associado ao HTML de três formas distintas.</p>
+<p><strong>Inline</strong>, diretamente no atributo <code>style</code> de um elemento. Por exemplo num elemento <code>h1</code>:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb5-1"><a href="#cb5-1"></a><span class="dt">&lt;</span><span class="kw">h1</span><span class="ot"> style</span><span class="op">=</span><span class="st">"color:#0d6efd; margin:0.5rem 0;"</span><span class="dt">&gt;</span>Título do Site<span class="dt">&lt;/</span><span class="kw">h1</span><span class="dt">&gt;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><strong>Interno</strong>, num bloco <code>&lt;style&gt;</code> dentro do <code>&lt;head&gt;</code>:</p>
+<p>Este código renderiza no <em>browser</em> como mostrado na figura <a href="#fig-02-titulo-inline-style" class="quarto-xref">Figura&nbsp;<span>2.5</span></a>:</p>
+<div id="fig-02-titulo-inline-style" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-02-titulo-inline-style-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap02/titulo-inline-style.png" class="img-fluid figure-img" style="width:50.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-02-titulo-inline-style-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.5: O título anterior, já colorido a azul pelo estilo <em>inline</em>.
+</figcaption>
+</figure>
+</div>
+<p><strong>Interno</strong>, num bloco <code>&lt;style&gt;</code> dentro do <code>&lt;head&gt;</code> do ficheiro <code>html</code>a que se refere:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb6-1"><a href="#cb6-1"></a><span class="dt">&lt;</span><span class="kw">head</span><span class="dt">&gt;</span></span>
 <span id="cb6-2"><a href="#cb6-2"></a>  <span class="dt">&lt;</span><span class="kw">meta</span><span class="ot"> charset</span><span class="op">=</span><span class="st">"UTF-8"</span><span class="dt">&gt;</span></span>
 <span id="cb6-3"><a href="#cb6-3"></a>  <span class="dt">&lt;</span><span class="kw">style</span><span class="dt">&gt;</span></span>
-<span id="cb6-4"><a href="#cb6-4"></a>    <span class="in">:root</span> { <span class="va">--brand</span><span class="ch">:</span><span class="cn">#0d6efd</span><span class="op">;</span> }</span>
+<span id="cb6-4"><a href="#cb6-4"></a>    <span class="in">:root</span> { <span class="va">--brand</span><span class="ch">:</span> <span class="cn">#0d6efd</span><span class="op">;</span> }</span>
 <span id="cb6-5"><a href="#cb6-5"></a>    body { <span class="kw">font-family</span><span class="ch">:</span> <span class="dv">system-ui</span><span class="op">,</span> <span class="dv">sans-serif</span><span class="op">;</span> <span class="kw">line-height</span><span class="ch">:</span><span class="dv">1.5</span><span class="op">;</span> }</span>
 <span id="cb6-6"><a href="#cb6-6"></a>    nav ul { <span class="kw">list-style</span><span class="ch">:</span><span class="dv">none</span><span class="op">;</span> <span class="kw">display</span><span class="ch">:</span><span class="dv">flex</span><span class="op">;</span> <span class="kw">gap</span><span class="ch">:</span><span class="dv">1</span><span class="dt">rem</span><span class="op">;</span> <span class="kw">padding</span><span class="ch">:</span><span class="dv">0</span><span class="op">;</span> }</span>
 <span id="cb6-7"><a href="#cb6-7"></a>    nav a { <span class="kw">text-decoration</span><span class="ch">:</span><span class="dv">none</span><span class="op">;</span> <span class="kw">padding</span><span class="ch">:</span><span class="dv">0.4</span><span class="dt">rem</span> <span class="dv">0.6</span><span class="dt">rem</span><span class="op">;</span> }</span>
 <span id="cb6-8"><a href="#cb6-8"></a>    nav a<span class="in">:hover</span> { <span class="kw">background</span><span class="ch">:</span><span class="fu">var(</span><span class="va">--brand</span><span class="fu">)</span><span class="op">;</span> }</span>
 <span id="cb6-9"><a href="#cb6-9"></a>  <span class="dt">&lt;/</span><span class="kw">style</span><span class="dt">&gt;</span></span>
 <span id="cb6-10"><a href="#cb6-10"></a><span class="dt">&lt;/</span><span class="kw">head</span><span class="dt">&gt;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><strong>Externo</strong>, num ficheiro <code>.css</code> à parte, ligado por <code>&lt;link&gt;</code>:</p>
+<p>A regra <code>:root { --brand: #0d6efd; }</code> define uma variável CSS (uma <em>custom property</em>), reutilizada depois com <code>var(--brand)</code>: é útil para manter a mesma cor em vários sítios da folha de estilos sem a repetir, e para a poder alterar num único sítio.</p>
+<p><strong>Externo</strong>, num ficheiro <code>.css</code> à parte, ligado pelo <em>tag</em> <code>&lt;link&gt;</code> posicionadao no <code>header</code> do documento onde se pretende aplicar os estilos:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb7-1"><a href="#cb7-1"></a><span class="dt">&lt;</span><span class="kw">head</span><span class="dt">&gt;</span></span>
 <span id="cb7-2"><a href="#cb7-2"></a>  <span class="dt">&lt;</span><span class="kw">meta</span><span class="ot"> charset</span><span class="op">=</span><span class="st">"UTF-8"</span><span class="dt">&gt;</span></span>
 <span id="cb7-3"><a href="#cb7-3"></a>  <span class="dt">&lt;</span><span class="kw">link</span><span class="ot"> rel</span><span class="op">=</span><span class="st">"stylesheet"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"styles.css"</span><span class="dt">&gt;</span></span>
 <span id="cb7-4"><a href="#cb7-4"></a><span class="dt">&lt;/</span><span class="kw">head</span><span class="dt">&gt;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="sourceCode" id="cb8"><pre class="sourceCode numberSource css number-lines code-with-copy"><code class="sourceCode css"><span id="cb8-1"><a href="#cb8-1"></a><span class="co">/* styles.css */</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a><span class="in">:root</span> { <span class="va">--brand</span><span class="ch">:</span><span class="cn">#0d6efd</span><span class="op">;</span> }</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="in">:root</span> { <span class="va">--brand</span><span class="ch">:</span> <span class="cn">#0d6efd</span><span class="op">;</span> }</span>
 <span id="cb8-3"><a href="#cb8-3"></a>body { <span class="kw">font-family</span><span class="ch">:</span> <span class="dv">system-ui</span><span class="op">,</span> <span class="dv">sans-serif</span><span class="op">;</span> <span class="kw">line-height</span><span class="ch">:</span><span class="dv">1.5</span><span class="op">;</span> }</span>
 <span id="cb8-4"><a href="#cb8-4"></a>nav ul { <span class="kw">list-style</span><span class="ch">:</span><span class="dv">none</span><span class="op">;</span> <span class="kw">display</span><span class="ch">:</span><span class="dv">flex</span><span class="op">;</span> <span class="kw">gap</span><span class="ch">:</span><span class="dv">1</span><span class="dt">rem</span><span class="op">;</span> <span class="kw">padding</span><span class="ch">:</span><span class="dv">0</span><span class="op">;</span> }</span>
 <span id="cb8-5"><a href="#cb8-5"></a>nav a { <span class="kw">text-decoration</span><span class="ch">:</span><span class="dv">none</span><span class="op">;</span> <span class="kw">padding</span><span class="ch">:</span><span class="dv">0.4</span><span class="dt">rem</span> <span class="dv">0.6</span><span class="dt">rem</span><span class="op">;</span> }</span>
 <span id="cb8-6"><a href="#cb8-6"></a>nav a<span class="in">:hover</span> { <span class="kw">background</span><span class="ch">:</span> <span class="fu">var(</span><span class="va">--brand</span><span class="fu">)</span><span class="op">;</span> }</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Aplicando estas regras (por qualquer uma das três formas) à lista de navegação apresentada atrás, o resultado é mostrado na figura <a href="#fig-02-nav-estilada" class="quarto-xref">Figura&nbsp;<span>2.6</span></a>: os marcadores da lista desaparecem, as ligações deixam de estar sublinhadas, e ficam dispostas lado a lado:</p>
+<div id="fig-02-nav-estilada" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-02-nav-estilada-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap02/nav-estilada.png" class="img-fluid figure-img" style="width:55.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-02-nav-estilada-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.6: A mesma lista de navegação, agora com o CSS aplicado (<code>list-style:none</code>, <code>display:flex</code>, <code>text-decoration:none</code>).
+</figcaption>
+</figure>
+</div>
 <p>Das três, o CSS externo é, em geral, a melhor prática: separa claramente a estrutura (HTML) da apresentação (CSS), permite reutilizar o mesmo ficheiro em várias páginas, e mantém cada documento mais curto e mais fácil de ler.</p>
 </section>
-<section id="sec-02-css-classes-especificidade" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="sec-02-css-classes-especificidade"><span class="header-section-number">2.3</span> Classes, IDs e Especificidade</h2>
-<p>Para aplicar estilos a grupos de elementos, o CSS usa dois seletores principais: a classe (<code>class</code>), que se pode repetir em vários elementos, e o identificador (<code>id</code>), que deve ser único na página.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb9-1"><a href="#cb9-1"></a><span class="dt">&lt;</span><span class="kw">h1</span><span class="ot"> id</span><span class="op">=</span><span class="st">"titulo"</span><span class="ot"> class</span><span class="op">=</span><span class="st">"titulo"</span><span class="dt">&gt;</span>Título do Site<span class="dt">&lt;/</span><span class="kw">h1</span><span class="dt">&gt;</span></span>
-<span id="cb9-2"><a href="#cb9-2"></a><span class="dt">&lt;</span><span class="kw">nav</span><span class="ot"> class</span><span class="op">=</span><span class="st">"menu"</span><span class="dt">&gt;</span></span>
-<span id="cb9-3"><a href="#cb9-3"></a>  <span class="dt">&lt;</span><span class="kw">ul</span><span class="dt">&gt;</span></span>
-<span id="cb9-4"><a href="#cb9-4"></a>    <span class="dt">&lt;</span><span class="kw">li</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"menu__link ativo"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"#home"</span><span class="dt">&gt;</span>Início<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
-<span id="cb9-5"><a href="#cb9-5"></a>    <span class="dt">&lt;</span><span class="kw">li</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"menu__link"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"#sobre"</span><span class="dt">&gt;</span>Sobre<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
-<span id="cb9-6"><a href="#cb9-6"></a>    <span class="dt">&lt;</span><span class="kw">li</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"menu__link"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"#contacto"</span><span class="dt">&gt;</span>Contacto<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
-<span id="cb9-7"><a href="#cb9-7"></a>  <span class="dt">&lt;/</span><span class="kw">ul</span><span class="dt">&gt;</span></span>
-<span id="cb9-8"><a href="#cb9-8"></a><span class="dt">&lt;/</span><span class="kw">nav</span><span class="dt">&gt;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource css number-lines code-with-copy"><code class="sourceCode css"><span id="cb10-1"><a href="#cb10-1"></a><span class="pp">#titulo</span> { <span class="kw">color</span><span class="ch">:</span> <span class="fu">var(</span><span class="va">--brand</span><span class="fu">)</span><span class="op">;</span> }              <span class="co">/* id: único por página */</span></span>
-<span id="cb10-2"><a href="#cb10-2"></a><span class="fu">.menu</span> { <span class="kw">border-block</span><span class="ch">:</span> <span class="dv">1</span><span class="dt">px</span> <span class="dv">solid</span> <span class="cn">#eee</span><span class="op">;</span> <span class="kw">padding</span><span class="ch">:</span> <span class="dv">0.75</span><span class="dt">rem</span> <span class="dv">0</span><span class="op">;</span> }</span>
-<span id="cb10-3"><a href="#cb10-3"></a><span class="fu">.menu__link</span> { <span class="kw">text-decoration</span><span class="ch">:</span> <span class="dv">none</span><span class="op">;</span> <span class="kw">padding</span><span class="ch">:</span> <span class="dv">0.4</span><span class="dt">rem</span> <span class="dv">0.6</span><span class="dt">rem</span><span class="op">;</span> }</span>
-<span id="cb10-4"><a href="#cb10-4"></a><span class="fu">.menu__link.ativo</span> { <span class="kw">font-weight</span><span class="ch">:</span> <span class="dv">600</span><span class="op">;</span> }</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Quando duas regras CSS entram em conflito sobre o mesmo elemento, quem vence é determinado pela sua especificidade, por ordem decrescente:</p>
+<section id="classes-ids-e-especificidade" class="level3" data-number="2.3.2">
+<h3 data-number="2.3.2" class="anchored" data-anchor-id="classes-ids-e-especificidade"><span class="header-section-number">2.3.2</span> Classes, IDs e Especificidade</h3>
+<p>Uma vez definida a estrutura no HTML, o CSS vai conter um conjunto de instruções que vai dizer aos elementos do HTML como vão ser “apresentados”. Para aplicar estilos aos elementos, o CSS usa dois seletores principais: a classe (<code>class</code>), para grupos de elementos, e o identificador (<code>id</code>), que deve ser único na página. Uma classe pode então designar vários elementos numa página, os quais serão formatados visualmente de forma idêntica. Pode ter-se um número qualquer de elementos da mesma classe no mesmo documento. Já o seletor <code>id</code> só pode deve aplicado a um único elemento numa página. Diz-se por isso que o <code>id</code>é mais específico dp que a <code>class</code>.</p>
+<p>Quando se escrevem regras CSS para uma classe coloca-se um ponto antes do nome da classe: <code>.nome_classe</code>, seguida das instruções de formatação entre <code>{ }</code>, cada uma delas separada por ponto-e-vírgula. Do lado do HTML os elementos que se pretendem formatar com essas regras têm definido o atributo <code>class=nome_classe</code>. No caso dos elementos HTML com atributo <code>id=nome_id</code>, serão formatados do lado das CSS tal como no caso das classes mas, em vez de o seletor começar por <code>.</code>, começa por <code>#</code>(<code>#nome_id</code>).</p>
+<p>Um mesmo elemento HTML pode ter aplicadas várias classes em simultâneo, separadas por espaço. Neste caso o elemento HTML será formatado com as regras de TODAS as classes aplicadas:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb9-1"><a href="#cb9-1"></a>  <span class="dt">&lt;</span><span class="kw">section</span><span class="ot"> class</span><span class="op">=</span><span class="st">"noticias destaque com_hero"</span><span class="dt">&gt;</span> conteúdo da secção <span class="dt">&lt;/</span><span class="kw">section</span><span class="dt">&gt;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Vejam-se os exemplos seguintes:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb10-1"><a href="#cb10-1"></a><span class="dt">&lt;</span><span class="kw">h1</span><span class="ot"> id</span><span class="op">=</span><span class="st">"titulo"</span><span class="ot"> class</span><span class="op">=</span><span class="st">"titulo"</span><span class="dt">&gt;</span>Título do Site<span class="dt">&lt;/</span><span class="kw">h1</span><span class="dt">&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="dt">&lt;</span><span class="kw">nav</span><span class="ot"> class</span><span class="op">=</span><span class="st">"menu"</span><span class="dt">&gt;</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a>  <span class="dt">&lt;</span><span class="kw">ul</span><span class="dt">&gt;</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a>    <span class="dt">&lt;</span><span class="kw">li</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"menu__link ativo"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"#home"</span><span class="dt">&gt;</span>Início<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a>    <span class="dt">&lt;</span><span class="kw">li</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"menu__link"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"#sobre"</span><span class="dt">&gt;</span>Sobre<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a>    <span class="dt">&lt;</span><span class="kw">li</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"menu__link"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"#contacto"</span><span class="dt">&gt;</span>Contacto<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a>  <span class="dt">&lt;/</span><span class="kw">ul</span><span class="dt">&gt;</span></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="dt">&lt;/</span><span class="kw">nav</span><span class="dt">&gt;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource css number-lines code-with-copy"><code class="sourceCode css"><span id="cb11-1"><a href="#cb11-1"></a><span class="in">:root</span> { <span class="va">--brand</span><span class="ch">:</span> <span class="cn">#0d6efd</span><span class="op">;</span> }</span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="pp">#titulo</span> { <span class="kw">color</span><span class="ch">:</span> <span class="fu">var(</span><span class="va">--brand</span><span class="fu">)</span><span class="op">;</span> }              <span class="co">/* id: único por página */</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="fu">.menu</span> { <span class="kw">border-block</span><span class="ch">:</span> <span class="dv">1</span><span class="dt">px</span> <span class="dv">solid</span> <span class="cn">#eee</span><span class="op">;</span> <span class="kw">padding</span><span class="ch">:</span> <span class="dv">0.75</span><span class="dt">rem</span> <span class="dv">0</span><span class="op">;</span> }</span>
+<span id="cb11-4"><a href="#cb11-4"></a><span class="fu">.menu__link</span> { <span class="kw">text-decoration</span><span class="ch">:</span> <span class="dv">none</span><span class="op">;</span> <span class="kw">padding</span><span class="ch">:</span> <span class="dv">0.4</span><span class="dt">rem</span> <span class="dv">0.6</span><span class="dt">rem</span><span class="op">;</span> }</span>
+<span id="cb11-5"><a href="#cb11-5"></a><span class="fu">.menu__link.ativo</span> { <span class="kw">font-weight</span><span class="ch">:</span> <span class="dv">600</span><span class="op">;</span> }</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Este código renderiza no <em>browser</em> como mostrado na figura <a href="#fig-02-classes-ids-exemplo" class="quarto-xref">Figura&nbsp;<span>2.7</span></a>: o título fica colorido pela regra <code>#titulo</code>, e o menu fica formatado pelas regras <code>.menu</code>/<code>.menu__link</code>, com a ligação <code>ativo</code> a negrito:</p>
+<div id="fig-02-classes-ids-exemplo" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-02-classes-ids-exemplo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap02/classes-ids-exemplo.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-02-classes-ids-exemplo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.7: O título e o menu anteriores, já formatados pelas regras de classe e de identificador.
+</figcaption>
+</figure>
+</div>
+<p>Quando o mesmo elemento HTML é formatado por duas regras CSS que entram em conflito, como por exemplo a determinação da sua cor, a regra que vence é determinada pela sua especificidade. Apresenta-se em baixo a lista de especificidades por ordem decrescente:</p>
 <ol type="1">
 <li><code>!important</code> (a evitar; torna o CSS difícil de manter)</li>
-<li>Estilo <em>inline</em> (<code>style="..."</code>)</li>
+<li>Estilo <em>inline</em>, ou seja dentro de cada elemento (<code>style="..."</code>)</li>
 <li>Identificador (<code>#id</code>)</li>
 <li>Classe (<code>.classe</code>), atributo ou pseudoclasse</li>
 <li>Elemento (<code>h1</code>, <code>p</code>, <code>a</code>, …)</li>
 </ol>
-<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource css number-lines code-with-copy"><code class="sourceCode css"><span id="cb11-1"><a href="#cb11-1"></a>h1 { <span class="kw">color</span><span class="ch">:</span> <span class="cn">black</span><span class="op">;</span> }</span>
-<span id="cb11-2"><a href="#cb11-2"></a><span class="fu">.titulo</span> { <span class="kw">color</span><span class="ch">:</span> <span class="cn">blue</span><span class="op">;</span> }</span>
-<span id="cb11-3"><a href="#cb11-3"></a><span class="pp">#titulo</span> { <span class="kw">color</span><span class="ch">:</span> <span class="cn">green</span><span class="op">;</span> }  <span class="co">/* vence as duas regras anteriores */</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Por exemplo, com que cor ficaria o título do exemplo anterior com esta CSS:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource css number-lines code-with-copy"><code class="sourceCode css"><span id="cb12-1"><a href="#cb12-1"></a>h1 { <span class="kw">color</span><span class="ch">:</span> <span class="cn">black</span><span class="op">;</span> }</span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="fu">.titulo</span> { <span class="kw">color</span><span class="ch">:</span> <span class="cn">blue</span><span class="op">;</span> }</span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="pp">#titulo</span> { <span class="kw">color</span><span class="ch">:</span> <span class="cn">green</span><span class="op">;</span> }  <span class="co">/* vence as duas regras anteriores */</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>O identificador (<code>#titulo</code>) é mais específico do que a classe e do que o elemento, por isso vence: o título fica verde, como mostrado na figura <a href="#fig-02-especificidade-1" class="quarto-xref">Figura&nbsp;<span>2.8</span></a>:</p>
+<div id="fig-02-especificidade-1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-02-especificidade-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap02/especificidade-1.png" class="img-fluid figure-img" style="width:60.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-02-especificidade-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.8: O título anterior a verde: a regra <code>#titulo</code> vence as regras <code>h1</code> e <code>.titulo</code>, por ser mais específica.
+</figcaption>
+</figure>
+</div>
+<p>Ou, se se aplica-se a especificidade <code>!important</code>:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource css number-lines code-with-copy"><code class="sourceCode css"><span id="cb13-1"><a href="#cb13-1"></a>h1 { <span class="kw">color</span><span class="ch">:</span> <span class="cn">black</span> <span class="at">!important</span><span class="op">;</span> } <span class="co">/* vence porque tem maior especificidade */</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="fu">.titulo</span> { <span class="kw">color</span><span class="ch">:</span> <span class="cn">blue</span><span class="op">;</span> }</span>
+<span id="cb13-3"><a href="#cb13-3"></a><span class="pp">#titulo</span> { <span class="kw">color</span><span class="ch">:</span> <span class="cn">green</span><span class="op">;</span> }</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Agora é a regra do elemento (<code>h1</code>) que vence, apesar de ser a menos específica das três, porque tem <code>!important</code>: o título fica preto, como mostrado na figura <a href="#fig-02-especificidade-2" class="quarto-xref">Figura&nbsp;<span>2.9</span></a>:</p>
+<div id="fig-02-especificidade-2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-02-especificidade-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap02/especificidade-2.png" class="img-fluid figure-img" style="width:60.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-02-especificidade-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.9: O título anterior a preto: a regra <code>h1</code> vence as regras <code>.titulo</code> e <code>#titulo</code>, apesar de ser a menos específica, por ter <code>!important</code>.
+</figcaption>
+</figure>
+</div>
 </section>
-<section id="sec-02-bootstrap" class="level2" data-number="2.4">
-<h2 data-number="2.4" class="anchored" data-anchor-id="sec-02-bootstrap"><span class="header-section-number">2.4</span> Bootstrap: um Framework CSS</h2>
-<p>Escrever e manter todo o CSS de uma aplicação a partir do zero é um trabalho considerável, sobretudo quando se pretende que o resultado seja responsivo (ajustado a diferentes tamanhos de ecrã) e visualmente consistente. Um <em>framework</em> CSS como o <em>Bootstrap</em> resolve este problema, fornecendo:</p>
+</section>
+<section id="sec-02-aplicar-estilos-frameworks" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="sec-02-aplicar-estilos-frameworks"><span class="header-section-number">2.4</span> Aplicar Estilos Usando Frameworks</h2>
+<section id="bootstrap" class="level3" data-number="2.4.1">
+<h3 data-number="2.4.1" class="anchored" data-anchor-id="bootstrap"><span class="header-section-number">2.4.1</span> Bootstrap</h3>
+<p>Escrever e manter todo o CSS de uma aplicação a partir do zero é um trabalho considerável, sobretudo quando se pretende que o resultado seja responsivo (ajustado a diferentes tamanhos de ecrã) e visualmente consistente. Um <em>framework</em> CSS como o <a href="https://getbootstrap.com/docs/5.3/">Bootstrap</a> resolve este problema, fornecendo:</p>
 <ul>
 <li>Produtividade e consistência visual, através de classes utilitárias prontas a usar</li>
 <li>Responsividade já implementada, através de uma grelha (<em>grid</em>) e de classes de espaçamento</li>
 <li>Componentes testados e acessíveis (formulários, barras de navegação, botões, entre outros)</li>
 </ul>
 <p>O <em>Bootstrap</em> pode ser incluído diretamente por <em>CDN</em> (<em>Content Delivery Network</em>), sem necessidade de instalação: uma folha de estilos no <code>&lt;head&gt;</code>, e um ficheiro JavaScript (para os componentes interativos) antes do fecho de <code>&lt;/body&gt;</code>.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb12-1"><a href="#cb12-1"></a><span class="dt">&lt;</span><span class="kw">head</span><span class="dt">&gt;</span></span>
-<span id="cb12-2"><a href="#cb12-2"></a>  <span class="dt">&lt;</span><span class="kw">link</span><span class="ot"> href</span><span class="op">=</span><span class="st">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"</span><span class="ot"> rel</span><span class="op">=</span><span class="st">"stylesheet"</span><span class="dt">&gt;</span></span>
-<span id="cb12-3"><a href="#cb12-3"></a><span class="dt">&lt;/</span><span class="kw">head</span><span class="dt">&gt;</span></span>
-<span id="cb12-4"><a href="#cb12-4"></a><span class="dt">&lt;</span><span class="kw">body</span><span class="dt">&gt;</span></span>
-<span id="cb12-5"><a href="#cb12-5"></a>  <span class="co">&lt;!-- conteúdo da página --&gt;</span></span>
-<span id="cb12-6"><a href="#cb12-6"></a>  <span class="dt">&lt;</span><span class="kw">script</span><span class="ot"> src</span><span class="op">=</span><span class="st">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"</span><span class="dt">&gt;&lt;/</span><span class="kw">script</span><span class="dt">&gt;</span></span>
-<span id="cb12-7"><a href="#cb12-7"></a><span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb14-1"><a href="#cb14-1"></a><span class="dt">&lt;</span><span class="kw">head</span><span class="dt">&gt;</span></span>
+<span id="cb14-2"><a href="#cb14-2"></a>  <span class="dt">&lt;</span><span class="kw">link</span><span class="ot"> href</span><span class="op">=</span><span class="st">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"</span><span class="ot"> rel</span><span class="op">=</span><span class="st">"stylesheet"</span><span class="dt">&gt;</span></span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="dt">&lt;/</span><span class="kw">head</span><span class="dt">&gt;</span></span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="dt">&lt;</span><span class="kw">body</span><span class="dt">&gt;</span></span>
+<span id="cb14-5"><a href="#cb14-5"></a>  <span class="co">&lt;!-- conteúdo da página --&gt;</span></span>
+<span id="cb14-6"><a href="#cb14-6"></a>  <span class="dt">&lt;</span><span class="kw">script</span><span class="ot"> src</span><span class="op">=</span><span class="st">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"</span><span class="dt">&gt;&lt;/</span><span class="kw">script</span><span class="dt">&gt;</span></span>
+<span id="cb14-7"><a href="#cb14-7"></a><span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Uma barra de navegação (<em>navbar</em>), com o <em>Bootstrap</em>, fica pronta em poucas linhas, já responsiva (colapsa num menu para ecrãs estreitos):</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb13-1"><a href="#cb13-1"></a><span class="dt">&lt;</span><span class="kw">nav</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar navbar-expand-md bg-light border-bottom"</span><span class="dt">&gt;</span></span>
-<span id="cb13-2"><a href="#cb13-2"></a>  <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"container"</span><span class="dt">&gt;</span></span>
-<span id="cb13-3"><a href="#cb13-3"></a>    <span class="dt">&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar-brand"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"#"</span><span class="dt">&gt;</span>Meu Site<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;</span></span>
-<span id="cb13-4"><a href="#cb13-4"></a>    <span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar-toggler"</span><span class="ot"> type</span><span class="op">=</span><span class="st">"button"</span><span class="ot"> data-bs-toggle</span><span class="op">=</span><span class="st">"collapse"</span><span class="ot"> data-bs-target</span><span class="op">=</span><span class="st">"#nav1"</span><span class="dt">&gt;</span></span>
-<span id="cb13-5"><a href="#cb13-5"></a>      <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar-toggler-icon"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span></span>
-<span id="cb13-6"><a href="#cb13-6"></a>    <span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
-<span id="cb13-7"><a href="#cb13-7"></a>    <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> id</span><span class="op">=</span><span class="st">"nav1"</span><span class="ot"> class</span><span class="op">=</span><span class="st">"collapse navbar-collapse"</span><span class="dt">&gt;</span></span>
-<span id="cb13-8"><a href="#cb13-8"></a>      <span class="dt">&lt;</span><span class="kw">ul</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar-nav ms-auto gap-2"</span><span class="dt">&gt;</span></span>
-<span id="cb13-9"><a href="#cb13-9"></a>        <span class="dt">&lt;</span><span class="kw">li</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-item"</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-link"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"#home"</span><span class="dt">&gt;</span>Início<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
-<span id="cb13-10"><a href="#cb13-10"></a>        <span class="dt">&lt;</span><span class="kw">li</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-item"</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-link"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"#sobre"</span><span class="dt">&gt;</span>Sobre<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
-<span id="cb13-11"><a href="#cb13-11"></a>        <span class="dt">&lt;</span><span class="kw">li</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-item"</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-link"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"#contacto"</span><span class="dt">&gt;</span>Contacto<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
-<span id="cb13-12"><a href="#cb13-12"></a>      <span class="dt">&lt;/</span><span class="kw">ul</span><span class="dt">&gt;</span></span>
-<span id="cb13-13"><a href="#cb13-13"></a>    <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb13-14"><a href="#cb13-14"></a>  <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb13-15"><a href="#cb13-15"></a><span class="dt">&lt;/</span><span class="kw">nav</span><span class="dt">&gt;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb15-1"><a href="#cb15-1"></a><span class="dt">&lt;</span><span class="kw">nav</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar navbar-expand-md bg-light border-bottom"</span><span class="dt">&gt;</span></span>
+<span id="cb15-2"><a href="#cb15-2"></a>  <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"container"</span><span class="dt">&gt;</span></span>
+<span id="cb15-3"><a href="#cb15-3"></a>    <span class="dt">&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar-brand"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"#"</span><span class="dt">&gt;</span>Meu Site<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;</span></span>
+<span id="cb15-4"><a href="#cb15-4"></a>    <span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar-toggler"</span><span class="ot"> type</span><span class="op">=</span><span class="st">"button"</span><span class="ot"> data-bs-toggle</span><span class="op">=</span><span class="st">"collapse"</span><span class="ot"> data-bs-target</span><span class="op">=</span><span class="st">"#nav1"</span><span class="dt">&gt;</span></span>
+<span id="cb15-5"><a href="#cb15-5"></a>      <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar-toggler-icon"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span></span>
+<span id="cb15-6"><a href="#cb15-6"></a>    <span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
+<span id="cb15-7"><a href="#cb15-7"></a>    <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> id</span><span class="op">=</span><span class="st">"nav1"</span><span class="ot"> class</span><span class="op">=</span><span class="st">"collapse navbar-collapse"</span><span class="dt">&gt;</span></span>
+<span id="cb15-8"><a href="#cb15-8"></a>      <span class="dt">&lt;</span><span class="kw">ul</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar-nav ms-auto gap-2"</span><span class="dt">&gt;</span></span>
+<span id="cb15-9"><a href="#cb15-9"></a>        <span class="dt">&lt;</span><span class="kw">li</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-item"</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-link"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"#home"</span><span class="dt">&gt;</span>Início<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
+<span id="cb15-10"><a href="#cb15-10"></a>        <span class="dt">&lt;</span><span class="kw">li</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-item"</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-link"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"#sobre"</span><span class="dt">&gt;</span>Sobre<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
+<span id="cb15-11"><a href="#cb15-11"></a>        <span class="dt">&lt;</span><span class="kw">li</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-item"</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-link"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"#contacto"</span><span class="dt">&gt;</span>Contacto<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
+<span id="cb15-12"><a href="#cb15-12"></a>      <span class="dt">&lt;/</span><span class="kw">ul</span><span class="dt">&gt;</span></span>
+<span id="cb15-13"><a href="#cb15-13"></a>    <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb15-14"><a href="#cb15-14"></a>  <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb15-15"><a href="#cb15-15"></a><span class="dt">&lt;/</span><span class="kw">nav</span><span class="dt">&gt;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Este código renderiza no <em>browser</em> como mostrado na figura <a href="#fig-02-bootstrap-navbar" class="quarto-xref">Figura&nbsp;<span>2.10</span></a>:</p>
+<div id="fig-02-bootstrap-navbar" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-02-bootstrap-navbar-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap02/bootstrap-navbar.png" class="img-fluid figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-02-bootstrap-navbar-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.10: A barra de navegação anterior, já com o estilo do Bootstrap.
+</figcaption>
+</figure>
+</div>
 <p>Um formulário ganha o mesmo tratamento visual através das classes <code>form-label</code> e <code>form-control</code>:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb14-1"><a href="#cb14-1"></a><span class="dt">&lt;</span><span class="kw">section</span><span class="ot"> class</span><span class="op">=</span><span class="st">"container my-4"</span><span class="dt">&gt;</span></span>
-<span id="cb14-2"><a href="#cb14-2"></a>  <span class="dt">&lt;</span><span class="kw">h2</span><span class="dt">&gt;</span>Formulário de contacto<span class="dt">&lt;/</span><span class="kw">h2</span><span class="dt">&gt;</span></span>
-<span id="cb14-3"><a href="#cb14-3"></a>  <span class="dt">&lt;</span><span class="kw">form</span><span class="ot"> class</span><span class="op">=</span><span class="st">"row g-3 col-lg-6"</span><span class="dt">&gt;</span></span>
-<span id="cb14-4"><a href="#cb14-4"></a>    <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"col-12"</span><span class="dt">&gt;</span></span>
-<span id="cb14-5"><a href="#cb14-5"></a>      <span class="dt">&lt;</span><span class="kw">label</span><span class="ot"> for</span><span class="op">=</span><span class="st">"nome"</span><span class="ot"> class</span><span class="op">=</span><span class="st">"form-label"</span><span class="dt">&gt;</span>Nome<span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
-<span id="cb14-6"><a href="#cb14-6"></a>      <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> id</span><span class="op">=</span><span class="st">"nome"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"nome"</span><span class="ot"> type</span><span class="op">=</span><span class="st">"text"</span><span class="ot"> class</span><span class="op">=</span><span class="st">"form-control"</span><span class="dt">&gt;</span></span>
-<span id="cb14-7"><a href="#cb14-7"></a>    <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb14-8"><a href="#cb14-8"></a>    <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"col-12"</span><span class="dt">&gt;</span></span>
-<span id="cb14-9"><a href="#cb14-9"></a>      <span class="dt">&lt;</span><span class="kw">label</span><span class="ot"> for</span><span class="op">=</span><span class="st">"email"</span><span class="ot"> class</span><span class="op">=</span><span class="st">"form-label"</span><span class="dt">&gt;</span>Email<span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
-<span id="cb14-10"><a href="#cb14-10"></a>      <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> id</span><span class="op">=</span><span class="st">"email"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"email"</span><span class="ot"> type</span><span class="op">=</span><span class="st">"email"</span><span class="ot"> class</span><span class="op">=</span><span class="st">"form-control"</span><span class="dt">&gt;</span></span>
-<span id="cb14-11"><a href="#cb14-11"></a>    <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb14-12"><a href="#cb14-12"></a>    <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"col-12"</span><span class="dt">&gt;</span></span>
-<span id="cb14-13"><a href="#cb14-13"></a>      <span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> class</span><span class="op">=</span><span class="st">"btn btn-primary"</span><span class="ot"> type</span><span class="op">=</span><span class="st">"submit"</span><span class="dt">&gt;</span>Enviar<span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
-<span id="cb14-14"><a href="#cb14-14"></a>    <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb14-15"><a href="#cb14-15"></a>  <span class="dt">&lt;/</span><span class="kw">form</span><span class="dt">&gt;</span></span>
-<span id="cb14-16"><a href="#cb14-16"></a><span class="dt">&lt;/</span><span class="kw">section</span><span class="dt">&gt;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>E o mesmo sistema de grelha organiza o conteúdo principal em colunas, que se reorganizam automaticamente consoante a largura do ecrã (<code>col-12</code> a largura total em ecrãs pequenos, <code>col-md-8</code> oito das doze colunas a partir de ecrãs médios):</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb15-1"><a href="#cb15-1"></a><span class="dt">&lt;</span><span class="kw">main</span><span class="ot"> class</span><span class="op">=</span><span class="st">"container my-4"</span><span class="dt">&gt;</span></span>
-<span id="cb15-2"><a href="#cb15-2"></a>  <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"row"</span><span class="dt">&gt;</span></span>
-<span id="cb15-3"><a href="#cb15-3"></a>    <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"col-12 col-md-8"</span><span class="dt">&gt;</span></span>
-<span id="cb15-4"><a href="#cb15-4"></a>      <span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span>Conteúdo principal…<span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
-<span id="cb15-5"><a href="#cb15-5"></a>    <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb15-6"><a href="#cb15-6"></a>    <span class="dt">&lt;</span><span class="kw">aside</span><span class="ot"> class</span><span class="op">=</span><span class="st">"col-12 col-md-4"</span><span class="dt">&gt;</span></span>
-<span id="cb15-7"><a href="#cb15-7"></a>      <span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span>Barra lateral…<span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
-<span id="cb15-8"><a href="#cb15-8"></a>    <span class="dt">&lt;/</span><span class="kw">aside</span><span class="dt">&gt;</span></span>
-<span id="cb15-9"><a href="#cb15-9"></a>  <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb15-10"><a href="#cb15-10"></a><span class="dt">&lt;/</span><span class="kw">main</span><span class="dt">&gt;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb16-1"><a href="#cb16-1"></a><span class="dt">&lt;</span><span class="kw">section</span><span class="ot"> class</span><span class="op">=</span><span class="st">"container my-4"</span><span class="dt">&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2"></a>  <span class="dt">&lt;</span><span class="kw">h2</span><span class="dt">&gt;</span>Formulário de contacto<span class="dt">&lt;/</span><span class="kw">h2</span><span class="dt">&gt;</span></span>
+<span id="cb16-3"><a href="#cb16-3"></a>  <span class="dt">&lt;</span><span class="kw">form</span><span class="ot"> class</span><span class="op">=</span><span class="st">"row g-3 col-lg-6"</span><span class="dt">&gt;</span></span>
+<span id="cb16-4"><a href="#cb16-4"></a>    <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"col-12"</span><span class="dt">&gt;</span></span>
+<span id="cb16-5"><a href="#cb16-5"></a>      <span class="dt">&lt;</span><span class="kw">label</span><span class="ot"> for</span><span class="op">=</span><span class="st">"nome"</span><span class="ot"> class</span><span class="op">=</span><span class="st">"form-label"</span><span class="dt">&gt;</span>Nome<span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
+<span id="cb16-6"><a href="#cb16-6"></a>      <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> id</span><span class="op">=</span><span class="st">"nome"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"nome"</span><span class="ot"> type</span><span class="op">=</span><span class="st">"text"</span><span class="ot"> class</span><span class="op">=</span><span class="st">"form-control"</span><span class="dt">&gt;</span></span>
+<span id="cb16-7"><a href="#cb16-7"></a>    <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb16-8"><a href="#cb16-8"></a>    <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"col-12"</span><span class="dt">&gt;</span></span>
+<span id="cb16-9"><a href="#cb16-9"></a>      <span class="dt">&lt;</span><span class="kw">label</span><span class="ot"> for</span><span class="op">=</span><span class="st">"email"</span><span class="ot"> class</span><span class="op">=</span><span class="st">"form-label"</span><span class="dt">&gt;</span>Email<span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
+<span id="cb16-10"><a href="#cb16-10"></a>      <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> id</span><span class="op">=</span><span class="st">"email"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"email"</span><span class="ot"> type</span><span class="op">=</span><span class="st">"email"</span><span class="ot"> class</span><span class="op">=</span><span class="st">"form-control"</span><span class="dt">&gt;</span></span>
+<span id="cb16-11"><a href="#cb16-11"></a>    <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb16-12"><a href="#cb16-12"></a>    <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"col-12"</span><span class="dt">&gt;</span></span>
+<span id="cb16-13"><a href="#cb16-13"></a>      <span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> class</span><span class="op">=</span><span class="st">"btn btn-primary"</span><span class="ot"> type</span><span class="op">=</span><span class="st">"submit"</span><span class="dt">&gt;</span>Enviar<span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
+<span id="cb16-14"><a href="#cb16-14"></a>    <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb16-15"><a href="#cb16-15"></a>  <span class="dt">&lt;/</span><span class="kw">form</span><span class="dt">&gt;</span></span>
+<span id="cb16-16"><a href="#cb16-16"></a><span class="dt">&lt;/</span><span class="kw">section</span><span class="dt">&gt;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Este código renderiza no <em>browser</em> como mostrado na figura <a href="#fig-02-bootstrap-form" class="quarto-xref">Figura&nbsp;<span>2.11</span></a>: compare-se com a figura <a href="#fig-02-formulario-contacto-bare" class="quarto-xref">Figura&nbsp;<span>2.4</span></a>, o mesmo formulário sem Bootstrap:</p>
+<div id="fig-02-bootstrap-form" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-02-bootstrap-form-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap02/bootstrap-form.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-02-bootstrap-form-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.11: O formulário de contacto anterior, já com o estilo do Bootstrap (<code>form-label</code>, <code>form-control</code>, <code>btn btn-primary</code>).
+</figcaption>
+</figure>
+</div>
+<p>O mesmo sistema de grelha organiza também o conteúdo principal em colunas. A grelha do Bootstrap divide cada linha (<code>row</code>) em doze colunas; a classe <code>col-6</code> ocupa seis dessas doze, ou seja, metade da largura:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb17-1"><a href="#cb17-1"></a><span class="dt">&lt;</span><span class="kw">main</span><span class="ot"> class</span><span class="op">=</span><span class="st">"container my-4"</span><span class="dt">&gt;</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a>  <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"row"</span><span class="dt">&gt;</span></span>
+<span id="cb17-3"><a href="#cb17-3"></a>    <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"col-6"</span><span class="dt">&gt;</span></span>
+<span id="cb17-4"><a href="#cb17-4"></a>      <span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span>Conteúdo principal…<span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
+<span id="cb17-5"><a href="#cb17-5"></a>    <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb17-6"><a href="#cb17-6"></a>    <span class="dt">&lt;</span><span class="kw">aside</span><span class="ot"> class</span><span class="op">=</span><span class="st">"col-6"</span><span class="dt">&gt;</span></span>
+<span id="cb17-7"><a href="#cb17-7"></a>      <span class="dt">&lt;</span><span class="kw">p</span><span class="dt">&gt;</span>Barra lateral…<span class="dt">&lt;/</span><span class="kw">p</span><span class="dt">&gt;</span></span>
+<span id="cb17-8"><a href="#cb17-8"></a>    <span class="dt">&lt;/</span><span class="kw">aside</span><span class="dt">&gt;</span></span>
+<span id="cb17-9"><a href="#cb17-9"></a>  <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb17-10"><a href="#cb17-10"></a><span class="dt">&lt;/</span><span class="kw">main</span><span class="dt">&gt;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Este código renderiza no <em>browser</em> como mostrado na figura <a href="#fig-02-bootstrap-grid" class="quarto-xref">Figura&nbsp;<span>2.12</span></a>: o conteúdo principal e a barra lateral ficam lado a lado, cada um a ocupar metade da largura, embora sem qualquer borda visível a marcar as colunas — é a grelha do Bootstrap que reserva o espaço de cada uma:</p>
+<div id="fig-02-bootstrap-grid" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-02-bootstrap-grid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap02/bootstrap-grid.png" class="img-fluid figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-02-bootstrap-grid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.12: O conteúdo principal e a barra lateral organizados pela grelha do Bootstrap.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="outros-frameworks" class="level3" data-number="2.4.2">
+<h3 data-number="2.4.2" class="anchored" data-anchor-id="outros-frameworks"><span class="header-section-number">2.4.2</span> Outros Frameworks</h3>
+<p>O <em>Bootstrap</em> não é o único <em>framework</em> CSS disponível, apenas o mais didático para começar, pela sua abordagem baseada em componentes prontos a usar. Vale a pena conhecer, ainda que sem aprofundar, algumas alternativas populares:</p>
+<dl>
+<dt><strong><a href="https://tailwindcss.com/docs">Tailwind CSS</a></strong></dt>
+<dd>
+Um <em>framework</em> utilitário (<em>utility-first</em>): em vez de componentes prontos como <code>navbar</code> ou <code>card</code>, fornece classes de baixo nível, uma por propriedade CSS (por exemplo <code>flex</code>, <code>pt-4</code>, <code>text-center</code>), que se combinam diretamente no HTML para construir qualquer visual à medida.
+</dd>
+<dt><strong><a href="https://bulma.io/documentation/">Bulma</a></strong></dt>
+<dd>
+Baseado apenas em CSS, sem qualquer JavaScript; sintaxe próxima do <em>Bootstrap</em>, mas sem componentes interativos (menus, modais) prontos a usar.
+</dd>
+<dt><strong><a href="https://materializecss.com/">Materialize</a></strong></dt>
+<dd>
+Implementa o <a href="https://m3.material.io/"><em>Material Design</em></a> da Google (sombras, elevação, cores vivas, animações); visualmente mais opinativo do que o <em>Bootstrap</em>.
+</dd>
+<dt><strong><a href="https://get.foundation/sites/docs/">Foundation</a></strong></dt>
+<dd>
+Orientado a projetos maiores e mais personalizados; mais flexível do que o <em>Bootstrap</em>, mas com uma curva de aprendizagem mais exigente.
+</dd>
+</dl>
+<p>A tabela seguinte compara estes <em>frameworks</em> pela abordagem que seguem e pela facilidade de aprendizagem:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Framework</th>
+<th>Abordagem</th>
+<th>Curva de aprendizagem</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Bootstrap</strong></td>
+<td>Componentes prontos (<code>navbar</code>, <code>card</code>, <code>btn</code>)</td>
+<td>Baixa</td>
+</tr>
+<tr class="even">
+<td><strong>Tailwind CSS</strong></td>
+<td>Classes utilitárias, uma por propriedade CSS</td>
+<td>Média/alta</td>
+</tr>
+<tr class="odd">
+<td><strong>Bulma</strong></td>
+<td>Componentes CSS, sem JavaScript</td>
+<td>Baixa</td>
+</tr>
+<tr class="even">
+<td><strong>Materialize</strong></td>
+<td>Componentes segundo o <em>Material Design</em></td>
+<td>Média</td>
+</tr>
+<tr class="odd">
+<td><strong>Foundation</strong></td>
+<td>Componentes configuráveis, mais flexíveis</td>
+<td>Alta</td>
+</tr>
+</tbody>
+</table>
+</section>
 </section>
 <section id="sec-02-boas-praticas" class="level2" data-number="2.5">
 <h2 data-number="2.5" class="anchored" data-anchor-id="sec-02-boas-praticas"><span class="header-section-number">2.5</span> Boas Práticas</h2>
@@ -469,28 +813,39 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 data-number="2.6" class="anchored" data-anchor-id="sec-02-world-capitals"><span class="header-section-number">2.6</span> Exercício: as Páginas Estáticas da Aplicação “World Capitals”</h2>
 <p>Aplicando o que foi apresentado nas secções anteriores, constroem-se agora as páginas visuais da aplicação usada ao longo dos LABs práticos (ver <a href="../capitulos/apendiceB.html">Apêndice B</a>): uma API que serve informação sobre países e as respetivas capitais. Nesta fase, as páginas são inteiramente estáticas, em HTML/CSS/Bootstrap, sem qualquer JavaScript: os dados apresentados são fixos no próprio HTML, e os formulários ainda não estão ligados a nenhum servidor. É esse o trabalho reservado aos LABs, que se limitarão a acrescentar <code>fetch()</code> a este código já pronto.</p>
 <p>Todas as páginas partilham a mesma barra de navegação:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb16-1"><a href="#cb16-1"></a><span class="dt">&lt;</span><span class="kw">nav</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar navbar-expand-md bg-light border-bottom"</span><span class="dt">&gt;</span></span>
-<span id="cb16-2"><a href="#cb16-2"></a>  <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"container"</span><span class="dt">&gt;</span></span>
-<span id="cb16-3"><a href="#cb16-3"></a>    <span class="dt">&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar-brand"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"index.html"</span><span class="dt">&gt;</span>World Capitals<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;</span></span>
-<span id="cb16-4"><a href="#cb16-4"></a>    <span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar-toggler"</span><span class="ot"> type</span><span class="op">=</span><span class="st">"button"</span><span class="ot"> data-bs-toggle</span><span class="op">=</span><span class="st">"collapse"</span><span class="ot"> data-bs-target</span><span class="op">=</span><span class="st">"#nav1"</span><span class="dt">&gt;</span></span>
-<span id="cb16-5"><a href="#cb16-5"></a>      <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar-toggler-icon"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span></span>
-<span id="cb16-6"><a href="#cb16-6"></a>    <span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
-<span id="cb16-7"><a href="#cb16-7"></a>    <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> id</span><span class="op">=</span><span class="st">"nav1"</span><span class="ot"> class</span><span class="op">=</span><span class="st">"collapse navbar-collapse"</span><span class="dt">&gt;</span></span>
-<span id="cb16-8"><a href="#cb16-8"></a>      <span class="dt">&lt;</span><span class="kw">ul</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar-nav ms-auto gap-2"</span><span class="dt">&gt;</span></span>
-<span id="cb16-9"><a href="#cb16-9"></a>        <span class="dt">&lt;</span><span class="kw">li</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-item"</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-link"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"index.html"</span><span class="dt">&gt;</span>Países<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
-<span id="cb16-10"><a href="#cb16-10"></a>        <span class="dt">&lt;</span><span class="kw">li</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-item"</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-link"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"capital.html"</span><span class="dt">&gt;</span>Consultar Capital<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
-<span id="cb16-11"><a href="#cb16-11"></a>        <span class="dt">&lt;</span><span class="kw">li</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-item"</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-link"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"paises-editar.html"</span><span class="dt">&gt;</span>Gerir Países<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
-<span id="cb16-12"><a href="#cb16-12"></a>        <span class="dt">&lt;</span><span class="kw">li</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-item"</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-link"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"login.html"</span><span class="dt">&gt;</span>Entrar<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
-<span id="cb16-13"><a href="#cb16-13"></a>      <span class="dt">&lt;/</span><span class="kw">ul</span><span class="dt">&gt;</span></span>
-<span id="cb16-14"><a href="#cb16-14"></a>    <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb16-15"><a href="#cb16-15"></a>  <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb16-16"><a href="#cb16-16"></a><span class="dt">&lt;/</span><span class="kw">nav</span><span class="dt">&gt;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb18-1"><a href="#cb18-1"></a><span class="dt">&lt;</span><span class="kw">nav</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar navbar-expand-md bg-light border-bottom"</span><span class="dt">&gt;</span></span>
+<span id="cb18-2"><a href="#cb18-2"></a>  <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"container"</span><span class="dt">&gt;</span></span>
+<span id="cb18-3"><a href="#cb18-3"></a>    <span class="dt">&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar-brand"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"index.html"</span><span class="dt">&gt;</span>World Capitals<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;</span></span>
+<span id="cb18-4"><a href="#cb18-4"></a>    <span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar-toggler"</span><span class="ot"> type</span><span class="op">=</span><span class="st">"button"</span><span class="ot"> data-bs-toggle</span><span class="op">=</span><span class="st">"collapse"</span><span class="ot"> data-bs-target</span><span class="op">=</span><span class="st">"#nav1"</span><span class="dt">&gt;</span></span>
+<span id="cb18-5"><a href="#cb18-5"></a>      <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar-toggler-icon"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span></span>
+<span id="cb18-6"><a href="#cb18-6"></a>    <span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
+<span id="cb18-7"><a href="#cb18-7"></a>    <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> id</span><span class="op">=</span><span class="st">"nav1"</span><span class="ot"> class</span><span class="op">=</span><span class="st">"collapse navbar-collapse"</span><span class="dt">&gt;</span></span>
+<span id="cb18-8"><a href="#cb18-8"></a>      <span class="dt">&lt;</span><span class="kw">ul</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar-nav ms-auto gap-2"</span><span class="dt">&gt;</span></span>
+<span id="cb18-9"><a href="#cb18-9"></a>        <span class="dt">&lt;</span><span class="kw">li</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-item"</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-link"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"index.html"</span><span class="dt">&gt;</span>Países<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
+<span id="cb18-10"><a href="#cb18-10"></a>        <span class="dt">&lt;</span><span class="kw">li</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-item"</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-link"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"capital.html"</span><span class="dt">&gt;</span>Consultar Capital<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
+<span id="cb18-11"><a href="#cb18-11"></a>        <span class="dt">&lt;</span><span class="kw">li</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-item"</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-link"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"paises-editar.html"</span><span class="dt">&gt;</span>Gerir Países<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
+<span id="cb18-12"><a href="#cb18-12"></a>        <span class="dt">&lt;</span><span class="kw">li</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-item"</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-link"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"login.html"</span><span class="dt">&gt;</span>Entrar<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
+<span id="cb18-13"><a href="#cb18-13"></a>      <span class="dt">&lt;/</span><span class="kw">ul</span><span class="dt">&gt;</span></span>
+<span id="cb18-14"><a href="#cb18-14"></a>    <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb18-15"><a href="#cb18-15"></a>  <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb18-16"><a href="#cb18-16"></a><span class="dt">&lt;/</span><span class="kw">nav</span><span class="dt">&gt;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Este código renderiza no <em>browser</em> como mostrado na figura <a href="#fig-02-world-capitals-navbar" class="quarto-xref">Figura&nbsp;<span>2.13</span></a>:</p>
+<div id="fig-02-world-capitals-navbar" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-02-world-capitals-navbar-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap02/world-capital-navbar.png" class="img-fluid figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-02-world-capitals-navbar-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2.13: A barra de navegação comum às quatro páginas da aplicação “World Capitals”, já com o estilo do Bootstrap.
+</figcaption>
+</figure>
+</div>
 <p>A partir desta <em>navbar</em> comum, constroem-se quatro páginas:</p>
 <ul>
 <li><strong>Listagem de países</strong> (<code>index.html</code>): uma tabela <em>Bootstrap</em>, com alguns países fixos no HTML a título de exemplo. Nos LABs, esta tabela passa a ser preenchida dinamicamente a partir do resultado de <code>/country</code>.</li>
 <li><strong>Autenticação</strong> (<code>login.html</code>): um formulário com os campos <code>user</code> e <code>pass</code>, com os mesmos nomes que o <em>endpoint</em> <code>/login</code> espera receber.</li>
-<li><strong>Consulta de capital</strong> (<code>capital.html</code>): um formulário simples, com um único campo <code>countrycode</code>, alinhado com o exemplo já apresentado no <a href="../capitulos/cap01.html">Capítulo 1</a>.</li>
-<li><strong>Gestão de países</strong> (<code>paises-editar.html</code>): três formulários distintos, um por operação, todos a apontar para o mesmo <em>endpoint</em> <code>/countryEdit</code>, distinguidos pelo campo escondido <code>operation</code> (ver a nota sobre este desenho no <a href="../capitulos/cap06.html">Capítulo 6</a>).</li>
+<li><strong>Consulta de capital</strong> (<code>capital.html</code>): um formulário simples, com um único campo <code>countrycode</code>.</li>
+<li><strong>Gestão de países</strong> (<code>paises-editar.html</code>): três formulários distintos, um por operação, todos a apontar para o mesmo <em>endpoint</em> <code>/countryEdit</code>, distinguidos pelo campo escondido <code>operation</code> (ver a nota sobre este desenho no <a href="../capitulos/cap07.html">Capítulo 7</a>).</li>
 </ul>
 <p>Estas quatro páginas, ligadas entre si pela barra de navegação comum, constituem já um pequeno sítio Web completo e funcional, mesmo sem qualquer lógica do lado do servidor: é possível navegar entre elas, preencher os formulários e submetê-los. O que falta, ainda, é haver um servidor a responder a esses pedidos, e é isso que a matéria dos capítulos seguintes vai fornecer.</p>
 <p>O código completo e autónomo das quatro páginas, pronto a copiar para um editor e a abrir diretamente no <em>browser</em>, está reunido no <a href="../capitulos/apendiceC.html">Apêndice C</a>.</p>
@@ -1067,8 +1422,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../capitulos/cap03.html" class="pagination-link" aria-label="Java EE e Fundamentos de Servlets">
-        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Java EE e Fundamentos de Servlets</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../capitulos/cap03.html" class="pagination-link" aria-label="O Protocolo HTTP">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">O Protocolo HTTP</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

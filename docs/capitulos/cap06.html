@@ -8,7 +8,7 @@
 
 <meta name="author" content="João Pavão">
 
-<title>6&nbsp; Web Services REST e Arquitetura Stateless (Parte 1) – Aplicações e Serviços Web</title>
+<title>6&nbsp; Segurança e Filtros – Aplicações e Serviços Web</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -86,7 +120,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../capitulos/cap06.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Web Services REST e Arquitetura Stateless (Parte 1)</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../capitulos/cap06.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Segurança e Filtros</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Procurar" onclick="window.quartoOpenSearch();">
@@ -135,31 +169,37 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap03.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Java EE e Fundamentos de Servlets</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">O Protocolo HTTP</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap04.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelo Stateful: Sessões e JSP</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Java EE e Fundamentos de Servlets</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap05.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Segurança e Filtros</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Modelo Stateful: Sessões e JSP</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap06.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Web Services REST e Arquitetura Stateless (Parte 1)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Segurança e Filtros</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap07.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Web Services REST (Parte 2) e o Cliente em JavaScript</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Web Services REST e Arquitetura Stateless (Parte 1)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/cap08.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Web Services REST (Parte 2) e o Cliente em JavaScript</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -201,7 +241,15 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Índice</h2>
    
   <ul>
-  <li><a href="#sec-06-rest" id="toc-sec-06-rest" class="nav-link active" data-scroll-target="#sec-06-rest"><span class="header-section-number">6.1</span> O Que é um Web Service</a></li>
+  <li><a href="#sec-06-problema" id="toc-sec-06-problema" class="nav-link active" data-scroll-target="#sec-06-problema"><span class="header-section-number">6.1</span> O Problema: Segurança Repetida em Cada <em>Servlet</em></a></li>
+  <li><a href="#sec-06-autenticacao-autorizacao" id="toc-sec-06-autenticacao-autorizacao" class="nav-link" data-scroll-target="#sec-06-autenticacao-autorizacao"><span class="header-section-number">6.2</span> Autenticação vs.&nbsp;Autorização</a></li>
+  <li><a href="#sec-06-o-que-e-um-filter" id="toc-sec-06-o-que-e-um-filter" class="nav-link" data-scroll-target="#sec-06-o-que-e-um-filter"><span class="header-section-number">6.3</span> O que é um Filtro</a></li>
+  <li><a href="#sec-06-onde-situa" id="toc-sec-06-onde-situa" class="nav-link" data-scroll-target="#sec-06-onde-situa"><span class="header-section-number">6.4</span> Onde um Filtro se Situa no Pedido</a></li>
+  <li><a href="#sec-06-ciclo-vida-filter" id="toc-sec-06-ciclo-vida-filter" class="nav-link" data-scroll-target="#sec-06-ciclo-vida-filter"><span class="header-section-number">6.5</span> Ciclo de Vida de um Filtro</a></li>
+  <li><a href="#sec-06-separacao-responsabilidades" id="toc-sec-06-separacao-responsabilidades" class="nav-link" data-scroll-target="#sec-06-separacao-responsabilidades"><span class="header-section-number">6.6</span> <em>Servlet</em> e Filtro: Separação de Responsabilidades</a></li>
+  <li><a href="#sec-06-declarar-filter" id="toc-sec-06-declarar-filter" class="nav-link" data-scroll-target="#sec-06-declarar-filter"><span class="header-section-number">6.7</span> Declarar e Implementar um Filtro</a></li>
+  <li><a href="#sec-06-redirect-vs-401" id="toc-sec-06-redirect-vs-401" class="nav-link" data-scroll-target="#sec-06-redirect-vs-401"><span class="header-section-number">6.8</span> Redirecionamento vs.&nbsp;<code>401</code>: uma Diferença Arquitetural</a></li>
+  <li><a href="#sec-06-preparacao-sem-estado" id="toc-sec-06-preparacao-sem-estado" class="nav-link" data-scroll-target="#sec-06-preparacao-sem-estado"><span class="header-section-number">6.9</span> Preparação para uma Segurança Sem Estado</a></li>
   </ul>
 </nav>
     </div>
@@ -210,7 +258,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Web Services REST e Arquitetura Stateless (Parte 1)</span></h1>
+<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Segurança e Filtros</span></h1>
 </div>
 
 
@@ -239,33 +287,170 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="sec-06-rest" class="level2" data-number="6.1">
-<h2 data-number="6.1" class="anchored" data-anchor-id="sec-06-rest"><span class="header-section-number">6.1</span> O Que é um Web Service</h2>
-<blockquote class="blockquote">
-<p>Conteúdo a desenvolver, alinhado com a primeira metade da Lecture 4 do ESIGELEC (REST Web Services and Stateless Architecture). Tópicos previstos:</p>
+<section id="sec-06-problema" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="sec-06-problema"><span class="header-section-number">6.1</span> O Problema: Segurança Repetida em Cada <em>Servlet</em></h2>
+<p>Com o que foi apresentado até aqui (ver <a href="../capitulos/cap05.html">Capítulo 5</a>), a autenticação está resolvida: a <code>LoginServlet</code> valida as credenciais e grava o utilizador na sessão, e cada <em>endpoint</em> protegido verifica essa sessão no início do seu <code>doGet()</code> ou <code>doPost()</code>. Isto funciona, mas tem um custo escondido: a lógica de autenticação vive, duplicada, dentro de <strong>cada</strong> <em>Servlet</em> protegida.</p>
+<p>Esta duplicação traz consigo vários problemas:</p>
 <ul>
-<li>O que é um Web Service</li>
-<li>REST (nível conceptual)</li>
-<li>Recursos e endpoints</li>
-<li>JSON como formato de troca de dados</li>
-<li>O contrato HTTP como contrato da API</li>
-<li>Stateful vs.&nbsp;Stateless</li>
+<li>A mesma verificação de sessão está repetida em todos os <em>endpoints</em> protegidos</li>
+<li>Existe risco real de inconsistência entre essas cópias</li>
+<li>É fácil esquecer a proteção ao criar um novo <em>endpoint</em></li>
 </ul>
-</blockquote>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
+<p>Dito de outra forma, esta duplicação viola o princípio <em>DRY</em> (<em>Don’t Repeat Yourself</em>): uma responsabilidade deveria viver num único sítio, e lógica repetida aumenta o custo de manutenção sempre que essa lógica precisa de mudar. Mais concretamente, este desenho viola o <strong>Princípio da Responsabilidade Única</strong>: cada <em>Servlet</em> passa a ter duas responsabilidades distintas, a lógica de negócio que lhe é própria, e a lógica de segurança que lhe é imposta. Isto torna as políticas de segurança difíceis de fazer evoluir, e o desenho pouco escalável, quer em número de <em>endpoints</em>, quer em complexidade das regras de acesso.</p>
+</section>
+<section id="sec-06-autenticacao-autorizacao" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="sec-06-autenticacao-autorizacao"><span class="header-section-number">6.2</span> Autenticação vs.&nbsp;Autorização</h2>
+<p>Antes de resolver o problema, vale a pena precisar dois conceitos frequentemente confundidos:</p>
+<dl>
+<dt><strong>Autenticação</strong></dt>
+<dd>
+Responde a “quem é o utilizador?”. É a verificação de identidade, tipicamente feita no momento do <em>login</em>.
+</dd>
+</dl>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb1-1"><a href="#cb1-1"></a><span class="cf">if</span> <span class="op">(</span>username<span class="op">.</span><span class="fu">equals</span><span class="op">(</span><span class="st">"admin"</span><span class="op">)</span> <span class="op">&amp;&amp;</span> password<span class="op">.</span><span class="fu">equals</span><span class="op">(</span><span class="st">"1234"</span><span class="op">))</span> <span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a>    HttpSession session <span class="op">=</span> request<span class="op">.</span><span class="fu">getSession</span><span class="op">(</span><span class="kw">true</span><span class="op">);</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>    session<span class="op">.</span><span class="fu">setAttribute</span><span class="op">(</span><span class="st">"UserName"</span><span class="op">,</span> username<span class="op">);</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<dl>
+<dt><strong>Autorização</strong></dt>
+<dd>
+Responde a “o que é que este utilizador tem permissão para aceder?”. É a verificação de permissões, feita depois de a identidade já estar confirmada.
+</dd>
+</dl>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb2-1"><a href="#cb2-1"></a><span class="cf">if</span> <span class="op">(</span>session<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"UserRole"</span><span class="op">).</span><span class="fu">equals</span><span class="op">(</span><span class="st">"ADMIN"</span><span class="op">))</span> <span class="op">{</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a>    <span class="co">// acesso permitido</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A autenticação acontece sempre primeiro: não faz sentido verificar permissões de alguém cuja identidade ainda não foi confirmada. Esta distinção reflete-se diretamente nos códigos de estado HTTP usados na resposta (ver <a href="../capitulos/cap03.html">Capítulo 3</a>):</p>
+<ul>
+<li><code>401 Unauthorized</code>: o pedido não está autenticado</li>
+<li><code>403 Forbidden</code>: o pedido está autenticado, mas não tem permissão para o recurso pedido</li>
+</ul>
+</section>
+<section id="sec-06-o-que-e-um-filter" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="sec-06-o-que-e-um-filter"><span class="header-section-number">6.3</span> O que é um Filtro</h2>
+<p>A pergunta que fica por responder é onde deve viver a lógica de segurança: dentro de cada <em>Servlet</em>? Duplicada por todos os <em>endpoints</em>? Ou centralizada num único componente? Segurança é, por natureza, uma preocupação transversal (<em>cross-cutting concern</em>): atravessa toda a aplicação, em vez de pertencer a um único módulo. É exatamente para isto que existe o Filtro.</p>
+<p>Um <a href="https://jakarta.ee/specifications/servlet/">Filtro</a> é um componente do lado do servidor que intercepta pedidos HTTP:</p>
+<ul>
+<li>É executado <strong>antes</strong> da <em>Servlet</em> de destino</li>
+<li>Pode também ser executado <strong>depois</strong> da <em>Servlet</em> (sobre a resposta)</li>
+<li>Pode bloquear, redirecionar ou modificar o pedido ou a resposta</li>
+</ul>
+<p>Além da autenticação e da autorização, os Filtros são o mecanismo natural para outras preocupações transversais: registo de atividade (<em>logging</em>), <em>CORS</em> (<em>Cross-Origin Resource Sharing</em>), ou validação de entrada. Um Filtro separa estas preocupações da lógica de negócio, que fica exclusivamente na <em>Servlet</em>.</p>
+</section>
+<section id="sec-06-onde-situa" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="sec-06-onde-situa"><span class="header-section-number">6.4</span> Onde um Filtro se Situa no Pedido</h2>
+<p>Um ou mais Filtros podem ser encadeados entre o cliente e a <em>Servlet</em> que trata efetivamente o pedido:</p>
+<pre><code>Cliente → Filtro 1 → ... → Filtro N → Servlet (lógica de negócio) → Resposta</code></pre>
+<div id="fig-06-filter-chain" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-06-filter-chain-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap06/Filter_Chain.png" class="img-fluid figure-img" style="width:80.0%">
 </div>
-<div class="callout-title-container flex-fill">
-<code>POST</code> + <code>operation</code> como alternativa aos verbos HTTP “puros”
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-06-filter-chain-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;6.1: Um pedido atravessa a cadeia de Filtros antes de chegar à Servlet; cada Filtro pode bloquear o pedido (vermelho), modificá-lo (amarelo) ou deixá-lo prosseguir (verde, chamando chain.doFilter()).
+</figcaption>
+</figure>
 </div>
+<p>Cada Filtro na cadeia tem, essencialmente, três comportamentos possíveis:</p>
+<ul>
+<li><strong>Bloquear o pedido</strong>: por exemplo, <code>400</code> (dados inválidos), <code>401</code> (identidade inválida) ou <code>403</code> (autenticado mas sem permissão)</li>
+<li><strong>Modificar o pedido</strong>: normalização e validação de dados, registo de atividade, entre outros</li>
+<li><strong>Deixar prosseguir</strong>: chamando <code>chain.doFilter(request, response)</code>, passando o controlo ao próximo elemento da cadeia</li>
+</ul>
+</section>
+<section id="sec-06-ciclo-vida-filter" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="sec-06-ciclo-vida-filter"><span class="header-section-number">6.5</span> Ciclo de Vida de um Filtro</h2>
+<p>O ciclo de vida de um Filtro segue o mesmo modelo já apresentado para as <em>Servlets</em> (ver <a href="../capitulos/cap04.html">Capítulo 4</a>):</p>
+<ul>
+<li><code>init()</code>: executado uma única vez, quando o contentor coloca o Filtro em serviço</li>
+<li><code>doFilter()</code>: executado a cada pedido; pode inspecionar, bloquear ou modificar o pedido e a resposta, e deve chamar <code>chain.doFilter()</code> para continuar a cadeia</li>
+<li><code>destroy()</code>: executado uma única vez, quando o Filtro é retirado de serviço, para libertar recursos</li>
+</ul>
+<p>Tal como uma <em>Servlet</em>, existe <strong>uma única instância</strong> de cada Filtro, partilhada por múltiplos pedidos concorrentes: aplica-se aqui exatamente o mesmo cuidado já referido no Capítulo 3, evitar estado mutável partilhado, e preferir variáveis locais dentro de <code>doFilter()</code>.</p>
+<div id="fig-06-filter-lifecycle" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-06-filter-lifecycle-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap06/Filter_Lifecycle.png" class="img-fluid figure-img" style="width:85.0%">
 </div>
-<div class="callout-body-container callout-body">
-<p>Os LABs práticos desta UC (ver <a href="../capitulos/apendiceB.html">Apêndice B</a>, LAB4) implementam a criação, atualização e remoção de um país através de um único <em>endpoint</em> (<code>/countryEdit</code>), recebido sempre por <code>POST</code>, distinguindo a operação pretendida através de um parâmetro <code>operation</code> (<code>insert</code>, <code>update</code>, <code>delete</code>). Isto contraria a semântica “pura” dos verbos HTTP apresentada no <a href="../capitulos/cap01.html">Capítulo 1</a> (<code>POST</code> para criar, <code>PUT</code> para atualizar, <code>DELETE</code> para remover), mas é uma simplificação pragmática, comum em código de formação: evita configurar <em>Servlets</em> adicionais mapeadas a <code>PUT</code>/<code>DELETE</code>, e mantém tudo testável com formulários HTML simples, sem recorrer a JavaScript.</p>
-<p>Fica como sugestão de implementação futura, possível para os alunos mais avançados: reescrever <code>/countryEdit</code> como três <em>endpoints</em> distintos, um por verbo HTTP (por exemplo, <code>PUT /country/{code}</code> para atualizar e <code>DELETE /country/{code}</code> para remover), aproximando a API de um desenho REST mais convencional.</p>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-06-filter-lifecycle-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;6.2: O ciclo de vida de um Filtro espelha o de uma Servlet: init() e destroy() correm uma única vez, doFilter() corre a cada pedido, para múltiplos pedidos concorrentes.
+</figcaption>
+</figure>
 </div>
+</section>
+<section id="sec-06-separacao-responsabilidades" class="level2" data-number="6.6">
+<h2 data-number="6.6" class="anchored" data-anchor-id="sec-06-separacao-responsabilidades"><span class="header-section-number">6.6</span> <em>Servlet</em> e Filtro: Separação de Responsabilidades</h2>
+<p>Centralizar a segurança num Filtro reorganiza as responsabilidades de toda a aplicação:</p>
+<div id="fig-06-servlet-vs-filter" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-06-servlet-vs-filter-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap06/Servlet_vs_Filter.png" class="img-fluid figure-img" style="width:75.0%">
 </div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-06-servlet-vs-filter-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;6.3: Sem Filtro, cada Servlet acumula autenticação, logging, validação e lógica de negócio. Com um Filtro, essas preocupações transversais concentram-se num único sítio, e cada Servlet fica só com a sua lógica de negócio.
+</figcaption>
+</figure>
+</div>
+<p>Esta reorganização traz vantagens concretas:</p>
+<ul>
+<li>A lógica de autenticação é escrita <strong>uma única vez</strong> (princípio <em>DRY</em>)</li>
+<li>A política de segurança é aplicada de forma consistente a todos os <em>endpoints</em></li>
+<li>Deixa de haver risco de “esquecer” a proteção numa <em>Servlet</em> nova</li>
+<li>Fica clara a separação entre preocupações transversais (Filtro) e lógica de negócio (<em>Servlet</em>)</li>
+</ul>
+</section>
+<section id="sec-06-declarar-filter" class="level2" data-number="6.7">
+<h2 data-number="6.7" class="anchored" data-anchor-id="sec-06-declarar-filter"><span class="header-section-number">6.7</span> Declarar e Implementar um Filtro</h2>
+<p>Um Filtro declara-se com a anotação <code>@WebFilter</code>, indicando o padrão de <em>URLs</em> a que se aplica:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb4-1"><a href="#cb4-1"></a><span class="at">@WebFilter</span><span class="op">(</span><span class="st">"/*"</span><span class="op">)</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="kw">public</span> <span class="kw">class</span> AuthenticationFilter <span class="kw">implements</span> <span class="bu">Filter</span> <span class="op">{</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>    <span class="co">// ...</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>O padrão <code>"/*"</code> intercepta todos os pedidos, sem exceção. A classe tem de implementar <code>jakarta.servlet.Filter</code>, e o contentor descobre-a automaticamente no momento da implantação (<em>deployment</em>). Tal como as <em>Servlets</em>, um Filtro também pode ser declarado de forma equivalente, embora considerada préterita, no ficheiro <code>web.xml</code>.</p>
+<p>Um <code>doFilter()</code> típico, que protege todos os pedidos exigindo uma sessão válida, tem esta forma:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">public</span> <span class="dt">void</span> <span class="fu">doFilter</span><span class="op">(</span>ServletRequest request<span class="op">,</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a>                      ServletResponse response<span class="op">,</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a>                      FilterChain chain<span class="op">)</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a>        <span class="kw">throws</span> <span class="bu">IOException</span><span class="op">,</span> ServletException <span class="op">{</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a></span>
+<span id="cb5-6"><a href="#cb5-6"></a>    HttpServletRequest req <span class="op">=</span> <span class="op">(</span>HttpServletRequest<span class="op">)</span> request<span class="op">;</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a>    HttpServletResponse res <span class="op">=</span> <span class="op">(</span>HttpServletResponse<span class="op">)</span> response<span class="op">;</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a></span>
+<span id="cb5-9"><a href="#cb5-9"></a>    HttpSession session <span class="op">=</span> req<span class="op">.</span><span class="fu">getSession</span><span class="op">(</span><span class="kw">false</span><span class="op">);</span></span>
+<span id="cb5-10"><a href="#cb5-10"></a></span>
+<span id="cb5-11"><a href="#cb5-11"></a>    <span class="cf">if</span> <span class="op">(</span>session <span class="op">==</span> <span class="kw">null</span> <span class="op">||</span> session<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"UserName"</span><span class="op">)</span> <span class="op">==</span> <span class="kw">null</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-12"><a href="#cb5-12"></a>        res<span class="op">.</span><span class="fu">sendError</span><span class="op">(</span>HttpServletResponse<span class="op">.</span><span class="fu">SC_UNAUTHORIZED</span><span class="op">);</span> <span class="co">// 401</span></span>
+<span id="cb5-13"><a href="#cb5-13"></a>        <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb5-14"><a href="#cb5-14"></a>    <span class="op">}</span></span>
+<span id="cb5-15"><a href="#cb5-15"></a></span>
+<span id="cb5-16"><a href="#cb5-16"></a>    chain<span class="op">.</span><span class="fu">doFilter</span><span class="op">(</span>request<span class="op">,</span> response<span class="op">);</span></span>
+<span id="cb5-17"><a href="#cb5-17"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Na prática, nem todos os pedidos devem ser protegidos: o próprio <code>/login</code>, e recursos estáticos como <code>/css</code>, <code>/js</code> ou <code>/images</code>, precisam de ficar acessíveis sem autenticação, sob pena de o utilizador nunca conseguir sequer chegar ao formulário de <em>login</em>.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb6-1"><a href="#cb6-1"></a><span class="bu">String</span> path <span class="op">=</span> req<span class="op">.</span><span class="fu">getRequestURI</span><span class="op">();</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="dt">boolean</span> isLogin <span class="op">=</span> path<span class="op">.</span><span class="fu">endsWith</span><span class="op">(</span><span class="st">"/login"</span><span class="op">);</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="dt">boolean</span> isStatic <span class="op">=</span> path<span class="op">.</span><span class="fu">startsWith</span><span class="op">(</span>req<span class="op">.</span><span class="fu">getContextPath</span><span class="op">()</span> <span class="op">+</span> <span class="st">"/css"</span><span class="op">)</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a>                 <span class="op">||</span> path<span class="op">.</span><span class="fu">startsWith</span><span class="op">(</span>req<span class="op">.</span><span class="fu">getContextPath</span><span class="op">()</span> <span class="op">+</span> <span class="st">"/js"</span><span class="op">)</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a>                 <span class="op">||</span> path<span class="op">.</span><span class="fu">startsWith</span><span class="op">(</span>req<span class="op">.</span><span class="fu">getContextPath</span><span class="op">()</span> <span class="op">+</span> <span class="st">"/images"</span><span class="op">);</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="cf">if</span> <span class="op">(</span>isLogin <span class="op">||</span> isStatic<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a>    chain<span class="op">.</span><span class="fu">doFilter</span><span class="op">(</span>request<span class="op">,</span> response<span class="op">);</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a>    <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb6-11"><a href="#cb6-11"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="sec-06-redirect-vs-401" class="level2" data-number="6.8">
+<h2 data-number="6.8" class="anchored" data-anchor-id="sec-06-redirect-vs-401"><span class="header-section-number">6.8</span> Redirecionamento vs.&nbsp;<code>401</code>: uma Diferença Arquitetural</h2>
+<p>A forma correta de reagir a uma falha de autenticação depende do tipo de aplicação:</p>
+<ul>
+<li>Numa aplicação Web tradicional, orientada à apresentação (ver <a href="../capitulos/cap01.html">Capítulo 1</a>), a resposta natural é um <strong>redirecionamento</strong> para a página de <em>login</em> (código <code>302</code>)</li>
+<li>Numa API REST, cujo contrato é JSON (ver <a href="../capitulos/cap07.html">Capítulos 7</a> e <a href="../capitulos/cap08.html">8</a>), a resposta correta é devolver <strong><code>401</code></strong>, sem qualquer redirecionamento</li>
+</ul>
+<p>A diferença resume-se a uma frase: numa aplicação Web tradicional, uma falha de autenticação muda a página mostrada; numa API REST, muda apenas o código de estado devolvido. É o cliente, não o servidor, quem decide o que fazer a seguir com esse <code>401</code>.</p>
+</section>
+<section id="sec-06-preparacao-sem-estado" class="level2" data-number="6.9">
+<h2 data-number="6.9" class="anchored" data-anchor-id="sec-06-preparacao-sem-estado"><span class="header-section-number">6.9</span> Preparação para uma Segurança Sem Estado</h2>
+<p>O modelo apresentado neste capítulo assenta inteiramente em sessão: o servidor guarda o estado do utilizador autenticado (<code>HttpSession</code>), e o Filtro verifica essa sessão em cada pedido. Este modelo tem uma limitação: exige que o servidor mantenha memória de cada utilizador, o que se torna problemático assim que existe mais do que uma instância do servidor (ver <a href="../capitulos/cap08.html">Capítulo 8</a>).</p>
+<p>A alternativa é a autenticação baseada em <em>token</em>: em vez de o servidor guardar sessão nenhuma, o próprio pedido transporta, em cada chamada, toda a informação necessária para se autenticar. Esta mudança, de um modelo com estado (<em>stateful</em>) para um modelo sem estado (<em>stateless</em>), é o tema dos capítulos seguintes.</p>
 
 
 </section>
@@ -834,13 +1019,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../capitulos/cap05.html" class="pagination-link" aria-label="Segurança e Filtros">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Segurança e Filtros</span></span>
+      <a href="../capitulos/cap05.html" class="pagination-link" aria-label="Modelo Stateful: Sessões e JSP">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Modelo Stateful: Sessões e JSP</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../capitulos/cap07.html" class="pagination-link" aria-label="Web Services REST (Parte 2) e o Cliente em JavaScript">
-        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Web Services REST (Parte 2) e o Cliente em JavaScript</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../capitulos/cap07.html" class="pagination-link" aria-label="Web Services REST e Arquitetura Stateless (Parte 1)">
+        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Web Services REST e Arquitetura Stateless (Parte 1)</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
