@@ -16,30 +16,11 @@ Uma aplicação Web não é apenas um programa que corre num computador: é um p
 - Manter informação entre pedidos sucessivos do mesmo utilizador
 - Proteger recursos de acessos não autorizados
 
-Resolver todos estes problemas repetidamente, aplicação a aplicação, seria um desperdício de esforço. É exactamente para evitar essa repetição que existem plataformas empresariais como a *Jakarta EE*.
+Resolver todos estes problemas repetidamente, aplicação a aplicação, seria um desperdício de esforço. É exactamente para evitar essa repetição que existem plataformas empresariais que fornecem estes serviços prontos a usar, libertando quem desenvolve para se concentrar na lógica de negócio da aplicação.
 
-## A Plataforma Jakarta EE {#sec-01-jakarta-ee}
+## Duas Orientações: Apresentação vs. Serviço {#sec-01-frontend-backend}
 
-A *Jakarta EE* (anteriormente conhecida como *Java EE*, até ser renomeada em 2019) é uma plataforma que fornece um conjunto de serviços e *APIs* prontos a usar para lidar com os problemas identificados acima, libertando quem desenvolve para se concentrar na lógica de negócio da aplicação.
-
-A plataforma assenta na linguagem Java e na *Java Virtual Machine* (JVM), o que significa que qualquer componente escrito para *Jakarta EE* beneficia da portabilidade e da gestão automática de memória já conhecidas da linguagem.
-
-## Arquitetura em Camadas {#sec-01-arquitetura-camadas}
-
-A plataforma *Jakarta EE* organiza uma aplicação segundo um modelo distribuído em várias camadas (*tiers*), cada uma com uma função bem definida e instalada, tipicamente, em máquinas diferentes:
-
-| Camada | Onde reside | Componentes típicos |
-|---|---|---|
-| *Client Tier* | Máquina do cliente | Páginas Web (browser), aplicações cliente |
-| *Web Tier* | Servidor *Jakarta EE* | *Servlets*, *JavaServer Pages*, *Web Services* |
-| *Business Tier* | Servidor *Jakarta EE* | *Enterprise Beans* (lógica de negócio) |
-| *EIS Tier* (*Enterprise Information System*) | Servidor de base de dados | Bases de dados, sistemas de informação empresarial |
-
-Esta separação por camadas permite que cada componente evolua de forma relativamente independente das restantes: alterar a base de dados não obriga a reescrever a lógica de negócio, e alterar a interface do cliente não obriga a alterar o servidor.
-
-## Aplicações da Camada Web: Apresentação vs. Serviço {#sec-01-frontend-backend}
-
-Dentro da camada Web, uma aplicação pode seguir duas orientações distintas, consoante o tipo de resposta que produz:
+Uma aplicação Web pode seguir duas orientações distintas, consoante o tipo de resposta que produz:
 
 **Orientada à apresentação** (*presentation-oriented*)
 : Gera páginas Web interativas (HTML, CSS e conteúdo dinâmico) em resposta a cada pedido. É o modelo tradicional de uma aplicação Web, pensada para ser consumida diretamente por um utilizador humano através de um *browser*.
@@ -67,6 +48,8 @@ Esta separação de responsabilidades é um dos princípios de desenho mais reco
 ## O Modelo Cliente-Servidor {#sec-01-cliente-servidor}
 
 Toda esta comunicação, seja ela orientada à apresentação ou a serviço, assenta no modelo cliente-servidor: um cliente (tipicamente um *browser*) envia um pedido através da rede, e um servidor processa esse pedido e devolve uma resposta.
+
+![O cliente (por exemplo, um browser) envia um pedido HTTP; o servidor processa-o e devolve uma resposta. A troca repete-se a cada interação, sem que o servidor guarde, por si só, memória da anterior.](../assets/images/capitulos/cap01/Modelo_cliente_servidor.png){#fig-01-cliente-servidor width="70%"}
 
 Esta troca é feita através do protocolo HTTP (*HyperText Transfer Protocol*), que tem duas características fundamentais:
 
@@ -98,6 +81,8 @@ Tanto um pedido como uma resposta HTTP seguem a mesma estrutura geral:
 3. Um corpo (*body*), opcional, com os dados propriamente ditos
 
 Um pedido `GET` não tem, tipicamente, corpo: todos os dados que transporta vão na própria *URL*, sob a forma de parâmetros. Um pedido `POST` transporta os dados no corpo da mensagem, fora da *URL*.
+
+![O formato geral de uma mensagem HTTP: a primeira linha (diferente para pedido e resposta), seguida dos vários grupos de cabeçalhos, e por fim o corpo.](../assets/images/capitulos/cap01/HTTP_message_request_format.png){#fig-01-http-formato-mensagem width="60%"}
 
 ### Exemplo: de um Formulário a um Pedido HTTP
 

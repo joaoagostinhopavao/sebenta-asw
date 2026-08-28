@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -177,7 +211,11 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#sec-03-servlets-en" id="toc-sec-03-servlets-en" class="nav-link active" data-scroll-target="#sec-03-servlets-en"><span class="header-section-number">3.1</span> The Web Container and the First Servlet</a></li>
+  <li><a href="#sec-03-why-servlets-en" id="toc-sec-03-why-servlets-en" class="nav-link active" data-scroll-target="#sec-03-why-servlets-en"><span class="header-section-number">3.1</span> Why Servlets?</a></li>
+  <li><a href="#sec-03-lifecycle-en" id="toc-sec-03-lifecycle-en" class="nav-link" data-scroll-target="#sec-03-lifecycle-en"><span class="header-section-number">3.2</span> The Servlet Lifecycle</a></li>
+  <li><a href="#sec-03-http-servlet-mapping-en" id="toc-sec-03-http-servlet-mapping-en" class="nav-link" data-scroll-target="#sec-03-http-servlet-mapping-en"><span class="header-section-number">3.3</span> From the HTTP Message to the Java Method</a></li>
+  <li><a href="#sec-03-content-type-en" id="toc-sec-03-content-type-en" class="nav-link" data-scroll-target="#sec-03-content-type-en"><span class="header-section-number">3.4</span> Content-Type and the Shape of the Response</a></li>
+  <li><a href="#sec-03-first-servlet-en" id="toc-sec-03-first-servlet-en" class="nav-link" data-scroll-target="#sec-03-first-servlet-en"><span class="header-section-number">3.5</span> A First Servlet: “World Capitals”</a></li>
   </ul>
 </nav>
     </div>
@@ -203,20 +241,126 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="sec-03-servlets-en" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="sec-03-servlets-en"><span class="header-section-number">3.1</span> The Web Container and the First Servlet</h2>
-<blockquote class="blockquote">
-<p>Content to be developed, aligned with ESIGELEC’s Lecture 1 (Java EE and Servlet Fundamentals). Planned topics:</p>
+<section id="sec-03-why-servlets-en" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="sec-03-why-servlets-en"><span class="header-section-number">3.1</span> Why Servlets?</h2>
+<p>Implementing, from scratch, a Java program capable of answering HTTP requests would require solving, alone, a set of problems common to any Web server: parsing the incoming HTTP message, handling several connections at once (each in its own thread), controlling the lifecycle of the instances in memory, and packaging all of this in a format an application server knows how to install and start.</p>
+<p>A Servlet is a Java class that runs inside a Servlet Container (for instance, Apache Tomcat) and automatically receives all of this work already done:</p>
 <ul>
-<li>Jakarta EE / Java EE</li>
-<li>Web Container (Tomcat)</li>
-<li>Servlet lifecycle</li>
-<li>HttpServletRequest / HttpServletResponse</li>
-<li>doGet() and doPost()</li>
-<li>HTTP parameters, Content-Type</li>
-<li>Manual JSON generation</li>
+<li>HTTP request parsing</li>
+<li>Thread management, one per request</li>
+<li>Management of the Servlet’s own lifecycle</li>
+<li>A deployment model of its own, packaged into a <code>.war</code> file (Web Application Archive)</li>
 </ul>
-</blockquote>
+<p>The Servlet Container corresponds, in the layered architecture presented in <a href="../capitulos/cap01.html">Chapter 1</a>, to the Web Tier: this is where Servlets live, between the client and the business layer.</p>
+</section>
+<section id="sec-03-lifecycle-en" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="sec-03-lifecycle-en"><span class="header-section-number">3.2</span> The Servlet Lifecycle</h2>
+<p>When a request is routed to a Servlet, the container always follows the same sequence:</p>
+<ol type="1">
+<li>If an instance of that Servlet does not yet exist in memory, the container loads the class, creates an instance, and calls the <code>init()</code> method</li>
+<li>For every request received, the container invokes the <code>service()</code> method, which dispatches to <code>doGet()</code>, <code>doPost()</code>, or another method depending on the HTTP verb used, passing it the <code>request</code> and <code>response</code> objects</li>
+<li>If the container needs to remove the Servlet (for instance, when the server shuts down), it invokes the <code>destroy()</code> method</li>
+</ol>
+<p>An important detail follows from this: there is a <strong>single instance</strong> of each Servlet in memory, even with N clients using the same service at once. Each request is handled by a different thread, but all of those threads share the same instance. In practice, this means:</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Beware of shared state
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Never store data from a specific request in the Servlet’s instance attributes: since the instance is shared by all threads, one request can read or overwrite data from another request in progress. Local variables, declared inside <code>doGet()</code> or <code>doPost()</code>, are safe, because each thread has its own copy.</p>
+</div>
+</div>
+</section>
+<section id="sec-03-http-servlet-mapping-en" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="sec-03-http-servlet-mapping-en"><span class="header-section-number">3.3</span> From the HTTP Message to the Java Method</h2>
+<p>A Servlet is bound to a URL through the <code>@WebServlet</code> annotation, which maps a path to the class that will handle it:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb1-1"><a href="#cb1-1"></a><span class="at">@WebServlet</span><span class="op">(</span><span class="st">"/country"</span><span class="op">)</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">public</span> <span class="kw">class</span> CountryServlet <span class="kw">extends</span> HttpServlet <span class="op">{</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>    <span class="co">// ...</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A request to <code>http://localhost:8080/country</code> is thus routed to the <code>CountryServlet</code> class. Inside it, the elements of the HTTP message (see <a href="../capitulos/cap01.html">Chapter 1</a>) correspond to concrete methods on the <code>request</code> and <code>response</code> objects:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>HTTP element</th>
+<th>Java access</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Request headers</td>
+<td><code>request.getHeader(name)</code></td>
+</tr>
+<tr class="even">
+<td>Parameters (query string or body)</td>
+<td><code>request.getParameter(name)</code></td>
+</tr>
+<tr class="odd">
+<td>Request body (JSON, raw data)</td>
+<td><code>request.getInputStream()</code></td>
+</tr>
+<tr class="even">
+<td>Writing the response</td>
+<td><code>response.getWriter()</code> or <code>response.getOutputStream()</code></td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">protected</span> <span class="dt">void</span> <span class="fu">doGet</span><span class="op">(</span>HttpServletRequest request<span class="op">,</span> HttpServletResponse response<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a>    <span class="bu">String</span> countryCode <span class="op">=</span> request<span class="op">.</span><span class="fu">getParameter</span><span class="op">(</span><span class="st">"countrycode"</span><span class="op">);</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a>    <span class="co">// ...</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="sec-03-content-type-en" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="sec-03-content-type-en"><span class="header-section-number">3.4</span> Content-Type and the Shape of the Response</h2>
+<p>Before writing anything to the response, it is essential to set its <code>Content-Type</code>: this header tells the client how to interpret the bytes that follow, whether as an HTML page or as JSON data.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb3-1"><a href="#cb3-1"></a>response<span class="op">.</span><span class="fu">setContentType</span><span class="op">(</span><span class="st">"text/html"</span><span class="op">);</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="bu">PrintWriter</span> out <span class="op">=</span> response<span class="op">.</span><span class="fu">getWriter</span><span class="op">();</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a>out<span class="op">.</span><span class="fu">println</span><span class="op">(</span><span class="st">"&lt;html&gt;&lt;body&gt;"</span><span class="op">);</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a>out<span class="op">.</span><span class="fu">println</span><span class="op">(</span><span class="st">"&lt;h1&gt;Hello João&lt;/h1&gt;"</span><span class="op">);</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a>out<span class="op">.</span><span class="fu">println</span><span class="op">(</span><span class="st">"&lt;/body&gt;&lt;/html&gt;"</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb4-1"><a href="#cb4-1"></a>response<span class="op">.</span><span class="fu">setContentType</span><span class="op">(</span><span class="st">"application/json"</span><span class="op">);</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="bu">PrintWriter</span> out <span class="op">=</span> response<span class="op">.</span><span class="fu">getWriter</span><span class="op">();</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>out<span class="op">.</span><span class="fu">print</span><span class="op">(</span><span class="st">"{</span><span class="sc">\"</span><span class="st">name</span><span class="sc">\"</span><span class="st">:</span><span class="sc">\"</span><span class="st">João</span><span class="sc">\"</span><span class="st">,</span><span class="sc">\"</span><span class="st">role</span><span class="sc">\"</span><span class="st">:</span><span class="sc">\"</span><span class="st">admin</span><span class="sc">\"</span><span class="st">}"</span><span class="op">);</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Without a dedicated JSON library, the most direct approach is to build the String manually, taking care to escape internal quotes with <code>\"</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb5-1"><a href="#cb5-1"></a><span class="bu">String</span> jsonResponse <span class="op">=</span> <span class="st">"{</span><span class="sc">\"</span><span class="st">country</span><span class="sc">\"</span><span class="st">: </span><span class="sc">\"</span><span class="st">Portugal</span><span class="sc">\"</span><span class="st">, </span><span class="sc">\"</span><span class="st">capital</span><span class="sc">\"</span><span class="st">: </span><span class="sc">\"</span><span class="st">Lisboa</span><span class="sc">\"</span><span class="st">, </span><span class="sc">\"</span><span class="st">ccode</span><span class="sc">\"</span><span class="st">: </span><span class="sc">\"</span><span class="st">PT</span><span class="sc">\"</span><span class="st">}"</span><span class="op">;</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a>out<span class="op">.</span><span class="fu">print</span><span class="op">(</span>jsonResponse<span class="op">);</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a>out<span class="op">.</span><span class="fu">flush</span><span class="op">();</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="sec-03-first-servlet-en" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="sec-03-first-servlet-en"><span class="header-section-number">3.5</span> A First Servlet: “World Capitals”</h2>
+<p>Applying what has been presented, a first Servlet can serve as a simple health check for the API:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb6-1"><a href="#cb6-1"></a><span class="at">@WebServlet</span><span class="op">(</span><span class="st">"/status"</span><span class="op">)</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="kw">public</span> <span class="kw">class</span> StatusServlet <span class="kw">extends</span> HttpServlet <span class="op">{</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a>    <span class="kw">protected</span> <span class="dt">void</span> <span class="fu">doGet</span><span class="op">(</span>HttpServletRequest request<span class="op">,</span> HttpServletResponse response<span class="op">)</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a>            <span class="kw">throws</span> ServletException<span class="op">,</span> <span class="bu">IOException</span> <span class="op">{</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a>        response<span class="op">.</span><span class="fu">setContentType</span><span class="op">(</span><span class="st">"text/plain"</span><span class="op">);</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a>        <span class="bu">PrintWriter</span> out <span class="op">=</span> response<span class="op">.</span><span class="fu">getWriter</span><span class="op">();</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a>        out<span class="op">.</span><span class="fu">print</span><span class="op">(</span><span class="st">"OK"</span><span class="op">);</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a>    <span class="op">}</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>And a second one, already returning fixed data in JSON format, is the first step of the “World Capitals” application used throughout this course:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb7-1"><a href="#cb7-1"></a><span class="at">@WebServlet</span><span class="op">(</span><span class="st">"/countrycapital"</span><span class="op">)</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="kw">public</span> <span class="kw">class</span> CountryCapitalServlet <span class="kw">extends</span> HttpServlet <span class="op">{</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a>    <span class="kw">protected</span> <span class="dt">void</span> <span class="fu">doGet</span><span class="op">(</span>HttpServletRequest request<span class="op">,</span> HttpServletResponse response<span class="op">)</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a>            <span class="kw">throws</span> ServletException<span class="op">,</span> <span class="bu">IOException</span> <span class="op">{</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a>        response<span class="op">.</span><span class="fu">setContentType</span><span class="op">(</span><span class="st">"application/json"</span><span class="op">);</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a>        <span class="bu">PrintWriter</span> out <span class="op">=</span> response<span class="op">.</span><span class="fu">getWriter</span><span class="op">();</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a></span>
+<span id="cb7-8"><a href="#cb7-8"></a>        <span class="bu">String</span> jsonResponse <span class="op">=</span> <span class="st">"{</span><span class="sc">\"</span><span class="st">country</span><span class="sc">\"</span><span class="st">: </span><span class="sc">\"</span><span class="st">Portugal</span><span class="sc">\"</span><span class="st">, </span><span class="sc">\"</span><span class="st">capital</span><span class="sc">\"</span><span class="st">: </span><span class="sc">\"</span><span class="st">Lisboa</span><span class="sc">\"</span><span class="st">, </span><span class="sc">\"</span><span class="st">ccode</span><span class="sc">\"</span><span class="st">: </span><span class="sc">\"</span><span class="st">PT</span><span class="sc">\"</span><span class="st">}"</span><span class="op">;</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a>        out<span class="op">.</span><span class="fu">print</span><span class="op">(</span>jsonResponse<span class="op">);</span></span>
+<span id="cb7-10"><a href="#cb7-10"></a>        out<span class="op">.</span><span class="fu">flush</span><span class="op">();</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a>    <span class="op">}</span></span>
+<span id="cb7-12"><a href="#cb7-12"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This Servlet always returns the same country, with the data fixed directly in the code. This is a deliberate simplification: the practical LAB1 picks up exactly at this point, replacing the fixed data with a dedicated data-access object (DAO), preparing the ground for later connecting to a real database server.</p>
 
 
 </section>

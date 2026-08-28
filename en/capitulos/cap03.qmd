@@ -3,15 +3,119 @@ title: "Java EE and Servlet Fundamentals"
 lang: en-GB
 ---
 
-## The Web Container and the First Servlet {#sec-03-servlets-en}
+## Why Servlets? {#sec-03-why-servlets-en}
 
-> Content to be developed, aligned with ESIGELEC's Lecture 1 (Java EE and
-> Servlet Fundamentals). Planned topics:
->
-> - Jakarta EE / Java EE
-> - Web Container (Tomcat)
-> - Servlet lifecycle
-> - HttpServletRequest / HttpServletResponse
-> - doGet() and doPost()
-> - HTTP parameters, Content-Type
-> - Manual JSON generation
+Implementing, from scratch, a Java program capable of answering HTTP requests would require solving, alone, a set of problems common to any Web server: parsing the incoming HTTP message, handling several connections at once (each in its own thread), controlling the lifecycle of the instances in memory, and packaging all of this in a format an application server knows how to install and start.
+
+A Servlet is a Java class that runs inside a Servlet Container (for instance, Apache Tomcat) and automatically receives all of this work already done:
+
+- HTTP request parsing
+- Thread management, one per request
+- Management of the Servlet's own lifecycle
+- A deployment model of its own, packaged into a `.war` file (Web Application Archive)
+
+The Servlet Container corresponds, in the layered architecture presented in [Chapter 1](cap01.qmd), to the Web Tier: this is where Servlets live, between the client and the business layer.
+
+## The Servlet Lifecycle {#sec-03-lifecycle-en}
+
+When a request is routed to a Servlet, the container always follows the same sequence:
+
+1. If an instance of that Servlet does not yet exist in memory, the container loads the class, creates an instance, and calls the `init()` method
+2. For every request received, the container invokes the `service()` method, which dispatches to `doGet()`, `doPost()`, or another method depending on the HTTP verb used, passing it the `request` and `response` objects
+3. If the container needs to remove the Servlet (for instance, when the server shuts down), it invokes the `destroy()` method
+
+An important detail follows from this: there is a **single instance** of each Servlet in memory, even with N clients using the same service at once. Each request is handled by a different thread, but all of those threads share the same instance. In practice, this means:
+
+::: {.callout-warning}
+## Beware of shared state
+
+Never store data from a specific request in the Servlet's instance attributes: since the instance is shared by all threads, one request can read or overwrite data from another request in progress. Local variables, declared inside `doGet()` or `doPost()`, are safe, because each thread has its own copy.
+:::
+
+## From the HTTP Message to the Java Method {#sec-03-http-servlet-mapping-en}
+
+A Servlet is bound to a URL through the `@WebServlet` annotation, which maps a path to the class that will handle it:
+
+```java
+@WebServlet("/country")
+public class CountryServlet extends HttpServlet {
+    // ...
+}
+```
+
+A request to `http://localhost:8080/country` is thus routed to the `CountryServlet` class. Inside it, the elements of the HTTP message (see [Chapter 1](cap01.qmd)) correspond to concrete methods on the `request` and `response` objects:
+
+| HTTP element | Java access |
+|---|---|
+| Request headers | `request.getHeader(name)` |
+| Parameters (query string or body) | `request.getParameter(name)` |
+| Request body (JSON, raw data) | `request.getInputStream()` |
+| Writing the response | `response.getWriter()` or `response.getOutputStream()` |
+
+```java
+protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+    String countryCode = request.getParameter("countrycode");
+    // ...
+}
+```
+
+## Content-Type and the Shape of the Response {#sec-03-content-type-en}
+
+Before writing anything to the response, it is essential to set its `Content-Type`: this header tells the client how to interpret the bytes that follow, whether as an HTML page or as JSON data.
+
+```java
+response.setContentType("text/html");
+PrintWriter out = response.getWriter();
+out.println("<html><body>");
+out.println("<h1>Hello João</h1>");
+out.println("</body></html>");
+```
+
+```java
+response.setContentType("application/json");
+PrintWriter out = response.getWriter();
+out.print("{\"name\":\"João\",\"role\":\"admin\"}");
+```
+
+Without a dedicated JSON library, the most direct approach is to build the String manually, taking care to escape internal quotes with `\"`:
+
+```java
+String jsonResponse = "{\"country\": \"Portugal\", \"capital\": \"Lisboa\", \"ccode\": \"PT\"}";
+out.print(jsonResponse);
+out.flush();
+```
+
+## A First Servlet: "World Capitals" {#sec-03-first-servlet-en}
+
+Applying what has been presented, a first Servlet can serve as a simple health check for the API:
+
+```java
+@WebServlet("/status")
+public class StatusServlet extends HttpServlet {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/plain");
+        PrintWriter out = response.getWriter();
+        out.print("OK");
+    }
+}
+```
+
+And a second one, already returning fixed data in JSON format, is the first step of the "World Capitals" application used throughout this course:
+
+```java
+@WebServlet("/countrycapital")
+public class CountryCapitalServlet extends HttpServlet {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("application/json");
+        PrintWriter out = response.getWriter();
+
+        String jsonResponse = "{\"country\": \"Portugal\", \"capital\": \"Lisboa\", \"ccode\": \"PT\"}";
+        out.print(jsonResponse);
+        out.flush();
+    }
+}
+```
+
+This Servlet always returns the same country, with the data fixed directly in the code. This is a deliberate simplification: the practical LAB1 picks up exactly at this point, replacing the fixed data with a dedicated data-access object (DAO), preparing the ground for later connecting to a real database server.

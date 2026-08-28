@@ -21,7 +21,7 @@ lang: pt-PT
 ::: {.callout-note}
 ## `POST` + `operation` como alternativa aos verbos HTTP "puros"
 
-Os LABs práticos desta UC (ver [Apêndice B](apendiceB.qmd), LAB4) implementam a criação, atualização e remoção de um país através de um único *endpoint* (`/countryEdit`), recebido sempre por `POST`, distinguindo a operação pretendida através de um parâmetro `operation` (`insert`, `update`, `delete`). Isto contraria a semântica "pura" dos verbos HTTP apresentada no [Capítulo 1](cap01.qmd) (`POST` para criar, `PUT` para atualizar, `DELETE` para remover), mas é uma simplificação pragmática, comum em código de formação: evita configurar *Servlets* adicionais mapeados a `PUT`/`DELETE`, e mantém tudo testável com formulários HTML simples, sem recorrer a JavaScript.
+Os LABs práticos desta UC (ver [Apêndice B](apendiceB.qmd), LAB4) implementam a criação, atualização e remoção de um país através de um único *endpoint* (`/countryEdit`), recebido sempre por `POST`, distinguindo a operação pretendida através de um parâmetro `operation` (`insert`, `update`, `delete`). Isto contraria a semântica "pura" dos verbos HTTP apresentada no [Capítulo 1](cap01.qmd) (`POST` para criar, `PUT` para atualizar, `DELETE` para remover), mas é uma simplificação pragmática, comum em código de formação: evita configurar *Servlets* adicionais mapeadas a `PUT`/`DELETE`, e mantém tudo testável com formulários HTML simples, sem recorrer a JavaScript.
 
 Fica como sugestão de implementação futura, possível para os alunos mais avançados: reescrever `/countryEdit` como três *endpoints* distintos, um por verbo HTTP (por exemplo, `PUT /country/{code}` para atualizar e `DELETE /country/{code}` para remover), aproximando a API de um desenho REST mais convencional.
 :::

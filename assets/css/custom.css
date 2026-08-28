@@ -164,6 +164,15 @@ pre.sourceCode {
   border-radius: 0;
 }
 
+/* Layout de 3 colunas (sidebar + conteúdo + índice) deixa a coluna de
+   texto estreita; a fonte por omissão do código obriga a barra de
+   deslizamento horizontal com frequência. Reduzida para caberem mais
+   caracteres por linha antes de precisar de deslizar. */
+div.sourceCode code {
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
 /* ============================================================
    Cabeçalho de capítulo — banner colorido
    ============================================================ */

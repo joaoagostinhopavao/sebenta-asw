@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Aplicações e Serviços Web",
     "section": "",
-    "text": "Prefácio\nEste documento é um documento de apoio ao estudo autónomo para a componente teórica da disciplina de Aplicações e Serviços Web (ASW), Mestrado em Engenharia Eletrotécnica e de Computadores (MEEC), cobrindo a arquitetura de aplicações Web, boas práticas de desenvolvimento, o protocolo HTTP, HTML e CSS, programação do lado do servidor e do lado do cliente, acesso a bases de dados, e Web Services REST, com o Java EE como caso de estudo.\nEsta UC segue de perto a matéria e os trabalhos práticos de uma UC homóloga já lecionada no ESIGELEC (parceiro internacional), com uma diferença importante: os alunos do ESIGELEC já chegam com base em HTML/CSS e bases de dados, os da UTAD não. Por isso, os primeiros capítulos cobrem essa base antes de convergir para a mesma matéria de Java EE.",
+    "text": "Prefácio\nEste documento é um documento de apoio ao estudo autónomo para a componente teórica da disciplina de Aplicações e Serviços Web (ASW), Mestrado em Engenharia Eletrotécnica e de Computadores (MEEC), cobrindo a arquitetura de aplicações Web, boas práticas de desenvolvimento, o protocolo HTTP, HTML e CSS, programação do lado do servidor e do lado do cliente, acesso a bases de dados, e Web Services REST, com o Java EE como caso de estudo.",
     "crumbs": [
       "Prefácio"
     ]
@@ -54,7 +54,7 @@
     "href": "capitulos/cap01.html",
     "title": "1  Arquitetura de Aplicações Web",
     "section": "",
-    "text": "1.1 O Problema: Construir uma Aplicação Web de Raiz\nUma aplicação Web não é apenas um programa que corre num computador: é um programa que responde a pedidos vindos de múltiplos clientes, em simultâneo, através da rede. Construída de raiz, sem qualquer apoio de plataforma, uma aplicação deste tipo teria de resolver, por si só, um conjunto de problemas comuns a qualquer sistema deste género:\nResolver todos estes problemas repetidamente, aplicação a aplicação, seria um desperdício de esforço. É exactamente para evitar essa repetição que existem plataformas empresariais como a Jakarta EE.",
+    "text": "1.1 O Problema: Construir uma Aplicação Web de Raiz\nUma aplicação Web não é apenas um programa que corre num computador: é um programa que responde a pedidos vindos de múltiplos clientes, em simultâneo, através da rede. Construída de raiz, sem qualquer apoio de plataforma, uma aplicação deste tipo teria de resolver, por si só, um conjunto de problemas comuns a qualquer sistema deste género:\nResolver todos estes problemas repetidamente, aplicação a aplicação, seria um desperdício de esforço. É exactamente para evitar essa repetição que existem plataformas empresariais que fornecem estes serviços prontos a usar, libertando quem desenvolve para se concentrar na lógica de negócio da aplicação.",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Arquitetura de Aplicações Web</span>"
     ]
@@ -70,31 +70,11 @@
     ]
   },
   {
-    "objectID": "capitulos/cap01.html#sec-01-jakarta-ee",
-    "href": "capitulos/cap01.html#sec-01-jakarta-ee",
-    "title": "1  Arquitetura de Aplicações Web",
-    "section": "1.2 A Plataforma Jakarta EE",
-    "text": "1.2 A Plataforma Jakarta EE\nA Jakarta EE (anteriormente conhecida como Java EE, até ser renomeada em 2019) é uma plataforma que fornece um conjunto de serviços e APIs prontos a usar para lidar com os problemas identificados acima, libertando quem desenvolve para se concentrar na lógica de negócio da aplicação.\nA plataforma assenta na linguagem Java e na Java Virtual Machine (JVM), o que significa que qualquer componente escrito para Jakarta EE beneficia da portabilidade e da gestão automática de memória já conhecidas da linguagem.",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Arquitetura de Aplicações Web</span>"
-    ]
-  },
-  {
-    "objectID": "capitulos/cap01.html#sec-01-arquitetura-camadas",
-    "href": "capitulos/cap01.html#sec-01-arquitetura-camadas",
-    "title": "1  Arquitetura de Aplicações Web",
-    "section": "1.3 Arquitetura em Camadas",
-    "text": "1.3 Arquitetura em Camadas\nA plataforma Jakarta EE organiza uma aplicação segundo um modelo distribuído em várias camadas (tiers), cada uma com uma função bem definida e instalada, tipicamente, em máquinas diferentes:\n\n\n\n\n\n\n\n\nCamada\nOnde reside\nComponentes típicos\n\n\n\n\nClient Tier\nMáquina do cliente\nPáginas Web (browser), aplicações cliente\n\n\nWeb Tier\nServidor Jakarta EE\nServlets, JavaServer Pages, Web Services\n\n\nBusiness Tier\nServidor Jakarta EE\nEnterprise Beans (lógica de negócio)\n\n\nEIS Tier (Enterprise Information System)\nServidor de base de dados\nBases de dados, sistemas de informação empresarial\n\n\n\nEsta separação por camadas permite que cada componente evolua de forma relativamente independente das restantes: alterar a base de dados não obriga a reescrever a lógica de negócio, e alterar a interface do cliente não obriga a alterar o servidor.",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Arquitetura de Aplicações Web</span>"
-    ]
-  },
-  {
     "objectID": "capitulos/cap01.html#sec-01-frontend-backend",
     "href": "capitulos/cap01.html#sec-01-frontend-backend",
     "title": "1  Arquitetura de Aplicações Web",
-    "section": "1.4 Aplicações da Camada Web: Apresentação vs. Serviço",
-    "text": "1.4 Aplicações da Camada Web: Apresentação vs. Serviço\nDentro da camada Web, uma aplicação pode seguir duas orientações distintas, consoante o tipo de resposta que produz:\n\nOrientada à apresentação (presentation-oriented)\n\nGera páginas Web interativas (HTML, CSS e conteúdo dinâmico) em resposta a cada pedido. É o modelo tradicional de uma aplicação Web, pensada para ser consumida diretamente por um utilizador humano através de um browser.\n\nOrientada a serviço (service-oriented)\n\nImplementa o ponto de acesso (endpoint) de um serviço Web, tipicamente devolvendo dados estruturados em formato JSON ou XML, em vez de HTML. Este modelo é pensado para ser consumido por outro programa, seja ele uma aplicação móvel, uma single-page application ou outro serviço.\n\n\nEsta distinção corresponde, em larga medida, à separação entre front-end (a parte da aplicação que interage diretamente com quem a usa) e back-end (a parte que processa a lógica e os dados). Uma aplicação orientada à apresentação tende a confundir estas duas responsabilidades num único componente do lado do servidor; uma aplicação orientada a serviço separa-as claramente, deixando o front-end inteiramente a cargo do cliente.",
+    "section": "1.2 Duas Orientações: Apresentação vs. Serviço",
+    "text": "1.2 Duas Orientações: Apresentação vs. Serviço\nUma aplicação Web pode seguir duas orientações distintas, consoante o tipo de resposta que produz:\n\nOrientada à apresentação (presentation-oriented)\n\nGera páginas Web interativas (HTML, CSS e conteúdo dinâmico) em resposta a cada pedido. É o modelo tradicional de uma aplicação Web, pensada para ser consumida diretamente por um utilizador humano através de um browser.\n\nOrientada a serviço (service-oriented)\n\nImplementa o ponto de acesso (endpoint) de um serviço Web, tipicamente devolvendo dados estruturados em formato JSON ou XML, em vez de HTML. Este modelo é pensado para ser consumido por outro programa, seja ele uma aplicação móvel, uma single-page application ou outro serviço.\n\n\nEsta distinção corresponde, em larga medida, à separação entre front-end (a parte da aplicação que interage diretamente com quem a usa) e back-end (a parte que processa a lógica e os dados). Uma aplicação orientada à apresentação tende a confundir estas duas responsabilidades num único componente do lado do servidor; uma aplicação orientada a serviço separa-as claramente, deixando o front-end inteiramente a cargo do cliente.",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Arquitetura de Aplicações Web</span>"
     ]
@@ -103,8 +83,8 @@
     "objectID": "capitulos/cap01.html#sec-01-mvc",
     "href": "capitulos/cap01.html#sec-01-mvc",
     "title": "1  Arquitetura de Aplicações Web",
-    "section": "1.5 O Padrão MVC",
-    "text": "1.5 O Padrão MVC\nOrganizar todo o código de uma aplicação num único bloco indiferenciado rapidamente se torna insustentável: o código que processa o pedido, o que acede aos dados e o que gera a resposta acabam misturados, difíceis de testar e de alterar em separado. O padrão Model-View-Controller (MVC) resolve este problema, dividindo a aplicação em três responsabilidades distintas:\n\nModel (Modelo)\n\nRepresenta os dados e a lógica de negócio da aplicação, independentemente de como são apresentados. Numa aplicação Web, o Model é tipicamente responsável por aceder à base de dados e devolver a informação já validada.\n\nView (Vista)\n\nResponsável por apresentar os dados a quem os pede, sem conter lógica de negócio. Numa aplicação orientada à apresentação, a View gera HTML; numa aplicação orientada a serviço, não existe, de facto, View do lado do servidor: a resposta é apenas dados estruturados (JSON), e é o cliente que decide como os apresentar.\n\nController (Controlador)\n\nRecebe o pedido, decide que operação realizar sobre o Model, e escolhe a View (ou o formato de resposta) a devolver. É o Controller que faz a ponte entre o pedido HTTP recebido e a lógica da aplicação.\n\n\nEsta separação de responsabilidades é um dos princípios de desenho mais recorrentes de toda esta matéria. Manifesta-se de forma clássica quando um componente do lado do servidor funciona como Controller e delega a apresentação a outro, que funciona como View; e manifesta-se de forma bem menos óbvia quando a View deixa de existir do lado do servidor e passa a ser reconstruída no browser, a partir de dados JSON.",
+    "section": "1.3 O Padrão MVC",
+    "text": "1.3 O Padrão MVC\nOrganizar todo o código de uma aplicação num único bloco indiferenciado rapidamente se torna insustentável: o código que processa o pedido, o que acede aos dados e o que gera a resposta acabam misturados, difíceis de testar e de alterar em separado. O padrão Model-View-Controller (MVC) resolve este problema, dividindo a aplicação em três responsabilidades distintas:\n\nModel (Modelo)\n\nRepresenta os dados e a lógica de negócio da aplicação, independentemente de como são apresentados. Numa aplicação Web, o Model é tipicamente responsável por aceder à base de dados e devolver a informação já validada.\n\nView (Vista)\n\nResponsável por apresentar os dados a quem os pede, sem conter lógica de negócio. Numa aplicação orientada à apresentação, a View gera HTML; numa aplicação orientada a serviço, não existe, de facto, View do lado do servidor: a resposta é apenas dados estruturados (JSON), e é o cliente que decide como os apresentar.\n\nController (Controlador)\n\nRecebe o pedido, decide que operação realizar sobre o Model, e escolhe a View (ou o formato de resposta) a devolver. É o Controller que faz a ponte entre o pedido HTTP recebido e a lógica da aplicação.\n\n\nEsta separação de responsabilidades é um dos princípios de desenho mais recorrentes de toda esta matéria. Manifesta-se de forma clássica quando um componente do lado do servidor funciona como Controller e delega a apresentação a outro, que funciona como View; e manifesta-se de forma bem menos óbvia quando a View deixa de existir do lado do servidor e passa a ser reconstruída no browser, a partir de dados JSON.",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Arquitetura de Aplicações Web</span>"
     ]
@@ -113,8 +93,8 @@
     "objectID": "capitulos/cap01.html#sec-01-cliente-servidor",
     "href": "capitulos/cap01.html#sec-01-cliente-servidor",
     "title": "1  Arquitetura de Aplicações Web",
-    "section": "1.6 O Modelo Cliente-Servidor",
-    "text": "1.6 O Modelo Cliente-Servidor\nToda esta comunicação, seja ela orientada à apresentação ou a serviço, assenta no modelo cliente-servidor: um cliente (tipicamente um browser) envia um pedido através da rede, e um servidor processa esse pedido e devolve uma resposta.\nEsta troca é feita através do protocolo HTTP (HyperText Transfer Protocol), que tem duas características fundamentais:\n\nÉ orientado a transações: cada interação é composta por um pedido (request) seguido de uma resposta (response)\nÉ stateless (sem estado): o servidor não guarda, por si só, qualquer memória de pedidos anteriores do mesmo cliente\n\nA ausência de estado no protocolo não impede que uma aplicação precise de reter informação entre pedidos (por exemplo, para saber que um utilizador está autenticado). Essa necessidade é resolvida ao nível da aplicação, não do protocolo, através de mecanismos como sessões e cookies.",
+    "section": "1.4 O Modelo Cliente-Servidor",
+    "text": "1.4 O Modelo Cliente-Servidor\nToda esta comunicação, seja ela orientada à apresentação ou a serviço, assenta no modelo cliente-servidor: um cliente (tipicamente um browser) envia um pedido através da rede, e um servidor processa esse pedido e devolve uma resposta.\n\n\n\n\n\n\nFigura 1.1: O cliente (por exemplo, um browser) envia um pedido HTTP; o servidor processa-o e devolve uma resposta. A troca repete-se a cada interação, sem que o servidor guarde, por si só, memória da anterior.\n\n\n\nEsta troca é feita através do protocolo HTTP (HyperText Transfer Protocol), que tem duas características fundamentais:\n\nÉ orientado a transações: cada interação é composta por um pedido (request) seguido de uma resposta (response)\nÉ stateless (sem estado): o servidor não guarda, por si só, qualquer memória de pedidos anteriores do mesmo cliente\n\nA ausência de estado no protocolo não impede que uma aplicação precise de reter informação entre pedidos (por exemplo, para saber que um utilizador está autenticado). Essa necessidade é resolvida ao nível da aplicação, não do protocolo, através de mecanismos como sessões e cookies.",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Arquitetura de Aplicações Web</span>"
     ]
@@ -123,8 +103,8 @@
     "objectID": "capitulos/cap01.html#sec-01-http-metodos",
     "href": "capitulos/cap01.html#sec-01-http-metodos",
     "title": "1  Arquitetura de Aplicações Web",
-    "section": "1.7 HTTP em Detalhe: Métodos",
-    "text": "1.7 HTTP em Detalhe: Métodos\nCada pedido HTTP indica, através de um método, a operação que pretende realizar sobre um recurso:\n\n\n\nMétodo\nSemântica típica\n\n\n\n\nGET\nObter um recurso\n\n\nPOST\nCriar um recurso\n\n\nPUT\nAtualizar ou substituir um recurso\n\n\nDELETE\nRemover um recurso\n\n\nHEAD\nObter apenas os cabeçalhos, sem corpo\n\n\n\nEstes cinco métodos cobrem a generalidade das operações realizadas por uma aplicação Web; os dois primeiros (GET e POST) são, de longe, os mais usados em formulários HTML tradicionais, enquanto PUT e DELETE ganham importância sobretudo em serviços orientados a recursos.",
+    "section": "1.5 HTTP em Detalhe: Métodos",
+    "text": "1.5 HTTP em Detalhe: Métodos\nCada pedido HTTP indica, através de um método, a operação que pretende realizar sobre um recurso:\n\n\n\nMétodo\nSemântica típica\n\n\n\n\nGET\nObter um recurso\n\n\nPOST\nCriar um recurso\n\n\nPUT\nAtualizar ou substituir um recurso\n\n\nDELETE\nRemover um recurso\n\n\nHEAD\nObter apenas os cabeçalhos, sem corpo\n\n\n\nEstes cinco métodos cobrem a generalidade das operações realizadas por uma aplicação Web; os dois primeiros (GET e POST) são, de longe, os mais usados em formulários HTML tradicionais, enquanto PUT e DELETE ganham importância sobretudo em serviços orientados a recursos.",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Arquitetura de Aplicações Web</span>"
     ]
@@ -133,8 +113,8 @@
     "objectID": "capitulos/cap01.html#sec-01-http-formato-mensagem",
     "href": "capitulos/cap01.html#sec-01-http-formato-mensagem",
     "title": "1  Arquitetura de Aplicações Web",
-    "section": "1.8 HTTP em Detalhe: Formato de uma Mensagem",
-    "text": "1.8 HTTP em Detalhe: Formato de uma Mensagem\nTanto um pedido como uma resposta HTTP seguem a mesma estrutura geral:\n\nUma primeira linha, diferente consoante se trate de um pedido (método, URL e versão de HTTP) ou de uma resposta (versão de HTTP, código de estado e motivo)\nUm conjunto de cabeçalhos (headers), que transportam metadados sobre a mensagem (por exemplo, o anfitrião de destino, o tipo de conteúdo ou o seu comprimento)\nUm corpo (body), opcional, com os dados propriamente ditos\n\nUm pedido GET não tem, tipicamente, corpo: todos os dados que transporta vão na própria URL, sob a forma de parâmetros. Um pedido POST transporta os dados no corpo da mensagem, fora da URL.\n\n1.8.1 Exemplo: de um Formulário a um Pedido HTTP\nConsidere-se um formulário HTML simples, usado para consultar a capital de um país a partir do respetivo código:\n&lt;form method=\"GET\" action=\"/capital\"&gt;\n  &lt;label for=\"countrycode\"&gt;Código do país&lt;/label&gt;\n  &lt;input type=\"text\" id=\"countrycode\" name=\"countrycode\"&gt;\n  &lt;button type=\"submit\"&gt;Consultar&lt;/button&gt;\n&lt;/form&gt;\nAo ser submetido com o valor PT, o browser gera o seguinte pedido HTTP:\nGET /capital?countrycode=PT HTTP/1.1\nHost: localhost:8080\nNote-se que, por se tratar de um método GET, o parâmetro countrycode é enviado como parte da URL (depois do ?), e não existe corpo na mensagem. Se o mesmo formulário usasse method=\"POST\", o parâmetro seguiria antes no corpo do pedido, e a URL manter-se-ia limpa (/capital).\nO servidor, ao processar este pedido, devolve uma resposta HTTP como a seguinte:\nHTTP/1.1 200 OK\nContent-Type: application/json\n\n{\"country\": \"Portugal\", \"capital\": \"Lisboa\", \"ccode\": \"PT\"}\n\n\n1.8.2 Exemplo: um Pedido POST com Corpo\nConsidere-se agora um formulário de autenticação, com os campos user e pass:\n&lt;form method=\"POST\" action=\"/login\"&gt;\n  &lt;label for=\"user\"&gt;Utilizador&lt;/label&gt;\n  &lt;input type=\"text\" id=\"user\" name=\"user\"&gt;\n  &lt;label for=\"pass\"&gt;Palavra-passe&lt;/label&gt;\n  &lt;input type=\"password\" id=\"pass\" name=\"pass\"&gt;\n  &lt;button type=\"submit\"&gt;Entrar&lt;/button&gt;\n&lt;/form&gt;\nAo ser submetido, este formulário gera o seguinte pedido HTTP:\nPOST /login HTTP/1.1\nHost: localhost:8080\nContent-Type: application/x-www-form-urlencoded\nContent-Length: 21\n\nuser=javaee&pass=esigelec2026\nAo contrário do exemplo anterior, os parâmetros já não vão na URL: seguem no corpo do pedido, depois de uma linha em branco que separa os cabeçalhos do corpo. É por isso que credenciais e outros dados sensíveis se enviam tipicamente por POST, nunca por GET: o corpo de um pedido não fica registado nos históricos de navegação nem nos ficheiros de registo (logs) do servidor, ao contrário do que acontece com os parâmetros de uma URL.",
+    "section": "1.6 HTTP em Detalhe: Formato de uma Mensagem",
+    "text": "1.6 HTTP em Detalhe: Formato de uma Mensagem\nTanto um pedido como uma resposta HTTP seguem a mesma estrutura geral:\n\nUma primeira linha, diferente consoante se trate de um pedido (método, URL e versão de HTTP) ou de uma resposta (versão de HTTP, código de estado e motivo)\nUm conjunto de cabeçalhos (headers), que transportam metadados sobre a mensagem (por exemplo, o anfitrião de destino, o tipo de conteúdo ou o seu comprimento)\nUm corpo (body), opcional, com os dados propriamente ditos\n\nUm pedido GET não tem, tipicamente, corpo: todos os dados que transporta vão na própria URL, sob a forma de parâmetros. Um pedido POST transporta os dados no corpo da mensagem, fora da URL.\n\n\n\n\n\n\nFigura 1.2: O formato geral de uma mensagem HTTP: a primeira linha (diferente para pedido e resposta), seguida dos vários grupos de cabeçalhos, e por fim o corpo.\n\n\n\n\n1.6.1 Exemplo: de um Formulário a um Pedido HTTP\nConsidere-se um formulário HTML simples, usado para consultar a capital de um país a partir do respetivo código:\n&lt;form method=\"GET\" action=\"/capital\"&gt;\n  &lt;label for=\"countrycode\"&gt;Código do país&lt;/label&gt;\n  &lt;input type=\"text\" id=\"countrycode\" name=\"countrycode\"&gt;\n  &lt;button type=\"submit\"&gt;Consultar&lt;/button&gt;\n&lt;/form&gt;\nAo ser submetido com o valor PT, o browser gera o seguinte pedido HTTP:\nGET /capital?countrycode=PT HTTP/1.1\nHost: localhost:8080\nNote-se que, por se tratar de um método GET, o parâmetro countrycode é enviado como parte da URL (depois do ?), e não existe corpo na mensagem. Se o mesmo formulário usasse method=\"POST\", o parâmetro seguiria antes no corpo do pedido, e a URL manter-se-ia limpa (/capital).\nO servidor, ao processar este pedido, devolve uma resposta HTTP como a seguinte:\nHTTP/1.1 200 OK\nContent-Type: application/json\n\n{\"country\": \"Portugal\", \"capital\": \"Lisboa\", \"ccode\": \"PT\"}\n\n\n1.6.2 Exemplo: um Pedido POST com Corpo\nConsidere-se agora um formulário de autenticação, com os campos user e pass:\n&lt;form method=\"POST\" action=\"/login\"&gt;\n  &lt;label for=\"user\"&gt;Utilizador&lt;/label&gt;\n  &lt;input type=\"text\" id=\"user\" name=\"user\"&gt;\n  &lt;label for=\"pass\"&gt;Palavra-passe&lt;/label&gt;\n  &lt;input type=\"password\" id=\"pass\" name=\"pass\"&gt;\n  &lt;button type=\"submit\"&gt;Entrar&lt;/button&gt;\n&lt;/form&gt;\nAo ser submetido, este formulário gera o seguinte pedido HTTP:\nPOST /login HTTP/1.1\nHost: localhost:8080\nContent-Type: application/x-www-form-urlencoded\nContent-Length: 21\n\nuser=javaee&pass=esigelec2026\nAo contrário do exemplo anterior, os parâmetros já não vão na URL: seguem no corpo do pedido, depois de uma linha em branco que separa os cabeçalhos do corpo. É por isso que credenciais e outros dados sensíveis se enviam tipicamente por POST, nunca por GET: o corpo de um pedido não fica registado nos históricos de navegação nem nos ficheiros de registo (logs) do servidor, ao contrário do que acontece com os parâmetros de uma URL.",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Arquitetura de Aplicações Web</span>"
     ]
@@ -143,8 +123,8 @@
     "objectID": "capitulos/cap01.html#sec-01-http-codigos-estado",
     "href": "capitulos/cap01.html#sec-01-http-codigos-estado",
     "title": "1  Arquitetura de Aplicações Web",
-    "section": "1.9 HTTP em Detalhe: Códigos de Estado",
-    "text": "1.9 HTTP em Detalhe: Códigos de Estado\nToda a resposta HTTP inclui um código de estado numérico, que indica sucintamente o resultado do pedido. Os códigos agrupam-se em cinco categorias, consoante a centena:\n\n\n\nIntervalo\nCategoria\n\n\n\n\n1xx\nInformativo\n\n\n2xx\nSucesso\n\n\n3xx\nRedirecionamento\n\n\n4xx\nErro do cliente\n\n\n5xx\nErro do servidor\n\n\n\nDentro destas categorias, alguns códigos surgem com particular frequência no desenvolvimento de serviços Web:\n\n\n\n\n\n\n\nCódigo\nSignificado\n\n\n\n\n200 OK\nO pedido foi processado com sucesso\n\n\n201 Created\nUm novo recurso foi criado com sucesso\n\n\n400 Bad Request\nO pedido está malformado ou falta um parâmetro obrigatório\n\n\n403 Forbidden\nO cliente não tem permissão para aceder ao recurso\n\n\n404 Not Found\nO recurso pedido não existe\n\n\n500 Internal Server Error\nOcorreu um erro não tratado do lado do servidor\n\n\n\nEscolher o código de estado correto para cada situação é uma parte essencial do desenho de um serviço Web: o código transmite, por si só, informação que o cliente pode usar para decidir como reagir, sem precisar de interpretar o corpo da resposta.",
+    "section": "1.7 HTTP em Detalhe: Códigos de Estado",
+    "text": "1.7 HTTP em Detalhe: Códigos de Estado\nToda a resposta HTTP inclui um código de estado numérico, que indica sucintamente o resultado do pedido. Os códigos agrupam-se em cinco categorias, consoante a centena:\n\n\n\nIntervalo\nCategoria\n\n\n\n\n1xx\nInformativo\n\n\n2xx\nSucesso\n\n\n3xx\nRedirecionamento\n\n\n4xx\nErro do cliente\n\n\n5xx\nErro do servidor\n\n\n\nDentro destas categorias, alguns códigos surgem com particular frequência no desenvolvimento de serviços Web:\n\n\n\n\n\n\n\nCódigo\nSignificado\n\n\n\n\n200 OK\nO pedido foi processado com sucesso\n\n\n201 Created\nUm novo recurso foi criado com sucesso\n\n\n400 Bad Request\nO pedido está malformado ou falta um parâmetro obrigatório\n\n\n403 Forbidden\nO cliente não tem permissão para aceder ao recurso\n\n\n404 Not Found\nO recurso pedido não existe\n\n\n500 Internal Server Error\nOcorreu um erro não tratado do lado do servidor\n\n\n\nEscolher o código de estado correto para cada situação é uma parte essencial do desenho de um serviço Web: o código transmite, por si só, informação que o cliente pode usar para decidir como reagir, sem precisar de interpretar o corpo da resposta.",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Arquitetura de Aplicações Web</span>"
     ]
@@ -224,17 +204,77 @@
     "href": "capitulos/cap03.html",
     "title": "3  Java EE e Fundamentos de Servlets",
     "section": "",
-    "text": "3.1 O Web Container e o Primeiro Servlet",
+    "text": "3.1 A Plataforma Jakarta EE\nA Jakarta EE (anteriormente conhecida como Java EE, até ser renomeada em 2019) é uma plataforma que fornece um conjunto de serviços e APIs prontos a usar para lidar com os problemas comuns a qualquer aplicação Web (ver Capítulo 1), libertando quem desenvolve para se concentrar na lógica de negócio da aplicação.\nA plataforma assenta na linguagem Java e na Java Virtual Machine (JVM), o que significa que qualquer componente escrito para Jakarta EE beneficia da portabilidade e da gestão automática de memória já conhecidas da linguagem.",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Java EE e Fundamentos de Servlets</span>"
     ]
   },
   {
-    "objectID": "capitulos/cap03.html#sec-03-servlets",
-    "href": "capitulos/cap03.html#sec-03-servlets",
+    "objectID": "capitulos/cap03.html#sec-03-arquitetura-camadas",
+    "href": "capitulos/cap03.html#sec-03-arquitetura-camadas",
     "title": "3  Java EE e Fundamentos de Servlets",
-    "section": "",
-    "text": "Conteúdo a desenvolver, alinhado com a Lecture 1 do ESIGELEC (Java EE and Servlet Fundamentals). Tópicos previstos:\n\nJakarta EE / Java EE\nWeb Container (Tomcat)\nCiclo de vida de um Servlet\nHttpServletRequest / HttpServletResponse\ndoGet() e doPost()\nParâmetros HTTP, Content-Type\nGeração manual de JSON",
+    "section": "3.2 Arquitetura em Camadas",
+    "text": "3.2 Arquitetura em Camadas\nA plataforma Jakarta EE organiza uma aplicação segundo um modelo distribuído em várias camadas (tiers), cada uma com uma função bem definida e instalada, tipicamente, em máquinas diferentes:\n\n\n\n\n\n\n\n\nCamada\nOnde reside\nComponentes típicos\n\n\n\n\nClient Tier\nMáquina do cliente\nPáginas Web (browser), aplicações cliente\n\n\nWeb Tier\nServidor Jakarta EE\nServlets, JavaServer Pages, Web Services\n\n\nBusiness Tier\nServidor Jakarta EE\nEnterprise Beans (lógica de negócio)\n\n\nEIS Tier (Enterprise Information System)\nServidor de base de dados\nBases de dados, sistemas de informação empresarial\n\n\n\nEsta separação por camadas permite que cada componente evolua de forma relativamente independente das restantes: alterar a base de dados não obriga a reescrever a lógica de negócio, e alterar a interface do cliente não obriga a alterar o servidor.\n\n\n\n\n\n\nFigura 3.1: A arquitetura em camadas da Jakarta EE: o cliente comunica apenas com a Web Tier, que por sua vez recorre à Business Tier e, através dela, à base de dados na EIS Tier.\n\n\n\n\n\n\n\n\n\nTomcat não é um servidor Jakarta EE completo\n\n\n\nO Apache Tomcat, usado ao longo desta UC, é um Servlet Container: implementa apenas a Web Tier (Servlets, JSP). Não inclui suporte para Enterprise Beans nem para a Business Tier propriamente dita, ao contrário de um servidor de aplicações Jakarta EE completo (por exemplo, WildFly, WebSphere ou GlassFish). Na prática, isto significa que a lógica de negócio que, na arquitetura formal, pertenceria à Business Tier, é implementada aqui diretamente em classes Java comuns (como os DAO usados nos LABs práticos), e não em Enterprise Beans.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Java EE e Fundamentos de Servlets</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap03.html#sec-03-porque-servlets",
+    "href": "capitulos/cap03.html#sec-03-porque-servlets",
+    "title": "3  Java EE e Fundamentos de Servlets",
+    "section": "3.3 Porquê Servlets?",
+    "text": "3.3 Porquê Servlets?\nImplementar, de raiz, um programa Java capaz de responder a pedidos HTTP obrigaria a resolver, sozinho, um conjunto de problemas comuns a qualquer servidor Web: interpretar a mensagem HTTP recebida, gerir várias ligações em simultâneo (cada uma num thread próprio), controlar o ciclo de vida das instâncias em memória, e empacotar tudo isto num formato que um servidor de aplicações saiba instalar e arrancar.\nUma Servlet é uma classe Java que corre dentro de um Servlet Container (por exemplo, o Apache Tomcat) e que recebe, automaticamente, todo este trabalho já feito:\n\nInterpretação (parsing) do pedido HTTP\nGestão de threads, uma por pedido\nGestão do ciclo de vida da própria Servlet\nUm modelo de implantação (deployment) próprio, empacotado num ficheiro .war (Web Application Archive)\n\nO Servlet Container corresponde, na arquitetura em camadas apresentada acima, à Web Tier: é aí que as Servlets residem, entre o cliente e a camada de negócio.\n\n\n\n\n\n\nFigura 3.2: Do ponto de vista do cliente, uma Servlet é apenas mais um destino de pedidos HTTP: recebe um pedido, devolve uma resposta.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Java EE e Fundamentos de Servlets</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap03.html#sec-03-ciclo-vida",
+    "href": "capitulos/cap03.html#sec-03-ciclo-vida",
+    "title": "3  Java EE e Fundamentos de Servlets",
+    "section": "3.4 O Ciclo de Vida de uma Servlet",
+    "text": "3.4 O Ciclo de Vida de uma Servlet\nQuando um pedido é encaminhado para uma Servlet, o contentor segue sempre a mesma sequência:\n\nSe ainda não existir uma instância dessa Servlet em memória, o contentor carrega a classe, cria uma instância e chama o método init()\nPara cada pedido recebido, o contentor invoca o método service(), que despacha para doGet(), doPost(), ou outro método consoante o verbo HTTP usado, passando-lhe os objetos request e response\nSe o contentor precisar de remover a Servlet (por exemplo, ao desligar o servidor), invoca o método destroy()\n\nUm pormenor importante decorre daqui: existe uma única instância de cada Servlet em memória, mesmo que existam N clientes a usar o mesmo serviço em simultâneo. Cada pedido é atendido por um thread diferente, mas todos esses threads partilham a mesma instância. Na prática, isto significa:\n\n\n\n\n\n\nCuidado com o estado partilhado\n\n\n\nNunca guardar dados de um pedido específico em atributos de instância da Servlet: como a instância é partilhada por todos os threads, um pedido pode ler ou sobrescrever dados de outro pedido em curso. Variáveis locais, declaradas dentro de doGet() ou doPost(), são seguras, porque cada thread tem a sua própria cópia.\n\n\n\n\n\n\n\n\nFigura 3.3: O contentor carrega a classe da Servlet uma única vez; cada pedido recebido é despachado para um thread próprio, que invoca service() sobre essa mesma instância partilhada.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Java EE e Fundamentos de Servlets</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap03.html#sec-03-mapeamento-http-servlet",
+    "href": "capitulos/cap03.html#sec-03-mapeamento-http-servlet",
+    "title": "3  Java EE e Fundamentos de Servlets",
+    "section": "3.5 Da Mensagem HTTP ao Método Java",
+    "text": "3.5 Da Mensagem HTTP ao Método Java\nUma Servlet liga-se a uma URL através da anotação @WebServlet, que faz o mapeamento entre um caminho e a classe que o vai tratar:\n@WebServlet(\"/country\")\npublic class CountryServlet extends HttpServlet {\n    // ...\n}\nUm pedido a http://localhost:8080/country é assim encaminhado para a classe CountryServlet. Dentro dela, os elementos da mensagem HTTP (ver Capítulo 1) correspondem a métodos concretos dos objetos request e response:\n\n\n\n\n\n\n\nElemento HTTP\nAcesso em Java\n\n\n\n\nCabeçalhos do pedido\nrequest.getHeader(nome)\n\n\nParâmetros (query string ou corpo)\nrequest.getParameter(nome)\n\n\nCorpo do pedido (JSON, dados em bruto)\nrequest.getInputStream()\n\n\nEscrever a resposta\nresponse.getWriter() ou response.getOutputStream()\n\n\n\nprotected void doGet(HttpServletRequest request, HttpServletResponse response) {\n    String countryCode = request.getParameter(\"countrycode\");\n    // ...\n}\n\n\n\n\n\n\nFigura 3.4: Dentro do servidor Jakarta EE, o pedido chega encapsulado num HttpServletRequest, é processado pelo componente Web (a Servlet), que pode consultar recursos de dados, e a resposta sai encapsulada num HttpServletResponse.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Java EE e Fundamentos de Servlets</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap03.html#sec-03-content-type",
+    "href": "capitulos/cap03.html#sec-03-content-type",
+    "title": "3  Java EE e Fundamentos de Servlets",
+    "section": "3.6 Content-Type e a Forma da Resposta",
+    "text": "3.6 Content-Type e a Forma da Resposta\nAntes de escrever qualquer coisa na resposta, é essencial definir o seu Content-Type: é este cabeçalho que diz ao cliente como deve interpretar os bytes que se seguem, seja como página HTML, seja como dados JSON.\nresponse.setContentType(\"text/html\");\nPrintWriter out = response.getWriter();\nout.println(\"&lt;html&gt;&lt;body&gt;\");\nout.println(\"&lt;h1&gt;Hello João&lt;/h1&gt;\");\nout.println(\"&lt;/body&gt;&lt;/html&gt;\");\nresponse.setContentType(\"application/json\");\nPrintWriter out = response.getWriter();\nout.print(\"{\\\"name\\\":\\\"João\\\",\\\"role\\\":\\\"admin\\\"}\");\nNa ausência de uma biblioteca dedicada à geração de JSON, o mais direto é construir a String manualmente, tendo o cuidado de escapar as aspas internas com \\\":\nString jsonResponse = \"{\\\"country\\\": \\\"Portugal\\\", \\\"capital\\\": \\\"Lisboa\\\", \\\"ccode\\\": \\\"PT\\\"}\";\nout.print(jsonResponse);\nout.flush();\nPara definir o código de estado da resposta (ver Capítulo 1), a classe HttpServletResponse disponibiliza uma constante para cada código, evitando o uso de números “mágicos” diretamente no código:\n\n\n\nCódigo HTTP\nConstante Java\n\n\n\n\n200\nHttpServletResponse.SC_OK\n\n\n201\nHttpServletResponse.SC_CREATED\n\n\n400\nHttpServletResponse.SC_BAD_REQUEST\n\n\n403\nHttpServletResponse.SC_FORBIDDEN\n\n\n404\nHttpServletResponse.SC_NOT_FOUND\n\n\n500\nHttpServletResponse.SC_INTERNAL_SERVER_ERROR\n\n\n\nresponse.setStatus(HttpServletResponse.SC_NOT_FOUND);",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Java EE e Fundamentos de Servlets</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap03.html#sec-03-primeiro-servlet",
+    "href": "capitulos/cap03.html#sec-03-primeiro-servlet",
+    "title": "3  Java EE e Fundamentos de Servlets",
+    "section": "3.7 Uma Primeira Servlet: “World Capitals”",
+    "text": "3.7 Uma Primeira Servlet: “World Capitals”\nAplicando o que foi apresentado, uma primeira Servlet pode servir como simples verificação de estado (health check) da API:\n@WebServlet(\"/status\")\npublic class StatusServlet extends HttpServlet {\n    protected void doGet(HttpServletRequest request, HttpServletResponse response)\n            throws ServletException, IOException {\n        response.setContentType(\"text/plain\");\n        PrintWriter out = response.getWriter();\n        out.print(\"OK\");\n    }\n}\nE um segundo, já a devolver dados fixos em formato JSON, é o primeiro passo da aplicação “World Capitals” usada ao longo desta UC:\n@WebServlet(\"/countrycapital\")\npublic class CountryCapitalServlet extends HttpServlet {\n    protected void doGet(HttpServletRequest request, HttpServletResponse response)\n            throws ServletException, IOException {\n        response.setContentType(\"application/json\");\n        PrintWriter out = response.getWriter();\n\n        String jsonResponse = \"{\\\"country\\\": \\\"Portugal\\\", \\\"capital\\\": \\\"Lisboa\\\", \\\"ccode\\\": \\\"PT\\\"}\";\n        out.print(jsonResponse);\n        out.flush();\n    }\n}\nEsta Servlet devolve sempre o mesmo país, com os dados fixos diretamente no código. É deliberadamente uma simplificação: o Apêndice B (LAB1) retoma exatamente este ponto, substituindo os dados fixos por um objeto dedicado ao acesso a dados (DAO), preparando o terreno para, mais tarde, ligar a um servidor de base de dados real.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Java EE e Fundamentos de Servlets</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap03.html#sec-03-servlets-mvc",
+    "href": "capitulos/cap03.html#sec-03-servlets-mvc",
+    "title": "3  Java EE e Fundamentos de Servlets",
+    "section": "3.8 Servlets e o Padrão MVC: Falta a View",
+    "text": "3.8 Servlets e o Padrão MVC: Falta a View\nAs Servlets apresentadas neste capítulo devolvem sempre JSON: são orientadas a serviço, e não têm, de facto, nenhuma View (ver Capítulo 1). Numa aplicação orientada à apresentação, porém, a mesma Servlet que funciona como Controller pode delegar a geração de HTML a uma página dedicada, mantendo a separação de responsabilidades do MVC:\n\n\n\n\n\n\nFigura 3.5: Na realização clássica do MVC em Jakarta EE, a Servlet funciona como Controller, uma JavaServer Page como View, e uma classe Java simples como Model.\n\n\n\nEssa página dedicada, a JavaServer Page (JSP), é abordada em detalhe no Capítulo 4.",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Java EE e Fundamentos de Servlets</span>"
     ]
@@ -244,17 +284,87 @@
     "href": "capitulos/cap04.html",
     "title": "4  Modelo Stateful: Sessões e JSP",
     "section": "",
-    "text": "4.1 Sessões, Cookies e Autenticação",
+    "text": "4.1 HTTP é Sem Estado: o Problema\nO protocolo HTTP é stateless (ver Capítulo 1): cada pedido é independente, e o servidor não guarda, por si só, qualquer memória de pedidos anteriores. Não existe, ao nível do protocolo, nenhuma noção de “utilizador com sessão iniciada”.\nIsto levanta um problema prático imediato: se um utilizador se autentica num pedido, como é que um pedido seguinte, minutos depois, sabe que esse utilizador continua autenticado? A resposta passa por dois mecanismos complementares:",
     "crumbs": [
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Modelo Stateful: Sessões e JSP</span>"
     ]
   },
   {
-    "objectID": "capitulos/cap04.html#sec-04-sessoes",
-    "href": "capitulos/cap04.html#sec-04-sessoes",
+    "objectID": "capitulos/cap04.html#sec-04-problema-estado",
+    "href": "capitulos/cap04.html#sec-04-problema-estado",
     "title": "4  Modelo Stateful: Sessões e JSP",
     "section": "",
-    "text": "Conteúdo a desenvolver, alinhado com a Lecture 2 do ESIGELEC (Traditional Java Web, Stateful Model). Tópicos previstos:\n\nJSP\nMVC tradicional (Servlet + JSP)\nRequestDispatcher\nHttpSession\nCookies, JSESSIONID\nAutenticação baseada em sessão\nLogout (session.invalidate())",
+    "text": "Cookies: um pequeno pedaço de informação guardado do lado do cliente, reenviado automaticamente pelo browser em cada pedido seguinte\nHttpSession: um objeto guardado do lado do servidor, associado a um identificador que o cliente devolve a cada pedido",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Modelo Stateful: Sessões e JSP</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap04.html#sec-04-cookies",
+    "href": "capitulos/cap04.html#sec-04-cookies",
+    "title": "4  Modelo Stateful: Sessões e JSP",
+    "section": "4.2 Cookies",
+    "text": "4.2 Cookies\nUm cookie é um par chave/valor guardado no browser. Quando o servidor envia um cookie, espera que o cliente o devolva em todos os pedidos HTTP seguintes, dirigidos ao mesmo domínio.\nDistinguem-se dois tipos, consoante a sua persistência:\n\nSession cookies: mantidos pelo cliente apenas durante a sessão de navegação (setMaxAge(-1))\nPermanent cookies: guardados de forma persistente, com um tempo de vida definido (setMaxAge(60*60*24*30) para 30 dias, por exemplo)\n\nCriar um cookie:\nCookie cookie = new Cookie(\"userName\", \"Pedro\");\ncookie.setMaxAge(-1); // session cookie\nresponse.addCookie(cookie);\nLer um cookie recebido num pedido:\nCookie[] cookies = request.getCookies();\nString user = null;\n\nfor (Cookie c : cookies) {\n    if (c.getName().equals(\"userName\")) {\n        user = c.getValue();\n    }\n}",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Modelo Stateful: Sessões e JSP</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap04.html#sec-04-sessoes-http",
+    "href": "capitulos/cap04.html#sec-04-sessoes-http",
+    "title": "4  Modelo Stateful: Sessões e JSP",
+    "section": "4.3 Sessões (HttpSession)",
+    "text": "4.3 Sessões (HttpSession)\nGuardar estado do lado do servidor exige um objeto próprio para o efeito: a HttpSession. Uma sessão obtém-se, ou cria-se, a partir do pedido:\nHttpSession session = request.getSession();          // cria se não existir\nHttpSession session = request.getSession(true);      // equivalente, explícito\nHttpSession session = request.getSession(false);     // NUNCA cria; devolve null se não houver\nUma vez obtida, a sessão guarda e devolve informação através de atributos, e pode ser terminada explicitamente:\nsession.setAttribute(\"email\", \"foo@fool.com\");\nString email = (String) session.getAttribute(\"email\");\nsession.invalidate();                    // termina a sessão\nsession.setMaxInactiveInterval(1800);     // tempo de inatividade, em segundos\nFalta uma peça: se HTTP não tem memória de pedidos anteriores, como é que o servidor sabe que dois pedidos sucessivos pertencem à mesma sessão? A resposta são, de novo, os cookies: por convenção, o identificador de sessão viaja num cookie chamado JSESSIONID, criado automaticamente pelo Servlet Container na primeira chamada a getSession().\nJSESSIONID=22562577CE80EF3B1DAAA0E48F2B6392\nQuando o cliente não aceita cookies, existe uma alternativa: codificar o identificador de sessão diretamente na URL.\nhttp://localhost:8080/CapitaisAPI/country;jsessionid=829F8836C240B51DD2F074259F242833\nÉ boa prática chamar sempre response.encodeURL(url) ao construir uma URL de destino: se os cookies estiverem ativos, o método devolve a URL inalterada; se não estiverem, acrescenta automaticamente o jsessionid.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Modelo Stateful: Sessões e JSP</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap04.html#sec-04-autenticacao-sessao",
+    "href": "capitulos/cap04.html#sec-04-autenticacao-sessao",
+    "title": "4  Modelo Stateful: Sessões e JSP",
+    "section": "4.4 Autenticação Baseada em Sessão",
+    "text": "4.4 Autenticação Baseada em Sessão\nJuntando os dois mecanismos anteriores, obtém-se o padrão clássico de autenticação por sessão, usado no LAB2 desta UC (ver Apêndice B). Depois de validar as credenciais, a LoginServlet cria uma sessão e guarda nela o identificador do utilizador:\n@WebServlet(\"/login\")\npublic class LoginServlet extends HttpServlet {\n    protected void doPost(HttpServletRequest request, HttpServletResponse response)\n            throws ServletException, IOException {\n        String user = request.getParameter(\"user\");\n        String pass = request.getParameter(\"pass\");\n\n        if (dao.validateUserCredentials(user, pass)) {\n            HttpSession session = request.getSession(true);\n            session.setAttribute(\"UserName\", user);\n\n            response.setContentType(\"application/json\");\n            response.getWriter().print(\"{\\\"message\\\":\\\"OK\\\",\\\"user\\\":\\\"\" + user + \"\\\"}\");\n        } else {\n            response.setStatus(HttpServletResponse.SC_FORBIDDEN);\n            response.getWriter().print(\"{\\\"message\\\":\\\"FORBIDDEN\\\",\\\"error\\\":\\\"Invalid login or password\\\"}\");\n        }\n    }\n}\nQualquer endpoint protegido verifica, no início do seu próprio doGet() ou doPost(), se existe uma sessão válida com esse atributo:\nHttpSession session = request.getSession(false);\nif (session == null || session.getAttribute(\"UserName\") == null) {\n    response.setStatus(HttpServletResponse.SC_FORBIDDEN);\n    response.getWriter().print(\"{\\\"error\\\":\\\"Authentication required\\\"}\");\n    return;\n}\n// pedido autenticado: continuar o processamento normal\nO logout resume-se a terminar a sessão:\nsession.invalidate();",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Modelo Stateful: Sessões e JSP</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap04.html#sec-04-mvc-jsp",
+    "href": "capitulos/cap04.html#sec-04-mvc-jsp",
+    "title": "4  Modelo Stateful: Sessões e JSP",
+    "section": "4.5 O Padrão MVC com Servlet e JSP",
+    "text": "4.5 O Padrão MVC com Servlet e JSP\nO Capítulo 1 apresentou o padrão MVC a nível conceptual, e o Capítulo 3 mostrou como uma Servlet funciona como Controller. Falta a peça final: a View.\n\n\n\n\n\n\nFigura 4.1: O modelo geral do MVC, aplicável a qualquer interface (não só Web): o Controller atualiza o Model e a apresentação; a View lê o Model para se apresentar.\n\n\n\nNuma aplicação orientada à apresentação, a Servlet recebe o pedido e decide o quê mostrar, mas delega a geração do HTML propriamente dita a uma JavaServer Page (JSP). O Model, por sua vez, é uma classe Java comum (por exemplo, um DAO), independente de ambos.\nA Servlet liga-se à JSP através de um RequestDispatcher: coloca os dados a mostrar num atributo do pedido, e encaminha (forward) o próprio pedido para a página:\nrequest.setAttribute(\"user\", user);\nrequest.getRequestDispatcher(\"/home.jsp\").forward(request, response);\nUma JSP é um documento de texto que mistura dois tipos de conteúdo: HTML estático e elementos de script dinâmico. Na primeira vez que é pedida, o Servlet Container converte-a automaticamente numa classe Servlet, que passa a comportar-se, dali em diante, exatamente como qualquer outra Servlet.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Modelo Stateful: Sessões e JSP</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap04.html#sec-04-exemplo-jsp",
+    "href": "capitulos/cap04.html#sec-04-exemplo-jsp",
+    "title": "4  Modelo Stateful: Sessões e JSP",
+    "section": "4.6 Um Exemplo Simples de JSP",
+    "text": "4.6 Um Exemplo Simples de JSP\n&lt;%@ page language=\"java\" contentType=\"text/html; charset=UTF-8\" pageEncoding=\"UTF-8\"%&gt;\n\n&lt;% String name = (String) request.getAttribute(\"userName\"); %&gt;\n\n&lt;!DOCTYPE html&gt;\n&lt;html&gt;\n&lt;head&gt;\n  &lt;meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"&gt;\n  &lt;title&gt;Uma Página JSP&lt;/title&gt;\n&lt;/head&gt;\n&lt;body&gt;\n  &lt;h1&gt;Olá, &lt;%= name %&gt;!&lt;/h1&gt;\n&lt;/body&gt;\n&lt;/html&gt;\nO bloco &lt;% ... %&gt; (scriptlet) contém código Java arbitrário; o bloco &lt;%= ... %&gt; (expressão) insere o valor de uma expressão Java diretamente no HTML gerado. É exatamente este atributo userName, colocado no pedido pela Servlet através de request.setAttribute(...), que a JSP aqui recupera.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Modelo Stateful: Sessões e JSP</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap04.html#sec-04-ciclo-vida-jsp",
+    "href": "capitulos/cap04.html#sec-04-ciclo-vida-jsp",
+    "title": "4  Modelo Stateful: Sessões e JSP",
+    "section": "4.7 Ciclo de Vida e Objetos Implícitos",
+    "text": "4.7 Ciclo de Vida e Objetos Implícitos\nO ciclo de vida de uma JSP segue o mesmo modelo da Servlet em que é convertida (ver Capítulo 3), com dois pormenores próprios:\n\nO contentor recompila a JSP automaticamente sempre que o ficheiro .jsp é alterado\nEm vez de init() e destroy(), a JSP oferece os métodos jspInit() e jspDestroy()\n\nOutra diferença prática: dentro de uma JSP, um conjunto de objetos está disponível automaticamente, sem qualquer declaração prévia, chamados objetos implícitos:\n\n\n\nObjeto implícito\nTipo\n\n\n\n\nout\nJspWriter\n\n\nrequest\nHttpServletRequest\n\n\nresponse\nHttpServletResponse\n\n\nsession\nHttpSession\n\n\npage\nObject\n\n\n\nPor causa do objeto implícito out, uma JSP nunca precisa de obter explicitamente um PrintWriter: usa-se out diretamente.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Modelo Stateful: Sessões e JSP</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap04.html#sec-04-scopes",
+    "href": "capitulos/cap04.html#sec-04-scopes",
+    "title": "4  Modelo Stateful: Sessões e JSP",
+    "section": "4.8 Scopes: Partilhar Informação Dentro do Servidor",
+    "text": "4.8 Scopes: Partilhar Informação Dentro do Servidor\nTal como as Servlets podem partilhar informação com outros módulos através de atributos (ver Capítulo 3), esses atributos existem sempre dentro de um determinado âmbito, ou scope. Existem quatro classes de scope:\n\nWeb context (ou application context): um único por aplicação, partilhado por todos os módulos e todos os utilizadores\nSession: um por utilizador, mantido entre vários pedidos desse utilizador\nRequest: um por pedido, perdido assim que a resposta é enviada\nPage: exclusivo de JSP, não é usado nesta UC\n\nTodos os scopes seguem a mesma interface: métodos setAttribute/getAttribute, e getAttributeNames() para listar tudo o que lá está guardado.\nWeb context, partilhado por toda a aplicação:\nServletContext context = request.getServletContext();\ncontext.setAttribute(\"dbHost\", \"localhost\");\nString dbHost = (String) context.getAttribute(\"dbHost\");\nSession, já apresentado, partilhado apenas pelo mesmo utilizador:\nHttpSession session = request.getSession();\nsession.setAttribute(\"email\", \"foo@fool.com\");\nString email = (String) session.getAttribute(\"email\");\nRequest, o mais restrito de todos, partilhado apenas entre módulos que processam o mesmo pedido (por exemplo, entre uma Servlet e a JSP para a qual reencaminha):\nrequest.setAttribute(\"email\", \"foo@fool.com\");\nString email = (String) request.getAttribute(\"email\");\nOs quatro scopes formam uma hierarquia de inclusão, do mais lato ao mais restrito: Application contém Session, que contém Request, que contém Page. Quanto maior o scope, mais partilhada fica a informação, e maior a responsabilidade de a gerir corretamente (por exemplo, de a remover quando deixa de ser necessária).\n\n\n\n\n\n\nFigura 4.2: Os quatro scopes, do mais lato (Application) ao mais restrito (Page): cada um contém o seguinte, e um scope maior implica mais partilha, mas também mais responsabilidade na sua gestão.\n\n\n\n\n\n\n\n\n\nScopes não se instanciam\n\n\n\nOs objetos de scope (ServletContext, HttpSession, ServletRequest) são fornecidos automaticamente pelo contentor. Nunca se cria uma instância nova com new: se um deles ainda não existe, os métodos apropriados (getServletContext(), getSession()) criam-no ou devolvem o existente.",
     "crumbs": [
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Modelo Stateful: Sessões e JSP</span>"
     ]
@@ -262,21 +372,101 @@
   {
     "objectID": "capitulos/cap05.html",
     "href": "capitulos/cap05.html",
-    "title": "5  Segurança e Filters",
+    "title": "5  Segurança e Filtros",
     "section": "",
-    "text": "5.1 Autenticação, Autorização e o Filter",
+    "text": "5.1 O Problema: Segurança Repetida em Cada Servlet\nCom o que foi apresentado até aqui (ver Capítulo 4), a autenticação está resolvida: a LoginServlet valida as credenciais e grava o utilizador na sessão, e cada endpoint protegido verifica essa sessão no início do seu doGet() ou doPost(). Isto funciona, mas tem um custo escondido: a lógica de autenticação vive, duplicada, dentro de cada Servlet protegida.\nEsta duplicação traz consigo vários problemas:\nDito de outra forma, esta duplicação viola o princípio DRY (Don’t Repeat Yourself): uma responsabilidade deveria viver num único sítio, e lógica repetida aumenta o custo de manutenção sempre que essa lógica precisa de mudar. Mais concretamente, este desenho viola o Princípio da Responsabilidade Única: cada Servlet passa a ter duas responsabilidades distintas, a lógica de negócio que lhe é própria, e a lógica de segurança que lhe é imposta. Isto torna as políticas de segurança difíceis de fazer evoluir, e o desenho pouco escalável, quer em número de endpoints, quer em complexidade das regras de acesso.",
     "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Segurança e Filters</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Segurança e Filtros</span>"
     ]
   },
   {
-    "objectID": "capitulos/cap05.html#sec-05-filters",
-    "href": "capitulos/cap05.html#sec-05-filters",
-    "title": "5  Segurança e Filters",
+    "objectID": "capitulos/cap05.html#sec-05-problema",
+    "href": "capitulos/cap05.html#sec-05-problema",
+    "title": "5  Segurança e Filtros",
     "section": "",
-    "text": "Conteúdo a desenvolver, alinhado com a Lecture 3 do ESIGELEC (Security and Filters). Tópicos previstos:\n\nAutenticação vs. autorização\nFilter (Jakarta Servlet)\nInterceção de pedidos\nFilterChain\nSeparação de responsabilidades\nHTTP 401 vs. 403\nArquitetura limpa: Servlet vs. Filter",
+    "text": "A mesma verificação de sessão está repetida em todos os endpoints protegidos\nExiste risco real de inconsistência entre essas cópias\nÉ fácil esquecer a proteção ao criar um novo endpoint",
     "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Segurança e Filters</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Segurança e Filtros</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap05.html#sec-05-autenticacao-autorizacao",
+    "href": "capitulos/cap05.html#sec-05-autenticacao-autorizacao",
+    "title": "5  Segurança e Filtros",
+    "section": "5.2 Autenticação vs. Autorização",
+    "text": "5.2 Autenticação vs. Autorização\nAntes de resolver o problema, vale a pena precisar dois conceitos frequentemente confundidos:\n\nAutenticação\n\nResponde a “quem é o utilizador?”. É a verificação de identidade, tipicamente feita no momento do login.\n\n\nif (username.equals(\"admin\") && password.equals(\"1234\")) {\n    HttpSession session = request.getSession(true);\n    session.setAttribute(\"UserName\", username);\n}\n\nAutorização\n\nResponde a “o que é que este utilizador tem permissão para aceder?”. É a verificação de permissões, feita depois de a identidade já estar confirmada.\n\n\nif (session.getAttribute(\"UserRole\").equals(\"ADMIN\")) {\n    // acesso permitido\n}\nA autenticação acontece sempre primeiro: não faz sentido verificar permissões de alguém cuja identidade ainda não foi confirmada. Esta distinção reflete-se diretamente nos códigos de estado HTTP usados na resposta (ver Capítulo 1):\n\n401 Unauthorized: o pedido não está autenticado\n403 Forbidden: o pedido está autenticado, mas não tem permissão para o recurso pedido",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Segurança e Filtros</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap05.html#sec-05-o-que-e-um-filter",
+    "href": "capitulos/cap05.html#sec-05-o-que-e-um-filter",
+    "title": "5  Segurança e Filtros",
+    "section": "5.3 O que é um Filtro",
+    "text": "5.3 O que é um Filtro\nA pergunta que fica por responder é onde deve viver a lógica de segurança: dentro de cada Servlet? Duplicada por todos os endpoints? Ou centralizada num único componente? Segurança é, por natureza, uma preocupação transversal (cross-cutting concern): atravessa toda a aplicação, em vez de pertencer a um único módulo. É exatamente para isto que existe o Filtro.\nUm Filtro é um componente do lado do servidor que intercepta pedidos HTTP:\n\nÉ executado antes da Servlet de destino\nPode também ser executado depois da Servlet (sobre a resposta)\nPode bloquear, redirecionar ou modificar o pedido ou a resposta\n\nAlém da autenticação e da autorização, os Filtros são o mecanismo natural para outras preocupações transversais: registo de atividade (logging), CORS (Cross-Origin Resource Sharing), ou validação de entrada. Um Filtro separa estas preocupações da lógica de negócio, que fica exclusivamente na Servlet.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Segurança e Filtros</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap05.html#sec-05-onde-situa",
+    "href": "capitulos/cap05.html#sec-05-onde-situa",
+    "title": "5  Segurança e Filtros",
+    "section": "5.4 Onde um Filtro se Situa no Pedido",
+    "text": "5.4 Onde um Filtro se Situa no Pedido\nUm ou mais Filtros podem ser encadeados entre o cliente e a Servlet que trata efetivamente o pedido:\nCliente → Filtro 1 → ... → Filtro N → Servlet (lógica de negócio) → Resposta\n\n\n\n\n\n\nFigura 5.1: Um pedido atravessa a cadeia de Filtros antes de chegar à Servlet; cada Filtro pode bloquear o pedido (vermelho), modificá-lo (amarelo) ou deixá-lo prosseguir (verde, chamando chain.doFilter()).\n\n\n\nCada Filtro na cadeia tem, essencialmente, três comportamentos possíveis:\n\nBloquear o pedido: por exemplo, 400 (dados inválidos), 401 (identidade inválida) ou 403 (autenticado mas sem permissão)\nModificar o pedido: normalização e validação de dados, registo de atividade, entre outros\nDeixar prosseguir: chamando chain.doFilter(request, response), passando o controlo ao próximo elemento da cadeia",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Segurança e Filtros</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap05.html#sec-05-ciclo-vida-filter",
+    "href": "capitulos/cap05.html#sec-05-ciclo-vida-filter",
+    "title": "5  Segurança e Filtros",
+    "section": "5.5 Ciclo de Vida de um Filtro",
+    "text": "5.5 Ciclo de Vida de um Filtro\nO ciclo de vida de um Filtro segue o mesmo modelo já apresentado para as Servlets (ver Capítulo 3):\n\ninit(): executado uma única vez, quando o contentor coloca o Filtro em serviço\ndoFilter(): executado a cada pedido; pode inspecionar, bloquear ou modificar o pedido e a resposta, e deve chamar chain.doFilter() para continuar a cadeia\ndestroy(): executado uma única vez, quando o Filtro é retirado de serviço, para libertar recursos\n\nTal como uma Servlet, existe uma única instância de cada Filtro, partilhada por múltiplos pedidos concorrentes: aplica-se aqui exatamente o mesmo cuidado já referido no Capítulo 3, evitar estado mutável partilhado, e preferir variáveis locais dentro de doFilter().\n\n\n\n\n\n\nFigura 5.2: O ciclo de vida de um Filtro espelha o de uma Servlet: init() e destroy() correm uma única vez, doFilter() corre a cada pedido, para múltiplos pedidos concorrentes.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Segurança e Filtros</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap05.html#sec-05-separacao-responsabilidades",
+    "href": "capitulos/cap05.html#sec-05-separacao-responsabilidades",
+    "title": "5  Segurança e Filtros",
+    "section": "5.6 Servlet e Filtro: Separação de Responsabilidades",
+    "text": "5.6 Servlet e Filtro: Separação de Responsabilidades\nCentralizar a segurança num Filtro reorganiza as responsabilidades de toda a aplicação:\n\n\n\n\n\n\nFigura 5.3: Sem Filtro, cada Servlet acumula autenticação, logging, validação e lógica de negócio. Com um Filtro, essas preocupações transversais concentram-se num único sítio, e cada Servlet fica só com a sua lógica de negócio.\n\n\n\nEsta reorganização traz vantagens concretas:\n\nA lógica de autenticação é escrita uma única vez (princípio DRY)\nA política de segurança é aplicada de forma consistente a todos os endpoints\nDeixa de haver risco de “esquecer” a proteção numa Servlet nova\nFica clara a separação entre preocupações transversais (Filtro) e lógica de negócio (Servlet)",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Segurança e Filtros</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap05.html#sec-05-declarar-filter",
+    "href": "capitulos/cap05.html#sec-05-declarar-filter",
+    "title": "5  Segurança e Filtros",
+    "section": "5.7 Declarar e Implementar um Filtro",
+    "text": "5.7 Declarar e Implementar um Filtro\nUm Filtro declara-se com a anotação @WebFilter, indicando o padrão de URLs a que se aplica:\n@WebFilter(\"/*\")\npublic class AuthenticationFilter implements Filter {\n    // ...\n}\nO padrão \"/*\" intercepta todos os pedidos, sem exceção. A classe tem de implementar jakarta.servlet.Filter, e o contentor descobre-a automaticamente no momento da implantação (deployment). Tal como as Servlets, um Filtro também pode ser declarado de forma equivalente, embora considerada préterita, no ficheiro web.xml.\nUm doFilter() típico, que protege todos os pedidos exigindo uma sessão válida, tem esta forma:\npublic void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)\n        throws IOException, ServletException {\n\n    HttpServletRequest req = (HttpServletRequest) request;\n    HttpServletResponse res = (HttpServletResponse) response;\n\n    HttpSession session = req.getSession(false);\n\n    if (session == null || session.getAttribute(\"UserName\") == null) {\n        res.sendError(HttpServletResponse.SC_UNAUTHORIZED); // 401\n        return;\n    }\n\n    chain.doFilter(request, response);\n}\nNa prática, nem todos os pedidos devem ser protegidos: o próprio /login, e recursos estáticos como /css, /js ou /images, precisam de ficar acessíveis sem autenticação, sob pena de o utilizador nunca conseguir sequer chegar ao formulário de login.\nString path = req.getRequestURI();\n\nboolean isLogin = path.endsWith(\"/login\");\nboolean isStatic = path.startsWith(req.getContextPath() + \"/css\")\n                 || path.startsWith(req.getContextPath() + \"/js\")\n                 || path.startsWith(req.getContextPath() + \"/images\");\n\nif (isLogin || isStatic) {\n    chain.doFilter(request, response);\n    return;\n}",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Segurança e Filtros</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap05.html#sec-05-redirect-vs-401",
+    "href": "capitulos/cap05.html#sec-05-redirect-vs-401",
+    "title": "5  Segurança e Filtros",
+    "section": "5.8 Redirecionamento vs. 401: uma Diferença Arquitetural",
+    "text": "5.8 Redirecionamento vs. 401: uma Diferença Arquitetural\nA forma correta de reagir a uma falha de autenticação depende do tipo de aplicação:\n\nNuma aplicação Web tradicional, orientada à apresentação (ver Capítulo 1), a resposta natural é um redirecionamento para a página de login (código 302)\nNuma API REST, cujo contrato é JSON (ver Capítulos 6 e 7), a resposta correta é devolver 401, sem qualquer redirecionamento\n\nA diferença resume-se a uma frase: numa aplicação Web tradicional, uma falha de autenticação muda a página mostrada; numa API REST, muda apenas o código de estado devolvido. É o cliente, não o servidor, quem decide o que fazer a seguir com esse 401.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Segurança e Filtros</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap05.html#sec-05-preparacao-sem-estado",
+    "href": "capitulos/cap05.html#sec-05-preparacao-sem-estado",
+    "title": "5  Segurança e Filtros",
+    "section": "5.9 Preparação para uma Segurança Sem Estado",
+    "text": "5.9 Preparação para uma Segurança Sem Estado\nO modelo apresentado neste capítulo assenta inteiramente em sessão: o servidor guarda o estado do utilizador autenticado (HttpSession), e o Filtro verifica essa sessão em cada pedido. Este modelo tem uma limitação: exige que o servidor mantenha memória de cada utilizador, o que se torna problemático assim que existe mais do que uma instância do servidor (ver Capítulo 7).\nA alternativa é a autenticação baseada em token: em vez de o servidor guardar sessão nenhuma, o próprio pedido transporta, em cada chamada, toda a informação necessária para se autenticar. Esta mudança, de um modelo com estado (stateful) para um modelo sem estado (stateless), é o tema dos capítulos seguintes.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Segurança e Filtros</span>"
     ]
   },
   {
@@ -294,7 +484,7 @@
     "href": "capitulos/cap06.html#sec-06-rest",
     "title": "6  Web Services REST e Arquitetura Stateless (Parte 1)",
     "section": "",
-    "text": "Conteúdo a desenvolver, alinhado com a primeira metade da Lecture 4 do ESIGELEC (REST Web Services and Stateless Architecture). Tópicos previstos:\n\nO que é um Web Service\nREST (nível conceptual)\nRecursos e endpoints\nJSON como formato de troca de dados\nO contrato HTTP como contrato da API\nStateful vs. Stateless\n\n\n\n\n\n\n\n\nPOST + operation como alternativa aos verbos HTTP “puros”\n\n\n\nOs LABs práticos desta UC (ver Apêndice B, LAB4) implementam a criação, atualização e remoção de um país através de um único endpoint (/countryEdit), recebido sempre por POST, distinguindo a operação pretendida através de um parâmetro operation (insert, update, delete). Isto contraria a semântica “pura” dos verbos HTTP apresentada no Capítulo 1 (POST para criar, PUT para atualizar, DELETE para remover), mas é uma simplificação pragmática, comum em código de formação: evita configurar Servlets adicionais mapeados a PUT/DELETE, e mantém tudo testável com formulários HTML simples, sem recorrer a JavaScript.\nFica como sugestão de implementação futura, possível para os alunos mais avançados: reescrever /countryEdit como três endpoints distintos, um por verbo HTTP (por exemplo, PUT /country/{code} para atualizar e DELETE /country/{code} para remover), aproximando a API de um desenho REST mais convencional.",
+    "text": "Conteúdo a desenvolver, alinhado com a primeira metade da Lecture 4 do ESIGELEC (REST Web Services and Stateless Architecture). Tópicos previstos:\n\nO que é um Web Service\nREST (nível conceptual)\nRecursos e endpoints\nJSON como formato de troca de dados\nO contrato HTTP como contrato da API\nStateful vs. Stateless\n\n\n\n\n\n\n\n\nPOST + operation como alternativa aos verbos HTTP “puros”\n\n\n\nOs LABs práticos desta UC (ver Apêndice B, LAB4) implementam a criação, atualização e remoção de um país através de um único endpoint (/countryEdit), recebido sempre por POST, distinguindo a operação pretendida através de um parâmetro operation (insert, update, delete). Isto contraria a semântica “pura” dos verbos HTTP apresentada no Capítulo 1 (POST para criar, PUT para atualizar, DELETE para remover), mas é uma simplificação pragmática, comum em código de formação: evita configurar Servlets adicionais mapeadas a PUT/DELETE, e mantém tudo testável com formulários HTML simples, sem recorrer a JavaScript.\nFica como sugestão de implementação futura, possível para os alunos mais avançados: reescrever /countryEdit como três endpoints distintos, um por verbo HTTP (por exemplo, PUT /country/{code} para atualizar e DELETE /country/{code} para remover), aproximando a API de um desenho REST mais convencional.",
     "crumbs": [
       "<span class='chapter-number'>6</span>  <span class='chapter-title'>Web Services REST e Arquitetura Stateless (Parte 1)</span>"
     ]

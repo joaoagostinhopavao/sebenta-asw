@@ -20,11 +20,6 @@ aplicações Web, boas práticas de desenvolvimento, o protocolo HTTP, HTML e
 CSS, programação do lado do servidor e do lado do cliente, acesso a bases de
 dados, e Web Services REST, com o Java EE como caso de estudo.
 
-Esta UC segue de perto a matéria e os trabalhos práticos de uma UC homóloga
-já lecionada no ESIGELEC (parceiro internacional), com uma diferença
-importante: os alunos do ESIGELEC já chegam com base em HTML/CSS e bases de
-dados, os da UTAD não. Por isso, os primeiros capítulos cobrem essa base
-antes de convergir para a mesma matéria de Java EE.
 
 ## Organização do documento {.unnumbered}
 

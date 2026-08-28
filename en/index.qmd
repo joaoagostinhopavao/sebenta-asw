@@ -24,12 +24,6 @@ development practices, the HTTP protocol, HTML and CSS, server-side and
 client-side programming, database access, and REST Web Services, with
 Java EE as the case study.
 
-This course follows closely the material and practical work of an
-equivalent course already taught at ESIGELEC (international partner),
-with one important difference: ESIGELEC students already have an HTML/CSS
-and database background, UTAD students do not. For this reason, the first
-chapters cover that foundation before converging on the same Java EE
-material.
 
 ## Organisation {.unnumbered}
 

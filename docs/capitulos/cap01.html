@@ -181,7 +181,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap05.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Segurança e Filters</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Segurança e Filtros</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -236,18 +236,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#sec-01-problema" id="toc-sec-01-problema" class="nav-link active" data-scroll-target="#sec-01-problema"><span class="header-section-number">1.1</span> O Problema: Construir uma Aplicação Web de Raiz</a></li>
-  <li><a href="#sec-01-jakarta-ee" id="toc-sec-01-jakarta-ee" class="nav-link" data-scroll-target="#sec-01-jakarta-ee"><span class="header-section-number">1.2</span> A Plataforma Jakarta EE</a></li>
-  <li><a href="#sec-01-arquitetura-camadas" id="toc-sec-01-arquitetura-camadas" class="nav-link" data-scroll-target="#sec-01-arquitetura-camadas"><span class="header-section-number">1.3</span> Arquitetura em Camadas</a></li>
-  <li><a href="#sec-01-frontend-backend" id="toc-sec-01-frontend-backend" class="nav-link" data-scroll-target="#sec-01-frontend-backend"><span class="header-section-number">1.4</span> Aplicações da Camada Web: Apresentação vs.&nbsp;Serviço</a></li>
-  <li><a href="#sec-01-mvc" id="toc-sec-01-mvc" class="nav-link" data-scroll-target="#sec-01-mvc"><span class="header-section-number">1.5</span> O Padrão MVC</a></li>
-  <li><a href="#sec-01-cliente-servidor" id="toc-sec-01-cliente-servidor" class="nav-link" data-scroll-target="#sec-01-cliente-servidor"><span class="header-section-number">1.6</span> O Modelo Cliente-Servidor</a></li>
-  <li><a href="#sec-01-http-metodos" id="toc-sec-01-http-metodos" class="nav-link" data-scroll-target="#sec-01-http-metodos"><span class="header-section-number">1.7</span> HTTP em Detalhe: Métodos</a></li>
-  <li><a href="#sec-01-http-formato-mensagem" id="toc-sec-01-http-formato-mensagem" class="nav-link" data-scroll-target="#sec-01-http-formato-mensagem"><span class="header-section-number">1.8</span> HTTP em Detalhe: Formato de uma Mensagem</a>
+  <li><a href="#sec-01-frontend-backend" id="toc-sec-01-frontend-backend" class="nav-link" data-scroll-target="#sec-01-frontend-backend"><span class="header-section-number">1.2</span> Duas Orientações: Apresentação vs.&nbsp;Serviço</a></li>
+  <li><a href="#sec-01-mvc" id="toc-sec-01-mvc" class="nav-link" data-scroll-target="#sec-01-mvc"><span class="header-section-number">1.3</span> O Padrão MVC</a></li>
+  <li><a href="#sec-01-cliente-servidor" id="toc-sec-01-cliente-servidor" class="nav-link" data-scroll-target="#sec-01-cliente-servidor"><span class="header-section-number">1.4</span> O Modelo Cliente-Servidor</a></li>
+  <li><a href="#sec-01-http-metodos" id="toc-sec-01-http-metodos" class="nav-link" data-scroll-target="#sec-01-http-metodos"><span class="header-section-number">1.5</span> HTTP em Detalhe: Métodos</a></li>
+  <li><a href="#sec-01-http-formato-mensagem" id="toc-sec-01-http-formato-mensagem" class="nav-link" data-scroll-target="#sec-01-http-formato-mensagem"><span class="header-section-number">1.6</span> HTTP em Detalhe: Formato de uma Mensagem</a>
   <ul class="collapse">
-  <li><a href="#exemplo-de-um-formulário-a-um-pedido-http" id="toc-exemplo-de-um-formulário-a-um-pedido-http" class="nav-link" data-scroll-target="#exemplo-de-um-formulário-a-um-pedido-http"><span class="header-section-number">1.8.1</span> Exemplo: de um Formulário a um Pedido HTTP</a></li>
-  <li><a href="#exemplo-um-pedido-post-com-corpo" id="toc-exemplo-um-pedido-post-com-corpo" class="nav-link" data-scroll-target="#exemplo-um-pedido-post-com-corpo"><span class="header-section-number">1.8.2</span> Exemplo: um Pedido <code>POST</code> com Corpo</a></li>
+  <li><a href="#exemplo-de-um-formulário-a-um-pedido-http" id="toc-exemplo-de-um-formulário-a-um-pedido-http" class="nav-link" data-scroll-target="#exemplo-de-um-formulário-a-um-pedido-http"><span class="header-section-number">1.6.1</span> Exemplo: de um Formulário a um Pedido HTTP</a></li>
+  <li><a href="#exemplo-um-pedido-post-com-corpo" id="toc-exemplo-um-pedido-post-com-corpo" class="nav-link" data-scroll-target="#exemplo-um-pedido-post-com-corpo"><span class="header-section-number">1.6.2</span> Exemplo: um Pedido <code>POST</code> com Corpo</a></li>
   </ul></li>
-  <li><a href="#sec-01-http-codigos-estado" id="toc-sec-01-http-codigos-estado" class="nav-link" data-scroll-target="#sec-01-http-codigos-estado"><span class="header-section-number">1.9</span> HTTP em Detalhe: Códigos de Estado</a></li>
+  <li><a href="#sec-01-http-codigos-estado" id="toc-sec-01-http-codigos-estado" class="nav-link" data-scroll-target="#sec-01-http-codigos-estado"><span class="header-section-number">1.7</span> HTTP em Detalhe: Códigos de Estado</a></li>
   </ul>
 </nav>
     </div>
@@ -296,57 +294,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Manter informação entre pedidos sucessivos do mesmo utilizador</li>
 <li>Proteger recursos de acessos não autorizados</li>
 </ul>
-<p>Resolver todos estes problemas repetidamente, aplicação a aplicação, seria um desperdício de esforço. É exactamente para evitar essa repetição que existem plataformas empresariais como a <em>Jakarta EE</em>.</p>
+<p>Resolver todos estes problemas repetidamente, aplicação a aplicação, seria um desperdício de esforço. É exactamente para evitar essa repetição que existem plataformas empresariais que fornecem estes serviços prontos a usar, libertando quem desenvolve para se concentrar na lógica de negócio da aplicação.</p>
 </section>
-<section id="sec-01-jakarta-ee" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="sec-01-jakarta-ee"><span class="header-section-number">1.2</span> A Plataforma Jakarta EE</h2>
-<p>A <em>Jakarta EE</em> (anteriormente conhecida como <em>Java EE</em>, até ser renomeada em 2019) é uma plataforma que fornece um conjunto de serviços e <em>APIs</em> prontos a usar para lidar com os problemas identificados acima, libertando quem desenvolve para se concentrar na lógica de negócio da aplicação.</p>
-<p>A plataforma assenta na linguagem Java e na <em>Java Virtual Machine</em> (JVM), o que significa que qualquer componente escrito para <em>Jakarta EE</em> beneficia da portabilidade e da gestão automática de memória já conhecidas da linguagem.</p>
-</section>
-<section id="sec-01-arquitetura-camadas" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="sec-01-arquitetura-camadas"><span class="header-section-number">1.3</span> Arquitetura em Camadas</h2>
-<p>A plataforma <em>Jakarta EE</em> organiza uma aplicação segundo um modelo distribuído em várias camadas (<em>tiers</em>), cada uma com uma função bem definida e instalada, tipicamente, em máquinas diferentes:</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Camada</th>
-<th>Onde reside</th>
-<th>Componentes típicos</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><em>Client Tier</em></td>
-<td>Máquina do cliente</td>
-<td>Páginas Web (browser), aplicações cliente</td>
-</tr>
-<tr class="even">
-<td><em>Web Tier</em></td>
-<td>Servidor <em>Jakarta EE</em></td>
-<td><em>Servlets</em>, <em>JavaServer Pages</em>, <em>Web Services</em></td>
-</tr>
-<tr class="odd">
-<td><em>Business Tier</em></td>
-<td>Servidor <em>Jakarta EE</em></td>
-<td><em>Enterprise Beans</em> (lógica de negócio)</td>
-</tr>
-<tr class="even">
-<td><em>EIS Tier</em> (<em>Enterprise Information System</em>)</td>
-<td>Servidor de base de dados</td>
-<td>Bases de dados, sistemas de informação empresarial</td>
-</tr>
-</tbody>
-</table>
-<p>Esta separação por camadas permite que cada componente evolua de forma relativamente independente das restantes: alterar a base de dados não obriga a reescrever a lógica de negócio, e alterar a interface do cliente não obriga a alterar o servidor.</p>
-</section>
-<section id="sec-01-frontend-backend" class="level2" data-number="1.4">
-<h2 data-number="1.4" class="anchored" data-anchor-id="sec-01-frontend-backend"><span class="header-section-number">1.4</span> Aplicações da Camada Web: Apresentação vs.&nbsp;Serviço</h2>
-<p>Dentro da camada Web, uma aplicação pode seguir duas orientações distintas, consoante o tipo de resposta que produz:</p>
+<section id="sec-01-frontend-backend" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="sec-01-frontend-backend"><span class="header-section-number">1.2</span> Duas Orientações: Apresentação vs.&nbsp;Serviço</h2>
+<p>Uma aplicação Web pode seguir duas orientações distintas, consoante o tipo de resposta que produz:</p>
 <dl>
 <dt><strong>Orientada à apresentação</strong> (<em>presentation-oriented</em>)</dt>
 <dd>
@@ -359,8 +311,8 @@ Implementa o ponto de acesso (<em>endpoint</em>) de um serviço Web, tipicamente
 </dl>
 <p>Esta distinção corresponde, em larga medida, à separação entre <em>front-end</em> (a parte da aplicação que interage diretamente com quem a usa) e <em>back-end</em> (a parte que processa a lógica e os dados). Uma aplicação orientada à apresentação tende a confundir estas duas responsabilidades num único componente do lado do servidor; uma aplicação orientada a serviço separa-as claramente, deixando o <em>front-end</em> inteiramente a cargo do cliente.</p>
 </section>
-<section id="sec-01-mvc" class="level2" data-number="1.5">
-<h2 data-number="1.5" class="anchored" data-anchor-id="sec-01-mvc"><span class="header-section-number">1.5</span> O Padrão MVC</h2>
+<section id="sec-01-mvc" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="sec-01-mvc"><span class="header-section-number">1.3</span> O Padrão MVC</h2>
 <p>Organizar todo o código de uma aplicação num único bloco indiferenciado rapidamente se torna insustentável: o código que processa o pedido, o que acede aos dados e o que gera a resposta acabam misturados, difíceis de testar e de alterar em separado. O padrão <em>Model-View-Controller</em> (MVC) resolve este problema, dividindo a aplicação em três responsabilidades distintas:</p>
 <dl>
 <dt><strong>Model</strong> (Modelo)</dt>
@@ -378,9 +330,19 @@ Recebe o pedido, decide que operação realizar sobre o Model, e escolhe a View 
 </dl>
 <p>Esta separação de responsabilidades é um dos princípios de desenho mais recorrentes de toda esta matéria. Manifesta-se de forma clássica quando um componente do lado do servidor funciona como Controller e delega a apresentação a outro, que funciona como View; e manifesta-se de forma bem menos óbvia quando a View deixa de existir do lado do servidor e passa a ser reconstruída no <em>browser</em>, a partir de dados JSON.</p>
 </section>
-<section id="sec-01-cliente-servidor" class="level2" data-number="1.6">
-<h2 data-number="1.6" class="anchored" data-anchor-id="sec-01-cliente-servidor"><span class="header-section-number">1.6</span> O Modelo Cliente-Servidor</h2>
+<section id="sec-01-cliente-servidor" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="sec-01-cliente-servidor"><span class="header-section-number">1.4</span> O Modelo Cliente-Servidor</h2>
 <p>Toda esta comunicação, seja ela orientada à apresentação ou a serviço, assenta no modelo cliente-servidor: um cliente (tipicamente um <em>browser</em>) envia um pedido através da rede, e um servidor processa esse pedido e devolve uma resposta.</p>
+<div id="fig-01-cliente-servidor" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-01-cliente-servidor-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap01/Modelo_cliente_servidor.png" class="img-fluid figure-img" style="width:70.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-01-cliente-servidor-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;1.1: O cliente (por exemplo, um browser) envia um pedido HTTP; o servidor processa-o e devolve uma resposta. A troca repete-se a cada interação, sem que o servidor guarde, por si só, memória da anterior.
+</figcaption>
+</figure>
+</div>
 <p>Esta troca é feita através do protocolo HTTP (<em>HyperText Transfer Protocol</em>), que tem duas características fundamentais:</p>
 <ul>
 <li>É orientado a transações: cada interação é composta por um pedido (<em>request</em>) seguido de uma resposta (<em>response</em>)</li>
@@ -388,8 +350,8 @@ Recebe o pedido, decide que operação realizar sobre o Model, e escolhe a View 
 </ul>
 <p>A ausência de estado no protocolo não impede que uma aplicação precise de reter informação entre pedidos (por exemplo, para saber que um utilizador está autenticado). Essa necessidade é resolvida ao nível da aplicação, não do protocolo, através de mecanismos como sessões e <em>cookies</em>.</p>
 </section>
-<section id="sec-01-http-metodos" class="level2" data-number="1.7">
-<h2 data-number="1.7" class="anchored" data-anchor-id="sec-01-http-metodos"><span class="header-section-number">1.7</span> HTTP em Detalhe: Métodos</h2>
+<section id="sec-01-http-metodos" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="sec-01-http-metodos"><span class="header-section-number">1.5</span> HTTP em Detalhe: Métodos</h2>
 <p>Cada pedido HTTP indica, através de um método, a operação que pretende realizar sobre um recurso:</p>
 <table class="caption-top table">
 <thead>
@@ -423,8 +385,8 @@ Recebe o pedido, decide que operação realizar sobre o Model, e escolhe a View 
 </table>
 <p>Estes cinco métodos cobrem a generalidade das operações realizadas por uma aplicação Web; os dois primeiros (<code>GET</code> e <code>POST</code>) são, de longe, os mais usados em formulários HTML tradicionais, enquanto <code>PUT</code> e <code>DELETE</code> ganham importância sobretudo em serviços orientados a recursos.</p>
 </section>
-<section id="sec-01-http-formato-mensagem" class="level2" data-number="1.8">
-<h2 data-number="1.8" class="anchored" data-anchor-id="sec-01-http-formato-mensagem"><span class="header-section-number">1.8</span> HTTP em Detalhe: Formato de uma Mensagem</h2>
+<section id="sec-01-http-formato-mensagem" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="sec-01-http-formato-mensagem"><span class="header-section-number">1.6</span> HTTP em Detalhe: Formato de uma Mensagem</h2>
 <p>Tanto um pedido como uma resposta HTTP seguem a mesma estrutura geral:</p>
 <ol type="1">
 <li>Uma primeira linha, diferente consoante se trate de um pedido (método, <em>URL</em> e versão de HTTP) ou de uma resposta (versão de HTTP, código de estado e motivo)</li>
@@ -432,8 +394,18 @@ Recebe o pedido, decide que operação realizar sobre o Model, e escolhe a View 
 <li>Um corpo (<em>body</em>), opcional, com os dados propriamente ditos</li>
 </ol>
 <p>Um pedido <code>GET</code> não tem, tipicamente, corpo: todos os dados que transporta vão na própria <em>URL</em>, sob a forma de parâmetros. Um pedido <code>POST</code> transporta os dados no corpo da mensagem, fora da <em>URL</em>.</p>
-<section id="exemplo-de-um-formulário-a-um-pedido-http" class="level3" data-number="1.8.1">
-<h3 data-number="1.8.1" class="anchored" data-anchor-id="exemplo-de-um-formulário-a-um-pedido-http"><span class="header-section-number">1.8.1</span> Exemplo: de um Formulário a um Pedido HTTP</h3>
+<div id="fig-01-http-formato-mensagem" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-01-http-formato-mensagem-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap01/HTTP_message_request_format.png" class="img-fluid figure-img" style="width:60.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-01-http-formato-mensagem-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;1.2: O formato geral de uma mensagem HTTP: a primeira linha (diferente para pedido e resposta), seguida dos vários grupos de cabeçalhos, e por fim o corpo.
+</figcaption>
+</figure>
+</div>
+<section id="exemplo-de-um-formulário-a-um-pedido-http" class="level3" data-number="1.6.1">
+<h3 data-number="1.6.1" class="anchored" data-anchor-id="exemplo-de-um-formulário-a-um-pedido-http"><span class="header-section-number">1.6.1</span> Exemplo: de um Formulário a um Pedido HTTP</h3>
 <p>Considere-se um formulário HTML simples, usado para consultar a capital de um país a partir do respetivo código:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1"></a><span class="dt">&lt;</span><span class="kw">form</span><span class="ot"> method</span><span class="op">=</span><span class="st">"GET"</span><span class="ot"> action</span><span class="op">=</span><span class="st">"/capital"</span><span class="dt">&gt;</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a>  <span class="dt">&lt;</span><span class="kw">label</span><span class="ot"> for</span><span class="op">=</span><span class="st">"countrycode"</span><span class="dt">&gt;</span>Código do país<span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
@@ -450,8 +422,8 @@ Recebe o pedido, decide que operação realizar sobre o Model, e escolhe a View 
 <span id="cb3-3"><a href="#cb3-3"></a></span>
 <span id="cb3-4"><a href="#cb3-4"></a><span class="ex">{</span><span class="st">"country"</span><span class="ex">:</span> <span class="st">"Portugal"</span>, <span class="st">"capital"</span>: <span class="st">"Lisboa"</span>, <span class="st">"ccode"</span>: <span class="st">"PT"</span>}</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="exemplo-um-pedido-post-com-corpo" class="level3" data-number="1.8.2">
-<h3 data-number="1.8.2" class="anchored" data-anchor-id="exemplo-um-pedido-post-com-corpo"><span class="header-section-number">1.8.2</span> Exemplo: um Pedido <code>POST</code> com Corpo</h3>
+<section id="exemplo-um-pedido-post-com-corpo" class="level3" data-number="1.6.2">
+<h3 data-number="1.6.2" class="anchored" data-anchor-id="exemplo-um-pedido-post-com-corpo"><span class="header-section-number">1.6.2</span> Exemplo: um Pedido <code>POST</code> com Corpo</h3>
 <p>Considere-se agora um formulário de autenticação, com os campos <code>user</code> e <code>pass</code>:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb4-1"><a href="#cb4-1"></a><span class="dt">&lt;</span><span class="kw">form</span><span class="ot"> method</span><span class="op">=</span><span class="st">"POST"</span><span class="ot"> action</span><span class="op">=</span><span class="st">"/login"</span><span class="dt">&gt;</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a>  <span class="dt">&lt;</span><span class="kw">label</span><span class="ot"> for</span><span class="op">=</span><span class="st">"user"</span><span class="dt">&gt;</span>Utilizador<span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
@@ -470,8 +442,8 @@ Recebe o pedido, decide que operação realizar sobre o Model, e escolhe a View 
 <p>Ao contrário do exemplo anterior, os parâmetros já não vão na <em>URL</em>: seguem no corpo do pedido, depois de uma linha em branco que separa os cabeçalhos do corpo. É por isso que credenciais e outros dados sensíveis se enviam tipicamente por <code>POST</code>, nunca por <code>GET</code>: o corpo de um pedido não fica registado nos históricos de navegação nem nos ficheiros de registo (<em>logs</em>) do servidor, ao contrário do que acontece com os parâmetros de uma <em>URL</em>.</p>
 </section>
 </section>
-<section id="sec-01-http-codigos-estado" class="level2" data-number="1.9">
-<h2 data-number="1.9" class="anchored" data-anchor-id="sec-01-http-codigos-estado"><span class="header-section-number">1.9</span> HTTP em Detalhe: Códigos de Estado</h2>
+<section id="sec-01-http-codigos-estado" class="level2" data-number="1.7">
+<h2 data-number="1.7" class="anchored" data-anchor-id="sec-01-http-codigos-estado"><span class="header-section-number">1.7</span> HTTP em Detalhe: Códigos de Estado</h2>
 <p>Toda a resposta HTTP inclui um código de estado numérico, que indica sucintamente o resultado do pedido. Os códigos agrupam-se em cinco categorias, consoante a centena:</p>
 <table class="caption-top table">
 <thead>

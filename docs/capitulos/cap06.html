@@ -147,7 +147,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap05.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Segurança e Filters</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Segurança e Filtros</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -262,7 +262,7 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Os LABs práticos desta UC (ver <a href="../capitulos/apendiceB.html">Apêndice B</a>, LAB4) implementam a criação, atualização e remoção de um país através de um único <em>endpoint</em> (<code>/countryEdit</code>), recebido sempre por <code>POST</code>, distinguindo a operação pretendida através de um parâmetro <code>operation</code> (<code>insert</code>, <code>update</code>, <code>delete</code>). Isto contraria a semântica “pura” dos verbos HTTP apresentada no <a href="../capitulos/cap01.html">Capítulo 1</a> (<code>POST</code> para criar, <code>PUT</code> para atualizar, <code>DELETE</code> para remover), mas é uma simplificação pragmática, comum em código de formação: evita configurar <em>Servlets</em> adicionais mapeados a <code>PUT</code>/<code>DELETE</code>, e mantém tudo testável com formulários HTML simples, sem recorrer a JavaScript.</p>
+<p>Os LABs práticos desta UC (ver <a href="../capitulos/apendiceB.html">Apêndice B</a>, LAB4) implementam a criação, atualização e remoção de um país através de um único <em>endpoint</em> (<code>/countryEdit</code>), recebido sempre por <code>POST</code>, distinguindo a operação pretendida através de um parâmetro <code>operation</code> (<code>insert</code>, <code>update</code>, <code>delete</code>). Isto contraria a semântica “pura” dos verbos HTTP apresentada no <a href="../capitulos/cap01.html">Capítulo 1</a> (<code>POST</code> para criar, <code>PUT</code> para atualizar, <code>DELETE</code> para remover), mas é uma simplificação pragmática, comum em código de formação: evita configurar <em>Servlets</em> adicionais mapeadas a <code>PUT</code>/<code>DELETE</code>, e mantém tudo testável com formulários HTML simples, sem recorrer a JavaScript.</p>
 <p>Fica como sugestão de implementação futura, possível para os alunos mais avançados: reescrever <code>/countryEdit</code> como três <em>endpoints</em> distintos, um por verbo HTTP (por exemplo, <code>PUT /country/{code}</code> para atualizar e <code>DELETE /country/{code}</code> para remover), aproximando a API de um desenho REST mais convencional.</p>
 </div>
 </div>
@@ -834,8 +834,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../capitulos/cap05.html" class="pagination-link" aria-label="Segurança e Filters">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Segurança e Filters</span></span>
+      <a href="../capitulos/cap05.html" class="pagination-link" aria-label="Segurança e Filtros">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Segurança e Filtros</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

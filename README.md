@@ -14,7 +14,7 @@ Sebenta-ASW/
 │   ├── cap02.qmd         # HTML, CSS e Bootstrap
 │   ├── cap03.qmd         # Java EE e Fundamentos de Servlets
 │   ├── cap04.qmd         # Modelo Stateful: Sessões e JSP
-│   ├── cap05.qmd         # Segurança e Filters
+│   ├── cap05.qmd         # Segurança e Filtros
 │   ├── cap06.qmd         # Web Services REST e Arquitetura Stateless (Parte 1)
 │   ├── cap07.qmd         # Web Services REST (Parte 2) e o Cliente em JavaScript
 │   ├── apendiceA.qmd     # Configuração do Ambiente de Desenvolvimento

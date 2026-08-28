@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Web Applications and Services",
     "section": "",
-    "text": "Preface\nThis textbook is a self-study resource for the theoretical component of Web Applications and Services (ASW), Master’s in Electrical and Computer Engineering (MEEC), covering Web application architecture, best development practices, the HTTP protocol, HTML and CSS, server-side and client-side programming, database access, and REST Web Services, with Java EE as the case study.\nThis course follows closely the material and practical work of an equivalent course already taught at ESIGELEC (international partner), with one important difference: ESIGELEC students already have an HTML/CSS and database background, UTAD students do not. For this reason, the first chapters cover that foundation before converging on the same Java EE material.",
+    "text": "Preface\nThis textbook is a self-study resource for the theoretical component of Web Applications and Services (ASW), Master’s in Electrical and Computer Engineering (MEEC), covering Web application architecture, best development practices, the HTTP protocol, HTML and CSS, server-side and client-side programming, database access, and REST Web Services, with Java EE as the case study.",
     "crumbs": [
       "Preface"
     ]
@@ -214,17 +214,57 @@
     "href": "capitulos/cap03.html",
     "title": "3  Java EE and Servlet Fundamentals",
     "section": "",
-    "text": "3.1 The Web Container and the First Servlet",
+    "text": "3.1 Why Servlets?\nImplementing, from scratch, a Java program capable of answering HTTP requests would require solving, alone, a set of problems common to any Web server: parsing the incoming HTTP message, handling several connections at once (each in its own thread), controlling the lifecycle of the instances in memory, and packaging all of this in a format an application server knows how to install and start.\nA Servlet is a Java class that runs inside a Servlet Container (for instance, Apache Tomcat) and automatically receives all of this work already done:\nThe Servlet Container corresponds, in the layered architecture presented in Chapter 1, to the Web Tier: this is where Servlets live, between the client and the business layer.",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Java EE and Servlet Fundamentals</span>"
     ]
   },
   {
-    "objectID": "capitulos/cap03.html#sec-03-servlets-en",
-    "href": "capitulos/cap03.html#sec-03-servlets-en",
+    "objectID": "capitulos/cap03.html#sec-03-why-servlets-en",
+    "href": "capitulos/cap03.html#sec-03-why-servlets-en",
     "title": "3  Java EE and Servlet Fundamentals",
     "section": "",
-    "text": "Content to be developed, aligned with ESIGELEC’s Lecture 1 (Java EE and Servlet Fundamentals). Planned topics:\n\nJakarta EE / Java EE\nWeb Container (Tomcat)\nServlet lifecycle\nHttpServletRequest / HttpServletResponse\ndoGet() and doPost()\nHTTP parameters, Content-Type\nManual JSON generation",
+    "text": "HTTP request parsing\nThread management, one per request\nManagement of the Servlet’s own lifecycle\nA deployment model of its own, packaged into a .war file (Web Application Archive)",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Java EE and Servlet Fundamentals</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap03.html#sec-03-lifecycle-en",
+    "href": "capitulos/cap03.html#sec-03-lifecycle-en",
+    "title": "3  Java EE and Servlet Fundamentals",
+    "section": "3.2 The Servlet Lifecycle",
+    "text": "3.2 The Servlet Lifecycle\nWhen a request is routed to a Servlet, the container always follows the same sequence:\n\nIf an instance of that Servlet does not yet exist in memory, the container loads the class, creates an instance, and calls the init() method\nFor every request received, the container invokes the service() method, which dispatches to doGet(), doPost(), or another method depending on the HTTP verb used, passing it the request and response objects\nIf the container needs to remove the Servlet (for instance, when the server shuts down), it invokes the destroy() method\n\nAn important detail follows from this: there is a single instance of each Servlet in memory, even with N clients using the same service at once. Each request is handled by a different thread, but all of those threads share the same instance. In practice, this means:\n\n\n\n\n\n\nBeware of shared state\n\n\n\nNever store data from a specific request in the Servlet’s instance attributes: since the instance is shared by all threads, one request can read or overwrite data from another request in progress. Local variables, declared inside doGet() or doPost(), are safe, because each thread has its own copy.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Java EE and Servlet Fundamentals</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap03.html#sec-03-http-servlet-mapping-en",
+    "href": "capitulos/cap03.html#sec-03-http-servlet-mapping-en",
+    "title": "3  Java EE and Servlet Fundamentals",
+    "section": "3.3 From the HTTP Message to the Java Method",
+    "text": "3.3 From the HTTP Message to the Java Method\nA Servlet is bound to a URL through the @WebServlet annotation, which maps a path to the class that will handle it:\n@WebServlet(\"/country\")\npublic class CountryServlet extends HttpServlet {\n    // ...\n}\nA request to http://localhost:8080/country is thus routed to the CountryServlet class. Inside it, the elements of the HTTP message (see Chapter 1) correspond to concrete methods on the request and response objects:\n\n\n\n\n\n\n\nHTTP element\nJava access\n\n\n\n\nRequest headers\nrequest.getHeader(name)\n\n\nParameters (query string or body)\nrequest.getParameter(name)\n\n\nRequest body (JSON, raw data)\nrequest.getInputStream()\n\n\nWriting the response\nresponse.getWriter() or response.getOutputStream()\n\n\n\nprotected void doGet(HttpServletRequest request, HttpServletResponse response) {\n    String countryCode = request.getParameter(\"countrycode\");\n    // ...\n}",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Java EE and Servlet Fundamentals</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap03.html#sec-03-content-type-en",
+    "href": "capitulos/cap03.html#sec-03-content-type-en",
+    "title": "3  Java EE and Servlet Fundamentals",
+    "section": "3.4 Content-Type and the Shape of the Response",
+    "text": "3.4 Content-Type and the Shape of the Response\nBefore writing anything to the response, it is essential to set its Content-Type: this header tells the client how to interpret the bytes that follow, whether as an HTML page or as JSON data.\nresponse.setContentType(\"text/html\");\nPrintWriter out = response.getWriter();\nout.println(\"&lt;html&gt;&lt;body&gt;\");\nout.println(\"&lt;h1&gt;Hello João&lt;/h1&gt;\");\nout.println(\"&lt;/body&gt;&lt;/html&gt;\");\nresponse.setContentType(\"application/json\");\nPrintWriter out = response.getWriter();\nout.print(\"{\\\"name\\\":\\\"João\\\",\\\"role\\\":\\\"admin\\\"}\");\nWithout a dedicated JSON library, the most direct approach is to build the String manually, taking care to escape internal quotes with \\\":\nString jsonResponse = \"{\\\"country\\\": \\\"Portugal\\\", \\\"capital\\\": \\\"Lisboa\\\", \\\"ccode\\\": \\\"PT\\\"}\";\nout.print(jsonResponse);\nout.flush();",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Java EE and Servlet Fundamentals</span>"
+    ]
+  },
+  {
+    "objectID": "capitulos/cap03.html#sec-03-first-servlet-en",
+    "href": "capitulos/cap03.html#sec-03-first-servlet-en",
+    "title": "3  Java EE and Servlet Fundamentals",
+    "section": "3.5 A First Servlet: “World Capitals”",
+    "text": "3.5 A First Servlet: “World Capitals”\nApplying what has been presented, a first Servlet can serve as a simple health check for the API:\n@WebServlet(\"/status\")\npublic class StatusServlet extends HttpServlet {\n    protected void doGet(HttpServletRequest request, HttpServletResponse response)\n            throws ServletException, IOException {\n        response.setContentType(\"text/plain\");\n        PrintWriter out = response.getWriter();\n        out.print(\"OK\");\n    }\n}\nAnd a second one, already returning fixed data in JSON format, is the first step of the “World Capitals” application used throughout this course:\n@WebServlet(\"/countrycapital\")\npublic class CountryCapitalServlet extends HttpServlet {\n    protected void doGet(HttpServletRequest request, HttpServletResponse response)\n            throws ServletException, IOException {\n        response.setContentType(\"application/json\");\n        PrintWriter out = response.getWriter();\n\n        String jsonResponse = \"{\\\"country\\\": \\\"Portugal\\\", \\\"capital\\\": \\\"Lisboa\\\", \\\"ccode\\\": \\\"PT\\\"}\";\n        out.print(jsonResponse);\n        out.flush();\n    }\n}\nThis Servlet always returns the same country, with the data fixed directly in the code. This is a deliberate simplification: the practical LAB1 picks up exactly at this point, replacing the fixed data with a dedicated data-access object (DAO), preparing the ground for later connecting to a real database server.",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Java EE and Servlet Fundamentals</span>"
     ]
