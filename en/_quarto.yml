@@ -39,10 +39,13 @@ book:
 
   sidebar:
     search: true
+    tools:
+      - icon: translate
+        href: /../index.html
+        text: "Versão portuguesa"
 
   page-footer:
     left: "Web Applications and Services — MEEC · UTAD"
-    right: "[🇵🇹 Português](/)"
 
 format:
   html:

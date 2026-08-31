@@ -50,10 +50,13 @@ book:
 
   sidebar:
     search: true
+    tools:
+      - icon: translate
+        href: /en/
+        text: "English version"
 
   page-footer:
     left: "Aplicações e Serviços Web — UTAD"
-    right: "[🇬🇧 English](/en/)"
 
 format:
   html:
