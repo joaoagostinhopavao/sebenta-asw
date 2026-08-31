@@ -1,0 +1,357 @@
+---
+title: "LAB6: The Front-Office in JavaScript"
+author: "João Pavão"
+date: 2026-08-26
+lang: en-GB
+---
+
+## LAB6: The Front-Office in JavaScript {#sec-apD6-lab6-en}
+
+Up to this point, the *backend* built in LABs 1 to 5 was always tested directly — in the *browser*, with simple HTML forms, or with a REST client (see [Appendix C](apendiceC.qmd)). This final LAB connects, for the first time, the ready-made visual pages from [Appendix A](apendiceA.qmd) to that same *backend*, through `fetch()` (see [Chapter 8](cap08.qmd)) — the missing piece of JavaScript needed to close the "three pieces" introduced in [Chapter 1](cap01.qmd).
+
+This LAB assumes the session-based *backend* built in LABs 1 to 4 ([Appendix D](apendiceD1.qmd) to [Appendix G](apendiceD4.qmd)), already with real data in a database (LAB4). Anyone who also completed the optional LAB5 (stateless authentication with JWT, [Appendix H](apendiceD5.qmd)) will find, at the end of this section, a note on what changes in that case.
+
+### Step 6.1: Prepare the Project {#sec-apD6-step1-en}
+
+1. Copy the four files from [Appendix A](apendiceA.qmd) (`index.html`, `login.html`, `capital.html`, `paises-editar.html`) to `src/main/webapp/`, inside the same Eclipse `CapitaisAPI` project already used in the previous LABs. These pages replace the "bare" test forms created throughout the previous LABs (`login.html` from LAB2, the `paises-editar.html` forms from LAB4) — from now on, the application has a single interface
+2. Inside `src/main/webapp/`, create a `js/` folder
+3. In each of the four `.html` files, add, before `</body>`, right after the *Bootstrap* `<script>`, a link to that page's own JavaScript file (and, in all of them except `login.html`, also to the shared `js/auth.js` — see [Step 6.4](#sec-apD6-step4-en)):
+
+```html
+<script src="js/auth.js"></script>
+<script src="js/countries.js"></script>
+```
+
+Since the pages are now served by Tomcat itself (rather than opened directly as a local file), `fetch()` requests can use simple relative *URLs*, with no leading slash — exactly the same pattern already used in the HTML forms from the previous LABs (`action="login"`, `action="countryEdit"`): they resolve automatically relative to the current page, within the same *host* and the same context (`CapitaisAPI`), with no cross-origin (*CORS*) problem at all.
+
+### Step 6.2: A Small Addition to the *Backend* — Listing the Available Codes {#sec-apD6-step2-en}
+
+None of the previous LABs exposed a way for a client to discover *which* country codes are available — it is only possible to look up one country at a time, already knowing its code (`/country?countrycode=PT`). To build the home page's listing, one small additional *endpoint* is needed.
+
+Create a new *Servlet*, `CountryCodesServlet`, in the `capitaisapi.servlets` package, mapped to the `/countrycodes` *URL*:
+
+```java
+package capitaisapi.servlets;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
+
+import capitaisapi.dao.DBDAO;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+@WebServlet("/countrycodes")
+public class CountryCodesServlet extends HttpServlet {
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        DBDAO dao = new DBDAO();
+        List<String> codes = dao.getCountryCodes();
+
+        StringBuilder json = new StringBuilder("[");
+        for (int i = 0; i < codes.size(); i++) {
+            if (i > 0) {
+                json.append(",");
+            }
+            json.append("\"").append(codes.get(i)).append("\"");
+        }
+        json.append("]");
+
+        response.setContentType("application/json");
+        PrintWriter out = response.getWriter();
+        String jsonResponse = json.toString();
+        out.print(jsonResponse);
+    }
+}
+```
+
+This *Servlet* does nothing new on the data side — it reuses `getCountryCodes()`, already present in `DBDAO` since [Appendix D](apendiceD1.qmd) — it just exposes, for the first time, that list to a client, in JSON.
+
+Since this listing is, just like each country's data, information reserved for authenticated users, add `/countrycodes` to the mapping of `AuthenticationFilter` ([Appendix F](apendiceD3.qmd)):
+
+```java
+@WebFilter(urlPatterns = {"/country", "/countrycodes", "/countryEdit"})
+```
+
+This LAB assumes that protection for `/capital` was not enabled (it stayed public, as allowed — "optionally" — in [Appendix G](apendiceD4.qmd)): the `capital.html` page keeps working without *login*.
+
+### Step 6.3: Authentication Without Reloading the Page {#sec-apD6-step3-en}
+
+In `login.html`, add an `id` to the form and a message area right after it:
+
+```html
+<form class="row g-3 col-lg-6" method="POST" action="/login" id="form-login">
+  ...
+</form>
+<div id="feedback" class="mt-3"></div>
+```
+
+Create `js/login.js`:
+
+```javascript
+document.querySelector("#form-login").addEventListener("submit", function (event) {
+  event.preventDefault();
+
+  const username = document.querySelector("#user").value;
+  const password = document.querySelector("#pass").value;
+
+  const body = new URLSearchParams();
+  body.append("user", username);
+  body.append("pass", password);
+
+  fetch("login", {
+    method: "POST",
+    body: body
+  })
+    .then(function (response) {
+      const success = response.ok;
+      return response.json().then(function (data) {
+        return { success: success, data: data };
+      });
+    })
+    .then(function (result) {
+      const feedback = document.querySelector("#feedback");
+      if (result.success) {
+        markAuthenticated();
+        window.location.href = "index.html";
+      } else {
+        feedback.textContent = result.data.error || result.data.message;
+        feedback.className = "mt-3 text-danger";
+      }
+    });
+});
+```
+
+`event.preventDefault()` stops the form's normal submission — from here on, it is `fetch()` that decides where the request goes, and the form's `action` attribute is no longer used. Note that there is no need to set the `Content-Type` header manually: when the request body is a `URLSearchParams`, the *browser* itself automatically sets `application/x-www-form-urlencoded`, the same format `LoginServlet` has expected since [Appendix E](apendiceD2.qmd) (`request.getParameter()`).
+
+The `markAuthenticated()` function, used here, comes from the next step — since `login.html` also loads `js/auth.js` (see [Step 6.1](#sec-apD6-step1-en)), that function is already available.
+
+### Step 6.4: Show/Hide Based on Authentication State {#sec-apD6-step4-en}
+
+In each of the four files, in the navigation bar block, replace the "Entrar" link line with these two:
+
+```html
+<li class="nav-item"><a class="nav-link" href="login.html" id="nav-login">Entrar</a></li>
+<li class="nav-item"><a class="nav-link d-none" href="#" id="nav-logout">Sair</a></li>
+```
+
+Create `js/auth.js`, shared by all pages:
+
+```javascript
+function markAuthenticated() {
+  localStorage.setItem("authenticated", "yes");
+}
+
+function clearAuthentication() {
+  localStorage.removeItem("authenticated");
+}
+
+function isAuthenticated() {
+  return localStorage.getItem("authenticated") === "yes";
+}
+
+function updateNav() {
+  const loginLink = document.querySelector("#nav-login");
+  const logoutLink = document.querySelector("#nav-logout");
+
+  if (!loginLink || !logoutLink) {
+    return;
+  }
+
+  if (isAuthenticated()) {
+    loginLink.classList.add("d-none");
+    logoutLink.classList.remove("d-none");
+  } else {
+    loginLink.classList.remove("d-none");
+    logoutLink.classList.add("d-none");
+  }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  updateNav();
+
+  const logoutLink = document.querySelector("#nav-logout");
+  if (logoutLink) {
+    logoutLink.addEventListener("click", function (event) {
+      event.preventDefault();
+      fetch("logout").then(function () {
+        clearAuthentication();
+        window.location.href = "index.html";
+      });
+    });
+  }
+});
+```
+
+Note that the visible text of the two links — "Entrar" and "Sair" — stays in Portuguese: these links belong to the shared navigation bar first built in [Chapter 2](cap02.qmd) and reused throughout [Appendix A](apendiceA.qmd), and its screenshots were never retaken in this English edition.
+
+This `localStorage` is only a convenience for the interface — it is not, in any way, real security. What still decides whether a request to `/country`, `/countrycodes` or `/countryEdit` is accepted is `AuthenticationFilter`, on the server side (see [Appendix F](apendiceD3.qmd)). If someone opens the *browser*'s developer tools and manually changes this value, the worst that happens is seeing a button that should not be there — protected requests still get a `403` response from the server.
+
+Since `paises-editar.html` only makes sense for someone with an active session, add a simple check at the start of `js/countries-edit.js` (see [Step 6.7](#sec-apD6-step7-en)):
+
+```javascript
+if (!isAuthenticated()) {
+  window.location.href = "login.html";
+}
+```
+
+### Step 6.5: List Countries on the Home Page {#sec-apD6-step5-en}
+
+In `index.html`, give the table's `<tbody>` an `id` and remove the three fixed example rows, since the table now becomes dynamically populated:
+
+```html
+<tbody id="countries-table"></tbody>
+```
+
+Create `js/countries.js`:
+
+```javascript
+if (isAuthenticated()) {
+  fetch("countrycodes")
+    .then(response => response.json())
+    .then(function (codes) {
+      const requests = codes.map(function (code) {
+        return fetch("country?countrycode=" + code).then(response => response.json());
+      });
+      return Promise.all(requests);
+    })
+    .then(function (countries) {
+      const table = document.querySelector("#countries-table");
+      countries.forEach(function (country) {
+        const row = document.createElement("tr");
+        row.innerHTML = "<td>" + country.code + "</td><td>" + country.name + "</td><td>" + country.capital + "</td>";
+        table.appendChild(row);
+      });
+    });
+} else {
+  const table = document.querySelector("#countries-table");
+  table.innerHTML = "<tr><td colspan=\"3\">Log in to see the list of countries.</td></tr>";
+}
+```
+
+This step combines two ideas already introduced separately: the `fetch()` + DOM pattern from [Chapter 8](cap08.qmd), and `Promise.all()`, which waits for several *promises* in parallel (one per country) and only continues once all of them have finished — faster than requesting the countries one by one, in sequence.
+
+### Step 6.6: Look Up a Capital {#sec-apD6-step6-en}
+
+In `capital.html`, give the form `id`s and add a result area:
+
+```html
+<form class="row g-3 col-lg-6" method="GET" action="/capital" id="form-capital">
+  ...
+</form>
+<div id="result" class="mt-3"></div>
+```
+
+Create `js/capital.js`:
+
+```javascript
+document.querySelector("#form-capital").addEventListener("submit", function (event) {
+  event.preventDefault();
+
+  const code = document.querySelector("#countrycode").value;
+
+  fetch("capital?countrycode=" + code)
+    .then(function (response) {
+      const success = response.ok;
+      return response.json().then(function (data) {
+        return { success: success, data: data };
+      });
+    })
+    .then(function (result) {
+      const resultEl = document.querySelector("#result");
+      if (result.success) {
+        resultEl.textContent = "Capital of " + code + ": " + result.data.capital;
+        resultEl.className = "mt-3";
+      } else {
+        resultEl.textContent = result.data.error || "Country not found";
+        resultEl.className = "mt-3 text-danger";
+      }
+    });
+});
+```
+
+### Step 6.7: Country CRUD {#sec-apD6-step7-en}
+
+In `paises-editar.html`, give the three forms `id`s (`form-insert`, `form-update`, `form-delete`) and add a single message area, shared by all three:
+
+```html
+<form class="row g-3 col-lg-6" method="POST" action="/countryEdit" id="form-insert">
+  ...
+</form>
+...
+<div id="feedback" class="mt-3"></div>
+```
+
+Create `js/countries-edit.js`:
+
+```javascript
+if (!isAuthenticated()) {
+  window.location.href = "login.html";
+}
+
+function submitOperation(form, successMessage) {
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const body = new URLSearchParams(new FormData(form));
+
+    fetch("countryEdit", {
+      method: "POST",
+      body: body
+    })
+      .then(function (response) {
+        const success = response.ok;
+        return response.json().then(function (data) {
+          return { success: success, data: data };
+        });
+      })
+      .then(function (result) {
+        const feedback = document.querySelector("#feedback");
+        if (result.success) {
+          feedback.textContent = successMessage;
+          feedback.className = "mt-3 text-success";
+          form.reset();
+        } else {
+          feedback.textContent = result.data.error || "Operation failed";
+          feedback.className = "mt-3 text-danger";
+        }
+      });
+  });
+}
+
+submitOperation(document.querySelector("#form-insert"), "Country inserted successfully.");
+submitOperation(document.querySelector("#form-update"), "Country updated successfully.");
+submitOperation(document.querySelector("#form-delete"), "Country removed successfully.");
+```
+
+`new FormData(form)` automatically collects every field with a `name` inside the submitted form — including the hidden `operation` field, already present in each of the three forms since [Appendix A](apendiceA.qmd) — with no need to list them one by one; `new URLSearchParams(...)` converts that collection directly into the format `CountryEditServlet` expects. The same `submitOperation()` function serves all three forms, because all three follow exactly the same request/response structure (see [Appendix G](apendiceD4.qmd)) — only the success message shown changes.
+
+### How to Test {#sec-apD6-test-en}
+
+1. Open `http://localhost:8080/CapitaisAPI/index.html` with no session started. The table should show the message asking to log in, and the navigation bar should show "Entrar"
+2. Log in on `login.html`. Expected result: redirect to `index.html`, already with the table populated, and the navigation bar showing "Sair" instead of "Entrar"
+3. Test `capital.html`: look up a valid country code and an invalid one, and confirm both messages
+4. Test `paises-editar.html`: insert a new country, confirm it appears in `index.html`; update it; remove it
+5. With no session started (for example, in an anonymous *browser* window), try to access `paises-editar.html` directly. Expected result: automatic redirect to `login.html`
+6. Log out through the "Sair" link. Expected result: back to `index.html`, with no session again, showing "Entrar" in the navigation bar
+
+### Conclusion {#sec-apD6-conclusion-en}
+
+With this LAB, the cycle introduced in [Chapter 1](cap01.qmd) closes: the three pieces — Frontend, Middleware, Backend — stop being a theoretical map of the book, and become an actually working application. The *backend* from LABs 1 to 4 never needed to know who would consume it; this LAB confirms exactly that, connecting it to a client built from scratch, without changing the business logic or the authentication already implemented.
+
+**Note, for anyone who completed the optional LAB5** ([Appendix H](apendiceD5.qmd)): if the *backend* used is the stateless one, based on JWT, the only change needed is in how the authentication state is stored and sent. Instead of relying on an automatic session *cookie*: also store the *token* returned by *login* (for example, alongside the authenticated flag itself, in `localStorage`); and send it with every protected request through the `Authorization: Bearer <token>` header (see [Appendix H](apendiceD5.qmd) and [Chapter 8](cap08.qmd)), in `fetch()`:
+
+```javascript
+fetch("country?countrycode=" + code, {
+  headers: { "Authorization": "Bearer " + token }
+})
+```
+
+Everything else — showing/hiding based on authentication, listing countries, the complete CRUD — stays exactly the same.

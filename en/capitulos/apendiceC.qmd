@@ -1,0 +1,60 @@
+---
+title: "Development Environment Setup"
+author: "João Pavão"
+date: 2026-08-26
+lang: en-GB
+---
+
+## Introduction {#sec-apC-intro-en}
+
+This appendix gathers, in a single place, all the tools needed throughout this course, with their installation links, official documentation, and possible alternatives.
+
+The instructions and links below apply equally to **macOS, Windows and Linux** — every tool listed has a version for all three systems. Where a step depends on the operating system, this is explicitly flagged.
+
+## The Tools for This Course {#sec-apC-tools-en}
+
+**JDK — *Java Development Kit***
+: The Java language and the tools to compile and run it — the foundation for everything else. The [Eclipse Temurin](https://adoptium.net/) distribution is recommended: free, open source, maintained by the *Eclipse Adoptium Working Group*, and available for all three operating systems. Alternative: [Oracle JDK](https://www.oracle.com/java/technologies/downloads/), Oracle's official build, under a different licence. Help: official documentation at <https://docs.oracle.com/en/java/>; for specific questions, the [`java` tag on Stack Overflow](https://stackoverflow.com/questions/tagged/java) is the first place to check.
+
+**Apache Tomcat**
+: The *Servlet Container* used throughout the course (see [Chapter 4](cap04.qmd)), installed on the server side. Available at <https://tomcat.apache.org/>. Alternatives exist (*Jetty*, or a full application server such as *WildFly*, already mentioned in [Chapter 4](cap04.qmd)), but they are not used in this course. Help: official documentation at <https://tomcat.apache.org/tomcat-10.1-doc/>; the [`tomcat` tag on Stack Overflow](https://stackoverflow.com/questions/tagged/tomcat) for specific questions.
+
+**Eclipse IDE for Enterprise Java and Web Developers**
+: The development environment (IDE) used for server-side code (Servlets, Filters, JSP), with built-in support for Jakarta EE projects and for installing and managing Tomcat directly from within Eclipse. Downloaded from <https://www.eclipse.org/downloads/packages/> (choose exactly the "Enterprise Java and Web Developers" package, not the generic "Eclipse IDE for Java Developers" package, which does not include the Web project tools). Alternative: [IntelliJ IDEA](https://www.jetbrains.com/idea/download/) (the *Ultimate* edition, paid — but free for students on registration — includes equivalent Jakarta EE support; the free *Community* edition does not). Help: [Eclipse community forum](https://www.eclipse.org/forums/); the [`eclipse` tag on Stack Overflow](https://stackoverflow.com/questions/tagged/eclipse).
+
+**VSCode or WebStorm**
+: A lighter editor, used for client-side code (HTML, CSS, JavaScript, see [Chapter 2](cap02.qmd) and [Chapter 8](cap08.qmd)) — it does not need either of Eclipse's two Java EE-specific supports. [VSCode](https://code.visualstudio.com/) is free and cross-platform; [WebStorm](https://www.jetbrains.com/webstorm/) is paid (free for students on registration), more specialised in JavaScript. Help: official documentation at <https://code.visualstudio.com/docs> (VSCode) or <https://www.jetbrains.com/webstorm/documentation/> (WebStorm).
+
+**A modern *browser*, with developer tools**
+: Chrome, Firefox and Edge all work equally well; what matters is knowing how to open their developer tools (*DevTools*, `F12` key or `Cmd+Option+I` on Mac), used throughout the course to inspect network requests and debug JavaScript (see [Chapter 8](cap08.qmd)). Help: <https://developer.chrome.com/docs/devtools/> (Chrome) or <https://firefox-source-docs.mozilla.org/devtools-user/> (Firefox).
+
+**A REST client**
+: A tool for building HTTP requests by hand (`GET`, `POST`, `PUT`, `DELETE`, with headers and body of your choosing), useful for testing a REST API directly (see [Chapter 7](cap07.qmd)) without depending on any *front-office* already built. A simple `GET` can always be tested directly in the *browser*, but `POST`, `PUT` and `DELETE` cannot. [Postman](https://www.postman.com/downloads/) is the best known; [Insomnia](https://insomnia.rest/download) is a lighter alternative; whoever prefers the command line can use `curl`, already included by default on macOS, on Linux, and on Windows 10 and later.
+
+**MySQL or MariaDB**
+: The relational database management system used from LAB4 onward ([Appendix G](apendiceD4.qmd)), when the fixed data used in the earlier LABs is replaced with real data, accessed through JDBC. [MySQL Community Server](https://dev.mysql.com/downloads/) is the free, open-source edition of MySQL; [MariaDB Server](https://mariadb.org/download/) is a free, open-source alternative, directly compatible (same network protocol, same JDBC *driver*) — either one works for this course. To create and manage the tables without relying solely on the command line, it is also useful to install a graphical client, such as [MySQL Workbench](https://dev.mysql.com/downloads/workbench/) or [DBeaver](https://dbeaver.io/) (cross-platform, compatible with both MySQL and MariaDB). Help: official documentation at <https://dev.mysql.com/doc/> (MySQL) or <https://mariadb.com/kb/en/documentation/> (MariaDB); the [`mysql`](https://stackoverflow.com/questions/tagged/mysql) and [`mariadb`](https://stackoverflow.com/questions/tagged/mariadb) tags on Stack Overflow for specific questions.
+
+## Required Tools {#sec-apC-required-en}
+
+From the list above, what is, in fact, indispensable for this course:
+
+| Tool | Minimum version | Note |
+|---|---|---|
+| JDK | 17 (LTS) | Required by Tomcat 10.1 (see below) |
+| Apache Tomcat | 10.1.x | **Do not use the 9.x series**: this course's code uses the `jakarta.servlet.*` package (see [Chapter 6](cap06.qmd)), which only exists from Tomcat 10 onward |
+| Eclipse IDE for Enterprise Java and Web Developers | Any current version | Or the equivalent IntelliJ IDEA Ultimate |
+| VSCode or WebStorm | Any current version | For client-side code |
+| A modern *browser* | Any current version | With *DevTools* |
+| MySQL or MariaDB | Any current version | Only needed from LAB4 onward ([Appendix G](apendiceD4.qmd)) |
+
+A REST client (Postman, Insomnia, or `curl`) is recommended, but not strictly required: the first LABs can be tested with simple HTML forms (see [Chapter 3](cap03.qmd)), with no dedicated client at all.
+
+## Confirming the Installation {#sec-apC-confirming-en}
+
+Before moving on to any LAB, it is worth confirming that each tool is correctly installed:
+
+- **JDK**: in a terminal, `java -version` should return the installed version number, with no errors
+- **Apache Tomcat**: starting Tomcat and visiting `http://localhost:8080` in a *browser* should show Tomcat's own default welcome page — no custom code is needed, or expected, yet
+- **Eclipse**: should open with no errors, and the project creation menu should include the "Dynamic Web Project" option — a sign that Jakarta EE support is correctly installed
+- **VSCode or WebStorm**: should open with no errors; creating any `.html` file and opening it directly in the *browser* confirms that the essentials already work, with no server needed
+- **MySQL or MariaDB**: starting the server and connecting to it — via the command line (`mysql -u root -p`) or through the chosen graphical client — should work with no errors; no database of your own needs to exist yet, just confirm that the server responds

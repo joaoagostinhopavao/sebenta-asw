@@ -1,0 +1,355 @@
+---
+title: "LAB6: O Front-Office em JavaScript"
+author: "João Pavão"
+date: 2026-08-26
+lang: pt-PT
+---
+
+## LAB6: O Front-Office em JavaScript {#sec-apD6-lab6}
+
+Até aqui, o *backend* construído nos LABs 1 a 5 foi sempre testado diretamente — no *browser*, com formulários HTML simples, ou com um cliente REST (ver [Apêndice C](apendiceC.qmd)). Este último LAB liga, pela primeira vez, as páginas visuais já prontas do [Apêndice A](apendiceA.qmd) a esse mesmo *backend*, através de `fetch()` (ver [Capítulo 8](cap08.qmd)) — a peça de JavaScript que faltava para fechar as "três peças" apresentadas no [Capítulo 1](cap01.qmd).
+
+Este LAB assume o *backend* com sessão construído nos LABs 1 a 4 ([Apêndice D](apendiceD1.qmd) a [Apêndice G](apendiceD4.qmd)), já com dados reais numa base de dados (LAB4). Quem tiver feito também o LAB5 opcional (autenticação sem estado com JWT, [Apêndice H](apendiceD5.qmd)) encontra, no final desta secção, uma nota sobre o que muda nesse caso.
+
+### Passo 6.1: Preparar o Projeto {#sec-apD6-passo1}
+
+1. Copiar os quatro ficheiros do [Apêndice A](apendiceA.qmd) (`index.html`, `login.html`, `capital.html`, `paises-editar.html`) para `src/main/webapp/`, dentro do mesmo projeto Eclipse `CapitaisAPI` já usado nos LABs anteriores. Estas páginas substituem os formulários "crus" de teste criados ao longo dos LABs anteriores (`login.html` do LAB2, os formulários de `paises-editar.html` do LAB4) — a partir de agora, a aplicação passa a ter uma única interface
+2. Dentro de `src/main/webapp/`, criar uma pasta `js/`
+3. Em cada um dos quatro ficheiros `.html`, acrescentar, antes do `</body>`, a seguir ao `<script>` do *Bootstrap*, uma ligação ao ficheiro JavaScript próprio dessa página (e, em todas exceto `login.html`, também a `js/auth.js`, partilhado — ver [Passo 6.4](#sec-apD6-passo4)):
+
+```html
+<script src="js/auth.js"></script>
+<script src="js/paises.js"></script>
+```
+
+Como as páginas passam a ser servidas pelo próprio Tomcat (e não abertas diretamente como ficheiro local), os pedidos `fetch()` podem usar *URLs* relativas simples, sem barra inicial — exatamente o mesmo padrão já usado nos formulários HTML dos LABs anteriores (`action="login"`, `action="countryEdit"`): resolvem-se automaticamente em relação à página atual, dentro do mesmo *host* e do mesmo contexto (`CapitaisAPI`), sem qualquer problema de origem cruzada (*CORS*).
+
+### Passo 6.2: Um Pequeno Acrescento ao *Backend* — Listar os Códigos Disponíveis {#sec-apD6-passo2}
+
+Nenhum dos LABs anteriores expôs uma forma de um cliente descobrir *quais* são os códigos de país disponíveis — só é possível consultar um país de cada vez, sabendo já o código (`/country?countrycode=PT`). Para construir a listagem da página inicial, falta um pequeno *endpoint* adicional.
+
+Criar uma nova *Servlet*, `CountryCodesServlet`, no pacote `capitaisapi.servlets`, mapeada à *URL* `/countrycodes`:
+
+```java
+package capitaisapi.servlets;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
+
+import capitaisapi.dao.DBDAO;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+@WebServlet("/countrycodes")
+public class CountryCodesServlet extends HttpServlet {
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        DBDAO dao = new DBDAO();
+        List<String> codigos = dao.getCountryCodes();
+
+        StringBuilder json = new StringBuilder("[");
+        for (int i = 0; i < codigos.size(); i++) {
+            if (i > 0) {
+                json.append(",");
+            }
+            json.append("\"").append(codigos.get(i)).append("\"");
+        }
+        json.append("]");
+
+        response.setContentType("application/json");
+        PrintWriter out = response.getWriter();
+        String jsonResponse = json.toString();
+        out.print(jsonResponse);
+    }
+}
+```
+
+Esta *Servlet* não faz nada de novo do lado dos dados — reutiliza `getCountryCodes()`, já existente no `DBDAO` desde o [Apêndice D](apendiceD1.qmd) — só expõe, pela primeira vez, essa lista a um cliente, em JSON.
+
+Como esta listagem é, tal como os dados de cada país, informação reservada a utilizadores autenticados, acrescentar `/countrycodes` ao mapeamento do `AuthenticationFilter` ([Apêndice F](apendiceD3.qmd)):
+
+```java
+@WebFilter(urlPatterns = {"/country", "/countrycodes", "/countryEdit"})
+```
+
+Neste LAB assume-se que a proteção de `/capital` não foi ativada (ficou pública, tal como permitido — "opcionalmente" — no [Apêndice G](apendiceD4.qmd)): a página `capital.html` continua a funcionar sem *login*.
+
+### Passo 6.3: Autenticação sem Recarregar a Página {#sec-apD6-passo3}
+
+Em `login.html`, acrescentar um `id` ao formulário e uma zona de mensagens logo a seguir:
+
+```html
+<form class="row g-3 col-lg-6" method="POST" action="/login" id="form-login">
+  ...
+</form>
+<div id="feedback" class="mt-3"></div>
+```
+
+Criar `js/login.js`:
+
+```javascript
+document.querySelector("#form-login").addEventListener("submit", function (evento) {
+  evento.preventDefault();
+
+  const utilizador = document.querySelector("#user").value;
+  const palavraPasse = document.querySelector("#pass").value;
+
+  const corpo = new URLSearchParams();
+  corpo.append("user", utilizador);
+  corpo.append("pass", palavraPasse);
+
+  fetch("login", {
+    method: "POST",
+    body: corpo
+  })
+    .then(function (response) {
+      const sucesso = response.ok;
+      return response.json().then(function (dados) {
+        return { sucesso: sucesso, dados: dados };
+      });
+    })
+    .then(function (resultado) {
+      const feedback = document.querySelector("#feedback");
+      if (resultado.sucesso) {
+        marcarAutenticado();
+        window.location.href = "index.html";
+      } else {
+        feedback.textContent = resultado.dados.error || resultado.dados.message;
+        feedback.className = "mt-3 text-danger";
+      }
+    });
+});
+```
+
+`evento.preventDefault()` impede a submissão normal do formulário — a partir daqui, é o `fetch()` que decide para onde vai o pedido, e o atributo `action` do formulário deixa de ser usado. Note-se que não é preciso definir manualmente o cabeçalho `Content-Type`: quando o corpo do pedido é um `URLSearchParams`, o próprio *browser* define automaticamente `application/x-www-form-urlencoded`, o mesmo formato que o `LoginServlet` já espera desde o [Apêndice E](apendiceD2.qmd) (`request.getParameter()`).
+
+A função `marcarAutenticado()`, usada aqui, vem do próximo passo — como `login.html` também carrega `js/auth.js` (ver [Passo 6.1](#sec-apD6-passo1)), essa função já está disponível.
+
+### Passo 6.4: Mostrar/Esconder Consoante o Estado de Autenticação {#sec-apD6-passo4}
+
+Em cada um dos quatro ficheiros, no bloco da barra de navegação, substituir a linha do link "Entrar" por estas duas:
+
+```html
+<li class="nav-item"><a class="nav-link" href="login.html" id="nav-entrar">Entrar</a></li>
+<li class="nav-item"><a class="nav-link d-none" href="#" id="nav-sair">Sair</a></li>
+```
+
+Criar `js/auth.js`, partilhado por todas as páginas:
+
+```javascript
+function marcarAutenticado() {
+  localStorage.setItem("autenticado", "sim");
+}
+
+function limparAutenticacao() {
+  localStorage.removeItem("autenticado");
+}
+
+function estaAutenticado() {
+  return localStorage.getItem("autenticado") === "sim";
+}
+
+function atualizarNav() {
+  const linkEntrar = document.querySelector("#nav-entrar");
+  const linkSair = document.querySelector("#nav-sair");
+
+  if (!linkEntrar || !linkSair) {
+    return;
+  }
+
+  if (estaAutenticado()) {
+    linkEntrar.classList.add("d-none");
+    linkSair.classList.remove("d-none");
+  } else {
+    linkEntrar.classList.remove("d-none");
+    linkSair.classList.add("d-none");
+  }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  atualizarNav();
+
+  const linkSair = document.querySelector("#nav-sair");
+  if (linkSair) {
+    linkSair.addEventListener("click", function (evento) {
+      evento.preventDefault();
+      fetch("logout").then(function () {
+        limparAutenticacao();
+        window.location.href = "index.html";
+      });
+    });
+  }
+});
+```
+
+Este `localStorage` é só uma conveniência para a interface — não é, de forma nenhuma, segurança real. Quem continua a decidir se um pedido a `/country`, `/countrycodes` ou `/countryEdit` é aceite é o `AuthenticationFilter`, do lado do servidor (ver [Apêndice F](apendiceD3.qmd)). Se alguém abrir as ferramentas de programador do *browser* e alterar manualmente este valor, o pior que acontece é ver um botão que não devia — os pedidos protegidos continuam, do lado do servidor, a responder `403`.
+
+Já que `paises-editar.html` só faz sentido para quem tem sessão iniciada, acrescentar no início de `js/paises-editar.js` (ver [Passo 6.7](#sec-apD6-passo7)) uma verificação simples:
+
+```javascript
+if (!estaAutenticado()) {
+  window.location.href = "login.html";
+}
+```
+
+### Passo 6.5: Listar Países na Página Inicial {#sec-apD6-passo5}
+
+Em `index.html`, dar um `id` ao `<tbody>` da tabela e retirar as três linhas fixas de exemplo, já que a tabela passa a ser preenchida dinamicamente:
+
+```html
+<tbody id="tabela-paises"></tbody>
+```
+
+Criar `js/paises.js`:
+
+```javascript
+if (estaAutenticado()) {
+  fetch("countrycodes")
+    .then(response => response.json())
+    .then(function (codigos) {
+      const pedidos = codigos.map(function (codigo) {
+        return fetch("country?countrycode=" + codigo).then(response => response.json());
+      });
+      return Promise.all(pedidos);
+    })
+    .then(function (paises) {
+      const tabela = document.querySelector("#tabela-paises");
+      paises.forEach(function (pais) {
+        const linha = document.createElement("tr");
+        linha.innerHTML = "<td>" + pais.code + "</td><td>" + pais.name + "</td><td>" + pais.capital + "</td>";
+        tabela.appendChild(linha);
+      });
+    });
+} else {
+  const tabela = document.querySelector("#tabela-paises");
+  tabela.innerHTML = "<tr><td colspan=\"3\">Inicie sessão para ver a lista de países.</td></tr>";
+}
+```
+
+Este passo combina duas ideias já apresentadas separadamente: o padrão `fetch()` + DOM do [Capítulo 8](cap08.qmd), e `Promise.all()`, que espera por várias *promises* em paralelo (uma por país) e só continua quando todas tiverem terminado — mais rápido do que pedir os países um a um, em sequência.
+
+### Passo 6.6: Consultar uma Capital {#sec-apD6-passo6}
+
+Em `capital.html`, dar `id`s ao formulário e acrescentar uma zona de resultado:
+
+```html
+<form class="row g-3 col-lg-6" method="GET" action="/capital" id="form-capital">
+  ...
+</form>
+<div id="resultado" class="mt-3"></div>
+```
+
+Criar `js/capital.js`:
+
+```javascript
+document.querySelector("#form-capital").addEventListener("submit", function (evento) {
+  evento.preventDefault();
+
+  const codigo = document.querySelector("#countrycode").value;
+
+  fetch("capital?countrycode=" + codigo)
+    .then(function (response) {
+      const sucesso = response.ok;
+      return response.json().then(function (dados) {
+        return { sucesso: sucesso, dados: dados };
+      });
+    })
+    .then(function (resultado) {
+      const resultadoEl = document.querySelector("#resultado");
+      if (resultado.sucesso) {
+        resultadoEl.textContent = "Capital de " + codigo + ": " + resultado.dados.capital;
+        resultadoEl.className = "mt-3";
+      } else {
+        resultadoEl.textContent = resultado.dados.error || "País não encontrado";
+        resultadoEl.className = "mt-3 text-danger";
+      }
+    });
+});
+```
+
+### Passo 6.7: CRUD de Países {#sec-apD6-passo7}
+
+Em `paises-editar.html`, dar `id`s aos três formulários (`form-inserir`, `form-atualizar`, `form-remover`) e acrescentar uma única zona de mensagens, partilhada pelos três:
+
+```html
+<form class="row g-3 col-lg-6" method="POST" action="/countryEdit" id="form-inserir">
+  ...
+</form>
+...
+<div id="feedback" class="mt-3"></div>
+```
+
+Criar `js/paises-editar.js`:
+
+```javascript
+if (!estaAutenticado()) {
+  window.location.href = "login.html";
+}
+
+function submeterOperacao(formulario, mensagemSucesso) {
+  formulario.addEventListener("submit", function (evento) {
+    evento.preventDefault();
+
+    const corpo = new URLSearchParams(new FormData(formulario));
+
+    fetch("countryEdit", {
+      method: "POST",
+      body: corpo
+    })
+      .then(function (response) {
+        const sucesso = response.ok;
+        return response.json().then(function (dados) {
+          return { sucesso: sucesso, dados: dados };
+        });
+      })
+      .then(function (resultado) {
+        const feedback = document.querySelector("#feedback");
+        if (resultado.sucesso) {
+          feedback.textContent = mensagemSucesso;
+          feedback.className = "mt-3 text-success";
+          formulario.reset();
+        } else {
+          feedback.textContent = resultado.dados.error || "Operação falhou";
+          feedback.className = "mt-3 text-danger";
+        }
+      });
+  });
+}
+
+submeterOperacao(document.querySelector("#form-inserir"), "País inserido com sucesso.");
+submeterOperacao(document.querySelector("#form-atualizar"), "País atualizado com sucesso.");
+submeterOperacao(document.querySelector("#form-remover"), "País removido com sucesso.");
+```
+
+`new FormData(formulario)` recolhe automaticamente todos os campos com `name` dentro do formulário submetido — incluindo o campo escondido `operation`, já presente em cada um dos três formulários desde o [Apêndice A](apendiceA.qmd) — sem ser preciso listá-los um a um; `new URLSearchParams(...)` converte essa recolha diretamente no formato que o `CountryEditServlet` espera. A mesma função `submeterOperacao()` serve para os três formulários, porque os três seguem exatamente a mesma estrutura de pedido e de resposta (ver [Apêndice G](apendiceD4.qmd)) — só muda a mensagem de sucesso mostrada.
+
+### Como Testar {#sec-apD6-testar}
+
+1. Abrir `http://localhost:8080/CapitaisAPI/index.html` sem sessão iniciada. A tabela deve mostrar a mensagem a pedir *login*, e a barra de navegação deve mostrar "Entrar"
+2. Fazer *login* em `login.html`. Resultado esperado: redirecionamento para `index.html`, já com a tabela preenchida, e a barra de navegação a mostrar "Sair" em vez de "Entrar"
+3. Testar `capital.html`: consultar um código de país válido e um inválido, e confirmar as duas mensagens
+4. Testar `paises-editar.html`: inserir um país novo, confirmar que aparece em `index.html`; atualizá-lo; removê-lo
+5. Sem sessão iniciada (por exemplo, numa janela anónima do *browser*), tentar aceder diretamente a `paises-editar.html`. Resultado esperado: redirecionamento automático para `login.html`
+6. Fazer *logout* através do link "Sair". Resultado esperado: regresso a `index.html`, de novo sem sessão, com "Entrar" na barra de navegação
+
+### Conclusão {#sec-apD6-conclusao}
+
+Com este LAB, fecha-se o ciclo apresentado no [Capítulo 1](cap01.qmd): as três peças — Frontend, Middleware, Backend — deixam de ser um mapa teórico do livro, e passam a ser uma aplicação a funcionar de facto. O *backend* dos LABs 1 a 4 nunca precisou de saber quem o ia consumir; este LAB confirma isso mesmo, ligando-lhe um cliente construído de raiz, sem alterar a lógica de negócio nem a autenticação já implementadas.
+
+**Nota, para quem completou o LAB5 opcional** ([Apêndice H](apendiceD5.qmd)): se o *backend* usado for o sem estado, baseado em JWT, a única mudança necessária está em como o estado de autenticação é guardado e enviado. Em vez de confiar num *cookie* de sessão automático: guardar também o *token* devolvido pelo *login* (por exemplo, a par da própria marca de autenticado, em `localStorage`); e enviá-lo em cada pedido protegido através do cabeçalho `Authorization: Bearer <token>` (ver [Apêndice H](apendiceD5.qmd) e [Capítulo 8](cap08.qmd)), em `fetch()`:
+
+```javascript
+fetch("country?countrycode=" + codigo, {
+  headers: { "Authorization": "Bearer " + token }
+})
+```
+
+Todo o resto — mostrar/esconder consoante autenticação, listar países, o CRUD completo — mantém-se exatamente igual.

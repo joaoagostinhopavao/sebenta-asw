@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="João Pavão">
+<meta name="dcterms.date" content="2026-08-26">
 
-<title>6&nbsp; REST Web Services and Stateless Architecture (Part 1) – Web Applications and Services</title>
+<title>6&nbsp; Security and Filters – Web Applications and Services</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -85,7 +121,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../capitulos/cap06.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">REST Web Services and Stateless Architecture (Part 1)</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../capitulos/cap06.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Security and Filters</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -134,31 +170,37 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap03.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Java EE and Servlet Fundamentals</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The HTTP Protocol</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap04.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Stateful Model: Sessions and JSP</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Java EE and Servlet Fundamentals</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap05.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Security and Filters</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">The Stateful Model: Sessions and JSP</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap06.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">REST Web Services and Stateless Architecture (Part 1)</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Security and Filters</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/cap07.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">REST Web Services (Part 2) and the JavaScript Client</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">REST Web Services and Stateless Architecture (Part 1)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/cap08.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">REST Web Services (Part 2) and the JavaScript Client</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -167,6 +209,71 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">References</span></a>
   </div>
 </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceA.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Complete Code: Static “World Capitals” Pages</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceB.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">JWT Token Signing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceC.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Development Environment Setup</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">LAB1: First Endpoint and Simulated DAO</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">LAB2: Login and Session</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">F</span>&nbsp; <span class="chapter-title">LAB3: AuthenticationFilter and Logout</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">G</span>&nbsp; <span class="chapter-title">LAB4: JDBC and Complete CRUD</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">H</span>&nbsp; <span class="chapter-title">LAB5 (Optional): Stateless Authentication with JWT</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">I</span>&nbsp; <span class="chapter-title">LAB6: The Front-Office in JavaScript</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
     </ul>
     </div>
 </nav>
@@ -177,7 +284,15 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#sec-06-rest-en" id="toc-sec-06-rest-en" class="nav-link active" data-scroll-target="#sec-06-rest-en"><span class="header-section-number">6.1</span> What is a Web Service</a></li>
+  <li><a href="#sec-06-problem-en" id="toc-sec-06-problem-en" class="nav-link active" data-scroll-target="#sec-06-problem-en"><span class="header-section-number">6.1</span> The Problem: Security Repeated in Every <em>Servlet</em></a></li>
+  <li><a href="#sec-06-authentication-authorisation-en" id="toc-sec-06-authentication-authorisation-en" class="nav-link" data-scroll-target="#sec-06-authentication-authorisation-en"><span class="header-section-number">6.2</span> Authentication vs.&nbsp;Authorisation</a></li>
+  <li><a href="#sec-06-what-is-a-filter-en" id="toc-sec-06-what-is-a-filter-en" class="nav-link" data-scroll-target="#sec-06-what-is-a-filter-en"><span class="header-section-number">6.3</span> What a Filter Is</a></li>
+  <li><a href="#sec-06-where-a-filter-sits-en" id="toc-sec-06-where-a-filter-sits-en" class="nav-link" data-scroll-target="#sec-06-where-a-filter-sits-en"><span class="header-section-number">6.4</span> Where a Filter Sits in the Request</a></li>
+  <li><a href="#sec-06-filter-lifecycle-en" id="toc-sec-06-filter-lifecycle-en" class="nav-link" data-scroll-target="#sec-06-filter-lifecycle-en"><span class="header-section-number">6.5</span> A Filter’s Lifecycle</a></li>
+  <li><a href="#sec-06-separation-of-responsibilities-en" id="toc-sec-06-separation-of-responsibilities-en" class="nav-link" data-scroll-target="#sec-06-separation-of-responsibilities-en"><span class="header-section-number">6.6</span> <em>Servlet</em> and Filter: Separation of Responsibilities</a></li>
+  <li><a href="#sec-06-declaring-a-filter-en" id="toc-sec-06-declaring-a-filter-en" class="nav-link" data-scroll-target="#sec-06-declaring-a-filter-en"><span class="header-section-number">6.7</span> Declaring and Implementing a Filter</a></li>
+  <li><a href="#sec-06-redirect-vs-401-en" id="toc-sec-06-redirect-vs-401-en" class="nav-link" data-scroll-target="#sec-06-redirect-vs-401-en"><span class="header-section-number">6.8</span> Redirection vs.&nbsp;<code>401</code>: an Architectural Difference</a></li>
+  <li><a href="#sec-06-preparing-for-stateless-en" id="toc-sec-06-preparing-for-stateless-en" class="nav-link" data-scroll-target="#sec-06-preparing-for-stateless-en"><span class="header-section-number">6.9</span> Preparing for Stateless Security</a></li>
   </ul>
 </nav>
     </div>
@@ -186,14 +301,26 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">REST Web Services and Stateless Architecture (Part 1)</span></h1>
+<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Security and Filters</span></h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>João Pavão </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">26 August 2026</p>
+    </div>
+  </div>
   
     
   </div>
@@ -203,33 +330,170 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="sec-06-rest-en" class="level2" data-number="6.1">
-<h2 data-number="6.1" class="anchored" data-anchor-id="sec-06-rest-en"><span class="header-section-number">6.1</span> What is a Web Service</h2>
-<blockquote class="blockquote">
-<p>Content to be developed, aligned with the first half of ESIGELEC’s Lecture 4 (REST Web Services and Stateless Architecture). Planned topics:</p>
+<section id="sec-06-problem-en" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="sec-06-problem-en"><span class="header-section-number">6.1</span> The Problem: Security Repeated in Every <em>Servlet</em></h2>
+<p>With what has been presented so far (see <a href="../capitulos/cap05.html">Chapter 5</a>), authentication is solved: the <code>LoginServlet</code> validates the credentials and stores the user in the session, and each protected <em>endpoint</em> checks that session at the start of its <code>doGet()</code> or <code>doPost()</code>. This works, but it has a hidden cost: the authentication logic lives, duplicated, inside <strong>every</strong> protected <em>Servlet</em>.</p>
+<p>This duplication brings several problems along with it:</p>
 <ul>
-<li>What is a Web Service</li>
-<li>REST (conceptual level)</li>
-<li>Resources and endpoints</li>
-<li>JSON as a data interchange format</li>
-<li>The HTTP contract as the API contract</li>
-<li>Stateful vs.&nbsp;Stateless</li>
+<li>The same session check is repeated in every protected <em>endpoint</em></li>
+<li>There is a real risk of inconsistency between these copies</li>
+<li>It is easy to forget the protection when creating a new <em>endpoint</em></li>
 </ul>
-</blockquote>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
+<p>Put another way, this duplication violates the <em>DRY</em> principle (<em>Don’t Repeat Yourself</em>): a responsibility should live in a single place, and repeated logic increases the maintenance cost whenever that logic needs to change. More concretely, this design violates the <strong>Single Responsibility Principle</strong>: each <em>Servlet</em> ends up with two distinct responsibilities, its own business logic, and the security logic imposed on it. This makes security policies hard to evolve, and the design poorly scalable, both in number of <em>endpoints</em> and in the complexity of the access rules.</p>
+</section>
+<section id="sec-06-authentication-authorisation-en" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="sec-06-authentication-authorisation-en"><span class="header-section-number">6.2</span> Authentication vs.&nbsp;Authorisation</h2>
+<p>Before solving the problem, it is worth pinning down two often-confused concepts:</p>
+<dl>
+<dt><strong>Authentication</strong></dt>
+<dd>
+Answers “who is the user?”. It is the identity check, typically performed at <em>login</em> time.
+</dd>
+</dl>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb1-1"><a href="#cb1-1"></a><span class="cf">if</span> <span class="op">(</span>username<span class="op">.</span><span class="fu">equals</span><span class="op">(</span><span class="st">"admin"</span><span class="op">)</span> <span class="op">&amp;&amp;</span> password<span class="op">.</span><span class="fu">equals</span><span class="op">(</span><span class="st">"1234"</span><span class="op">))</span> <span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a>    HttpSession session <span class="op">=</span> request<span class="op">.</span><span class="fu">getSession</span><span class="op">(</span><span class="kw">true</span><span class="op">);</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>    session<span class="op">.</span><span class="fu">setAttribute</span><span class="op">(</span><span class="st">"UserName"</span><span class="op">,</span> username<span class="op">);</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<dl>
+<dt><strong>Authorisation</strong></dt>
+<dd>
+Answers “what is this user allowed to access?”. It is the permission check, performed once identity has already been confirmed.
+</dd>
+</dl>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb2-1"><a href="#cb2-1"></a><span class="cf">if</span> <span class="op">(</span>session<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"UserRole"</span><span class="op">).</span><span class="fu">equals</span><span class="op">(</span><span class="st">"ADMIN"</span><span class="op">))</span> <span class="op">{</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a>    <span class="co">// access granted</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Authentication always happens first: it makes no sense to check the permissions of someone whose identity has not yet been confirmed. This distinction is directly reflected in the HTTP status codes used in the response (see <a href="../capitulos/cap03.html">Chapter 3</a>):</p>
+<ul>
+<li><code>401 Unauthorized</code>: the request is not authenticated</li>
+<li><code>403 Forbidden</code>: the request is authenticated, but lacks permission for the requested resource</li>
+</ul>
+</section>
+<section id="sec-06-what-is-a-filter-en" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="sec-06-what-is-a-filter-en"><span class="header-section-number">6.3</span> What a Filter Is</h2>
+<p>The question left unanswered is where the security logic should live: inside each <em>Servlet</em>? Duplicated across every <em>endpoint</em>? Or centralised in a single component? Security is, by nature, a <em>cross-cutting concern</em>: it runs through the whole application, rather than belonging to a single module. This is exactly what the Filter exists for.</p>
+<p>A <a href="https://jakarta.ee/specifications/servlet/">Filter</a> is a server-side component that intercepts HTTP requests:</p>
+<ul>
+<li>It runs <strong>before</strong> the destination <em>Servlet</em></li>
+<li>It can also run <strong>after</strong> the <em>Servlet</em> (over the response)</li>
+<li>It can block, redirect, or modify the request or the response</li>
+</ul>
+<p>Beyond authentication and authorisation, Filters are the natural mechanism for other cross-cutting concerns: activity <em>logging</em>, <em>CORS</em> (<em>Cross-Origin Resource Sharing</em>), or input validation. A Filter separates these concerns from the business logic, which stays exclusively in the <em>Servlet</em>.</p>
+</section>
+<section id="sec-06-where-a-filter-sits-en" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="sec-06-where-a-filter-sits-en"><span class="header-section-number">6.4</span> Where a Filter Sits in the Request</h2>
+<p>One or more Filters can be chained between the client and the <em>Servlet</em> that actually handles the request:</p>
+<pre><code>Client → Filter 1 → ... → Filter N → Servlet (business logic) → Response</code></pre>
+<div id="fig-06-filter-chain-en" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-06-filter-chain-en-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap06/Filter_Chain.png" class="img-fluid figure-img" style="width:80.0%">
 </div>
-<div class="callout-title-container flex-fill">
-<code>POST</code> + <code>operation</code> as an Alternative to “Pure” HTTP Verbs
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-06-filter-chain-en-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.1: A request passes through the Filter chain before reaching the Servlet; each Filter can block the request (red), modify it (yellow), or let it proceed (green, by calling chain.doFilter()).
+</figcaption>
+</figure>
 </div>
+<p>Each Filter in the chain has, essentially, three possible behaviours:</p>
+<ul>
+<li><strong>Block the request</strong>: for example, <code>400</code> (invalid data), <code>401</code> (invalid identity) or <code>403</code> (authenticated but without permission)</li>
+<li><strong>Modify the request</strong>: data normalisation and validation, activity logging, among others</li>
+<li><strong>Let it proceed</strong>: by calling <code>chain.doFilter(request, response)</code>, passing control to the next element in the chain</li>
+</ul>
+</section>
+<section id="sec-06-filter-lifecycle-en" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="sec-06-filter-lifecycle-en"><span class="header-section-number">6.5</span> A Filter’s Lifecycle</h2>
+<p>A Filter’s lifecycle follows the same model already presented for <em>Servlets</em> (see <a href="../capitulos/cap04.html">Chapter 4</a>):</p>
+<ul>
+<li><code>init()</code>: executed once, when the container puts the Filter into service</li>
+<li><code>doFilter()</code>: executed on every request; it can inspect, block or modify the request and the response, and must call <code>chain.doFilter()</code> to continue the chain</li>
+<li><code>destroy()</code>: executed once, when the Filter is taken out of service, to free resources</li>
+</ul>
+<p>Just like a <em>Servlet</em>, there is <strong>a single instance</strong> of each Filter, shared by multiple concurrent requests: exactly the same care already mentioned in Chapter 4 applies here — avoid shared mutable state, and prefer local variables inside <code>doFilter()</code>.</p>
+<div id="fig-06-filter-lifecycle-en" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-06-filter-lifecycle-en-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap06/Filter_Lifecycle.png" class="img-fluid figure-img" style="width:85.0%">
 </div>
-<div class="callout-body-container callout-body">
-<p>This course’s practical LABs (LAB4) implement creating, updating and removing a country through a single endpoint (<code>/countryEdit</code>), always received via <code>POST</code>, distinguishing the intended operation through an <code>operation</code> parameter (<code>insert</code>, <code>update</code>, <code>delete</code>). This runs against the “pure” HTTP verb semantics presented in <a href="../capitulos/cap01.html">Chapter 1</a> (<code>POST</code> to create, <code>PUT</code> to update, <code>DELETE</code> to remove), but it is a pragmatic simplification, common in teaching code: it avoids configuring additional Servlets mapped to <code>PUT</code>/<code>DELETE</code>, and keeps everything testable with plain HTML forms, with no need for JavaScript.</p>
-<p>This is left as a possible future implementation exercise for more advanced students: rewrite <code>/countryEdit</code> as three separate endpoints, one per HTTP verb (for instance, <code>PUT /country/{code}</code> to update and <code>DELETE /country/{code}</code> to remove), bringing the API closer to a more conventional REST design.</p>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-06-filter-lifecycle-en-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.2: A Filter’s lifecycle mirrors a Servlet’s: init() and destroy() run once, doFilter() runs on every request, for multiple concurrent requests.
+</figcaption>
+</figure>
 </div>
+</section>
+<section id="sec-06-separation-of-responsibilities-en" class="level2" data-number="6.6">
+<h2 data-number="6.6" class="anchored" data-anchor-id="sec-06-separation-of-responsibilities-en"><span class="header-section-number">6.6</span> <em>Servlet</em> and Filter: Separation of Responsibilities</h2>
+<p>Centralising security in a Filter reorganises the responsibilities of the whole application:</p>
+<div id="fig-06-servlet-vs-filter-en" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-06-servlet-vs-filter-en-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap06/Servlet_vs_Filter.png" class="img-fluid figure-img" style="width:75.0%">
 </div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-06-servlet-vs-filter-en-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.3: Without a Filter, each Servlet accumulates authentication, logging, validation and business logic. With a Filter, those cross-cutting concerns are concentrated in a single place, and each Servlet is left with only its own business logic.
+</figcaption>
+</figure>
+</div>
+<p>This reorganisation brings concrete advantages:</p>
+<ul>
+<li>The authentication logic is written <strong>once</strong> (<em>DRY</em> principle)</li>
+<li>The security policy is applied consistently to every <em>endpoint</em></li>
+<li>There is no longer any risk of “forgetting” the protection on a new <em>Servlet</em></li>
+<li>The separation between cross-cutting concerns (Filter) and business logic (<em>Servlet</em>) becomes clear</li>
+</ul>
+</section>
+<section id="sec-06-declaring-a-filter-en" class="level2" data-number="6.7">
+<h2 data-number="6.7" class="anchored" data-anchor-id="sec-06-declaring-a-filter-en"><span class="header-section-number">6.7</span> Declaring and Implementing a Filter</h2>
+<p>A Filter is declared with the <code>@WebFilter</code> annotation, indicating the <em>URL</em> pattern it applies to:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb4-1"><a href="#cb4-1"></a><span class="at">@WebFilter</span><span class="op">(</span><span class="st">"/*"</span><span class="op">)</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="kw">public</span> <span class="kw">class</span> AuthenticationFilter <span class="kw">implements</span> <span class="bu">Filter</span> <span class="op">{</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>    <span class="co">// ...</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The pattern <code>"/*"</code> intercepts every request, with no exception. The class must implement <code>jakarta.servlet.Filter</code>, and the container discovers it automatically at <em>deployment</em> time. Just like <em>Servlets</em>, a Filter can also be declared equivalently in the <code>web.xml</code> file, although this practice is no longer much in use.</p>
+<p>A typical <code>doFilter()</code>, protecting every request by requiring a valid session, has this form:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">public</span> <span class="dt">void</span> <span class="fu">doFilter</span><span class="op">(</span>ServletRequest request<span class="op">,</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a>                      ServletResponse response<span class="op">,</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a>                      FilterChain chain<span class="op">)</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a>        <span class="kw">throws</span> <span class="bu">IOException</span><span class="op">,</span> ServletException <span class="op">{</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a></span>
+<span id="cb5-6"><a href="#cb5-6"></a>    HttpServletRequest req <span class="op">=</span> <span class="op">(</span>HttpServletRequest<span class="op">)</span> request<span class="op">;</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a>    HttpServletResponse res <span class="op">=</span> <span class="op">(</span>HttpServletResponse<span class="op">)</span> response<span class="op">;</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a></span>
+<span id="cb5-9"><a href="#cb5-9"></a>    HttpSession session <span class="op">=</span> req<span class="op">.</span><span class="fu">getSession</span><span class="op">(</span><span class="kw">false</span><span class="op">);</span></span>
+<span id="cb5-10"><a href="#cb5-10"></a></span>
+<span id="cb5-11"><a href="#cb5-11"></a>    <span class="cf">if</span> <span class="op">(</span>session <span class="op">==</span> <span class="kw">null</span> <span class="op">||</span> session<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"UserName"</span><span class="op">)</span> <span class="op">==</span> <span class="kw">null</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-12"><a href="#cb5-12"></a>        res<span class="op">.</span><span class="fu">sendError</span><span class="op">(</span>HttpServletResponse<span class="op">.</span><span class="fu">SC_UNAUTHORIZED</span><span class="op">);</span> <span class="co">// 401</span></span>
+<span id="cb5-13"><a href="#cb5-13"></a>        <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb5-14"><a href="#cb5-14"></a>    <span class="op">}</span></span>
+<span id="cb5-15"><a href="#cb5-15"></a></span>
+<span id="cb5-16"><a href="#cb5-16"></a>    chain<span class="op">.</span><span class="fu">doFilter</span><span class="op">(</span>request<span class="op">,</span> response<span class="op">);</span></span>
+<span id="cb5-17"><a href="#cb5-17"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In practice, not every request should be protected: <code>/login</code> itself, and static resources such as <code>/css</code>, <code>/js</code> or <code>/images</code>, need to remain accessible without authentication — otherwise the user could never even reach the <em>login</em> form.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb6-1"><a href="#cb6-1"></a><span class="bu">String</span> path <span class="op">=</span> req<span class="op">.</span><span class="fu">getRequestURI</span><span class="op">();</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="dt">boolean</span> isLogin <span class="op">=</span> path<span class="op">.</span><span class="fu">endsWith</span><span class="op">(</span><span class="st">"/login"</span><span class="op">);</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="dt">boolean</span> isStatic <span class="op">=</span> path<span class="op">.</span><span class="fu">startsWith</span><span class="op">(</span>req<span class="op">.</span><span class="fu">getContextPath</span><span class="op">()</span> <span class="op">+</span> <span class="st">"/css"</span><span class="op">)</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a>                 <span class="op">||</span> path<span class="op">.</span><span class="fu">startsWith</span><span class="op">(</span>req<span class="op">.</span><span class="fu">getContextPath</span><span class="op">()</span> <span class="op">+</span> <span class="st">"/js"</span><span class="op">)</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a>                 <span class="op">||</span> path<span class="op">.</span><span class="fu">startsWith</span><span class="op">(</span>req<span class="op">.</span><span class="fu">getContextPath</span><span class="op">()</span> <span class="op">+</span> <span class="st">"/images"</span><span class="op">);</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="cf">if</span> <span class="op">(</span>isLogin <span class="op">||</span> isStatic<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a>    chain<span class="op">.</span><span class="fu">doFilter</span><span class="op">(</span>request<span class="op">,</span> response<span class="op">);</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a>    <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb6-11"><a href="#cb6-11"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="sec-06-redirect-vs-401-en" class="level2" data-number="6.8">
+<h2 data-number="6.8" class="anchored" data-anchor-id="sec-06-redirect-vs-401-en"><span class="header-section-number">6.8</span> Redirection vs.&nbsp;<code>401</code>: an Architectural Difference</h2>
+<p>The correct way to react to an authentication failure depends on the kind of application:</p>
+<ul>
+<li>In a traditional, presentation-oriented Web application (see <a href="../capitulos/cap01.html">Chapter 1</a>), the natural response is a <strong>redirect</strong> to the <em>login</em> page (code <code>302</code>)</li>
+<li>In a REST API, whose contract is JSON (see <a href="../capitulos/cap07.html">Chapters 7</a> and <a href="../capitulos/cap08.html">8</a>), the correct response is to return <strong><code>401</code></strong>, with no redirection at all</li>
+</ul>
+<p>The difference boils down to one sentence: in a traditional Web application, an authentication failure changes the page shown; in a REST API, it only changes the status code returned. It is the client, not the server, that decides what to do next with that <code>401</code>.</p>
+</section>
+<section id="sec-06-preparing-for-stateless-en" class="level2" data-number="6.9">
+<h2 data-number="6.9" class="anchored" data-anchor-id="sec-06-preparing-for-stateless-en"><span class="header-section-number">6.9</span> Preparing for Stateless Security</h2>
+<p>The model presented in this chapter rests entirely on sessions: the server stores the authenticated user’s state (<code>HttpSession</code>), and the Filter checks that session on every request. This model has one limitation: it requires the server to keep memory of each user, which becomes problematic as soon as there is more than one server instance (see <a href="../capitulos/cap08.html">Chapter 8</a>).</p>
+<p>The alternative is token-based authentication: instead of the server storing any session at all, each request itself carries, on every call, all the information needed to authenticate. This shift, from a stateful model to a stateless model, is the subject of the following chapters.</p>
 
 
 </section>
@@ -798,13 +1062,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../capitulos/cap05.html" class="pagination-link" aria-label="Security and Filters">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Security and Filters</span></span>
+      <a href="../capitulos/cap05.html" class="pagination-link" aria-label="The Stateful Model: Sessions and JSP">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">The Stateful Model: Sessions and JSP</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../capitulos/cap07.html" class="pagination-link" aria-label="REST Web Services (Part 2) and the JavaScript Client">
-        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">REST Web Services (Part 2) and the JavaScript Client</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../capitulos/cap07.html" class="pagination-link" aria-label="REST Web Services and Stateless Architecture (Part 1)">
+        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">REST Web Services and Stateless Architecture (Part 1)</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

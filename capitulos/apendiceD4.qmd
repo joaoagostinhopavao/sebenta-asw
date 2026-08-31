@@ -1,0 +1,204 @@
+---
+title: "LAB4: JDBC e CRUD Completo"
+author: "João Pavão"
+date: 2026-08-26
+lang: pt-PT
+---
+
+## LAB4: JDBC e CRUD Completo {#sec-apD4-lab4}
+
+Depois de construída uma API funcional, com autenticação baseada em sessão (LABs 1 a 3, [Apêndice D](apendiceD1.qmd), [Apêndice E](apendiceD2.qmd), [Apêndice F](apendiceD3.qmd)), o passo seguinte é substituir os dados fixos, escritos diretamente no código, por dados reais, guardados numa base de dados relacional.
+
+### Passo 4.1: Preparar a Base de Dados {#sec-apD4-passo1}
+
+Antes de tocar em código Java, é preciso criar previamente uma base de dados relacional (MySQL ou MariaDB), com duas tabelas.
+
+**Tabela `countries`**, com os campos:
+
+- `code` (`VARCHAR`, chave primária)
+- `name` (`VARCHAR`)
+- `capital` (`VARCHAR`)
+
+**Tabela `users`**, com os campos:
+
+- `username` (`VARCHAR`, chave primária)
+- `password` (`VARCHAR`)
+
+Nesta fase, e só para simplificar, as palavras-passe podem ficar guardadas em texto simples. Numa aplicação real, deveriam ser guardadas em formato *hash* (por exemplo, SHA-256), nunca em texto simples.
+
+### Passo 4.2: Configurar JDBC e Atualizar o `DBDAO` {#sec-apD4-passo2}
+
+1. Acrescentar o *driver* JDBC do MariaDB/MySQL à pasta `src/main/webapp/WEB-INF/lib`
+2. Atualizar a classe `DBDAO` (ver [Apêndice D](apendiceD1.qmd)) para:
+   - Criar um método para estabelecer a ligação à base de dados
+   - Substituir os dados fixos por consultas SQL
+   - Alterar ou criar os seguintes métodos, para os países:
+
+```java
+public List<String> getCountryCodes()
+public CountryModel getCountry(String code)
+public boolean insertCountry(String code, String name, String capital)
+public boolean updateCountry(String code, String name, String capital)
+public boolean deleteCountry(String code)
+```
+
+**Exemplo de alteração de um método do `DBDAO`**
+
+O exemplo seguinte mostra a implementação do método `insertCountry()` já adaptada ao acesso à base de dados, usando *prepared statements* — a forma correta de incluir valores vindos do exterior numa instrução SQL, sem abrir a porta a injeção de SQL (ver [Capítulo 4](cap04.qmd)):
+
+```java
+public boolean insertCountry(String code, String name, String capital) {
+    if (code == null || code.isBlank() ||
+        name == null || name.isBlank() ||
+        capital == null || capital.isBlank()) {
+        return false;
+    }
+
+    if (code.length() != 2) {
+        return false;
+    }
+
+    String sql = "INSERT INTO countries (code, name, capital) VALUES (?, ?, ?)";
+
+    try (Connection conn = getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setString(1, code);
+        ps.setString(2, name);
+        ps.setString(3, capital);
+
+        int rows = ps.executeUpdate();
+        boolean sucesso = (rows == 1);
+        return sucesso;
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
+```
+
+Os restantes métodos (`getCountryCodes`, `getCountry`, `updateCountry`, `deleteCountry`) seguem o mesmo princípio: uma instrução SQL própria, executada através de um `PreparedStatement`, dentro de um bloco `try`-com-recursos que fecha automaticamente a ligação.
+
+3. Implementar também os seguintes métodos, para os utilizadores:
+
+```java
+public boolean createUser(String username, String password)
+public boolean validateUserCredentials(String username, String password)
+```
+
+A partir de agora, a validação do *login* deixa de comparar com valores fixos no código, e passa a consultar a tabela `users`.
+
+### Passo 4.3: Atualizar o *Endpoint* de *Login* {#sec-apD4-passo3}
+
+A `LoginServlet` ([Apêndice E](apendiceD2.qmd)) deixa de usar credenciais fixas no código. O método `validateUserCredentials()` deve:
+
+- Consultar a tabela `users`
+- Confirmar que o utilizador existe
+- Validar a palavra-passe
+
+**Nota de segurança**: nesta fase, para simplificar, pode usar-se comparação direta (texto simples). Mais tarde, deve implementar-se o mesmo com *hashing*, tanto no armazenamento como na validação.
+
+### Passo 4.4: Criar um *Endpoint* CRUD com POST e o Parâmetro `operation` {#sec-apD4-passo4}
+
+Para inserir e editar países, cria-se uma única *Servlet*, `CountryEditServlet`, mapeada à *URL* `/countryEdit` através de `@WebServlet("/countryEdit")`, responsável por todas as alterações à tabela `countries`.
+
+No método `doPost`, a *Servlet* recebe o parâmetro `operation`, com um dos valores `insert`, `update` ou `delete`. Consoante o valor:
+
+- Validar os parâmetros necessários
+- Invocar o método correspondente do `DBDAO`
+- Devolver JSON e o código de estado apropriado, de acordo com a tabela:
+
+| Ação | Código de estado esperado |
+|---|---|
+| `insert` | `201` (`SC_CREATED`) |
+| `update` | `200` (`SC_OK`) |
+| `delete` | `200` (`SC_OK`) |
+| erro | `400` (`SC_BAD_REQUEST`) ou `404` (`SC_NOT_FOUND`) |
+
+**Exemplo de código para inserir um país**
+
+No método `doPost()`, ler primeiro o valor do parâmetro `operation`:
+
+```java
+String operation = request.getParameter("operation");
+```
+
+Depois, usar uma instrução `switch` para invocar o método correspondente do `DBDAO`:
+
+```java
+switch (operation) {
+    case "insert":
+        String code = request.getParameter("code");
+        String name = request.getParameter("name");
+        String capital = request.getParameter("capital");
+
+        boolean inserted = dao.insertCountry(code, name, capital);
+
+        if (inserted) {
+            response.setStatus(HttpServletResponse.SC_CREATED);
+            String jsonResponse = "{\"message\": \"Country inserted successfully\"}";
+            out.print(jsonResponse);
+        } else {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            String jsonResponse = "{\"error\": \"Insert failed\"}";
+            out.print(jsonResponse);
+        }
+        break;
+
+    case "update":
+        // segue a mesma estrutura do caso "insert": ler os parâmetros,
+        // invocar dao.updateCountry(...), e responder SC_OK ou o erro apropriado
+        break;
+
+    case "delete":
+        // segue a mesma estrutura: ler o parâmetro "code", invocar
+        // dao.deleteCountry(code), e responder SC_OK ou SC_NOT_FOUND
+        break;
+}
+```
+
+Os casos `update` e `delete` seguem exatamente a mesma estrutura do caso `insert`: ler os parâmetros necessários do pedido, invocar o método correspondente do `DBDAO`, e responder com o código de estado apropriado da tabela acima.
+
+### Passo 4.5: Criar Formulários HTML para Teste {#sec-apD4-passo5}
+
+Criar ficheiros HTML simples dentro de `src/main/webapp/`, tal como já feito para o *login* no [Apêndice E](apendiceD2.qmd). Por exemplo, o ficheiro para testar a operação `insert`:
+
+```html
+<form method="POST" action="countryEdit">
+  <input type="hidden" name="operation" value="insert">
+  <input type="text" name="code" maxlength="2" required>
+  <input type="text" name="name" required>
+  <input type="text" name="capital" required>
+  <button type="submit">Insert Country</button>
+</form>
+```
+
+O campo escondido (`type="hidden"`), a primeira linha do formulário, é o que envia o parâmetro `operation` via POST para a *Servlet* — o utilizador não o vê, nem o edita.
+
+Implementar formulários semelhantes para todas as operações, tanto da tabela `countries` como da tabela `users`. Estes ficheiros servem apenas como clientes de teste da API.
+
+### Passo 4.6: Proteger os *Endpoints* com o Filtro {#sec-apD4-passo6}
+
+O `AuthenticationFilter` ([Apêndice F](apendiceD3.qmd)) deve passar a proteger também:
+
+- `/country`
+- `/countryEdit`
+- (opcionalmente) `/capital`
+
+Basta acrescentar estas *URLs* a `urlPatterns` no `@WebFilter` do Filtro. O *endpoint* de criação de utilizadores pode ficar sem proteção, só para efeitos de teste.
+
+### Passo 4.7: Teste Integrado {#sec-apD4-passo7}
+
+1. Criar um utilizador
+2. Fazer *login*
+3. Inserir um novo país
+4. Consultar esse país através de `/country`
+5. Atualizar o país
+6. Remover o país
+7. Fazer *logout*
+8. Confirmar que o acesso volta a ser negado (`403`)
+
+### Conclusão {#sec-apD4-conclusao}
+
+Neste LAB, a API passa a usar dados reais, guardados numa base de dados relacional. A aplicação deixa de ser um protótipo estático e passa a ser um sistema dinâmico, com persistência de dados e operações CRUD completas. Este passo prepara o terreno para melhorias futuras de segurança (*hashing* de palavras-passe), validação mais rigorosa, e uma arquitetura sem estado — tema do [Apêndice H](apendiceD5.qmd).

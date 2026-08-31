@@ -214,19 +214,55 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/apendiceA.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Configuração do Ambiente de Desenvolvimento</span></span></a>
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Código Completo: Páginas Estáticas “World Capitals”</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/apendiceB.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">LABs Práticos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Assinatura de Tokens JWT</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/apendiceC.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Código Completo: Páginas Estáticas “World Capitals”</span></span></a>
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Configuração do Ambiente de Desenvolvimento</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">LAB1: Primeiro Endpoint e DAO Simulado</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">LAB2: Login e Sessão</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">F</span>&nbsp; <span class="chapter-title">LAB3: AuthenticationFilter e Logout</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">G</span>&nbsp; <span class="chapter-title">LAB4: JDBC e CRUD Completo</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">H</span>&nbsp; <span class="chapter-title">LAB5 (Opcional): Autenticação Sem Estado com JWT</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">I</span>&nbsp; <span class="chapter-title">LAB6: O Front-Office em JavaScript</span></span></a>
   </div>
 </li>
       </ul>
@@ -352,7 +388,7 @@ Tomcat não é um servidor Jakarta EE completo
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>O <a href="https://tomcat.apache.org/"><em>Apache Tomcat</em></a>, usado ao longo desta UC, é um <em>Servlet Container</em>: implementa apenas a <em>Web Tier</em> (Servlets, JSP). Não inclui suporte para <em>Enterprise Beans</em> nem para a <em>Business Tier</em> propriamente dita, ao contrário de um servidor de aplicações <em>Jakarta EE</em> completo (por exemplo, <em>WildFly</em>, <em>WebSphere</em> ou <em>GlassFish</em>). Na prática, isto significa que a lógica de negócio que, na arquitetura formal, pertenceria à <em>Business Tier</em>, é implementada aqui diretamente em classes Java comuns (como os <em>DAO</em> usados nos LABs práticos), e não em <em>Enterprise Beans</em>.</p>
+<p>O <a href="https://tomcat.apache.org/"><em>Apache Tomcat</em></a>, usado ao longo desta UC, é um <em>Servlet Container</em>: implementa apenas a <em>Web Tier</em> (Servlets, JSP). Não inclui suporte para <em>Enterprise Beans</em> nem para a <em>Business Tier</em> propriamente dita, ao contrário de um servidor de aplicações <em>Jakarta EE</em> completo (por exemplo, <em>WildFly</em>, <em>WebSphere</em> ou <em>GlassFish</em>). Na prática, isto significa que a lógica de negócio que, na arquitetura formal, pertenceria à <em>Business Tier</em>, é implementada aqui diretamente em classes Java comuns, e não em <em>Enterprise Beans</em>.</p>
 </div>
 </div>
 </section>
@@ -380,7 +416,7 @@ Figura&nbsp;4.2: Do ponto de vista do cliente, uma Servlet é apenas mais um des
 </section>
 <section id="sec-04-ciclo-vida" class="level2" data-number="4.4">
 <h2 data-number="4.4" class="anchored" data-anchor-id="sec-04-ciclo-vida"><span class="header-section-number">4.4</span> O Ciclo de Vida de uma Servlet</h2>
-<p>Quando um pedido é encaminhado para uma <em>Servlet</em>, o contentor segue sempre a mesma sequência:</p>
+<p>Quando um pedido é encaminhado para uma <em>Servlet</em>, o contentor segue sempre a mesma sequência (ver <a href="#fig-04-servlet-ciclo-vida" class="quarto-xref">Figura&nbsp;<span>4.3</span></a> ):</p>
 <ol type="1">
 <li>Se ainda não existir uma instância dessa <em>Servlet</em> em memória, o contentor carrega a classe, cria uma instância e chama o método <code>init()</code></li>
 <li>Para cada pedido recebido, o contentor invoca o método <code>service()</code>, que despacha para <code>doGet()</code>, <code>doPost()</code>, ou outro método consoante o verbo HTTP usado, passando-lhe os objetos <code>request</code> e <code>response</code></li>
@@ -418,34 +454,35 @@ Figura&nbsp;4.3: O contentor carrega a classe da Servlet uma única vez; cada pe
 <span id="cb1-2"><a href="#cb1-2"></a><span class="kw">public</span> <span class="kw">class</span> CountryServlet <span class="kw">extends</span> HttpServlet <span class="op">{</span></span>
 <span id="cb1-3"><a href="#cb1-3"></a>    <span class="co">// ...</span></span>
 <span id="cb1-4"><a href="#cb1-4"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Um pedido a <code>http://localhost:8080/country</code> é assim encaminhado para a classe <code>CountryServlet</code>. Dentro dela, os elementos da mensagem HTTP (ver <a href="../capitulos/cap03.html">Capítulo 3</a>) correspondem a métodos concretos dos objetos <code>request</code> e <code>response</code>:</p>
+<p>Um pedido de um cliente a http://localhost:8080/country é assim encaminhado para a classe CountryServlet. O contentor constrói automaticamente, a partir dos elementos da mensagem HTTP recebida (ver Capítulo 3 (cap03.qmd)), o objeto request; o objeto response, complementar, é o que a Servlet usa para construir a mensagem de saída. Os elementos de cada mensagem correspondem a métodos concretos destes dois objetos:</p>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>Elemento HTTP</th>
 <th>Acesso em Java</th>
+<th>Quando se usa</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td>Cabeçalhos do pedido</td>
 <td><code>request.getHeader(nome)</code></td>
+<td>Sempre, qualquer que seja o tipo de pedido</td>
 </tr>
 <tr class="even">
-<td>Parâmetros (<em>query string</em> ou corpo)</td>
+<td>Parâmetros (<em>query string</em> de um <code>GET</code>, ou corpo <code>application/x-www-form-urlencoded</code> de um <code>POST</code>)</td>
 <td><code>request.getParameter(nome)</code></td>
+<td>Formulários HTML tradicionais (ver <a href="../capitulos/cap02.html">Capítulo 2</a>), numa aplicação orientada à apresentação</td>
 </tr>
 <tr class="odd">
-<td>Corpo do pedido (JSON, dados em bruto)</td>
+<td>Corpo do pedido em bruto (tipicamente JSON)</td>
 <td><code>request.getInputStream()</code></td>
+<td><em>Web services</em> REST (ver <a href="../capitulos/cap07.html">Capítulo 7</a>): o corpo não vem no formato <code>application/x-www-form-urlencoded</code>, por isso <code>getParameter()</code> não o interpreta, e é preciso ler e interpretar o JSON manualmente</td>
 </tr>
 <tr class="even">
 <td>Escrever a resposta</td>
 <td><code>response.getWriter()</code> ou <code>response.getOutputStream()</code></td>
+<td>Sempre, qualquer que seja o tipo de resposta</td>
 </tr>
 </tbody>
 </table>
@@ -459,7 +496,7 @@ Figura&nbsp;4.3: O contentor carrega a classe da Servlet uma única vez; cada pe
 <img src="../assets/images/capitulos/cap04/HTTP_Request_server_3.png" class="img-fluid figure-img" style="width:80.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-04-http-request-server-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;4.4: Dentro do servidor Jakarta EE, o pedido chega encapsulado num <code>HttpServletRequest</code>, é processado pelo componente Web (a Servlet), que pode consultar recursos de dados, e a resposta sai encapsulada num <code>HttpServletResponse</code>.
+Figura&nbsp;4.4: Dentro do servidor Jakarta EE, o pedido chega encapsulado num <code>HttpServletRequest</code>, é processado pelo componente Web (a Servlet), que pode usar outra servlet, ou consultar recursos de dados, e a resposta sai encapsulada num <code>HttpServletResponse</code>.
 </figcaption>
 </figure>
 </div>
@@ -467,11 +504,13 @@ Figura&nbsp;4.4: Dentro do servidor Jakarta EE, o pedido chega encapsulado num <
 <section id="sec-04-content-type" class="level2" data-number="4.6">
 <h2 data-number="4.6" class="anchored" data-anchor-id="sec-04-content-type"><span class="header-section-number">4.6</span> Content-Type e a Forma da Resposta</h2>
 <p>Antes de escrever qualquer coisa na resposta, é essencial definir o seu <code>Content-Type</code>: é este cabeçalho que diz ao cliente como deve interpretar os bytes que se seguem, seja como página HTML, seja como dados <a href="https://www.json.org/">JSON</a>.</p>
+<p>No caso de uma aplicação orientada à apresentação:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb3-1"><a href="#cb3-1"></a>response<span class="op">.</span><span class="fu">setContentType</span><span class="op">(</span><span class="st">"text/html"</span><span class="op">);</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="bu">PrintWriter</span> out <span class="op">=</span> response<span class="op">.</span><span class="fu">getWriter</span><span class="op">();</span></span>
 <span id="cb3-3"><a href="#cb3-3"></a>out<span class="op">.</span><span class="fu">println</span><span class="op">(</span><span class="st">"&lt;html&gt;&lt;body&gt;"</span><span class="op">);</span></span>
 <span id="cb3-4"><a href="#cb3-4"></a>out<span class="op">.</span><span class="fu">println</span><span class="op">(</span><span class="st">"&lt;h1&gt;Hello João&lt;/h1&gt;"</span><span class="op">);</span></span>
 <span id="cb3-5"><a href="#cb3-5"></a>out<span class="op">.</span><span class="fu">println</span><span class="op">(</span><span class="st">"&lt;/body&gt;&lt;/html&gt;"</span><span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>No caso de uma apresentaçao orientada ao serviço:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb4-1"><a href="#cb4-1"></a>response<span class="op">.</span><span class="fu">setContentType</span><span class="op">(</span><span class="st">"application/json"</span><span class="op">);</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a><span class="bu">PrintWriter</span> out <span class="op">=</span> response<span class="op">.</span><span class="fu">getWriter</span><span class="op">();</span></span>
 <span id="cb4-3"><a href="#cb4-3"></a>out<span class="op">.</span><span class="fu">print</span><span class="op">(</span><span class="st">"{</span><span class="sc">\"</span><span class="st">name</span><span class="sc">\"</span><span class="st">:</span><span class="sc">\"</span><span class="st">João</span><span class="sc">\"</span><span class="st">,</span><span class="sc">\"</span><span class="st">role</span><span class="sc">\"</span><span class="st">:</span><span class="sc">\"</span><span class="st">admin</span><span class="sc">\"</span><span class="st">}"</span><span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -541,11 +580,13 @@ Figura&nbsp;4.4: Dentro do servidor Jakarta EE, o pedido chega encapsulado num <
 <span id="cb8-10"><a href="#cb8-10"></a>        out<span class="op">.</span><span class="fu">flush</span><span class="op">();</span></span>
 <span id="cb8-11"><a href="#cb8-11"></a>    <span class="op">}</span></span>
 <span id="cb8-12"><a href="#cb8-12"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Esta <em>Servlet</em> devolve sempre o mesmo país, com os dados fixos diretamente no código. É deliberadamente uma simplificação: o <a href="../capitulos/apendiceB.html">Apêndice B</a> (LAB1) retoma exatamente este ponto, substituindo os dados fixos por um objeto dedicado ao acesso a dados (<em>DAO</em>), preparando o terreno para, mais tarde, ligar a um servidor de base de dados real.</p>
+<p>Esta <em>Servlet</em> devolve sempre o mesmo país, com os dados fixos diretamente no código — uma simplificação deliberada nesta fase introdutória. Numa aplicação real, esses dados viriam antes de um objeto dedicado ao acesso a dados, um <em>Data Access Object</em> (DAO).</p>
+<p>Um DAO não é um conceito formal da <em>Jakarta EE</em> nem exige nenhuma anotação ou interface especial — é apenas uma convenção comum: uma classe Java simples que isola, num único sítio, a forma como os dados são obtidos (por exemplo, <code>findByCode(code)</code> ou <code>validateUserCredentials(user, pass)</code>), escondendo do resto do código se, por trás desses métodos, está uma lista fixa em memória, uma base de dados, ou outra fonte qualquer.</p>
 </section>
 <section id="sec-04-servlets-mvc" class="level2" data-number="4.8">
 <h2 data-number="4.8" class="anchored" data-anchor-id="sec-04-servlets-mvc"><span class="header-section-number">4.8</span> Servlets e o Padrão MVC: Falta a View</h2>
-<p>As <em>Servlets</em> apresentadas neste capítulo devolvem sempre JSON: são orientadas a serviço, e não têm, de facto, nenhuma View (ver <a href="../capitulos/cap01.html">Capítulo 1</a>). Numa aplicação orientada à apresentação, porém, a mesma <em>Servlet</em> que funciona como Controller pode delegar a geração de HTML a uma página dedicada, mantendo a separação de responsabilidades do MVC:</p>
+<p>A matéria deste curso centra-se mais nas aplicações de serviços web, pelo que as <em>Servlets</em> apresentadas devolvem sempre JSON: sendo orientadas a serviço, não têm, de facto, nenhuma View (ver <a href="../capitulos/cap01.html">Capítulo 1</a>). Tal facto não significa que a aplicação não possa alimentar uma vista gráfica; neste caso usa-se o modelo <code>MVC</code> em que a <em>Servlet</em> faz de <code>Controller</code> e alimenta uma página <em>web</em> indiretamente através de JSON. Essa página <em>web</em> é naturalmente construída em <code>HTML</code>, mas tem que ter uma lógica de script que extraia do JSON os dados necessários para os colocar nos locais adequados da página <code>HTML</code> (ver <a href="../capitulos/cap08.html">Capítulo 8</a>).</p>
+<p>Se a aplicação for, de raiz, orientada à apresentação, porém, a mesma <em>Servlet</em> que funciona como Controller pode gerar diretamente o <code>HTML</code> da página (da <code>View</code>) ou pode ainda delegar essa responsabilidade a uma página dedicada, usando uma tecnologia conhecida como <code>JSP</code> (<em>JavaServer Pages</em>) mantendo a separação de responsabilidades do MVC, como se pode observar na <a href="#fig-04-mvc-servlet-jsp" class="quarto-xref">Figura&nbsp;<span>4.5</span></a>.</p>
 <div id="fig-04-mvc-servlet-jsp" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-04-mvc-servlet-jsp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">

@@ -1,0 +1,128 @@
+---
+title: "LAB1: Primeiro Endpoint e DAO Simulado"
+author: "João Pavão"
+date: 2026-08-26
+lang: pt-PT
+---
+
+## Introdução aos LABs Práticos {#sec-apD1-intro}
+
+Os LABs práticos desta UC constroem, passo a passo, uma API REST completa
+— a "World Capitals API". Os LABs 1 a 5 constroem inteiramente o
+*backend*: cada um é testado diretamente no *browser* ou com um cliente
+REST (ver [Apêndice C](apendiceC.qmd)), sem qualquer JavaScript. Só no
+[Apêndice I](apendiceD6.qmd), depois de fechado o *backend*, é que esse
+mesmo *backend* é ligado a um *front-office* em JavaScript, através de
+`fetch()` (ver [Capítulo 8](cap08.qmd)) — a mesma separação entre as três
+peças já apresentada no [Capítulo 1](cap01.qmd).
+
+As páginas visuais desta mesma aplicação (listagem de países, login,
+consulta de capital, formulários de CRUD) já foram construídas em
+HTML/CSS/Bootstrap no [Capítulo 2](cap02.qmd), com os nomes de
+campos alinhados com os da API, e estão disponíveis como ficheiros
+completos e prontos a copiar no [Apêndice A](apendiceA.qmd). É esse o
+código ao qual o [Apêndice I](apendiceD6.qmd) vai acrescentar o `fetch()`
+necessário.
+
+## LAB1: Primeiro Endpoint e DAO Simulado {#sec-apD1-lab1}
+
+Uma boa configuração do ambiente de desenvolvimento é a base de qualquer aplicação robusta e fácil de manter. Investir tempo a preparar corretamente as ferramentas e a estruturar o projeto poupa, mais tarde, inúmeras horas de depuração e reorganização. Este LAB guia a configuração do Eclipse e do Tomcat, e a criação do primeiro *endpoint*, que vai servir de "verificação de estado" (*health check*) da API.
+
+### Passo 1.1: Preparar o Ambiente de Desenvolvimento {#sec-apD1-lab1-passo1}
+
+1. **Instalar o Eclipse IDE**: começar por descarregar e instalar o "Eclipse IDE for Enterprise Java and Web Developers" (ver [Apêndice C](apendiceC.qmd)). É importante escolher exatamente esta versão, já que vem pré-configurada com as ferramentas essenciais para este projeto
+2. Instalar o Apache Tomcat (ver [Apêndice C](apendiceC.qmd) para a versão exigida), seguindo as instruções de instalação, fora do Eclipse
+3. **Configurar o Apache Tomcat no Eclipse**:
+   - No Eclipse, ir à perspetiva *Servers*. Se não estiver visível, abrir por `Window > Show View > Servers`
+   - Clicar na ligação para criar um novo servidor ("*No servers are available. Click this link to create a new server...*")
+   - Na janela que aparece, expandir a pasta `Apache` e selecionar a versão do Tomcat instalada
+   - Seguir os passos do assistente, indicando a pasta onde o Tomcat foi instalado
+   - Ao terminar, o servidor Tomcat aparece na perspetiva *Servers*, pronto a usar
+
+### Passo 1.2: Criar o *Dynamic Web Project* {#sec-apD1-lab1-passo2}
+
+1. No menu do Eclipse, selecionar `File > New > Dynamic Web Project`
+2. Na janela de criação do projeto, definir o **Project name** como `CapitaisAPI`
+3. Confirmar que o **Target runtime** está definido para o servidor Apache Tomcat configurado no passo anterior
+4. Clicar em `Finish` para criar o projeto
+5. Depois de criado o projeto, é boa prática organizar o código-fonte em pacotes: no *Project Explorer*, expandir a secção "Java Resources" e localizar a pasta de código-fonte (normalmente `src` ou `src/main/java`). Botão direito sobre essa pasta, `New > Package`, e criar o pacote `capitaisapi.servlets`
+
+### Passo 1.3: Desenvolver o Primeiro *Endpoint* (*Servlet*) {#sec-apD1-lab1-passo3}
+
+O primeiro *endpoint* é um simples verificador de estado, para confirmar que a API está a funcionar corretamente.
+
+1. Botão direito sobre o pacote `capitaisapi.servlets` criado, `New > Servlet`
+2. Na janela que se abre, manter todos os campos com o valor pré-preenchido, e dar à classe o nome `StatusServlet`. Clicar em `Finish`
+3. O Eclipse gera o esqueleto da classe. Mapear esta *Servlet* à *URL* `/status` através da anotação `@WebServlet`, diretamente acima da declaração da classe (fica `@WebServlet("/status")`)
+4. Testar a *Servlet*: no explorador de ficheiros, botão direito sobre o ficheiro que contém a *Servlet*, `Run As > Run on Server`. Escolher o servidor Tomcat da mesma versão usada ao criar a *Servlet*, e `Finish`. Em poucos segundos deve aparecer o resultado da *Servlet* num *browser*
+5. Criar uma nova *Servlet*, pelo mesmo processo, no mesmo pacote, chamada `CountryCapital`, e alterar o método `doGet` para devolver uma mensagem JSON simples. Este método é invocado sempre que é feito um pedido HTTP `GET` à *URL* `/countrycapital`. Para escrever este método de acordo com os requisitos do HTTP e boas práticas de programação (ver [Capítulo 4](cap04.qmd)), substituir todo o código de `doGet()` por este:
+
+```java
+// Dentro do método doGet da Servlet CountryCapital
+response.setContentType("application/json"); // define o tipo de conteúdo como JSON
+PrintWriter out = response.getWriter(); // obtém o fluxo de saída
+
+// Construção manual da String JSON
+String jsonResponse = "{\"country\": \"Portugal\", \"capital\": \"Lisboa\", \"ccode\": \"PT\"}";
+out.print(jsonResponse); // envia os dados estruturados ao cliente
+out.flush();
+```
+
+É preciso importar `PrintWriter`, que não vem incluído no esqueleto gerado da *Servlet*. Note-se que a *String* JSON contém aspas lá dentro — por isso, as aspas dentro da *String* Java têm de ser escritas como `\"` (com *escape*). Não usar aspas simples dentro da *String*, porque não são válidas em JSON.
+
+### Passo 1.4: Implementar e Testar a Aplicação {#sec-apD1-lab1-passo4}
+
+1. Testar a *Servlet* de novo, tal como no Passo 1.3 (ponto 4). O Eclipse compila, instala e arranca a aplicação no servidor
+2. Também é possível testar com botão direito sobre o nome do projeto (`CapitaisAPI`) — abre um *browser* (ou uma ferramenta de teste). Introduzir a seguinte *URL*:
+
+   `http://localhost:8080/CapitaisAPI/countrycapital`
+3. Deve aparecer a seguinte resposta no ecrã:
+
+   `{"country": "Portugal", "capital": "Lisboa", "ccode": "PT"}`
+
+confirmando que o primeiro *endpoint* está a funcionar corretamente. Enquanto a *Servlet* estiver a correr no servidor, pode fechar-se o *browser* e voltar a abri-lo, introduzindo a mesma *URL*, e o resultado é o mesmo.
+
+### Passo 1.5: Implementar a Interface com a Base de Dados via DAO {#sec-apD1-lab1-passo5}
+
+Numa aplicação "da vida real", o conteúdo dinâmico é normalmente gerado a partir de dados vindos de uma base de dados. A ligação entre a aplicação Web e a base de dados pode fazer-se através de um *Data Access Object* (DAO, ver [Capítulo 4](cap04.qmd)), que esconde da aplicação Web os detalhes de implementação da base de dados. Nesta aplicação vai usar-se um DAO para fazer a interface entre a aplicação Web e a base de dados.
+
+Como ainda não há acesso a uma base de dados real, nesta fase do projeto vai usar-se um DAO que **simula** o acesso à base de dados (mais tarde, no LAB4, este DAO será alterado para consultar uma base de dados real). Note-se que, do ponto de vista da aplicação Web, não há qualquer diferença entre um DAO que vai buscar dados a uma base de dados real e um que tem os dados fixos diretamente no código.
+
+Criar uma nova classe, chamada `DBDAO`, no pacote `capitaisapi.dao`, e escrever nela três métodos públicos:
+
+- `List<String> getCountryCodes();`
+- `String getCountryName(String countryCode);`
+- `String getCapitalName(String countryCode);`
+
+O primeiro método devolve a lista de códigos de país disponíveis (`PT`, `FR`, `EN`, etc.), o segundo devolve o nome do país associado a um código, e o último devolve o nome da capital associada a um código de país.
+
+Para este LAB, fixar todos os valores de retorno diretamente no código da classe `DBDAO`. Usar um `HashMap<String, String>` para guardar os valores fixos dos códigos de país e dos nomes das capitais, e uma `List` para guardar a lista de códigos de país.
+
+Por omissão, a *Servlet* `/countrycapital` deve mostrar a capital do primeiro país da lista devolvida pelo método `List<String> getCountryCodes()` do DAO.
+
+### Passo 1.6: Criar o Modelo de Dados (POJO) {#sec-apD1-lab1-passo6}
+
+Para representar os dados da aplicação de forma estruturada, usam-se *POJOs* (*Plain Old Java Objects*). Um POJO é um tipo de dados, tal como `String` ou `Integer`, e por isso ajuda a garantir que uma determinada informação segue sempre as mesmas regras. Se se usar um POJO como valor de retorno de um método, esse valor passa a respeitar o que está definido no POJO — por outras palavras, um POJO é um **modelo de dados**. Cria-se já, para ficarem definidas as peças principais, ainda que o POJO só venha a ser usado mais adiante.
+
+1. Criar uma nova classe chamada `CountryModel` no pacote `capitaisapi.servlets`. Este será o POJO
+2. Acrescentar atributos privados para representar os dados de um país: `codigo`, `nome` e `capital`. Mais tarde, se for conveniente, podem acrescentar-se outros, como número de habitantes ou área
+3. Gerar os *getters* e *setters* para todos os atributos: botão direito numa linha em branco por baixo da definição dos atributos, `Source > Generate Getters and Setters` — o Eclipse gera o código automaticamente
+
+### Passo 1.7: Desenvolver o *Endpoint* das Capitais {#sec-apD1-lab1-passo7}
+
+Cria-se agora uma nova *Servlet* que usa o DAO para devolver dados dinâmicos. Para efeitos de teste, não se quer que o DAO devolva toda a informação de um país (código, nome e capital) — o POJO só é usado quando for preciso devolver a informação completa de um país.
+
+1. Criar uma nova *Servlet* chamada `CapitalServlet`, no pacote `capitaisapi.servlets`, mapeada à *URL* `/capital`
+2. No método `doGet`, implementar a lógica para:
+   - Ler o parâmetro `countrycode` do pedido (`request.getParameter("countrycode")`)
+   - Instanciar o `DBDAO` e chamar `getCapitalName()` com o código de país recebido
+   - Verificar se o país foi encontrado: se sim, construir uma *String* JSON com o código de país e o nome da capital; se não, devolver uma resposta de erro apropriada. Se o parâmetro `countrycode` for nulo ou vazio, devolver `400` (parâmetro em falta, ver [Capítulo 3](cap03.qmd)); se `countrycode` tiver um valor desconhecido, devolver `404` (país não encontrado). Usar `response.setStatus(HttpServletResponse.SC_BAD_REQUEST)` para o `400`, e `response.setStatus(HttpServletResponse.SC_NOT_FOUND)` para o `404`
+   - Definir o `Content-Type` como `application/json`, e enviar a *String* JSON como resposta
+
+### Passo 1.8: Desenvolver o *Endpoint* dos Países {#sec-apD1-lab1-passo8}
+
+1. Criar uma nova *Servlet* `CountryServlet`, no mesmo pacote das anteriores, mapeada a `/country`
+2. No `DBDAO`, acrescentar um novo método `CountryModel getCountry(String countrycode)`, destinado a devolver todos os dados de um país (código, nome do país e nome da capital)
+3. Usando uma estrutura semelhante à da `CapitalServlet`, no método `doGet`, obter os dados completos de um país e devolver a estrutura JSON completa, devidamente validada pelo POJO `CountryModel`
+
+Note-se que a *Servlet* deixa agora de manipular dados isolados (*Strings* soltas), e passa a trabalhar com um objeto estruturado — o que melhora a legibilidade, a manutenção e a validação dos dados. O método `getCountry()` no `DBDAO` passa a centralizar a agregação dos dados e a encapsulá-los num modelo estruturado (POJO), reduzindo a responsabilidade da *Servlet*.

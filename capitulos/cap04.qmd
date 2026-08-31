@@ -31,7 +31,7 @@ Esta separação por camadas permite que cada componente evolua de forma relativ
 ::: {.callout-note}
 ## Tomcat não é um servidor Jakarta EE completo
 
-O [*Apache Tomcat*](https://tomcat.apache.org/), usado ao longo desta UC, é um *Servlet Container*: implementa apenas a *Web Tier* (Servlets, JSP). Não inclui suporte para *Enterprise Beans* nem para a *Business Tier* propriamente dita, ao contrário de um servidor de aplicações *Jakarta EE* completo (por exemplo, *WildFly*, *WebSphere* ou *GlassFish*). Na prática, isto significa que a lógica de negócio que, na arquitetura formal, pertenceria à *Business Tier*, é implementada aqui diretamente em classes Java comuns (como os *DAO* usados nos LABs práticos), e não em *Enterprise Beans*.
+O [*Apache Tomcat*](https://tomcat.apache.org/), usado ao longo desta UC, é um *Servlet Container*: implementa apenas a *Web Tier* (Servlets, JSP). Não inclui suporte para *Enterprise Beans* nem para a *Business Tier* propriamente dita, ao contrário de um servidor de aplicações *Jakarta EE* completo (por exemplo, *WildFly*, *WebSphere* ou *GlassFish*). Na prática, isto significa que a lógica de negócio que, na arquitetura formal, pertenceria à *Business Tier*, é implementada aqui diretamente em classes Java comuns, e não em *Enterprise Beans*.
 :::
 
 ## Porquê Servlets? {#sec-04-porque-servlets}
@@ -51,7 +51,7 @@ O *Servlet Container* corresponde, na arquitetura em camadas apresentada acima, 
 
 ## O Ciclo de Vida de uma Servlet {#sec-04-ciclo-vida}
 
-Quando um pedido é encaminhado para uma *Servlet*, o contentor segue sempre a mesma sequência:
+Quando um pedido é encaminhado para uma *Servlet*, o contentor segue sempre a mesma sequência (ver @fig-04-servlet-ciclo-vida ):
 
 1. Se ainda não existir uma instância dessa *Servlet* em memória, o contentor carrega a classe, cria uma instância e chama o método `init()`
 2. Para cada pedido recebido, o contentor invoca o método `service()`, que despacha para `doGet()`, `doPost()`, ou outro método consoante o verbo HTTP usado, passando-lhe os objetos `request` e `response`
@@ -78,14 +78,14 @@ public class CountryServlet extends HttpServlet {
 }
 ```
 
-Um pedido a `http://localhost:8080/country` é assim encaminhado para a classe `CountryServlet`. Dentro dela, os elementos da mensagem HTTP (ver [Capítulo 3](cap03.qmd)) correspondem a métodos concretos dos objetos `request` e `response`:
+Um pedido de um cliente a http://localhost:8080/country é assim encaminhado para a classe CountryServlet. O contentor constrói automaticamente, a partir dos elementos da mensagem HTTP recebida (ver Capítulo 3 (cap03.qmd)), o objeto request; o objeto response, complementar, é o que a Servlet usa para construir a mensagem de saída. Os elementos de cada mensagem correspondem a métodos concretos destes dois objetos:
 
-| Elemento HTTP | Acesso em Java |
-|---|---|
-| Cabeçalhos do pedido | `request.getHeader(nome)` |
-| Parâmetros (*query string* ou corpo) | `request.getParameter(nome)` |
-| Corpo do pedido (JSON, dados em bruto) | `request.getInputStream()` |
-| Escrever a resposta | `response.getWriter()` ou `response.getOutputStream()` |
+| Elemento HTTP | Acesso em Java | Quando se usa |
+|---|---|---|
+| Cabeçalhos do pedido | `request.getHeader(nome)` | Sempre, qualquer que seja o tipo de pedido |
+| Parâmetros (*query string* de um `GET`, ou corpo `application/x-www-form-urlencoded` de um `POST`) | `request.getParameter(nome)` | Formulários HTML tradicionais (ver [Capítulo 2](cap02.qmd)), numa aplicação orientada à apresentação |
+| Corpo do pedido em bruto (tipicamente JSON) | `request.getInputStream()` | *Web services* REST (ver [Capítulo 7](cap07.qmd)): o corpo não vem no formato `application/x-www-form-urlencoded`, por isso `getParameter()` não o interpreta, e é preciso ler e interpretar o JSON manualmente |
+| Escrever a resposta | `response.getWriter()` ou `response.getOutputStream()` | Sempre, qualquer que seja o tipo de resposta |
 
 ```java
 protected void doGet(HttpServletRequest request, HttpServletResponse response) {
@@ -94,12 +94,13 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 }
 ```
 
-![Dentro do servidor Jakarta EE, o pedido chega encapsulado num `HttpServletRequest`, é processado pelo componente Web (a Servlet), que pode consultar recursos de dados, e a resposta sai encapsulada num `HttpServletResponse`.](../assets/images/capitulos/cap04/HTTP_Request_server_3.png){#fig-04-http-request-server width="80%"}
+![Dentro do servidor Jakarta EE, o pedido chega encapsulado num `HttpServletRequest`, é processado pelo componente Web (a Servlet), que pode usar outra servlet, ou consultar recursos de dados, e a resposta sai encapsulada num `HttpServletResponse`.](../assets/images/capitulos/cap04/HTTP_Request_server_3.png){#fig-04-http-request-server width="80%"}
 
 ## Content-Type e a Forma da Resposta {#sec-04-content-type}
 
 Antes de escrever qualquer coisa na resposta, é essencial definir o seu `Content-Type`: é este cabeçalho que diz ao cliente como deve interpretar os bytes que se seguem, seja como página HTML, seja como dados [JSON](https://www.json.org/).
 
+No caso de uma aplicação orientada à apresentação:
 ```java
 response.setContentType("text/html");
 PrintWriter out = response.getWriter();
@@ -107,6 +108,7 @@ out.println("<html><body>");
 out.println("<h1>Hello João</h1>");
 out.println("</body></html>");
 ```
+No caso de uma apresentaçao orientada ao serviço:
 
 ```java
 response.setContentType("application/json");
@@ -170,11 +172,15 @@ public class CountryCapitalServlet extends HttpServlet {
 }
 ```
 
-Esta *Servlet* devolve sempre o mesmo país, com os dados fixos diretamente no código. É deliberadamente uma simplificação: o [Apêndice B](apendiceB.qmd) (LAB1) retoma exatamente este ponto, substituindo os dados fixos por um objeto dedicado ao acesso a dados (*DAO*), preparando o terreno para, mais tarde, ligar a um servidor de base de dados real.
+Esta *Servlet* devolve sempre o mesmo país, com os dados fixos diretamente no código — uma simplificação deliberada nesta fase introdutória. Numa aplicação real, esses dados viriam antes de um objeto dedicado ao acesso a dados, um *Data Access Object* (DAO).
+
+Um DAO não é um conceito formal da *Jakarta EE* nem exige nenhuma anotação ou interface especial — é apenas uma convenção comum: uma classe Java simples que isola, num único sítio, a forma como os dados são obtidos (por exemplo, `findByCode(code)` ou `validateUserCredentials(user, pass)`), escondendo do resto do código se, por trás desses métodos, está uma lista fixa em memória, uma base de dados, ou outra fonte qualquer.
 
 ## Servlets e o Padrão MVC: Falta a View {#sec-04-servlets-mvc}
 
-As *Servlets* apresentadas neste capítulo devolvem sempre JSON: são orientadas a serviço, e não têm, de facto, nenhuma View (ver [Capítulo 1](cap01.qmd)). Numa aplicação orientada à apresentação, porém, a mesma *Servlet* que funciona como Controller pode delegar a geração de HTML a uma página dedicada, mantendo a separação de responsabilidades do MVC:
+A matéria deste curso centra-se mais nas aplicações de serviços web, pelo que as *Servlets* apresentadas devolvem sempre JSON: sendo orientadas a serviço, não têm, de facto, nenhuma View (ver [Capítulo 1](cap01.qmd)). Tal facto não significa que a aplicação não possa alimentar uma vista gráfica; neste caso usa-se o modelo `MVC` em que a *Servlet* faz de `Controller` e alimenta uma página *web* indiretamente através de JSON. Essa página *web* é naturalmente construída em `HTML`, mas tem que ter uma lógica de script que extraia do JSON os dados necessários para os colocar nos locais adequados da página `HTML` (ver [Capítulo 8](cap08.qmd)).
+
+Se a aplicação for, de raiz, orientada à apresentação, porém, a mesma *Servlet* que funciona como Controller pode gerar diretamente o `HTML` da página (da `View`) ou pode ainda delegar essa responsabilidade a uma página dedicada, usando uma tecnologia conhecida como `JSP` (*JavaServer Pages*) mantendo a separação de responsabilidades do MVC, como se pode observar na @fig-04-mvc-servlet-jsp.
 
 ![Na realização clássica do MVC em Jakarta EE, a Servlet funciona como Controller, uma JavaServer Page como View, e uma classe Java simples como Model.](../assets/images/capitulos/cap04/Arquitetura_MVC.png){#fig-04-mvc-servlet-jsp width="70%"}
 

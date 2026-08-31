@@ -109,7 +109,7 @@ public class AuthenticationFilter implements Filter {
 }
 ```
 
-O padrão `"/*"` intercepta todos os pedidos, sem exceção. A classe tem de implementar `jakarta.servlet.Filter`, e o contentor descobre-a automaticamente no momento da implantação (*deployment*). Tal como as *Servlets*, um Filtro também pode ser declarado de forma equivalente, embora considerada préterita, no ficheiro `web.xml`.
+O padrão `"/*"` intercepta todos os pedidos, sem exceção. A classe tem de implementar `jakarta.servlet.Filter`, e o contentor descobre-a automaticamente no momento da implantação (*deployment*). Tal como as *Servlets*, um Filtro também pode ser declarado de forma equivalente no ficheiro `web.xml`, embora esta prática já não esteja muito em uso.
 
 Um `doFilter()` típico, que protege todos os pedidos exigindo uma sessão válida, tem esta forma:
 

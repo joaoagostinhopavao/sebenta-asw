@@ -41,6 +41,12 @@ book:
     - capitulos/apendiceA.qmd
     - capitulos/apendiceB.qmd
     - capitulos/apendiceC.qmd
+    - capitulos/apendiceD1.qmd
+    - capitulos/apendiceD2.qmd
+    - capitulos/apendiceD3.qmd
+    - capitulos/apendiceD4.qmd
+    - capitulos/apendiceD5.qmd
+    - capitulos/apendiceD6.qmd
 
   sidebar:
     search: true

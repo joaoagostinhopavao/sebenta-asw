@@ -1,0 +1,204 @@
+---
+title: "LAB4: JDBC and Complete CRUD"
+author: "João Pavão"
+date: 2026-08-26
+lang: en-GB
+---
+
+## LAB4: JDBC and Complete CRUD {#sec-apD4-lab4-en}
+
+After building a functional API, with session-based authentication (LABs 1 to 3, [Appendix D](apendiceD1.qmd), [Appendix E](apendiceD2.qmd), [Appendix F](apendiceD3.qmd)), the next step is to replace the fixed data written directly in the code with real data, stored in a relational database.
+
+### Step 4.1: Prepare the Database {#sec-apD4-step1-en}
+
+Before touching any Java code, a relational database (MySQL or MariaDB) must first be created, with two tables.
+
+**Table `countries`**, with the fields:
+
+- `code` (`VARCHAR`, primary key)
+- `name` (`VARCHAR`)
+- `capital` (`VARCHAR`)
+
+**Table `users`**, with the fields:
+
+- `username` (`VARCHAR`, primary key)
+- `password` (`VARCHAR`)
+
+At this stage, purely to keep things simple, passwords may be stored as plain text. In a real application, they should be stored in *hashed* form (for example, SHA-256), never as plain text.
+
+### Step 4.2: Configure JDBC and Update `DBDAO` {#sec-apD4-step2-en}
+
+1. Add the MariaDB/MySQL JDBC *driver* to the `src/main/webapp/WEB-INF/lib` folder
+2. Update the `DBDAO` class (see [Appendix D](apendiceD1.qmd)) to:
+   - Create a method for establishing the database connection
+   - Replace the fixed data with SQL queries
+   - Change or create the following methods, for countries:
+
+```java
+public List<String> getCountryCodes()
+public CountryModel getCountry(String code)
+public boolean insertCountry(String code, String name, String capital)
+public boolean updateCountry(String code, String name, String capital)
+public boolean deleteCountry(String code)
+```
+
+**Example of changing a `DBDAO` method**
+
+The following example shows the `insertCountry()` method already adapted for database access, using *prepared statements* — the correct way to include values coming from outside the application in a SQL statement, without opening the door to SQL injection (see [Chapter 4](cap04.qmd)):
+
+```java
+public boolean insertCountry(String code, String name, String capital) {
+    if (code == null || code.isBlank() ||
+        name == null || name.isBlank() ||
+        capital == null || capital.isBlank()) {
+        return false;
+    }
+
+    if (code.length() != 2) {
+        return false;
+    }
+
+    String sql = "INSERT INTO countries (code, name, capital) VALUES (?, ?, ?)";
+
+    try (Connection conn = getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setString(1, code);
+        ps.setString(2, name);
+        ps.setString(3, capital);
+
+        int rows = ps.executeUpdate();
+        boolean success = (rows == 1);
+        return success;
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
+```
+
+The remaining methods (`getCountryCodes`, `getCountry`, `updateCountry`, `deleteCountry`) follow the same principle: a SQL statement of its own, executed through a `PreparedStatement`, inside a `try`-with-resources block that automatically closes the connection.
+
+3. Also implement the following methods, for users:
+
+```java
+public boolean createUser(String username, String password)
+public boolean validateUserCredentials(String username, String password)
+```
+
+From now on, *login* validation no longer compares against fixed values in the code, and instead queries the `users` table.
+
+### Step 4.3: Update the *Login* Endpoint {#sec-apD4-step3-en}
+
+`LoginServlet` ([Appendix E](apendiceD2.qmd)) no longer uses fixed credentials in the code. The `validateUserCredentials()` method must:
+
+- Query the `users` table
+- Confirm that the user exists
+- Validate the password
+
+**Security note**: at this stage, for simplicity, direct comparison (plain text) may be used. Later, this should be implemented with *hashing* instead, both for storage and for validation.
+
+### Step 4.4: Create a CRUD Endpoint Using POST and the `operation` Parameter {#sec-apD4-step4-en}
+
+To insert and edit countries, a single *Servlet* is created, `CountryEditServlet`, mapped to the `/countryEdit` *URL* through `@WebServlet("/countryEdit")`, responsible for all changes to the `countries` table.
+
+In the `doPost` method, the *Servlet* receives the `operation` parameter, with one of the values `insert`, `update` or `delete`. Depending on the value:
+
+- Validate the required parameters
+- Invoke the corresponding `DBDAO` method
+- Return JSON and the appropriate status code, according to the table:
+
+| Action | Expected status code |
+|---|---|
+| `insert` | `201` (`SC_CREATED`) |
+| `update` | `200` (`SC_OK`) |
+| `delete` | `200` (`SC_OK`) |
+| error | `400` (`SC_BAD_REQUEST`) or `404` (`SC_NOT_FOUND`) |
+
+**Example code for inserting a country**
+
+In the `doPost()` method, first read the value of the `operation` parameter:
+
+```java
+String operation = request.getParameter("operation");
+```
+
+Then use a `switch` statement to invoke the corresponding `DBDAO` method:
+
+```java
+switch (operation) {
+    case "insert":
+        String code = request.getParameter("code");
+        String name = request.getParameter("name");
+        String capital = request.getParameter("capital");
+
+        boolean inserted = dao.insertCountry(code, name, capital);
+
+        if (inserted) {
+            response.setStatus(HttpServletResponse.SC_CREATED);
+            String jsonResponse = "{\"message\": \"Country inserted successfully\"}";
+            out.print(jsonResponse);
+        } else {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            String jsonResponse = "{\"error\": \"Insert failed\"}";
+            out.print(jsonResponse);
+        }
+        break;
+
+    case "update":
+        // follows the same structure as the "insert" case: read the parameters,
+        // invoke dao.updateCountry(...), and respond with SC_OK or the appropriate error
+        break;
+
+    case "delete":
+        // follows the same structure: read the "code" parameter, invoke
+        // dao.deleteCountry(code), and respond with SC_OK or SC_NOT_FOUND
+        break;
+}
+```
+
+The `update` and `delete` cases follow exactly the same structure as the `insert` case: read the parameters required by the request, invoke the corresponding `DBDAO` method, and respond with the appropriate status code from the table above.
+
+### Step 4.5: Create HTML Forms for Testing {#sec-apD4-step5-en}
+
+Create simple HTML files inside `src/main/webapp/`, just as was already done for *login* in [Appendix E](apendiceD2.qmd). For example, the file to test the `insert` operation:
+
+```html
+<form method="POST" action="countryEdit">
+  <input type="hidden" name="operation" value="insert">
+  <input type="text" name="code" maxlength="2" required>
+  <input type="text" name="name" required>
+  <input type="text" name="capital" required>
+  <button type="submit">Insert Country</button>
+</form>
+```
+
+The hidden field (`type="hidden"`), the form's first line, is what sends the `operation` parameter via POST to the *Servlet* — the user does not see it, nor edit it.
+
+Implement similar forms for every operation, for both the `countries` table and the `users` table. These files serve only as test clients for the API.
+
+### Step 4.6: Protect the Endpoints with the Filter {#sec-apD4-step6-en}
+
+`AuthenticationFilter` ([Appendix F](apendiceD3.qmd)) must now also protect:
+
+- `/country`
+- `/countryEdit`
+- (optionally) `/capital`
+
+Simply add these *URLs* to `urlPatterns` in the Filter's `@WebFilter`. The user-creation endpoint can be left unprotected, for testing purposes only.
+
+### Step 4.7: Integrated Testing {#sec-apD4-step7-en}
+
+1. Create a user
+2. *Log in*
+3. Insert a new country
+4. Look up that country through `/country`
+5. Update the country
+6. Remove the country
+7. *Log out*
+8. Confirm that access is denied again (`403`)
+
+### Conclusion {#sec-apD4-conclusion-en}
+
+In this LAB, the API starts using real data, stored in a relational database. The application stops being a static prototype and becomes a dynamic system, with data persistence and complete CRUD operations. This step lays the groundwork for future security improvements (password *hashing*), stricter validation, and a stateless architecture — the subject of [Appendix H](apendiceD5.qmd).

@@ -8,7 +8,7 @@
 
 <meta name="author" content="João Pavão">
 
-<title>Apêndice B — LABs Práticos – Aplicações e Serviços Web</title>
+<title>Apêndice B — Assinatura de Tokens JWT – Aplicações e Serviços Web</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -86,7 +120,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../capitulos/apendiceA.html">Apêndices</a></li><li class="breadcrumb-item"><a href="../capitulos/apendiceB.html"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">LABs Práticos</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../capitulos/apendiceA.html">Apêndices</a></li><li class="breadcrumb-item"><a href="../capitulos/apendiceB.html"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Assinatura de Tokens JWT</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Procurar" onclick="window.quartoOpenSearch();">
@@ -180,19 +214,55 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/apendiceA.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Configuração do Ambiente de Desenvolvimento</span></span></a>
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Código Completo: Páginas Estáticas “World Capitals”</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/apendiceB.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">LABs Práticos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Assinatura de Tokens JWT</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/apendiceC.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Código Completo: Páginas Estáticas “World Capitals”</span></span></a>
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Configuração do Ambiente de Desenvolvimento</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">LAB1: Primeiro Endpoint e DAO Simulado</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">LAB2: Login e Sessão</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">F</span>&nbsp; <span class="chapter-title">LAB3: AuthenticationFilter e Logout</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">G</span>&nbsp; <span class="chapter-title">LAB4: JDBC e CRUD Completo</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">H</span>&nbsp; <span class="chapter-title">LAB5 (Opcional): Autenticação Sem Estado com JWT</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">I</span>&nbsp; <span class="chapter-title">LAB6: O Front-Office em JavaScript</span></span></a>
   </div>
 </li>
       </ul>
@@ -208,19 +278,21 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#sec-apB-intro" id="toc-sec-apB-intro" class="nav-link active" data-scroll-target="#sec-apB-intro"><span class="header-section-number">B.1</span> Introdução</a></li>
-  <li><a href="#sec-apB-lab1" id="toc-sec-apB-lab1" class="nav-link" data-scroll-target="#sec-apB-lab1"><span class="header-section-number">B.2</span> LAB1: Primeiro Endpoint e DAO Simulado</a></li>
-  <li><a href="#sec-apB-lab2" id="toc-sec-apB-lab2" class="nav-link" data-scroll-target="#sec-apB-lab2"><span class="header-section-number">B.3</span> LAB2: Login e Sessão</a></li>
-  <li><a href="#sec-apB-lab3" id="toc-sec-apB-lab3" class="nav-link" data-scroll-target="#sec-apB-lab3"><span class="header-section-number">B.4</span> LAB3: AuthenticationFilter e Logout</a></li>
-  <li><a href="#sec-apB-lab4" id="toc-sec-apB-lab4" class="nav-link" data-scroll-target="#sec-apB-lab4"><span class="header-section-number">B.5</span> LAB4: JDBC e CRUD Completo</a></li>
+  <li><a href="#sec-apB-hmac" id="toc-sec-apB-hmac" class="nav-link" data-scroll-target="#sec-apB-hmac"><span class="header-section-number">B.2</span> HMAC: uma Chave Secreta Partilhada</a></li>
+  <li><a href="#sec-apB-assimetrico" id="toc-sec-apB-assimetrico" class="nav-link" data-scroll-target="#sec-apB-assimetrico"><span class="header-section-number">B.3</span> RSA e ECDSA: um Par de Chaves</a></li>
+  <li><a href="#sec-apB-escolher" id="toc-sec-apB-escolher" class="nav-link" data-scroll-target="#sec-apB-escolher"><span class="header-section-number">B.4</span> Escolher entre HMAC e Assinatura Assimétrica</a></li>
+  <li><a href="#sec-apB-alg-none" id="toc-sec-apB-alg-none" class="nav-link" data-scroll-target="#sec-apB-alg-none"><span class="header-section-number">B.5</span> O Ataque <code>alg:none</code></a></li>
+  <li><a href="#sec-apB-armazenamento" id="toc-sec-apB-armazenamento" class="nav-link" data-scroll-target="#sec-apB-armazenamento"><span class="header-section-number">B.6</span> Onde Guardar o Token no Cliente</a></li>
+  <li><a href="#sec-apB-boas-praticas" id="toc-sec-apB-boas-praticas" class="nav-link" data-scroll-target="#sec-apB-boas-praticas"><span class="header-section-number">B.7</span> Boas Práticas Mínimas</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../capitulos/apendiceA.html">Apêndices</a></li><li class="breadcrumb-item"><a href="../capitulos/apendiceB.html"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">LABs Práticos</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../capitulos/apendiceA.html">Apêndices</a></li><li class="breadcrumb-item"><a href="../capitulos/apendiceB.html"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Assinatura de Tokens JWT</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Apêndice B — LABs Práticos</h1>
+<h1 class="title">Apêndice B — Assinatura de Tokens JWT</h1>
 </div>
 
 
@@ -251,33 +323,150 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="sec-apB-intro" class="level2" data-number="B.1">
 <h2 data-number="B.1" class="anchored" data-anchor-id="sec-apB-intro"><span class="header-section-number">B.1</span> Introdução</h2>
-<p>Os LABs práticos desta UC são os mesmos do ESIGELEC (a “World Capitals API”), com um “twist” de JavaScript próprio da UTAD: onde o ESIGELEC pede formulários HTML crus como <em>test clients</em> da API, aqui esses formulários são substituídos por um front-office com <code>fetch()</code>, sem alargar o âmbito do trabalho prático.</p>
-<p>As páginas visuais desta mesma aplicação (listagem de países, login, consulta de capital, formulários de CRUD) já foram construídas em HTML/CSS/Bootstrap no <a href="../capitulos/cap02.html">Capítulo 2</a>, com os nomes de campos alinhados com os da API, e estão disponíveis como ficheiros completos e prontos a copiar no <a href="../capitulos/apendiceC.html">Apêndice C</a>. Nos LABs, o trabalho é essencialmente acrescentar o <code>fetch()</code> necessário a esse código já existente.</p>
+<p>O <a href="../capitulos/cap08.html">Capítulo 8</a> mostrou como um JWT (ver <a href="cap08.html#sec-08-jwt" class="quarto-xref"><span>Secção 8.3</span></a>) é assinado e verificado, sem nunca aprofundar <strong>com que algoritmo</strong>, nem <strong>que garantias de segurança</strong> essa assinatura oferece. Este apêndice aprofunda especificamente essa questão: a assinatura de <em>tokens</em>.</p>
 </section>
-<section id="sec-apB-lab1" class="level2" data-number="B.2">
-<h2 data-number="B.2" class="anchored" data-anchor-id="sec-apB-lab1"><span class="header-section-number">B.2</span> LAB1: Primeiro Endpoint e DAO Simulado</h2>
-<blockquote class="blockquote">
-<p>Conteúdo a desenvolver a partir de LAB1-EN.pdf (ESIGELEC), sem alterações ao enunciado. Ainda sem <em>front-office</em> — é só backend.</p>
-</blockquote>
+<section id="sec-apB-hmac" class="level2" data-number="B.2">
+<h2 data-number="B.2" class="anchored" data-anchor-id="sec-apB-hmac"><span class="header-section-number">B.2</span> HMAC: uma Chave Secreta Partilhada</h2>
+<p>O algoritmo usado no <a href="../capitulos/cap08.html">Capítulo 8</a>, <code>HS256</code>, é a combinação de <strong>HMAC</strong> (<em>Hash-based Message Authentication Code</em>) com a função de resumo criptográfico <code>SHA-256</code>. É um algoritmo <strong>simétrico</strong>: a mesma chave secreta é usada tanto para assinar como para verificar um <em>token</em>.</p>
+<p>Essa chave nunca é gerada no cliente, nem alguma vez viaja até ele: é criada e guardada exclusivamente no servidor (tipicamente uma única vez, na configuração inicial da aplicação), e nunca sai daí. O que o cliente recebe, e mais tarde reenvia, é sempre o <em>token</em> já assinado — o resultado de usar a chave — nunca a chave em si.</p>
+<div id="fig-apB-hmac" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-apB-hmac-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/apendiceB/JWT_HMAC.png" class="img-fluid figure-img" style="width:65.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-apB-hmac-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;B.1: Num esquema simétrico (HMAC), o mesmo servidor guarda a única chave secreta que existe, e usa-a tanto para assinar o token no login como para o verificar em cada pedido seguinte.
+</figcaption>
+</figure>
+</div>
+<p>Isto funciona bem exatamente na situação apresentada ao longo desta UC: <strong>um único servidor</strong> (ou várias instâncias desse mesmo servidor, todas com acesso à mesma chave secreta, ver <a href="cap08.html#sec-08-escalabilidade-horizontal" class="quarto-xref"><span>Secção 8.5</span></a>) é, simultaneamente, quem emite os <em>tokens</em> e quem os valida. A chave nunca sai desse perímetro de confiança.</p>
+<p>O inconveniente do HMAC aparece quando esse perímetro deixa de fazer sentido: se um sistema externo — que não deveria ter autoridade para <strong>emitir</strong> <em>tokens</em> válidos — precisasse de os <strong>validar</strong>, teria de receber a mesma chave secreta usada para os assinar. Nesse momento, deixa de ser só um verificador: passa a ser também capaz de forjar <em>tokens</em> novos, válidos, para qualquer utilizador.</p>
 </section>
-<section id="sec-apB-lab2" class="level2" data-number="B.3">
-<h2 data-number="B.3" class="anchored" data-anchor-id="sec-apB-lab2"><span class="header-section-number">B.3</span> LAB2: Login e Sessão</h2>
-<blockquote class="blockquote">
-<p>Conteúdo a desenvolver a partir de LAB2-EN.pdf (ESIGELEC). Twist JavaScript: substituir o <code>login.html</code> cru por uma versão com <code>fetch()</code> (POST assíncrono, sem reload, com feedback visual de sucesso/erro).</p>
-</blockquote>
+<section id="sec-apB-assimetrico" class="level2" data-number="B.3">
+<h2 data-number="B.3" class="anchored" data-anchor-id="sec-apB-assimetrico"><span class="header-section-number">B.3</span> RSA e ECDSA: um Par de Chaves</h2>
+<p>Um algoritmo <strong>assimétrico</strong> resolve este problema separando as duas capacidades em duas chaves distintas: uma <strong>chave privada</strong>, que só quem emite <em>tokens</em> conhece, e uma <strong>chave pública</strong>, correspondente, que pode ser livremente distribuída a quem precisar de os validar. O que a chave privada assina, só é possível verificar com a chave pública correspondente — mas não é possível <strong>assinar</strong> nada de novo apenas com a chave pública.</p>
+<p>Os dois algoritmos assimétricos mais comuns em JWT são <code>RS256</code> (RSA com <code>SHA-256</code>) e <code>ES256</code> (<em>Elliptic Curve Digital Signature Algorithm</em> com <code>SHA-256</code>) — este último mais recente, com chaves mais pequenas e verificação mais rápida para um nível de segurança equivalente, cada vez mais preferido ao RSA em sistemas novos.</p>
+<div id="fig-apB-assimetrico" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-apB-assimetrico-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/apendiceB/JWT_Assimetrico.png" class="img-fluid figure-img" style="width:85.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-apB-assimetrico-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;B.2: Num esquema assimétrico (RSA/ECDSA), só o Serviço de Autenticação guarda a chave privada e assina tokens novos; a chave pública correspondente pode ser distribuída livremente a qualquer servidor que precise apenas de validar, sem nunca poder emitir tokens em nome de outro.
+</figcaption>
+</figure>
+</div>
+<p>Este desenho é o habitual em sistemas compostos por vários serviços independentes (por vezes chamados <em>microserviços</em>): um único Serviço de Autenticação, responsável por validar credenciais e emitir <em>tokens</em>, e vários outros serviços, cada um deles a validar esses <em>tokens</em> de forma completamente autónoma, sem nunca comunicar entre si nem confiar uns nos outros para além da chave pública partilhada.</p>
 </section>
-<section id="sec-apB-lab3" class="level2" data-number="B.4">
-<h2 data-number="B.4" class="anchored" data-anchor-id="sec-apB-lab3"><span class="header-section-number">B.4</span> LAB3: AuthenticationFilter e Logout</h2>
-<blockquote class="blockquote">
-<p>Conteúdo a desenvolver a partir de LAB3-EN.pdf (ESIGELEC) — ainda por analisar em detalhe. Twist JavaScript: o front-office passa a mostrar/esconder secções consoante o estado de sessão.</p>
-</blockquote>
+<section id="sec-apB-escolher" class="level2" data-number="B.4">
+<h2 data-number="B.4" class="anchored" data-anchor-id="sec-apB-escolher"><span class="header-section-number">B.4</span> Escolher entre HMAC e Assinatura Assimétrica</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>HMAC (<code>HS256</code>)</th>
+<th>Assimétrico (<code>RS256</code>/<code>ES256</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Nº de chaves</td>
+<td>Uma só, partilhada</td>
+<td>Duas: privada (emite) e pública (verifica)</td>
+</tr>
+<tr class="even">
+<td>Quem pode emitir <em>tokens</em> válidos</td>
+<td>Qualquer um com a chave</td>
+<td>Só quem tem a chave privada</td>
+</tr>
+<tr class="odd">
+<td>Quem pode validar <em>tokens</em></td>
+<td>Qualquer um com a chave</td>
+<td>Qualquer um com a chave pública</td>
+</tr>
+<tr class="even">
+<td>Cenário típico</td>
+<td>Um servidor (ou cluster de confiança) emite e valida</td>
+<td>Vários serviços independentes só validam</td>
+</tr>
+<tr class="odd">
+<td>Desempenho</td>
+<td>Mais rápido, mais simples</td>
+<td>Mais lento, chaves maiores (exceto ECDSA)</td>
+</tr>
+</tbody>
+</table>
+<p>Para a aplicação “World Capitals” usada ao longo desta UC — um único servidor, responsável tanto por emitir como por validar os seus próprios <em>tokens</em> — o HMAC é uma escolha perfeitamente adequada, e é por isso que o <a href="../capitulos/cap08.html">Capítulo 8</a> o usa como exemplo. A escolha só passaria a pesar a favor de um algoritmo assimétrico se a aplicação crescesse para vários serviços independentes, cada um dos quais devesse poder validar, mas não emitir, credenciais de acesso.</p>
 </section>
-<section id="sec-apB-lab4" class="level2" data-number="B.5">
-<h2 data-number="B.5" class="anchored" data-anchor-id="sec-apB-lab4"><span class="header-section-number">B.5</span> LAB4: JDBC e CRUD Completo</h2>
-<blockquote class="blockquote">
-<p>Conteúdo a desenvolver a partir de LAB4-EN.pdf (ESIGELEC). Twist JavaScript: substituir os formulários crus de insert/update/delete por um mini front-office (lista de países + formulário <code>fetch()</code> para CRUD).</p>
-<p>LAB5 do ESIGELEC (“Subject treated in slides”, opcional) fica de fora do calendário fixo.</p>
-</blockquote>
+<section id="sec-apB-alg-none" class="level2" data-number="B.5">
+<h2 data-number="B.5" class="anchored" data-anchor-id="sec-apB-alg-none"><span class="header-section-number">B.5</span> O Ataque <code>alg:none</code></h2>
+<p>O <em>header</em> de um JWT declara, ele próprio, qual o algoritmo usado na assinatura (ver <a href="cap08.html#sec-08-jwt" class="quarto-xref"><span>Secção 8.3</span></a>). A especificação original do JWT permite, entre os valores possíveis desse campo, o valor <code>none</code> — pensado para casos em que a integridade já é garantida por outro mecanismo, e nenhuma assinatura é sequer necessária.</p>
+<p>Um verificador mal implementado, que confie cegamente no algoritmo declarado no <em>header</em> em vez de impor um algoritmo esperado, pode ser enganado por um <em>token</em> como este:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">{</span><span class="dt">"alg"</span><span class="fu">:</span> <span class="st">"none"</span><span class="fu">,</span> <span class="dt">"typ"</span><span class="fu">:</span> <span class="st">"JWT"</span><span class="fu">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>seguido de um <em>payload</em> arbitrário e de uma assinatura vazia. Se o código de verificação não rejeitar explicitamente o algoritmo <code>none</code>, um atacante pode construir, à mão, um <em>token</em> com qualquer <em>payload</em> que queira — por exemplo, <code>{"sub":"admin","role":"admin"}</code> — sem precisar de conhecer chave nenhuma, e o servidor aceita-o como legítimo.</p>
+<p>É exatamente este ataque que motiva a recomendação já feita no <a href="../capitulos/cap08.html">Capítulo 8</a>: uma biblioteca bem escrita, como a JJWT, exige que o algoritmo esperado seja indicado explicitamente no código de verificação, e rejeita qualquer <em>token</em> que declare um algoritmo diferente — incluindo <code>none</code> — independentemente do que o próprio <em>token</em> afirme sobre si mesmo.</p>
+</section>
+<section id="sec-apB-armazenamento" class="level2" data-number="B.6">
+<h2 data-number="B.6" class="anchored" data-anchor-id="sec-apB-armazenamento"><span class="header-section-number">B.6</span> Onde Guardar o Token no Cliente</h2>
+<p>Tudo o que foi visto até aqui protege o <em>token</em> contra falsificação — mas não contra roubo (ver <a href="cap08.html#sec-08-authorization-header" class="quarto-xref"><span>Secção 8.2</span></a>): quem o possui pode usá-lo livremente, como o seu legítimo dono, até ele expirar. O sítio onde o cliente o guarda entre pedidos determina a que tipo de roubo fica exposto.</p>
+<dl>
+<dt><strong>Guardar no <code>localStorage</code> do <em>browser</em></strong></dt>
+<dd>
+Acessível a qualquer código JavaScript que corra na página — incluindo, infelizmente, um <em>script</em> malicioso injetado através de uma vulnerabilidade de <em>Cross-Site Scripting</em> (XSS). Se essa vulnerabilidade existir na aplicação, um atacante consegue ler o <em>token</em> diretamente e reenviá-lo, fazendo-se passar pelo utilizador. Não é, por outro lado, enviado automaticamente pelo <em>browser</em> em pedidos a outros sítios, por isso não fica exposto a <em>Cross-Site Request Forgery</em> (CSRF)
+</dd>
+<dt><strong>Cookie <code>HttpOnly</code></strong></dt>
+<dd>
+Marcado com o atributo <code>HttpOnly</code>, um <em>cookie</em> fica inacessível ao próprio JavaScript da página — nem um <em>script</em> malicioso o consegue ler, o que neutraliza o roubo por XSS. Em troca, o <em>browser</em> reenvia automaticamente <em>cookies</em> em qualquer pedido dirigido ao domínio, mesmo quando esse pedido é despoletado por uma página de outro sítio — reabrindo a porta a CSRF, que passa a ter de ser mitigado à parte (por exemplo, com o atributo <code>SameSite</code>)
+</dd>
+</dl>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th><code>localStorage</code></th>
+<th>Cookie <code>HttpOnly</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Acessível a JavaScript</td>
+<td>Sim</td>
+<td>Não</td>
+</tr>
+<tr class="even">
+<td>Vulnerável a roubo por XSS</td>
+<td>Sim</td>
+<td>Não</td>
+</tr>
+<tr class="odd">
+<td>Reenviado automaticamente pelo <em>browser</em></td>
+<td>Não</td>
+<td>Sim</td>
+</tr>
+<tr class="even">
+<td>Vulnerável a CSRF</td>
+<td>Não</td>
+<td>Sim, exige mitigação à parte</td>
+</tr>
+</tbody>
+</table>
+<p>Nenhuma das duas opções é isenta de risco — cada uma troca um tipo de vulnerabilidade por outro. O modelo seguido no <a href="../capitulos/cap08.html">Capítulo 8</a> (<em>token</em> reenviado manualmente no cabeçalho <code>Authorization</code>, ver <a href="cap08.html#sec-08-fetch-json" class="quarto-xref"><span>Secção 8.7</span></a>) pressupõe que o <em>token</em> está acessível ao próprio JavaScript, o que aponta para <code>localStorage</code>, e é o mais comum em aplicações de página única modernas. Nesse modelo, prevenir XSS deixa de ser só uma boa prática geral: torna-se uma condição essencial para a segurança do próprio mecanismo de autenticação — ainda que a prevenção de XSS em si fique fora do âmbito deste apêndice.</p>
+</section>
+<section id="sec-apB-boas-praticas" class="level2" data-number="B.7">
+<h2 data-number="B.7" class="anchored" data-anchor-id="sec-apB-boas-praticas"><span class="header-section-number">B.7</span> Boas Práticas Mínimas</h2>
+<ul>
+<li><strong>Nunca aceitar o algoritmo do <em>token</em> às cegas</strong> — o código de verificação deve impor explicitamente o algoritmo esperado (ver <a href="#sec-apB-alg-none" class="quarto-xref"><span>Secção B.5</span></a>)</li>
+<li><strong>A chave secreta (HMAC) ou privada (RSA/ECDSA) nunca deve viver no código-fonte</strong> — deve ser lida de uma variável de ambiente ou de um gestor de segredos dedicado, nunca <em>commitada</em> num repositório</li>
+<li><strong>Uma chave curta ou previsível anula a segurança do algoritmo</strong> — o comprimento mínimo recomendado depende do algoritmo, mas uma <em>string</em> curta e memorável nunca é apropriada</li>
+<li><strong>Expiração curta</strong> (a <em>claim</em> <code>exp</code>, ver <a href="cap08.html#sec-08-ciclo-vida-token" class="quarto-xref"><span>Secção 8.4</span></a>) limita os danos de um <em>token</em> comprometido, mesmo sem qualquer mecanismo adicional</li>
+<li><strong>HTTPS é sempre obrigatório</strong> — mesmo um <em>token</em> assinado corretamente é uma credencial válida se for intercetado em trânsito; a assinatura protege contra falsificação, não contra escuta da rede</li>
+</ul>
+<p>Estas práticas são um ponto de partida, não um tratamento exaustivo de segurança de aplicações Web.</p>
 
 
 </section>
@@ -846,13 +1035,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../capitulos/apendiceA.html" class="pagination-link" aria-label="Configuração do Ambiente de Desenvolvimento">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Configuração do Ambiente de Desenvolvimento</span></span>
+      <a href="../capitulos/apendiceA.html" class="pagination-link" aria-label="Código Completo: Páginas Estáticas &quot;World Capitals&quot;">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Código Completo: Páginas Estáticas “World Capitals”</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../capitulos/apendiceC.html" class="pagination-link" aria-label="Código Completo: Páginas Estáticas &quot;World Capitals&quot;">
-        <span class="nav-page-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Código Completo: Páginas Estáticas “World Capitals”</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../capitulos/apendiceC.html" class="pagination-link" aria-label="Configuração do Ambiente de Desenvolvimento">
+        <span class="nav-page-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Configuração do Ambiente de Desenvolvimento</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

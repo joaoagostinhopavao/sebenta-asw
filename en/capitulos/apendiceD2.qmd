@@ -1,0 +1,112 @@
+---
+title: "LAB2: Login and Session"
+author: "João Pavão"
+date: 2026-08-26
+lang: en-GB
+---
+
+## LAB2: Login and Session {#sec-apD2-lab2-en}
+
+Security is a fundamental concern in any Web application. Since this is a REST API, redirects are not used as in a traditional Web application — all communication with the client happens through HTTP status codes and JSON bodies (see [Chapter 3](cap03.qmd)). In this LAB, a *login* *endpoint* is added to the "World Capitals API", and the HTTP session (see [Chapter 5](cap05.qmd)) is used to keep track, on the server side, of the fact that a given user is authenticated.
+
+### Step 2.1: Create the *Login* *Endpoint* {#sec-apD2-step1-en}
+
+1. In the `capitaisapi.servlets` package (already used in the previous LABs, see [Appendix D](apendiceD1.qmd)), create a new *Servlet* called `LoginServlet`, mapped to the `/login` *URL*
+2. Implement the `doPost` method — not `doGet` — since credentials should not travel visibly in the *URL*
+3. This method should receive two request parameters: `user` and `pass`
+
+### Step 2.2: Implement the Authentication Logic {#sec-apD2-step2-en}
+
+Add a new public method to the `DBDAO` class (see [Appendix D](apendiceD1.qmd)):
+
+```java
+public boolean validateUserCredentials(String user, String pass)
+```
+
+For this LAB, fix the valid credentials directly in the code: username `javaee`, password `asw2026`. The method compares the received values against these fixed values, and returns `true` or `false`.
+
+In `LoginServlet`'s `doPost` method, read the two request parameters:
+
+```java
+String user = request.getParameter("user");
+String pass = request.getParameter("pass");
+```
+
+### Step 2.3: Create and Manage the Session {#sec-apD2-step3-en}
+
+If the credentials are valid, the *Servlet* should:
+
+1. Create (or obtain) an HTTP session: `HttpSession session = request.getSession(true);`
+2. Store the authenticated user's identity in the session: `session.setAttribute("UserName", user);`
+3. Respond with `HTTP 200` and a confirmation JSON body
+
+Example of a successful response:
+
+::: {.httpmsg}
+{"message": "OK", "user": "javaee"}
+:::
+
+### Step 2.4: Handle Authentication Failures {#sec-apD2-step4-en}
+
+Not every request to `/login` corresponds to a successful *login*. There are two cases to handle:
+
+**Missing parameter** — if `user` or `pass` come in null or empty, respond with `HTTP 400 BAD REQUEST`:
+
+::: {.httpmsg}
+{"message": "BAD REQUEST!", "error": "Missing parameter user or pass"}
+:::
+
+**Invalid credentials** — if `validateUserCredentials()` returns `false`, respond with `HTTP 403 FORBIDDEN`:
+
+::: {.httpmsg}
+{"message": "FORBIDDEN!", "error": "Invalid login or password"}
+:::
+
+Note that, in neither of these cases, does the *Servlet* redirect the client to another page — it is the client that decides what to do next, based on the status code and the JSON body received.
+
+### Step 2.5: Create an HTML File to Test the *Login* *Endpoint* {#sec-apD2-step5-en}
+
+To test the `/login` *endpoint* without relying on external tools, a simple HTML form is created — with no JavaScript, no `fetch()`. That topic is reserved for [Appendix I](apendiceD6.qmd), once the *backend* is complete.
+
+Create the file at `src/main/webapp/login.html` — outside `WEB-INF`, since content inside `WEB-INF` is not directly accessible from the *browser* (see [Appendix C](apendiceC.qmd)):
+
+```html
+<form method="POST" action="login">
+  <input type="text" name="user" required>
+  <input type="password" name="pass" required>
+  <button type="submit">Login</button>
+</form>
+```
+
+This file serves only as a test client for the *endpoint* — it is not the application's final *login* form (that one is already finished in [Appendix A](apendiceA.qmd)).
+
+### Step 2.6: Protect an *Endpoint* with Session Verification {#sec-apD2-step6-en}
+
+With *login* working, the `/country` *endpoint* (the `CountryServlet` from [Appendix D](apendiceD1.qmd)) is now protected, so that it only responds to requests from authenticated users.
+
+It is worth distinguishing two concepts here (see [Chapter 6](cap06.qmd)): **authentication** — confirming who the user is — and **authorisation** — confirming whether that user has permission to access a given resource. This step is only about authentication: checking whether a valid session exists.
+
+At the start of `CountryServlet`'s `doGet` method, add:
+
+```java
+HttpSession session = request.getSession(false);
+
+if (session == null || session.getAttribute("UserName") == null) {
+    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+    response.setContentType("application/json");
+    PrintWriter out = response.getWriter();
+    String jsonResponse = "{\"error\": \"Authentication required\"}";
+    out.print(jsonResponse);
+    return;
+}
+```
+
+Note the use of `request.getSession(false)`: unlike what happens at *login* (`getSession(true)`), here a new session should not be created just to check whether it exists — if there is no session, `getSession(false)` returns `null`. It is essential not to forget the `return` after writing the error response: without it, the code would keep executing the rest of the method, even after already having sent a `403` response.
+
+### How to Test {#sec-apD2-test-en}
+
+1. Access `/country?countrycode=PT` directly, without logging in first. Expected result: `HTTP 403`, with the body `{"error": "Authentication required"}`
+2. Submit the `login.html` form with `javaee` / `asw2026`. Expected result: `HTTP 200`, with the body `{"message": "OK", "user": "javaee"}`
+3. Repeat the request to `/country?countrycode=PT`. Expected result now: `HTTP 200`, with the country's data
+
+This LAB leaves the session-verification logic scattered across every *Servlet* that needs protection — in [Appendix F](apendiceD3.qmd), that logic is centralised in a single Filter.

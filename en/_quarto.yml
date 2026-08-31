@@ -23,7 +23,19 @@ book:
     - capitulos/cap05.qmd
     - capitulos/cap06.qmd
     - capitulos/cap07.qmd
+    - capitulos/cap08.qmd
     - references.qmd
+
+  appendices:
+    - capitulos/apendiceA.qmd
+    - capitulos/apendiceB.qmd
+    - capitulos/apendiceC.qmd
+    - capitulos/apendiceD1.qmd
+    - capitulos/apendiceD2.qmd
+    - capitulos/apendiceD3.qmd
+    - capitulos/apendiceD4.qmd
+    - capitulos/apendiceD5.qmd
+    - capitulos/apendiceD6.qmd
 
   sidebar:
     search: true

@@ -214,19 +214,55 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/apendiceA.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Configuração do Ambiente de Desenvolvimento</span></span></a>
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Código Completo: Páginas Estáticas “World Capitals”</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/apendiceB.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">LABs Práticos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Assinatura de Tokens JWT</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/apendiceC.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Código Completo: Páginas Estáticas “World Capitals”</span></span></a>
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Configuração do Ambiente de Desenvolvimento</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">LAB1: Primeiro Endpoint e DAO Simulado</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">LAB2: Login e Sessão</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">F</span>&nbsp; <span class="chapter-title">LAB3: AuthenticationFilter e Logout</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">G</span>&nbsp; <span class="chapter-title">LAB4: JDBC e CRUD Completo</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">H</span>&nbsp; <span class="chapter-title">LAB5 (Opcional): Autenticação Sem Estado com JWT</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">I</span>&nbsp; <span class="chapter-title">LAB6: O Front-Office em JavaScript</span></span></a>
   </div>
 </li>
       </ul>
@@ -811,7 +847,7 @@ Orientado a projetos maiores e mais personalizados; mais flexível do que o <em>
 </section>
 <section id="sec-02-world-capitals" class="level2" data-number="2.6">
 <h2 data-number="2.6" class="anchored" data-anchor-id="sec-02-world-capitals"><span class="header-section-number">2.6</span> Exercício: as Páginas Estáticas da Aplicação “World Capitals”</h2>
-<p>Aplicando o que foi apresentado nas secções anteriores, constroem-se agora as páginas visuais da aplicação usada ao longo dos LABs práticos (ver <a href="../capitulos/apendiceB.html">Apêndice B</a>): uma API que serve informação sobre países e as respetivas capitais. Nesta fase, as páginas são inteiramente estáticas, em HTML/CSS/Bootstrap, sem qualquer JavaScript: os dados apresentados são fixos no próprio HTML, e os formulários ainda não estão ligados a nenhum servidor. É esse o trabalho reservado aos LABs, que se limitarão a acrescentar <code>fetch()</code> a este código já pronto.</p>
+<p>Aplicando o que foi apresentado nas secções anteriores, constroem-se agora as páginas visuais da aplicação usada ao longo dos LABs práticos (ver <a href="../capitulos/apendiceD1.html">Apêndice D</a> e seguintes): uma API que serve informação sobre países e as respetivas capitais. Nesta fase, as páginas são inteiramente estáticas, em HTML/CSS/Bootstrap, sem qualquer JavaScript: os dados apresentados são fixos no próprio HTML, e os formulários ainda não estão ligados a nenhum servidor. É esse o trabalho reservado aos LABs, que se limitarão a acrescentar <code>fetch()</code> a este código já pronto.</p>
 <p>Todas as páginas partilham a mesma barra de navegação:</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb18-1"><a href="#cb18-1"></a><span class="dt">&lt;</span><span class="kw">nav</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar navbar-expand-md bg-light border-bottom"</span><span class="dt">&gt;</span></span>
 <span id="cb18-2"><a href="#cb18-2"></a>  <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"container"</span><span class="dt">&gt;</span></span>
@@ -848,7 +884,7 @@ Figura&nbsp;2.13: A barra de navegação comum às quatro páginas da aplicaçã
 <li><strong>Gestão de países</strong> (<code>paises-editar.html</code>): três formulários distintos, um por operação, todos a apontar para o mesmo <em>endpoint</em> <code>/countryEdit</code>, distinguidos pelo campo escondido <code>operation</code> (ver a nota sobre este desenho no <a href="../capitulos/cap07.html">Capítulo 7</a>).</li>
 </ul>
 <p>Estas quatro páginas, ligadas entre si pela barra de navegação comum, constituem já um pequeno sítio Web completo e funcional, mesmo sem qualquer lógica do lado do servidor: é possível navegar entre elas, preencher os formulários e submetê-los. O que falta, ainda, é haver um servidor a responder a esses pedidos, e é isso que a matéria dos capítulos seguintes vai fornecer.</p>
-<p>O código completo e autónomo das quatro páginas, pronto a copiar para um editor e a abrir diretamente no <em>browser</em>, está reunido no <a href="../capitulos/apendiceC.html">Apêndice C</a>.</p>
+<p>O código completo e autónomo das quatro páginas, pronto a copiar para um editor e a abrir diretamente no <em>browser</em>, está reunido no <a href="../capitulos/apendiceA.html">Apêndice A</a>.</p>
 
 
 </section>

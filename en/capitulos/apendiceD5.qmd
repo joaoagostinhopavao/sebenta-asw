@@ -1,0 +1,185 @@
+---
+title: "LAB5 (Optional): Stateless Authentication with JWT"
+author: "João Pavão"
+date: 2026-08-26
+lang: en-GB
+---
+
+## LAB5 (Optional): Stateless Authentication with JWT {#sec-apD5-lab5-en}
+
+In LABs 1 to 4, server-side stateful authentication was implemented (`HttpSession`). This model is common in traditional Java Web applications, and is a good way of clearly understanding authentication and authorization.
+
+In this optional LAB, the project evolves towards a modern, stateless REST API architecture: `HttpSession` and `JSESSIONID` are no longer used, the server stops keeping any per-user state between requests, and authentication is instead done with a JWT (*JSON Web Token*, see [Chapter 8](cap08.qmd) and [Appendix B](apendiceB.qmd)), sent with every protected request. This LAB is optional, aimed at anyone who wants to go further and understand how modern APIs typically authenticate clients.
+
+**Objectives**: by the end of this LAB, it should be possible to explain the difference between stateful (session) authentication and stateless (*token*) authentication; implement JWT-based authentication; use the HTTP `Authorization` header with the `Bearer` scheme; validate a JWT inside a Filter; and correctly distinguish `401` from `403`.
+
+### Stateful vs. Stateless {#sec-apD5-concept-en}
+
+**Session-based model (stateful)** — the model already used in the previous LABs: the server creates an `HttpSession`; Tomcat sends a `JSESSIONID` *cookie* to the *browser*; the server keeps state in memory (or in a shared session store). Works well for monolithic applications, but becomes harder to scale in distributed systems (multiple servers, load balancing, microservices, see [Chapter 8](cap08.qmd)).
+
+**JWT model (stateless)** — the server keeps no session at all; the *login* *endpoint* generates a *token*; the client sends the *token* with every protected request; the server validates the *token* on every request. The authentication state (identity + expiry) is encoded inside the *token* itself; the application's data remains stored in the database.
+
+### Step 5.1: Add a JWT Library {#sec-apD5-step1-en}
+
+Generating and validating *JSON Web Tokens* requires an external library — the standard Java API includes no native JWT support. This LAB uses the **JJWT** library (*Java JWT*, see [Appendix B](apendiceB.qmd)).
+
+**Where to download it**: the library is available on Maven Central (search for `io.jsonwebtoken jjwt`). The following three artifacts need to be downloaded (example for version `0.11.5`):
+
+- `jjwt-api-0.11.5.jar`
+- `jjwt-impl-0.11.5.jar`
+- `jjwt-jackson-0.11.5.jar`
+
+All three JAR files must be downloaded.
+
+**Where to place the JAR files**: copy the three files to `src/main/webapp/WEB-INF/lib` — the same location already used earlier for the JDBC *driver* (see [Appendix G](apendiceD4.qmd)).
+
+After copying the files:
+
+1. Stop the Tomcat server
+2. Clean the project (`Clean`)
+3. Restart the server
+
+If everything is correct, the server starts up with no errors.
+
+### Step 5.2: Create a Small JWT Utility Class {#sec-apD5-step2-en}
+
+Create a new class `JwtUtil` (suggested package: `capitaisapi.security`). This class should centralise JWT operations:
+
+- `String generateToken(String username)`
+- `boolean validateToken(String token)`
+- `String extractUsername(String token)` (optional, but useful)
+
+Implementation requirements for this LAB:
+
+- Sign the *tokens* with HMAC SHA-256 (`HS256`, see [Appendix B](apendiceB.qmd))
+- Include at least: `sub` (*subject*) equal to the *username*, and `exp` (expiry date)
+- Use a single shared secret key (fixed in the code for this LAB; in a real application, it should be read from outside the code, see [Appendix B](apendiceB.qmd))
+
+Example implementation:
+
+```java
+package capitaisapi.security;
+
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
+import java.security.Key;
+import java.util.Date;
+
+public class JWTUtil {
+    // Secret key (must be at least 256 bits long for HS256)
+    private static final String SECRET =
+        "MySuperSecretKeyForJwtSigningMustBeLongEnough12345";
+
+    private static final long EXPIRATION_TIME = 1000 * 60 * 30; // 30 minutes
+
+    private static Key getSigningKey() {
+        return Keys.hmacShaKeyFor(SECRET.getBytes());
+    }
+
+    // Generates the token
+    public static String generateToken(String username) {
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + EXPIRATION_TIME);
+
+        JwtBuilder builder = Jwts.builder();
+        builder.setSubject(username);
+        builder.setIssuedAt(now);
+        builder.setExpiration(expiryDate);
+        builder.signWith(getSigningKey(), SignatureAlgorithm.HS256);
+
+        String token = builder.compact();
+        return token;
+    }
+
+    // Validates the token and returns the username if valid, or null otherwise
+    public static String validateToken(String token) {
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(getSigningKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+            return claims.getSubject(); // username
+        } catch (JwtException | IllegalArgumentException e) {
+            return null;
+        }
+    }
+}
+```
+
+Important: never store passwords inside the *token*.
+
+### Step 5.3: Change `/login` to Return a Token (No Session) {#sec-apD5-step3-en}
+
+In this LAB, `/login` no longer creates a session:
+
+- remove `request.getSession(true)`
+- remove `session.setAttribute("UserName", ...)`
+
+Instead, `LoginServlet` should:
+
+1. Read `user` and `pass` from `doPost`
+2. Validate the credentials with `DBDAO.validateUserCredentials(user, pass)`
+3. If valid: generate a JWT with `JwtUtil.generateToken(user)`, and return `HTTP 200` with a JSON body containing the *token*
+4. If invalid: return `HTTP 401` and a JSON error message
+
+Example successful response:
+
+::: {.httpmsg}
+{"token": "xxxxx.yyyyy.zzzzz"}
+:::
+
+Example failure response:
+
+::: {.httpmsg}
+{"error": "Invalid login or password"}
+:::
+
+Status code rules (recommended): missing parameters → `400` (`SC_BAD_REQUEST`); invalid credentials → `401` (`SC_UNAUTHORIZED`); valid credentials → `200` (`SC_OK`).
+
+### Step 5.4: Create a JWT Authentication Filter {#sec-apD5-step4-en}
+
+Create a new Filter, for example `JwtAuthenticationFilter` (the same package as the previous Filter works fine, see [Appendix F](apendiceD3.qmd)). Map it with `@WebFilter` to the *endpoints* that should be protected, for example `/country`, `/countryEdit` and, optionally, `/capital`.
+
+Inside `doFilter`, the Filter should:
+
+1. Read the `Authorization` header
+2. Check that it exists and starts with `Bearer`
+3. Extract the *token* after `Bearer`
+4. Validate the *token*: the signature is correct, and the *token* is not expired
+5. If valid, let the request continue: `chain.doFilter(request, response)`
+6. If invalid or missing, block the request: return `HTTP 401` (`SC_UNAUTHORIZED`) with a JSON error body
+
+Suggested error response:
+
+::: {.httpmsg}
+{"error": "Invalid or expired token"}
+:::
+
+Practical note: set `response.setContentType("application/json")` before writing the JSON.
+
+### Step 5.5: Remove the Session-Based Filter (or Disable It) {#sec-apD5-step5-en}
+
+At this stage, the old session-based model is no longer relied upon: remove the mapping of the old `AuthenticationFilter` (or stop using it), and remove any checks such as `request.getSession(false)` and `session.getAttribute("UserName")` from the *Servlets*. In this LAB, access control is done solely through *token* validation.
+
+### Step 5.6: `401` vs. `403` in This Project {#sec-apD5-step6-en}
+
+Always use these definitions: `401 Unauthorized` — the request is not authenticated (*token* missing, invalid, or expired); `403 Forbidden` — the request is authenticated, but the authenticated user does not have permission to access that resource.
+
+This tutorial mostly uses `401`, because roles/permissions are not yet implemented. If roles are added later (for example, administrator vs. regular user), `403` becomes relevant. Recall: authentication answers "who are you?"; authorization answers "are you allowed to do this?" (see [Chapter 6](cap06.qmd)).
+
+### Step 5.7: How to Test (*Browser* + `curl`/Postman) {#sec-apD5-step7-en}
+
+Since *browsers* do not easily allow setting custom headers during normal navigation, testing a JWT is best done with `curl` or Postman (see [Appendix C](apendiceC.qmd)).
+
+**1) Log in and obtain a token**: send a `POST` request to `/login` with valid credentials (`javaee` / `asw2026`) and copy the *token* from the JSON response.
+
+**2) Call a protected endpoint with the token**: send a `GET` request to `/country?countrycode=PT`, with the header `Authorization: Bearer <token>`. Expected result: valid *token* → `HTTP 200` with JSON data; missing or invalid *token* → `HTTP 401` with a JSON error.
+
+In this LAB, always send the *token* through the `Authorization` header. Do not store the JWT in *cookies* — that would, in practice, reintroduce implicit session-like behaviour.
+
+**3) Test expiry**: wait until the *token* expires (or set a very short expiry just for testing), and repeat the same request — `401` should now be obtained. After *login*, also confirm that the server does not create any `JSESSIONID` *cookie*: that is the confirmation that the application is, in fact, stateless.
+
+### Conclusion {#sec-apD5-conclusion-en}
+
+This optional LAB shows the natural evolution of the API across the five LABs: session-based (stateful) authentication → authorization logic centralised in a Filter → real persistence with a database → stateless authentication with JWT. With JWT, the API becomes easier to scale horizontally, and aligns with modern server-side architectures, especially when serving *SPAs* (*Single-Page Applications*) and mobile applications.

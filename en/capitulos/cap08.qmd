@@ -1,0 +1,214 @@
+---
+title: "REST Web Services (Part 2) and the JavaScript Client"
+author: "João Pavão"
+date: 2026-08-26
+lang: en-GB
+---
+
+## Session Limitations in Distributed Systems {#sec-08-session-limitations-en}
+
+[Chapter 7](cap07.qmd) ended by pointing at the problem: an authentication model based on `HttpSession` (see [Chapter 5](cap05.qmd)) requires the server to keep, in memory, the state of each authenticated user. As soon as there is more than one server instance, that memory is no longer automatically shared between them.
+
+There are known workarounds for this problem — *sticky sessions* (always routing the same client to the same instance) or replicating sessions across instances — but both come at a cost: the first limits how requests can be distributed, and the second requires extra infrastructure just to keep instances synchronised. Neither solves the problem at its root; both are ways of working around a dependency on state that, for a REST API (see [Chapter 7](cap07.qmd)), should not exist in the first place.
+
+## Stateless Authentication: the `Authorization` Header {#sec-08-authorization-header-en}
+
+The stateless alternative reverses the responsibility: instead of the server keeping track of who is authenticated, it is the **client itself** that keeps proof of its authentication — a *token* — and resends it with every request, typically in the HTTP `Authorization` header:
+
+::: {.httpmsg}
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYXZhZWUifQ.dGhpc19pc19hX2Zha2Vfc2lnbmF0dXJl
+:::
+
+The word `Bearer` indicates the type of credential that follows (literally, "bearer": whoever presents this *token* is treated as its rightful owner). Upon receiving the request, the server does not need to consult any memory: it only needs to validate the *token* itself — what that is, and how that validation works, is the subject of the next section.
+
+## JWT: a Stateless *Token* {#sec-08-jwt-en}
+
+A *JSON Web Token* (JWT) is a standardised *token* format, designed to carry information compactly and verifiably, without the server needing to keep anything about it. A JWT always has three parts, separated by dots:
+
+```
+<header>.<payload>.<signature>
+```
+
+**Header**
+: Metadata about the *token* itself, typically the signing algorithm used — for example, `{"alg":"HS256","typ":"JWT"}`
+
+**Payload**
+: The data the *token* carries (the *claims*) — for example, `{"sub":"javaee","role":"user","exp":1893456000}`, identifying the user, their role, and the expiry date
+
+**Signature**
+: The result of cryptographically signing the *header* and the *payload* with a secret key, known only to the server
+
+Each of these three parts is encoded in *Base64* and concatenated with dots, producing the long, unreadable *string* characteristic of a JWT (like the one in the `Authorization` header example above). The *header* and the *payload* are only encoded, not encrypted — anyone can read them, with no key needed. What guarantees that no one can **forge** a valid *token* is the signature: only whoever knows the server's secret key can generate it correctly, and any change to the *header* or the *payload*, however small, invalidates the signature. Upon receiving a request, the server recomputes the signature from the received *header* and *payload*, and compares it with the one carried in the *token*: if they match, the content can be trusted, without the server having had to keep, itself, absolutely anything.
+
+## The Lifecycle of a *Token* {#sec-08-token-lifecycle-en}
+
+A *token* does not replace the moment of authentication itself — it only replaces the way the server remembers it.
+
+**Issuance**
+: The client authenticates exactly as in [Chapter 5](cap05.qmd), sending `user`/`pass` to a *login* *endpoint*. The server validates the credentials (for example, through a DAO, see [Chapter 4](cap04.qmd)) but, instead of creating an `HttpSession`, generates a new JWT, signs it with its secret key, and returns it to the client in the response body
+
+**Storage and resending**
+: Unlike `JSESSIONID` (see [Chapter 5](cap05.qmd)), which the *browser* resends automatically through a *cookie*, the client is responsible for storing the received *token* and for explicitly resending it in the `Authorization` header of every subsequent request
+
+**Validation**
+: Each request is validated completely independently of previous ones: the server recomputes the signature, without consulting any session at all (see @sec-08-horizontal-scalability-en)
+
+**Expiry**
+: The `exp` *claim* in the *payload* defines how long the *token* remains valid. Once that moment has passed, the server rejects it (`401`) even if the signature is still correct, forcing a new *login*. This limits the time window in which an intercepted *token* could be misused — unlike an `HttpSession`, which only ends through explicit *logout* or prolonged inactivity (see [Chapter 5](cap05.qmd)), a JWT always expires, even if it is still being used
+
+The following table summarises the difference between the two authentication models seen so far in this course:
+
+| | Session (`HttpSession`) | JWT |
+|---|---|---|
+| Where the state lives | On the server, in memory | In the *token* itself, on the client side |
+| What the client keeps | An identifier (`JSESSIONID`) | The full *token*, already carrying the data |
+| Validation on each request | A lookup in the server's memory | Signature verification, with no lookup at all |
+| Multiple server instances | Need to share the session with one another | Each validates independently |
+
+In practice, a Filter (see [Chapter 6](cap06.qmd)) remains the natural place for this validation to happen. Recall the session-based authentication Filter already presented in that chapter:
+
+```java
+public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+        throws IOException, ServletException {
+
+    HttpServletRequest req = (HttpServletRequest) request;
+    HttpServletResponse res = (HttpServletResponse) response;
+
+    HttpSession session = req.getSession(false);
+
+    if (session == null || session.getAttribute("UserName") == null) {
+        res.sendError(HttpServletResponse.SC_UNAUTHORIZED); // 401
+        return;
+    }
+
+    chain.doFilter(request, response);
+}
+```
+
+The equivalent, *token*-based version has exactly the same structure — only the check itself changes, from an `HttpSession` lookup to validating the *token*'s signature and validity. That validation is rarely written from scratch: it is sensitive code, involving cryptography, and it pays off to leave it to a well-tested, actively maintained library, rather than reimplementing it. [JJWT](https://github.com/jwtk/jjwt) is one of the most widely used in Java, and one of the more security-conscious in the ecosystem (for example, it requires the expected algorithm to be stated explicitly, to prevent a common attack in which a *token* with no signature at all would be accepted as valid):
+
+```java
+public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+        throws IOException, ServletException {
+
+    HttpServletRequest req = (HttpServletRequest) request;
+    HttpServletResponse res = (HttpServletResponse) response;
+
+    String authHeader = req.getHeader("Authorization");
+
+    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        res.sendError(HttpServletResponse.SC_UNAUTHORIZED); // 401
+        return;
+    }
+
+    String token = authHeader.substring("Bearer ".length());
+
+    try {
+        Claims claims = Jwts.parser()
+                .verifyWith(SECRET_KEY)          // the server's secret key
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+
+        req.setAttribute("UserName", claims.getSubject());
+    } catch (JwtException e) {
+        res.sendError(HttpServletResponse.SC_UNAUTHORIZED); // invalid signature or expired token
+        return;
+    }
+
+    chain.doFilter(request, response);
+}
+```
+
+The call to `parseSignedClaims(token)` internally does everything the validation requires: it decodes the *header* and the *payload*, recomputes the signature with `SECRET_KEY` and compares it with the one received, and checks the `exp` *claim* — throwing a `JwtException` (or one of its subclasses, such as `ExpiredJwtException` for an expired *token*, or `SignatureException` for an invalid signature) should any of these checks fail. Note the structural similarity to the session-based Filter: in both cases, a failure condition ends the request with `401`, and the chain only continues with `chain.doFilter()` if authentication is valid.
+
+## Horizontal Scalability {#sec-08-horizontal-scalability-en}
+
+Scaling an application means increasing its capacity to answer more requests. There are, typically, two ways of doing this:
+
+**Vertical scalability**
+: Increasing the resources (CPU, memory) of the existing machine — has a physical limit, and does not solve the problem of a single point of failure
+
+**Horizontal scalability**
+: Adding more server instances, running in parallel, distributing requests between them — typically through a *load balancer*
+
+Horizontal scalability only works without complications when any instance can answer any request, indifferently — exactly the property a stateless service offers. With JWT-based authentication, no instance needs to know anything about any other: each validates the received *token* completely independently, using the same secret key shared by all of them. It is this independence between instances that makes stateless architecture the foundation of any system designed to scale.
+
+## Distributed MVC: the Pattern Splits Across Server and Client {#sec-08-distributed-mvc-en}
+
+In a presentation-oriented application, the MVC pattern (see [Chapter 1](cap01.qmd)) lives entirely on the server side: one component acts as Controller, and another, responsible for generating HTML, as View. In a REST API, that organisation stops making sense: the server no longer generates HTML, and the View, as defined in classic MVC, disappears from the server side.
+
+On the server side, only the Model (data access) and the Controller (the *endpoint* that receives the HTTP request and returns JSON) remain. The role of View moves entirely to the client: it is the [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) code, running in the *browser*, that interprets the received JSON and manipulates the [*DOM*](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model) to present it to whoever is using the application.
+
+This split can be read as a second application of the same pattern, now on the client side: the JavaScript that handles the response and updates the page itself acts as both Controller (deciding what to do with the received response) and View (generating the HTML shown); the JSON returned by the API is the Model, kept on the server and synchronised on every [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) request.
+
+This is why a JavaScript *front-office* connected to a REST API is not an alternative to MVC, but rather the same pattern distributed across two machines instead of one.
+
+## Consuming a REST API in JavaScript: `fetch()` and JSON {#sec-08-fetch-json-en}
+
+The [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) is the standard way for a *browser* to issue HTTP requests from JavaScript, without reloading the page. A simple, unauthenticated request looks like this:
+
+```javascript
+fetch("/country/PT")
+  .then(response => response.json())
+  .then(data => {
+    console.log(data.capital);
+  });
+```
+
+`fetch()` returns a *promise* — a value that is not yet available, but will be, later, once the request finishes. The first `.then()` receives the raw HTTP response, and converts its body, as JSON text, into a plain JavaScript object through `response.json()` — this step, in turn, also returns a *promise*, so it is chained with a second `.then()`, with the data now ready to use.
+
+For an authenticated request (see @sec-08-authorization-header-en and @sec-08-jwt-en), the *token* travels in a header, just like any other authenticated HTTP request:
+
+```javascript
+fetch("/country", {
+  headers: { "Authorization": "Bearer " + token }
+})
+  .then(response => response.json())
+  .then(data => {
+    // ...
+  });
+```
+
+A `POST` request, creating a resource, carries its body already in JSON, explicitly stating that format in the `Content-Type` header (see [Chapter 4](cap04.qmd)):
+
+```javascript
+fetch("/country", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ code: "PT", name: "Portugal", capital: "Lisboa" })
+})
+  .then(response => response.json())
+  .then(data => {
+    // ...
+  });
+```
+
+## The DOM as the *Browser*'s "View" {#sec-08-dom-view-en}
+
+The [*DOM*](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model) (*Document Object Model*) is the in-memory representation of the HTML page the *browser* is displaying — a tree of objects, one per page element, that JavaScript can read and change directly. It is through the DOM that JavaScript plays the role of View (see @sec-08-distributed-mvc-en): it does not generate HTML as text, the way a JSP does (see [Chapter 5](cap05.qmd)), but instead locates elements already present on the page and updates their content.
+
+```javascript
+fetch("/country/PT")
+  .then(response => response.json())
+  .then(data => {
+    document.querySelector("#capital").textContent = data.capital;
+  });
+```
+
+`document.querySelector(selector)` locates the first page element matching the given selector (here, the element with `id="capital"`), returning a reference to that DOM element; `textContent` is the property that sets the text shown inside it. The same principle applies to a list of results: for each item returned by the API, a new HTML element is created and inserted into the page.
+
+```javascript
+fetch("/country")
+  .then(response => response.json())
+  .then(countries => {
+    const table = document.querySelector("#tabela-paises");
+    countries.forEach(country => {
+      const row = document.createElement("tr");
+      row.innerHTML = `<td>${country.code}</td><td>${country.name}</td><td>${country.capital}</td>`;
+      table.appendChild(row);
+    });
+  });
+```
+
+This pattern — requesting data from a REST API with `fetch()`, and using the DOM to display it — is the foundation of any JavaScript *front-office* connected to a REST service, regardless of the specific application or data involved.

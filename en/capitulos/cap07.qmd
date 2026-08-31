@@ -1,26 +1,109 @@
 ---
-title: "REST Web Services (Part 2) and the JavaScript Client"
+title: "REST Web Services and Stateless Architecture (Part 1)"
+author: "João Pavão"
+date: 2026-08-26
 lang: en-GB
 ---
 
-## JWT, Scalability and Consuming the API in JavaScript {#sec-07-jwt-js-en}
+## The Problem: Applications That Need to Communicate {#sec-07-problem-en}
 
-> Content to be developed, aligned with the second half of ESIGELEC's
-> Lecture 4 + UTAD's own JavaScript "twist". Planned topics:
->
-> - Session limitations in distributed systems
-> - Authorization header
-> - JWT (header, payload, signature)
-> - Horizontal scalability
-> - fetch() and client-side JSON
-> - The DOM as the browser's "View"
+Up to this point, the server has always been thought of from the perspective of a single kind of client: a *browser*, requesting HTML pages for a human user to read. But a server rarely serves only that kind of client. A mobile application, another server, an integration script, or the JavaScript running in the *browser* itself (see [Chapter 8](cap08.qmd)) may also need to access the same information — without any of them needing, or wanting, to receive a ready-to-display HTML page.
 
-## Distributed MVC: the Pattern Splits Across Server and Client {#sec-07-distributed-mvc-en}
+HTML is a format designed for presentation: it mixes data with the form, or semantic structure, in which that data should be shown. A program that only needs the data (for example, the price of a product, or a country's capital) would have to "take apart" the HTML to get to it — fragile, and dependent on presentation details that have nothing to do with the information itself. What is needed is a way of exposing the same data so that any program, not just a *browser* with a human looking at it, can consume it directly.
 
-In a presentation-oriented application, the MVC pattern (see [Chapter 1](cap01.qmd)) lives entirely on the server side: one component acts as Controller, and another, responsible for generating HTML, as View. In a REST API, that organisation stops making sense: the server no longer generates HTML, and the View, as defined in classic MVC, disappears from the server side.
+## What a Web Service Is {#sec-07-webservice-en}
 
-On the server side, only the Model (data access) and the Controller (the endpoint that receives the HTTP request and returns JSON) remain. The role of View moves entirely to the client: it is the JavaScript code, running in the browser, that interprets the received JSON and manipulates the DOM to present it to whoever is using the application.
+A *Web Service* is a software component accessible over the network — typically via HTTP — that exposes functionality or data in a format designed to be consumed by other programs, not read directly by a human. Unlike a Web page, a *Web Service* does not generate presentation: it returns structured data with no semantic dressing, and it is the client that decides what to do with it.
 
-This split can be read as a second application of the same pattern, now on the client side: the JavaScript that handles the response and updates the page acts, itself, as both Controller (deciding what to do with the received response) and View (generating the HTML shown); the JSON returned by the API is the Model, kept on the server and synchronised on every `fetch()` request.
+This decoupling is what allows the same server to answer, with the same logic, requests coming from completely different sources: a mobile application, a JavaScript *front-office*, or another server — all receive the same data, in the same structure, and each decides how to present it (or whether to present it at all).
 
-This is why a JavaScript front-office connected to a REST API is not an alternative to MVC, but rather the same pattern distributed across two machines instead of one.
+## SOAP and REST: Two Approaches {#sec-07-soap-rest-en}
+
+Historically, there have been two main approaches to building *Web Services*:
+
+**SOAP** (*Simple Object Access Protocol*)
+: A formal, XML-based protocol, with a rigid message structure (the SOAP *envelope*) and a contract described separately, in a *WSDL* document. It is verbose and requires specific tooling to generate and consume that contract, but it offers strong formal guarantees — used mostly in legacy enterprise systems, with strict transaction and security requirements.
+
+**REST** (*Representational State Transfer*)
+: An architectural style, not a formal protocol, that uses HTTP directly as both transport and contract: the verbs, status codes and headers already seen in [Chapters 3](cap03.qmd) and [4](cap04.qmd) are, themselves, the vocabulary of the API. It is lighter, simpler to test, and is the dominant approach today for Web and mobile applications — the only one covered in detail in this course.
+
+## REST: Fielding's Principles {#sec-07-rest-principles-en}
+
+The term REST was coined by Roy Fielding, in 2000, to describe the architectural style that was already, in practice, implicit in the design of the Web itself. A REST service follows a set of principles:
+
+- **Client-server**: responsibilities are separated; the client does not need to know how the data is stored, and the server does not need to know how it is presented,
+- **Stateless**: each request contains all the information needed to be processed, without depending on memory of previous requests on the server (see @sec-07-stateful-stateless-en),
+- **Uniform interface**: resources are always manipulated the same way, through HTTP's own verbs and status codes, without inventing a bespoke vocabulary per API,
+- **Resources and representations**: everything the API exposes is modelled as a resource, identified by a *URL*, with one or more possible representations (typically JSON),
+- **Cacheable**: a response can indicate whether or not it may be cached, to avoid unnecessary repeated requests.
+
+Not every API that calls itself "REST" strictly follows all of these principles — in practice, "REST" has become a generic term for "resource-oriented API over HTTP, typically with JSON". That is the sense used throughout this course.
+
+## Resource-Oriented Architecture {#sec-07-resources-en}
+
+REST's most visible principle is thinking of the API around **resources**, not actions. A resource is anything that can be identified and manipulated — a country, a user, an order — and it is identified by a *URL*, never by a function name.
+
+A design that does not follow this principle is closer to an *RPC* (*Remote Procedure Call*) style, where the *URL* names an operation:
+
+::: {.httpmsg}
+GET /getCountry?code=PT\
+GET /deleteCountry?code=PT
+:::
+
+A resource-oriented design uses the *URL* itself to identify the resource, leaving the HTTP verb (see [Chapter 3](cap03.qmd)) to indicate the operation to perform on it:
+
+::: {.httpmsg}
+GET /country/PT → get country PT\
+DELETE /country/PT → remove country PT
+:::
+
+The advantage is not just aesthetic: it makes the API predictable. Once the `/country/{code}` pattern is known, it is immediately clear how to access, update or remove any country, without needing to memorise a different function name for each operation.
+
+## HTTP Methods as the API's Contract {#sec-07-methods-contract-en}
+
+In a REST API, HTTP methods stop being just "the way the request arrives" (see [Chapter 3](cap03.qmd)) and become the API's own contract: the meaning of each verb, applied to a resource, is always the same.
+
+| Method | Operation | Idempotent? |
+|---|---|---|
+| `GET` | Read the resource | Yes |
+| `POST` | Create a new resource | No |
+| `PUT` | Update or replace the resource | Yes |
+| `DELETE` | Remove the resource | Yes |
+
+A method is said to be **idempotent** when repeating it several times has exactly the same effect as executing it once. `DELETE /country/PT` removes country PT; repeating the same request does not remove "anything more", the final result is identical. `POST /country`, on the other hand, creates a new resource on every call, so it is not idempotent: repeating the request creates several resources, not just one. This property matters especially on unreliable networks: a client unsure whether a `PUT` or `DELETE` request reached its destination can safely repeat it; the same cannot be done with a `POST`, on pain of duplicating the created resource.
+
+## JSON as a Resource's Representation {#sec-07-json-representation-en}
+
+A resource can have more than one possible representation — the same country could, in theory, be returned in JSON, in XML, or in any other format, depending on what the client requests. In practice, and throughout this course, the representation used is always [JSON](https://www.json.org/) (the format traditionally associated with SOAP is XML, more verbose and less straightforward to generate and parse in JavaScript).
+
+```json
+{"code": "PT", "name": "Portugal", "capital": "Lisboa"}
+```
+
+The `Content-Type: application/json` header (see [Chapter 4](cap04.qmd)) is what informs the client that this is the representation chosen for the response.
+
+## From a Web Application to a REST Service {#sec-07-web-to-rest-en}
+
+The infrastructure behind a REST service is nothing new: it is still a *Servlet*, mapped to a *URL* through `@WebServlet` (see [Chapter 4](cap04.qmd)), receiving an HTTP request and returning a response. What changes is **what** that response contains, and **who** it is designed for.
+
+In a presentation-oriented application (see [Chapters 1](cap01.qmd) and [5](cap05.qmd)), the Servlet returns HTML, meant for a human to read directly in the *browser*. In a REST API, the same Servlet returns JSON, meant to be interpreted by code — whether that code is another server, a mobile application, or the *browser*'s own JavaScript (see [Chapter 8](cap08.qmd)). The View, in the classic MVC sense (see [Chapter 1](cap01.qmd)), stops existing on the server side: it is the client, whatever it may be, that decides how (or whether) to present the data received.
+
+## Stateful vs. Stateless {#sec-07-stateful-stateless-en}
+
+[Chapter 5](cap05.qmd) presented a *stateful* model: the server keeps, in the `HttpSession`, information about each authenticated user, and every subsequent request is interpreted in light of that memory. A **stateless** service follows the opposite principle: the server keeps no memory at all between requests, and each request must carry, within itself, all the information needed to be processed — including, if required, proof that whoever is making it is authenticated.
+
+This does not mean the application as a whole stops having persistent data — the database keeps storing countries, users, orders. It only means that the **application server** itself keeps no session information about who is making each request, from one request to the next.
+
+## Why the Absence of State Matters {#sec-07-why-stateless-matters-en}
+
+The limitation of the stateful model only becomes visible once there is more than one server instance answering requests — a common situation in any application with a real need to scale. If a user authenticates on instance A, and a following request is routed to instance B, that second instance has no corresponding session in its memory: the user appears unauthenticated, despite having just logged in.
+
+A stateless service does not suffer from this problem: since no instance keeps memory of anyone, any one of them can answer any request, indifferently. This property is what makes it possible to distribute requests across several server instances with no coordination between them at all — a topic picked up in detail in [Chapter 8](cap08.qmd).
+
+::: {.callout-note}
+## `POST` + `operation` as an alternative to "pure" HTTP verbs
+
+In practice, it is common to find APIs that do not follow the "pure" semantics of HTTP verbs presented above (`POST` to create, `PUT` to update, `DELETE` to remove). A pragmatic alternative, used especially in contexts with technical constraints — for example, when only `GET`/`POST` requests can be issued, as from a simple HTML form, with no JavaScript involved (see [Chapter 2](cap02.qmd)) — is to concentrate write operations in a single *endpoint*, always received via `POST`, distinguishing the intended operation through an additional parameter, such as `operation` (`insert`, `update`, `delete`).
+
+This solution works, but moves away from more conventional REST design: a single *endpoint* no longer maps directly to a resource and a verb, drifting instead towards an *RPC* style over HTTP. In an API designed to be consumed by JavaScript — which can issue `PUT` and `DELETE` requests with no limitation at all (see [Chapter 8](cap08.qmd)) — the closer-to-REST alternative is to rewrite that *endpoint* as several, one per HTTP verb (for example, `PUT /resource/{id}` to update and `DELETE /resource/{id}` to remove).
+:::

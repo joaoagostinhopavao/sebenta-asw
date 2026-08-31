@@ -16,19 +16,19 @@ Isto levanta um problema prático imediato: se um utilizador se autentica num pe
 
 ## *Cookies* {#sec-05-cookies}
 
-Um *cookie* é um par chave/valor guardado no *browser*. Quando o servidor envia um *cookie*, espera que o cliente o devolva em todos os pedidos HTTP seguintes, dirigidos ao mesmo domínio.
+Um *cookie* é um par chave/valor guardado no *browser*. Quando o servidor envia um *cookie*, espera que o cliente o devolva em todos os pedidos HTTP seguintes, dirigidos ao mesmo domínio, implementando deste modo um mecanismo de identificação que se sobrepõe ao estado `stateless` do HTTP.
 
 Distinguem-se dois tipos, consoante a sua persistência:
 
-- **_Session cookies_**: mantidos pelo cliente apenas durante a sessão de navegação (`setMaxAge(-1)`)
-- **_Permanent cookies_**: guardados de forma persistente, com um tempo de vida definido (`setMaxAge(60*60*24*30)` para 30 dias, por exemplo)
+- **_Session cookies_**: mantidos pelo cliente apenas durante uma sessão de navegação (`setMaxAge(-1)`). Enquanto não se fechar a sessão, o cliente continua a identificar-se através do *cookie*. A partir do momento em que se fecha a sessão (por *logout* ou fechando o *browser*) o *cookie* é destruido.
+- **_Permanent cookies_**: guardados de forma persistente, com um tempo de vida definido (`setMaxAge(60*60*24*30)` - o tempo é expresso em segundos, neste caso para 30 dias).
 
 Criar um *cookie*:
 
 ```java
 Cookie cookie = new Cookie("userName", "Pedro");
 cookie.setMaxAge(-1); // session cookie
-response.addCookie(cookie);
+response.addCookie(cookie); // o cookie é adicionado à resposta e enviado ao cliente
 ```
 
 Ler um *cookie* recebido num pedido:
@@ -79,7 +79,7 @@ http://localhost:8080/CapitaisAPI/country;jsessionid=829F8836C240B51DD2F074259F2
 
 ## Autenticação Baseada em Sessão {#sec-05-autenticacao-sessao}
 
-Juntando os dois mecanismos anteriores, obtém-se o padrão clássico de autenticação por sessão, usado no LAB2 desta UC (ver [Apêndice B](apendiceB.qmd)). Depois de validar as credenciais, a `LoginServlet` cria uma sessão e guarda nela o identificador do utilizador:
+Juntando os dois mecanismos anteriores, obtém-se o padrão clássico de autenticação por sessão. Depois de validar as credenciais, a `LoginServlet` cria uma sessão e guarda nela o identificador do utilizador:
 
 ```java
 @WebServlet("/login")
@@ -103,6 +103,8 @@ public class LoginServlet extends HttpServlet {
 }
 ```
 
+Note-se que `dao` é uma instância de um *Data Access Object* (DAO) — um objeto dedicado ao acesso a dados, já referido no [Capítulo 4](cap04.qmd) — responsável, neste caso, por validar as credenciais recebidas: tipicamente consulta uma base de dados de utilizadores, e devolve `true` ou `false` consoante o `user`/`pass` sejam válidos ou não.
+
 Qualquer *endpoint* protegido verifica, no início do seu próprio `doGet()` ou `doPost()`, se existe uma sessão válida com esse atributo:
 
 ```java
@@ -123,7 +125,7 @@ session.invalidate();
 
 ## O Padrão MVC com *Servlet* e JSP {#sec-05-mvc-jsp}
 
-O [Capítulo 1](cap01.qmd) apresentou o padrão MVC a nível conceptual, e o [Capítulo 4](cap04.qmd) mostrou como uma *Servlet* funciona como Controller. Falta a peça final: a View.
+O [Capítulo 1](cap01.qmd) apresentou o padrão MVC a nível conceptual, e o [Capítulo 4](cap04.qmd) mostrou como uma *Servlet* funciona como Controller. As páginas construídas no [Capítulo 2](cap02.qmd) já desempenham o papel de View, mas são estáticas: o seu conteúdo não muda consoante o pedido. Esta secção mostra uma forma alternativa de construir a View — desta vez gerada dinamicamente do lado do servidor, a partir dos dados que o Controller lhe entrega.
 
 ![O modelo geral do MVC, aplicável a qualquer interface (não só Web): o Controller atualiza o Model e a apresentação; a View lê o Model para se apresentar.](../assets/images/capitulos/cap05/Modelo_MVC_Geral.png){#fig-05-mvc-geral width="55%"}
 
@@ -136,7 +138,7 @@ request.setAttribute("user", user);
 request.getRequestDispatcher("/home.jsp").forward(request, response);
 ```
 
-Uma JSP é um documento de texto que mistura dois tipos de conteúdo: HTML estático e elementos de *script* dinâmico. Na primeira vez que é pedida, o *Servlet Container* converte-a automaticamente numa classe *Servlet*, que passa a comportar-se, dali em diante, exatamente como qualquer outra *Servlet*.
+Uma JSP é um documento de texto que mistura dois tipos de conteúdo: HTML estático e elementos de *script* dinâmico. Na primeira vez que é pedida, o *Servlet Container* converte-a automaticamente numa classe *Servlet*, que passa a comportar-se, dali em diante, exatamente como qualquer outra *Servlet*, no papel de `Controller`.
 
 ## Um Exemplo Simples de JSP {#sec-05-exemplo-jsp}
 

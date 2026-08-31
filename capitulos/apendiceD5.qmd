@@ -1,0 +1,185 @@
+---
+title: "LAB5 (Opcional): Autenticação Sem Estado com JWT"
+author: "João Pavão"
+date: 2026-08-26
+lang: pt-PT
+---
+
+## LAB5 (Opcional): Autenticação Sem Estado com JWT {#sec-apD5-lab5}
+
+Nos LABs 1 a 4, implementou-se autenticação baseada em estado do lado do servidor (`HttpSession`). Esse modelo é comum em aplicações Web Java tradicionais, e é uma boa forma de perceber claramente autenticação e autorização.
+
+Neste LAB opcional, o projeto evolui para uma arquitetura de API REST moderna e sem estado: deixa de usar-se `HttpSession` e `JSESSIONID`, o servidor deixa de guardar qualquer estado por utilizador entre pedidos, e a autenticação passa a ser feita com um JWT (*JSON Web Token*, ver [Capítulo 8](cap08.qmd) e [Apêndice B](apendiceB.qmd)), enviado em cada pedido protegido. Este LAB é opcional, pensado para quem quiser ir mais além e perceber como as APIs modernas normalmente autenticam clientes.
+
+**Objetivos**: no final deste LAB, deve ser possível explicar a diferença entre autenticação com estado (sessão) e sem estado (*token*); implementar autenticação baseada em JWT; usar o cabeçalho HTTP `Authorization` com o esquema `Bearer`; validar um JWT dentro de um Filtro; e distinguir corretamente `401` de `403`.
+
+### Com Estado vs. Sem Estado {#sec-apD5-conceito}
+
+**Modelo baseado em sessão (com estado)** — o modelo já usado nos LABs anteriores: o servidor cria uma `HttpSession`; o Tomcat envia um *cookie* `JSESSIONID` ao *browser*; o servidor guarda estado em memória (ou num repositório de sessões partilhado). Funciona bem para aplicações monolíticas, mas torna-se mais difícil de escalar em sistemas distribuídos (vários servidores, balanceamento de carga, microserviços, ver [Capítulo 8](cap08.qmd)).
+
+**Modelo JWT (sem estado)** — o servidor não guarda sessão nenhuma; o *endpoint* de *login* gera um *token*; o cliente envia o *token* em cada pedido protegido; o servidor valida o *token* em cada pedido. O estado de autenticação (identidade + expiração) fica codificado dentro do próprio *token*; os dados da aplicação continuam guardados na base de dados.
+
+### Passo 5.1: Acrescentar uma Biblioteca JWT {#sec-apD5-passo1}
+
+Para gerar e validar *JSON Web Tokens* é preciso uma biblioteca externa — a API padrão do Java não inclui suporte nativo para JWT. Neste LAB usa-se a biblioteca **JJWT** (*Java JWT*, ver [Apêndice B](apendiceB.qmd)).
+
+**Onde descarregar**: a biblioteca está disponível no Maven Central (procurar por `io.jsonwebtoken jjwt`). É preciso descarregar os três artefactos seguintes (exemplo para a versão `0.11.5`):
+
+- `jjwt-api-0.11.5.jar`
+- `jjwt-impl-0.11.5.jar`
+- `jjwt-jackson-0.11.5.jar`
+
+É preciso descarregar os três ficheiros JAR.
+
+**Onde colocar os ficheiros JAR**: copiar os três ficheiros para `src/main/webapp/WEB-INF/lib` — o mesmo sítio já usado antes para o *driver* JDBC (ver [Apêndice G](apendiceD4.qmd)).
+
+Depois de copiar os ficheiros:
+
+1. Parar o servidor Tomcat
+2. Limpar o projeto (`Clean`)
+3. Reiniciar o servidor
+
+Se estiver tudo correto, o servidor arranca sem erros.
+
+### Passo 5.2: Criar uma Pequena Classe Utilitária JWT {#sec-apD5-passo2}
+
+Criar uma nova classe `JwtUtil` (sugestão de pacote: `capitaisapi.security`). Esta classe deve centralizar as operações com JWT:
+
+- `String generateToken(String username)`
+- `boolean validateToken(String token)`
+- `String extractUsername(String token)` (opcional, mas útil)
+
+Requisitos de implementação para este LAB:
+
+- Assinar os *tokens* com HMAC SHA-256 (`HS256`, ver [Apêndice B](apendiceB.qmd))
+- Incluir pelo menos: `sub` (*subject*) igual ao *username*, e `exp` (data de expiração)
+- Usar uma única chave secreta partilhada (fixa no código para este LAB; numa aplicação real, deveria ser lida de fora do código, ver [Apêndice B](apendiceB.qmd))
+
+Exemplo de implementação:
+
+```java
+package capitaisapi.security;
+
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
+import java.security.Key;
+import java.util.Date;
+
+public class JWTUtil {
+    // Chave secreta (tem de ter pelo menos 256 bits para HS256)
+    private static final String SECRET =
+        "MySuperSecretKeyForJwtSigningMustBeLongEnough12345";
+
+    private static final long EXPIRATION_TIME = 1000 * 60 * 30; // 30 minutos
+
+    private static Key getSigningKey() {
+        return Keys.hmacShaKeyFor(SECRET.getBytes());
+    }
+
+    // Gera o token
+    public static String generateToken(String username) {
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + EXPIRATION_TIME);
+
+        JwtBuilder builder = Jwts.builder();
+        builder.setSubject(username);
+        builder.setIssuedAt(now);
+        builder.setExpiration(expiryDate);
+        builder.signWith(getSigningKey(), SignatureAlgorithm.HS256);
+
+        String token = builder.compact();
+        return token;
+    }
+
+    // Valida o token e devolve o username se for válido, ou null caso contrário
+    public static String validateToken(String token) {
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(getSigningKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+            return claims.getSubject(); // username
+        } catch (JwtException | IllegalArgumentException e) {
+            return null;
+        }
+    }
+}
+```
+
+Importante: nunca guardar palavras-passe dentro do *token*.
+
+### Passo 5.3: Alterar o `/login` para Devolver um Token (Sem Sessão) {#sec-apD5-passo3}
+
+Neste LAB, o `/login` deixa de criar sessão:
+
+- remover `request.getSession(true)`
+- remover `session.setAttribute("UserName", ...)`
+
+Em vez disso, a `LoginServlet` deve:
+
+1. Ler `user` e `pass` a partir de `doPost`
+2. Validar as credenciais com `DBDAO.validateUserCredentials(user, pass)`
+3. Se válidas: gerar um JWT com `JwtUtil.generateToken(user)`, e devolver `HTTP 200` com um corpo JSON contendo o *token*
+4. Se inválidas: devolver `HTTP 401` e uma mensagem de erro em JSON
+
+Exemplo de resposta com sucesso:
+
+::: {.httpmsg}
+{"token": "xxxxx.yyyyy.zzzzz"}
+:::
+
+Exemplo de resposta com falha:
+
+::: {.httpmsg}
+{"error": "Invalid login or password"}
+:::
+
+Regras de código de estado (recomendadas): parâmetros em falta → `400` (`SC_BAD_REQUEST`); credenciais inválidas → `401` (`SC_UNAUTHORIZED`); credenciais válidas → `200` (`SC_OK`).
+
+### Passo 5.4: Criar um Filtro de Autenticação JWT {#sec-apD5-passo4}
+
+Criar um novo Filtro, por exemplo `JwtAuthenticationFilter` (o mesmo pacote do Filtro anterior serve, ver [Apêndice F](apendiceD3.qmd)). Mapeá-lo com `@WebFilter` aos *endpoints* que devem ficar protegidos, por exemplo `/country`, `/countryEdit` e, opcionalmente, `/capital`.
+
+Dentro de `doFilter`, o Filtro deve:
+
+1. Ler o cabeçalho `Authorization`
+2. Verificar que existe e começa por `Bearer`
+3. Extrair o *token* a seguir a `Bearer`
+4. Validar o *token*: a assinatura está correta, e o *token* não está expirado
+5. Se válido, deixar o pedido continuar: `chain.doFilter(request, response)`
+6. Se inválido ou em falta, bloquear o pedido: devolver `HTTP 401` (`SC_UNAUTHORIZED`) com um corpo JSON de erro
+
+Resposta de erro sugerida:
+
+::: {.httpmsg}
+{"error": "Invalid or expired token"}
+:::
+
+Nota prática: definir `response.setContentType("application/json")` antes de escrever o JSON.
+
+### Passo 5.5: Remover o Filtro Baseado em Sessão (ou Desativá-lo) {#sec-apD5-passo5}
+
+Nesta fase, deixa de se depender do modelo antigo baseado em sessão: remover o mapeamento do antigo `AuthenticationFilter` (ou deixar de o usar), e remover quaisquer verificações como `request.getSession(false)` e `session.getAttribute("UserName")` das *Servlets*. Neste LAB, o controlo de acesso é feito apenas através da validação do *token*.
+
+### Passo 5.6: `401` vs. `403` Neste Projeto {#sec-apD5-passo6}
+
+Usar sempre estas definições: `401 Unauthorized` — o pedido não está autenticado (*token* em falta, inválido, ou expirado); `403 Forbidden` — o pedido está autenticado, mas o utilizador autenticado não tem permissão para aceder a esse recurso.
+
+Neste tutorial usa-se sobretudo o `401`, porque ainda não se implementam papéis/permissões. Se mais tarde se acrescentarem papéis (por exemplo, administrador vs. utilizador normal), o `403` passa a ser relevante. Recorde-se: a autenticação responde a "quem és tu?"; a autorização responde a "tens permissão para fazer isto?" (ver [Capítulo 6](cap06.qmd)).
+
+### Passo 5.7: Como Testar (*Browser* + `curl`/Postman) {#sec-apD5-passo7}
+
+Como os *browsers* não permitem facilmente definir cabeçalhos personalizados numa navegação normal, testar um JWT faz-se melhor com `curl` ou com Postman (ver [Apêndice C](apendiceC.qmd)).
+
+**1) Fazer *login* e obter um *token***: enviar um pedido `POST` a `/login` com credenciais válidas (`javaee` / `asw2026`) e copiar o *token* da resposta JSON.
+
+**2) Chamar um *endpoint* protegido com o *token***: enviar um pedido `GET` a `/country?countrycode=PT`, com o cabeçalho `Authorization: Bearer <token>`. Resultado esperado: *token* válido → `HTTP 200` com dados JSON; *token* em falta ou inválido → `HTTP 401` com um erro JSON.
+
+Neste LAB, enviar sempre o *token* através do cabeçalho `Authorization`. Não guardar o JWT em *cookies* — isso reintroduziria, na prática, um comportamento de sessão implícito.
+
+**3) Testar a expiração**: esperar até o *token* expirar (ou configurar uma expiração muito curta só para testar), e repetir o mesmo pedido — deve agora obter-se `401`. Depois do *login*, confirmar também que o servidor não cria nenhum *cookie* `JSESSIONID`: é essa a confirmação de que a aplicação é, de facto, sem estado.
+
+### Conclusão {#sec-apD5-conclusao}
+
+Este LAB opcional mostra a evolução natural da API ao longo dos cinco LABs: autenticação baseada em sessão (com estado) → lógica de autorização centralizada num Filtro → persistência real com uma base de dados → autenticação sem estado com JWT. Com o JWT, a API torna-se mais fácil de escalar horizontalmente, e alinha-se com as arquiteturas modernas do lado do servidor, sobretudo quando serve *SPAs* (*Single-Page Applications*) e aplicações móveis.

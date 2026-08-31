@@ -5,23 +5,105 @@ date: 2026-08-26
 lang: pt-PT
 ---
 
-## O Que é um Web Service {#sec-07-rest}
+## O Problema: Aplicações que Precisam de Comunicar {#sec-07-problema}
 
-> Conteúdo a desenvolver, alinhado com a primeira metade da Lecture 4 do
-> ESIGELEC (REST Web Services and Stateless Architecture). Tópicos
-> previstos:
->
-> - O que é um Web Service
-> - REST (nível conceptual)
-> - Recursos e endpoints
-> - JSON como formato de troca de dados
-> - O contrato HTTP como contrato da API
-> - Stateful vs. Stateless
+Até aqui, o servidor foi sempre pensado a partir de um único tipo de cliente: um *browser*, a pedir páginas HTML para um utilizador humano ler. Mas um servidor raramente serve só esse tipo de cliente. Uma aplicação móvel, outro servidor, um script de integração, ou o próprio JavaScript a correr no *browser* (ver [Capítulo 8](cap08.qmd)) podem também precisar de aceder à mesma informação — sem nenhum deles precisar, ou querer, receber uma página HTML pronta a mostrar.
+
+O HTML é um formato pensado para apresentação: mistura dados com a forma, ou estrutra semântica, como esses dados devem ser mostrados. Um programa que só precise dos dados (por exemplo, o preço de um produto, ou a capital de um país) teria de "desmontar" o HTML para lá chegar — frágil, e dependente de detalhes de apresentação que nada têm a ver com a informação em si. Faz falta uma forma de expor os mesmos dados de um jeito que qualquer programa, não só um *browser* com um humano a olhar para ele, consiga consumir diretamente.
+
+## O Que é um Web Service {#sec-07-webservice}
+
+Um *Web Service* é um componente de software acessível através da rede — tipicamente por HTTP — que expõe funcionalidade ou dados num formato pensado para ser consumido por outros programas, não por um humano a ler diretamente. Ao contrário de uma página *Web*, um *Web Service* não gera apresentação: devolve dados estruturados sem qualquer relação semântica, e é o cliente que decide o que fazer com eles.
+
+Este desacoplamento é o que permite ao mesmo servidor responder, com a mesma lógica, a pedidos vindos de origens completamente diferentes: uma aplicação móvel, um *front-office* em JavaScript, ou outro servidor — todos recebem os mesmos dados, na mesma estrutura, e cada um decide como os apresentar (ou se sequer os apresenta).
+
+## SOAP e REST: Duas Abordagens {#sec-07-soap-rest}
+
+Historicamente, existiram duas abordagens principais para construir *Web Services*:
+
+**SOAP** (*Simple Object Access Protocol*)
+: Um protocolo formal, baseado em XML, com uma estrutura rígida de mensagem (o *envelope* SOAP) e um contrato descrito à parte, num documento *WSDL*. É verboso e exige ferramentas específicas para gerar e consumir esse contrato, mas oferece garantias formais fortes — usado sobretudo em sistemas empresariais legados, com requisitos rigorosos de transação e segurança.
+
+**REST** (*Representational State Transfer*)
+: Um estilo arquitetural, não um protocolo formal, que usa diretamente o HTTP como transporte e como contrato: os verbos, os códigos de estado e os cabeçalhos já vistos nos [Capítulos 3](cap03.qmd) e [4](cap04.qmd) são, eles próprios, o vocabulário da API. É mais leve, mais simples de testar e é a abordagem dominante hoje em dia para aplicações *Web* e móveis — a única tratada em detalhe nesta UC.
+
+## REST: os Princípios de Fielding {#sec-07-rest-principios}
+
+O termo REST foi cunhado por Roy Fielding, em 2000, para descrever o estilo arquitetural que já estava, na prática, implícito no desenho da própria *Web*. Um serviço REST segue um conjunto de princípios:
+
+- **Cliente-servidor**: as responsabilidades estão separadas; o cliente não precisa de saber como os dados são armazenados, e o servidor não precisa de saber como são apresentados,
+- **Sem estado** (*stateless*): cada pedido contém toda a informação necessária para ser processado, sem depender de memória de pedidos anteriores no servidor (ver @sec-07-stateful-stateless),
+- **Interface uniforme**: os recursos são manipulados sempre da mesma forma, através dos verbos e códigos de estado do próprio HTTP, sem inventar um vocabulário próprio por API,
+- **Recursos e representações**: tudo o que a API expõe é modelado como um recurso, identificado por uma *URL*, com uma ou mais representações possíveis (tipicamente JSON),
+- **Cacheável**: uma resposta pode indicar se pode, ou não, ser guardada em *cache*, para evitar pedidos repetidos desnecessários.
+
+Nem toda a API que se diz "REST" respeita todos estes princípios com rigor — na prática, "REST" tornou-se um termo genérico para "API sobre HTTP, orientada a recursos, tipicamente com JSON". É esse o sentido usado ao longo desta UC.
+
+## Arquitetura Orientada a Recursos {#sec-07-recursos}
+
+O princípio mais visível do REST é pensar a API em torno de **recursos**, não de ações. Um recurso é qualquer coisa que possa ser identificada e manipulada — um país, um utilizador, uma encomenda — e é identificado por uma *URL*, nunca por um nome de função.
+
+Um desenho que não segue este princípio aproxima-se antes de um estilo *RPC* (*Remote Procedure Call*), em que a *URL* nomeia uma operação:
+
+::: {.httpmsg}
+GET /getCountry?code=PT\
+GET /deleteCountry?code=PT
+:::
+
+Um desenho orientado a recursos usa a própria *URL* para identificar o recurso, deixando o verbo HTTP (ver [Capítulo 3](cap03.qmd)) indicar a operação a realizar sobre ele:
+
+::: {.httpmsg}
+GET /country/PT → obter o país PT\
+DELETE /country/PT → remover o país PT
+:::
+
+A vantagem não é só estética: torna a API previsível. Uma vez conhecido o padrão `/country/{code}`, sabe-se de imediato como aceder, atualizar ou remover qualquer país, sem ser preciso decorar um nome de função diferente para cada operação.
+
+## Os Métodos HTTP como Contrato da API {#sec-07-metodos-contrato}
+
+Numa API REST, os métodos HTTP deixam de ser só "a forma como o pedido chega" (ver [Capítulo 3](cap03.qmd)) e passam a ser o próprio contrato da API: o significado de cada verbo, aplicado a um recurso, é sempre o mesmo.
+
+| Método | Operação | Idempotente? |
+|---|---|---|
+| `GET` | Ler o recurso | Sim |
+| `POST` | Criar um novo recurso | Não |
+| `PUT` | Atualizar ou substituir o recurso | Sim |
+| `DELETE` | Remover o recurso | Sim |
+
+Um método diz-se **idempotente** quando repeti-lo várias vezes tem exatamente o mesmo efeito que executá-lo uma única vez. `DELETE /country/PT` remove o país PT; repetir o mesmo pedido não remove "mais nada", o resultado final é idêntico. Já `POST /country`, ao criar um novo recurso a cada chamada, não é idempotente: repetir o pedido cria vários recursos, não um só. Esta propriedade importa sobretudo em redes pouco fiáveis: um cliente que não tem a certeza se um pedido `PUT` ou `DELETE` chegou ao destino pode repeti-lo em segurança; já não pode fazer o mesmo com um `POST`, sob pena de duplicar o recurso criado.
+
+## JSON como Representação de um Recurso {#sec-07-json-representacao}
+
+Um recurso pode ter mais do que uma representação possível — o mesmo país poderia, em teoria, ser devolvido em JSON, em XML, ou em qualquer outro formato, consoante o que o cliente pedir. Na prática, e ao longo desta UC, a representação usada é sempre [JSON](https://www.json.org/) (o formato tradicionalmente associado ao SOAP é o XML, mais verboso e menos direto de gerar e interpretar em JavaScript).
+
+```json
+{"code": "PT", "name": "Portugal", "capital": "Lisboa"}
+```
+
+O cabeçalho `Content-Type: application/json` (ver [Capítulo 4](cap04.qmd)) é o que informa o cliente de que é esta a representação escolhida para a resposta.
+
+## De uma Aplicação Web a um Serviço REST {#sec-07-de-web-a-rest}
+
+A infraestrutura por trás de um serviço REST não é nova: continua a ser uma *Servlet*, mapeada a uma *URL* através de `@WebServlet` (ver [Capítulo 4](cap04.qmd)), a receber um pedido HTTP e a devolver uma resposta. O que muda é **o que** essa resposta contém, e **para quem** é pensada.
+
+Numa aplicação orientada à apresentação (ver [Capítulos 1](cap01.qmd) e [5](cap05.qmd)), a Servlet devolve HTML, pensado para um humano ler diretamente no *browser*. Numa API REST, a mesma Servlet devolve JSON, pensado para ser interpretado por código — seja esse código outro servidor, uma aplicação móvel, ou o JavaScript do próprio *browser* (ver [Capítulo 8](cap08.qmd)). A View, no sentido clássico de MVC (ver [Capítulo 1](cap01.qmd)), deixa de existir do lado do servidor: é o cliente, seja ele qual for, quem decide como (ou se) apresentar os dados recebidos.
+
+## Stateful vs. Stateless {#sec-07-stateful-stateless}
+
+O [Capítulo 5](cap05.qmd) apresentou um modelo com estado (*stateful*): o servidor guarda, na `HttpSession`, informação sobre cada utilizador autenticado, e cada pedido seguinte é interpretado à luz dessa memória. Um serviço **sem estado** (*stateless*) segue o princípio oposto: o servidor não guarda memória nenhuma entre pedidos, e cada pedido tem de trazer, em si próprio, toda a informação necessária para ser processado — incluindo, se for preciso, a prova de que quem o faz está autenticado.
+
+Isto não significa que a aplicação, no seu todo, deixe de ter dados persistentes — a base de dados continua a guardar países, utilizadores, encomendas. Significa apenas que o **servidor de aplicações**, em si, não guarda nenhuma informação de sessão sobre quem está a fazer cada pedido, entre um pedido e o seguinte.
+
+## Porque a Ausência de Estado Importa {#sec-07-porque-stateless-importa}
+
+A limitação do modelo com estado só se torna visível quando existe mais do que uma instância do servidor a atender pedidos — situação comum em qualquer aplicação com necessidade real de escala. Se um utilizador se autentica na instância A, e um pedido seguinte for encaminhado para a instância B, essa segunda instância não tem, na sua memória, nenhuma sessão correspondente: o utilizador aparece como não autenticado, mesmo tendo acabado de o fazer.
+
+Um serviço sem estado não sofre deste problema: como nenhuma instância guarda memória de ninguém, qualquer uma delas pode responder a qualquer pedido, indiferentemente. Esta propriedade é o que torna possível distribuir os pedidos por várias instâncias do servidor sem qualquer coordenação entre elas — o tema retomado, em detalhe, no [Capítulo 8](cap08.qmd).
 
 ::: {.callout-note}
 ## `POST` + `operation` como alternativa aos verbos HTTP "puros"
 
-Os LABs práticos desta UC (ver [Apêndice B](apendiceB.qmd), LAB4) implementam a criação, atualização e remoção de um país através de um único *endpoint* (`/countryEdit`), recebido sempre por `POST`, distinguindo a operação pretendida através de um parâmetro `operation` (`insert`, `update`, `delete`). Isto contraria a semântica "pura" dos verbos HTTP apresentada no [Capítulo 3](cap03.qmd) (`POST` para criar, `PUT` para atualizar, `DELETE` para remover), mas é uma simplificação pragmática, comum em código de formação: evita configurar *Servlets* adicionais mapeadas a `PUT`/`DELETE`, e mantém tudo testável com formulários HTML simples, sem recorrer a JavaScript.
+Na prática, é comum encontrar APIs que não seguem a semântica "pura" dos verbos HTTP apresentada acima (`POST` para criar, `PUT` para atualizar, `DELETE` para remover). Uma alternativa pragmática, usada sobretudo em contextos com restrições técnicas — por exemplo, quando só é possível emitir pedidos `GET`/`POST`, como a partir de um formulário HTML simples, sem recorrer a JavaScript (ver [Capítulo 2](cap02.qmd)) — é concentrar as operações de escrita num único *endpoint*, recebido sempre por `POST`, distinguindo a operação pretendida através de um parâmetro adicional, como `operation` (`insert`, `update`, `delete`).
 
-Fica como sugestão de implementação futura, possível para os alunos mais avançados: reescrever `/countryEdit` como três *endpoints* distintos, um por verbo HTTP (por exemplo, `PUT /country/{code}` para atualizar e `DELETE /country/{code}` para remover), aproximando a API de um desenho REST mais convencional.
+Esta solução funciona, mas afasta-se do desenho REST mais convencional: um único *endpoint* deixa de mapear diretamente para um recurso e um verbo, aproximando-se antes de um estilo *RPC* sobre HTTP. Numa API pensada para ser consumida por JavaScript — que pode emitir pedidos `PUT` e `DELETE` sem qualquer limitação (ver [Capítulo 8](cap08.qmd)) — a alternativa mais próxima do REST é reescrever esse *endpoint* como vários, um por verbo HTTP (por exemplo, `PUT /recurso/{id}` para atualizar e `DELETE /recurso/{id}` para remover).
 :::

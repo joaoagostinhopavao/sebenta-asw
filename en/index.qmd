@@ -36,9 +36,17 @@ The textbook is organised into three thematic blocks:
 3. **Web Services** — security and filters, and REST Web Services,
    including consuming an API from JavaScript in the browser
 
-The practical LABs (the same as ESIGELEC's, with a JavaScript "twist"
-specific to this course) are described in Appendix B of the Portuguese
-edition.
+The practical LABs (the same as ESIGELEC's, with a JavaScript front-office
+added in LAB6) are described in Appendices D1 to D6, with the development
+environment setup in Appendix C.
+
+## Source and Updates {.unnumbered}
+
+The content of this study guide is based on the course's official syllabus
+and on materials from ESIGELEC (Java EE slides and LABs) and UTAD (HTTP,
+HTML/CSS/Bootstrap, Servlets), organised and adapted for the 2026/2027
+academic year. The reference bibliography for the course is listed in each
+chapter and compiled in the `referencias.bib` file.
 
 ## How to Use This Textbook {.unnumbered}
 

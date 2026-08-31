@@ -1,0 +1,91 @@
+---
+title: "LAB3: AuthenticationFilter e Logout"
+author: "João Pavão"
+date: 2026-08-26
+lang: pt-PT
+---
+
+## LAB3: AuthenticationFilter e Logout {#sec-apD3-lab3}
+
+No [Apêndice E](apendiceD2.qmd), a verificação da sessão ficou escrita diretamente dentro da `CountryServlet`. Esta abordagem funciona, mas não escala bem: se houver dez *endpoints* protegidos, o mesmo bloco de código teria de ser copiado dez vezes. Neste LAB, essa lógica passa a estar centralizada num Filtro (`jakarta.servlet.Filter`, ver [Capítulo 6](cap06.qmd)), e acrescenta-se também um *endpoint* de *logout*.
+
+### Passo 3.1: Criar e Configurar o Filtro de Autenticação {#sec-apD3-passo1}
+
+1. Criar uma nova classe chamada `AuthenticationFilter`, no pacote `capitaisapi.filters`
+2. Esta classe deve implementar a interface `jakarta.servlet.Filter`
+3. Mapear o Filtro aos *endpoints* que se querem proteger, através da anotação `@WebFilter`:
+
+```java
+@WebFilter(urlPatterns = {"/country", "/capital"})
+public class AuthenticationFilter implements Filter {
+    // ...
+}
+```
+
+Note-se que este mapeamento é uma lista explícita de *URLs* protegidas — ao contrário de um padrão do tipo `/*` com exceções, aqui só os *endpoints* indicados em `urlPatterns` passam pelo Filtro. Sem a anotação `@WebFilter`, o Filtro fica definido como classe, mas nunca é executado pelo servidor.
+
+### Passo 3.2: Implementar a Lógica de Verificação no Filtro {#sec-apD3-passo2}
+
+O método a implementar é `doFilter(ServletRequest request, ServletResponse response, FilterChain chain)`. Os parâmetros chegam com o tipo genérico `ServletRequest`/`ServletResponse` — quando gerado automaticamente pelo Eclipse, pode aparecer com nomes genéricos como `arg0`, `arg1`, `arg2`, convém renomeá-los para algo mais claro. Antes de os usar, é preciso converter (*cast*) para os tipos HTTP:
+
+```java
+@Override
+public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+        throws IOException, ServletException {
+
+    HttpServletRequest httpRequest = (HttpServletRequest) request;
+    HttpServletResponse httpResponse = (HttpServletResponse) response;
+
+    HttpSession session = httpRequest.getSession(false);
+
+    if (session != null && session.getAttribute("UserName") != null) {
+        chain.doFilter(request, response);
+    } else {
+        httpResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        httpResponse.setContentType("application/json");
+        PrintWriter out = httpResponse.getWriter();
+        String jsonResponse = "{\"error\": \"Authentication required\"}";
+        out.print(jsonResponse);
+    }
+}
+```
+
+A chamada a `chain.doFilter(request, response)` é o que deixa o pedido continuar para a *Servlet* de destino — se a sessão não for válida, essa chamada não deve ser feita, e o Filtro responde diretamente com `403 FORBIDDEN`.
+
+### Passo 3.3: Remover a Verificação Manual da *Servlet* {#sec-apD3-passo3}
+
+Com o Filtro a tratar da autenticação, o bloco de verificação acrescentado no [Passo 2.6](apendiceD2.qmd#sec-apD2-passo6) deixa de ser necessário dentro da `CountryServlet`. Remover esse bloco: a *Servlet* volta a conter apenas a lógica própria do seu *endpoint*, sem preocupações de controlo de acesso.
+
+Esta separação — lógica de negócio na *Servlet*, controlo de acesso no Filtro — torna o código mais limpo e mais fácil de manter: para proteger um novo *endpoint*, basta acrescentar a sua *URL* a `urlPatterns` no [Passo 3.1](#sec-apD3-passo1), sem tocar em mais nenhum código.
+
+### Passo 3.4: Criar o *Endpoint* de *Logout* {#sec-apD3-passo4}
+
+1. Criar uma nova *Servlet* chamada `LogoutServlet`, no pacote `capitaisapi.servlets`, mapeada à *URL* `/logout`
+2. Implementar o método `doGet`:
+
+```java
+HttpSession session = request.getSession(false);
+
+if (session != null) {
+    session.invalidate();
+}
+
+response.setContentType("application/json");
+PrintWriter out = response.getWriter();
+String jsonResponse = "{\"message\": \"Logout OK\"}";
+out.print(jsonResponse);
+```
+
+`session.invalidate()` termina a sessão do lado do servidor — a partir deste momento, qualquer pedido posterior com o mesmo `JSESSIONID` (ver [Capítulo 5](cap05.qmd)) já não encontra uma sessão válida.
+
+### Passo 3.5: Teste Integrado {#sec-apD3-passo5}
+
+1. Aceder a `/country?countrycode=PT` sem fazer *login*. Resultado esperado: `HTTP 403`, `{"error": "Authentication required"}`
+2. Fazer *login* através de `login.html` ([Apêndice E](apendiceD2.qmd)) com `javaee` / `asw2026`. Resultado esperado: `HTTP 200` com a resposta de sucesso — e, nesta altura, confirmar (por exemplo, nas ferramentas de programador do *browser*) que foi criado automaticamente um *cookie* `JSESSIONID`
+3. Repetir o pedido a `/country?countrycode=PT`. Resultado esperado: `HTTP 200`, com os dados do país
+4. Aceder a `/logout`. Resultado esperado: `HTTP 200`, `{"message": "Logout OK"}`
+5. Repetir mais uma vez o pedido a `/country?countrycode=PT`. Resultado esperado: `HTTP 403` de novo — o *logout* invalidou a sessão
+
+### Conclusão {#sec-apD3-conclusao}
+
+A arquitetura da API fica agora mais modular: a autenticação continua concentrada no *endpoint* `/login`, mas a autorização — decidir se um determinado pedido pode ou não avançar — já não está espalhada pelas *Servlets*, e passa a estar centralizada num único Filtro. No [Apêndice G](apendiceD4.qmd), os dados fixos usados até aqui são substituídos por dados reais, guardados numa base de dados relacional.

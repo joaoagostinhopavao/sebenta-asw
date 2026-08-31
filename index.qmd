@@ -31,8 +31,9 @@ O texto está organizado em três blocos temáticos:
 3. **Web Services** — segurança e filtros, e Web Services REST, incluindo o
    consumo de uma API a partir de JavaScript no browser
 
-Os trabalhos práticos (os mesmos LABs do ESIGELEC, com um "twist" de
-JavaScript próprio desta UC) estão descritos no Apêndice B.
+Os trabalhos práticos (os mesmos LABs do ESIGELEC, com um front-office em
+JavaScript acrescentado no LAB6) estão descritos nos Apêndices D1 a D6, com
+a configuração do ambiente de desenvolvimento no Apêndice C.
 
 ## Fonte e atualização {.unnumbered}
 

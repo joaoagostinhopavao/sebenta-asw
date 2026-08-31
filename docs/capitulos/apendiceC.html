@@ -8,7 +8,7 @@
 
 <meta name="author" content="João Pavão">
 
-<title>Apêndice C — Código Completo: Páginas Estáticas “World Capitals” – Aplicações e Serviços Web</title>
+<title>Apêndice C — Configuração do Ambiente de Desenvolvimento – Aplicações e Serviços Web</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,40 +21,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -65,6 +31,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../capitulos/apendiceD1.html" rel="next">
 <link href="../capitulos/apendiceB.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -119,7 +86,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../capitulos/apendiceA.html">Apêndices</a></li><li class="breadcrumb-item"><a href="../capitulos/apendiceC.html"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Código Completo: Páginas Estáticas “World Capitals”</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../capitulos/apendiceA.html">Apêndices</a></li><li class="breadcrumb-item"><a href="../capitulos/apendiceC.html"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Configuração do Ambiente de Desenvolvimento</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Procurar" onclick="window.quartoOpenSearch();">
@@ -213,19 +180,55 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/apendiceA.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Configuração do Ambiente de Desenvolvimento</span></span></a>
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Código Completo: Páginas Estáticas “World Capitals”</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/apendiceB.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">LABs Práticos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Assinatura de Tokens JWT</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/apendiceC.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Código Completo: Páginas Estáticas “World Capitals”</span></span></a>
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Configuração do Ambiente de Desenvolvimento</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">LAB1: Primeiro Endpoint e DAO Simulado</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">LAB2: Login e Sessão</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">F</span>&nbsp; <span class="chapter-title">LAB3: AuthenticationFilter e Logout</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">G</span>&nbsp; <span class="chapter-title">LAB4: JDBC e CRUD Completo</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">H</span>&nbsp; <span class="chapter-title">LAB5 (Opcional): Autenticação Sem Estado com JWT</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">I</span>&nbsp; <span class="chapter-title">LAB6: O Front-Office em JavaScript</span></span></a>
   </div>
 </li>
       </ul>
@@ -241,20 +244,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#sec-apC-intro" id="toc-sec-apC-intro" class="nav-link active" data-scroll-target="#sec-apC-intro"><span class="header-section-number">C.1</span> Introdução</a></li>
-  <li><a href="#sec-apC-estrutura" id="toc-sec-apC-estrutura" class="nav-link" data-scroll-target="#sec-apC-estrutura"><span class="header-section-number">C.2</span> Estrutura Inicial do Projeto</a></li>
-  <li><a href="#sec-apC-index" id="toc-sec-apC-index" class="nav-link" data-scroll-target="#sec-apC-index"><span class="header-section-number">C.3</span> <code>index.html</code>: Listagem de Países</a></li>
-  <li><a href="#sec-apC-login" id="toc-sec-apC-login" class="nav-link" data-scroll-target="#sec-apC-login"><span class="header-section-number">C.4</span> <code>login.html</code>: Autenticação</a></li>
-  <li><a href="#sec-apC-capital" id="toc-sec-apC-capital" class="nav-link" data-scroll-target="#sec-apC-capital"><span class="header-section-number">C.5</span> <code>capital.html</code>: Consulta de Capital</a></li>
-  <li><a href="#sec-apC-paises-editar" id="toc-sec-apC-paises-editar" class="nav-link" data-scroll-target="#sec-apC-paises-editar"><span class="header-section-number">C.6</span> <code>paises-editar.html</code>: Gestão de Países</a></li>
+  <li><a href="#sec-apC-ferramentas" id="toc-sec-apC-ferramentas" class="nav-link" data-scroll-target="#sec-apC-ferramentas"><span class="header-section-number">C.2</span> As Ferramentas desta UC</a></li>
+  <li><a href="#sec-apC-obrigatorias" id="toc-sec-apC-obrigatorias" class="nav-link" data-scroll-target="#sec-apC-obrigatorias"><span class="header-section-number">C.3</span> Ferramentas Obrigatórias</a></li>
+  <li><a href="#sec-apC-confirmar" id="toc-sec-apC-confirmar" class="nav-link" data-scroll-target="#sec-apC-confirmar"><span class="header-section-number">C.4</span> Confirmar a Instalação</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../capitulos/apendiceA.html">Apêndices</a></li><li class="breadcrumb-item"><a href="../capitulos/apendiceC.html"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Código Completo: Páginas Estáticas “World Capitals”</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../capitulos/apendiceA.html">Apêndices</a></li><li class="breadcrumb-item"><a href="../capitulos/apendiceC.html"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Configuração do Ambiente de Desenvolvimento</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Apêndice C — Código Completo: Páginas Estáticas “World Capitals”</h1>
+<h1 class="title">Apêndice C — Configuração do Ambiente de Desenvolvimento</h1>
 </div>
 
 
@@ -285,265 +286,98 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="sec-apC-intro" class="level2" data-number="C.1">
 <h2 data-number="C.1" class="anchored" data-anchor-id="sec-apC-intro"><span class="header-section-number">C.1</span> Introdução</h2>
-<p>Este apêndice reúne, em ficheiros completos e autónomos, o código apresentado por partes no <a href="../capitulos/cap02.html">Capítulo 2</a>. Cada bloco abaixo é um ficheiro <code>.html</code> independente, pronto a copiar para um editor (VSCode ou WebStorm) e a abrir diretamente no <em>browser</em>, sem qualquer instalação ou configuração de servidor: o <em>Bootstrap</em> é carregado por <em>CDN</em>, e os dados apresentados estão fixos no próprio HTML.</p>
-<p>Este código serve dois propósitos:</p>
+<p>Este apêndice reúne, num único sítio, todas as ferramentas necessárias ao longo desta UC, com as respetivas ligações de instalação, documentação oficial e alternativas possíveis.</p>
+<p>As instruções e ligações abaixo aplicam-se a <strong>macOS, Windows e Linux</strong> por igual — todas as ferramentas listadas têm versão para os três sistemas. Onde um passo depender do sistema operativo, isso é assinalado explicitamente.</p>
+</section>
+<section id="sec-apC-ferramentas" class="level2" data-number="C.2">
+<h2 data-number="C.2" class="anchored" data-anchor-id="sec-apC-ferramentas"><span class="header-section-number">C.2</span> As Ferramentas desta UC</h2>
+<dl>
+<dt><strong>JDK — <em>Java Development Kit</em></strong></dt>
+<dd>
+A linguagem Java e as ferramentas para a compilar e correr — a base de tudo o resto. Recomenda-se a distribuição <a href="https://adoptium.net/">Eclipse Temurin</a>, gratuita, de código aberto e mantida pela <em>Eclipse Adoptium Working Group</em>, disponível para os três sistemas operativos. Alternativa: o <a href="https://www.oracle.com/java/technologies/downloads/">Oracle JDK</a>, oficial da Oracle, com licença diferente. Ajuda: documentação oficial em <a href="https://docs.oracle.com/en/java/" class="uri">https://docs.oracle.com/en/java/</a>; para dúvidas concretas, a <em>tag</em> <a href="https://stackoverflow.com/questions/tagged/java"><code>java</code> no Stack Overflow</a> é o primeiro sítio a consultar.
+</dd>
+<dt><strong>Apache Tomcat</strong></dt>
+<dd>
+O <em>Servlet Container</em> usado ao longo de toda a UC (ver <a href="../capitulos/cap04.html">Capítulo 4</a>), para instalar do lado do servidor. Disponível em <a href="https://tomcat.apache.org/" class="uri">https://tomcat.apache.org/</a>. Alternativas existem (<em>Jetty</em>, ou um servidor de aplicações completo como o <em>WildFly</em>, já referido no <a href="../capitulos/cap04.html">Capítulo 4</a>), mas não são usadas nesta UC. Ajuda: documentação oficial em <a href="https://tomcat.apache.org/tomcat-10.1-doc/" class="uri">https://tomcat.apache.org/tomcat-10.1-doc/</a>; a <em>tag</em> <a href="https://stackoverflow.com/questions/tagged/tomcat"><code>tomcat</code> no Stack Overflow</a> para dúvidas concretas.
+</dd>
+<dt><strong>Eclipse IDE for Enterprise Java and Web Developers</strong></dt>
+<dd>
+O ambiente de desenvolvimento (IDE) usado para o código do lado do servidor (Servlets, Filtros, JSP), com suporte integrado para projetos Jakarta EE e para instalar e gerir o Tomcat diretamente a partir do próprio Eclipse. Descarrega-se em <a href="https://www.eclipse.org/downloads/packages/" class="uri">https://www.eclipse.org/downloads/packages/</a> (escolher exatamente o pacote “Enterprise Java and Web Developers”, não o pacote genérico “Eclipse IDE for Java Developers”, que não inclui as ferramentas de projeto Web). Alternativa: <a href="https://www.jetbrains.com/idea/download/">IntelliJ IDEA</a> (a edição <em>Ultimate</em>, paga — mas gratuita para estudantes mediante registo — inclui suporte Jakarta EE equivalente; a edição <em>Community</em>, gratuita, não inclui). Ajuda: <a href="https://www.eclipse.org/forums/">Fórum da comunidade Eclipse</a>; a <em>tag</em> <a href="https://stackoverflow.com/questions/tagged/eclipse"><code>eclipse</code> no Stack Overflow</a>.
+</dd>
+<dt><strong>VSCode ou WebStorm</strong></dt>
+<dd>
+Um editor mais leve, usado para o código do lado do cliente (HTML, CSS, JavaScript, ver <a href="../capitulos/cap02.html">Capítulo 2</a> e <a href="../capitulos/cap08.html">Capítulo 8</a>) — não precisa de nenhum dos dois suportes específicos de Java EE do Eclipse. O <a href="https://code.visualstudio.com/">VSCode</a> é gratuito e multiplataforma; o <a href="https://www.jetbrains.com/webstorm/">WebStorm</a> é pago (gratuito para estudantes mediante registo), mais especializado em JavaScript. Ajuda: documentação oficial em <a href="https://code.visualstudio.com/docs" class="uri">https://code.visualstudio.com/docs</a> (VSCode) ou <a href="https://www.jetbrains.com/webstorm/documentation/" class="uri">https://www.jetbrains.com/webstorm/documentation/</a> (WebStorm).
+</dd>
+<dt><strong>Um <em>browser</em> moderno, com ferramentas de programador</strong></dt>
+<dd>
+Chrome, Firefox e Edge servem igualmente bem; o importante é saber abrir as suas ferramentas de programador (<em>DevTools</em>, tecla <code>F12</code> ou <code>Cmd+Option+I</code> no Mac), usadas ao longo da UC para inspecionar pedidos de rede e depurar JavaScript (ver <a href="../capitulos/cap08.html">Capítulo 8</a>). Ajuda: <a href="https://developer.chrome.com/docs/devtools/" class="uri">https://developer.chrome.com/docs/devtools/</a> (Chrome) ou <a href="https://firefox-source-docs.mozilla.org/devtools-user/" class="uri">https://firefox-source-docs.mozilla.org/devtools-user/</a> (Firefox).
+</dd>
+<dt><strong>Um cliente REST</strong></dt>
+<dd>
+Uma ferramenta para construir pedidos HTTP à mão (<code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE</code>, com cabeçalhos e corpo à escolha), útil para testar diretamente uma API REST (ver <a href="../capitulos/cap07.html">Capítulo 7</a>) sem depender de nenhum <em>front-office</em> já feito. Um simples <code>GET</code> pode sempre testar-se diretamente no <em>browser</em>, mas <code>POST</code>, <code>PUT</code> e <code>DELETE</code> já não. O <a href="https://www.postman.com/downloads/">Postman</a> é o mais conhecido; o <a href="https://insomnia.rest/download">Insomnia</a> é uma alternativa mais leve; quem preferir a linha de comandos pode usar o <code>curl</code>, já incluído por omissão em macOS, em Linux, e em Windows 10 e posterior.
+</dd>
+<dt><strong>MySQL ou MariaDB</strong></dt>
+<dd>
+O sistema de gestão de base de dados relacional usado a partir do LAB4 (<a href="../capitulos/apendiceD4.html">Apêndice G</a>), quando os dados fixos usados nos LABs anteriores são substituídos por dados reais, acedidos através de JDBC. O <a href="https://dev.mysql.com/downloads/">MySQL Community Server</a> é a edição gratuita e de código aberto do MySQL; o <a href="https://mariadb.org/download/">MariaDB Server</a> é uma alternativa também gratuita e de código aberto, diretamente compatível (mesmo protocolo de rede, mesmo <em>driver</em> JDBC) — qualquer um dos dois serve para esta UC. Para criar e gerir as tabelas sem depender só da linha de comandos, é útil instalar também um cliente gráfico, como o <a href="https://dev.mysql.com/downloads/workbench/">MySQL Workbench</a> ou o <a href="https://dbeaver.io/">DBeaver</a> (multiplataforma, compatível com MySQL e MariaDB). Ajuda: documentação oficial em <a href="https://dev.mysql.com/doc/" class="uri">https://dev.mysql.com/doc/</a> (MySQL) ou <a href="https://mariadb.com/kb/en/documentation/" class="uri">https://mariadb.com/kb/en/documentation/</a> (MariaDB); as <em>tags</em> <a href="https://stackoverflow.com/questions/tagged/mysql"><code>mysql</code></a> e <a href="https://stackoverflow.com/questions/tagged/mariadb"><code>mariadb</code></a> no Stack Overflow para dúvidas concretas.
+</dd>
+</dl>
+</section>
+<section id="sec-apC-obrigatorias" class="level2" data-number="C.3">
+<h2 data-number="C.3" class="anchored" data-anchor-id="sec-apC-obrigatorias"><span class="header-section-number">C.3</span> Ferramentas Obrigatórias</h2>
+<p>Da lista anterior, o que é, de facto, indispensável nesta UC:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Ferramenta</th>
+<th>Versão mínima</th>
+<th>Nota</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>JDK</td>
+<td>17 (LTS)</td>
+<td>Exigido pelo Tomcat 10.1 (ver abaixo)</td>
+</tr>
+<tr class="even">
+<td>Apache Tomcat</td>
+<td>10.1.x</td>
+<td><strong>Não usar a série 9.x</strong>: o código desta UC usa o pacote <code>jakarta.servlet.*</code> (ver <a href="../capitulos/cap06.html">Capítulo 6</a>), que só existe a partir do Tomcat 10</td>
+</tr>
+<tr class="odd">
+<td>Eclipse IDE for Enterprise Java and Web Developers</td>
+<td>Qualquer versão atual</td>
+<td>Ou o equivalente IntelliJ IDEA Ultimate</td>
+</tr>
+<tr class="even">
+<td>VSCode ou WebStorm</td>
+<td>Qualquer versão atual</td>
+<td>Para o código do lado do cliente</td>
+</tr>
+<tr class="odd">
+<td>Um <em>browser</em> moderno</td>
+<td>Qualquer versão atual</td>
+<td>Com <em>DevTools</em></td>
+</tr>
+<tr class="even">
+<td>MySQL ou MariaDB</td>
+<td>Qualquer versão atual</td>
+<td>Só necessário a partir do LAB4 (<a href="../capitulos/apendiceD4.html">Apêndice G</a>)</td>
+</tr>
+</tbody>
+</table>
+<p>Um cliente REST (Postman, Insomnia, ou <code>curl</code>) é recomendado, mas não estritamente obrigatório: os primeiros LABs podem testar-se com formulários HTML simples (ver <a href="../capitulos/cap03.html">Capítulo 3</a>), sem qualquer cliente dedicado.</p>
+</section>
+<section id="sec-apC-confirmar" class="level2" data-number="C.4">
+<h2 data-number="C.4" class="anchored" data-anchor-id="sec-apC-confirmar"><span class="header-section-number">C.4</span> Confirmar a Instalação</h2>
+<p>Antes de avançar para qualquer LAB, vale a pena confirmar que cada ferramenta está corretamente instalada:</p>
 <ul>
-<li>Em aula, como demonstração imediata: copiar, abrir no <em>browser</em>, e ter desde logo um pequeno sítio Web funcional a navegar</li>
-<li>Nos LABs práticos (<a href="../capitulos/apendiceB.html">Apêndice B</a>), como <em>boilerplate</em>: o ponto de partida ao qual se acrescenta o JavaScript necessário para consumir a API REST, sem reescrever HTML de raiz</li>
+<li><strong>JDK</strong>: num terminal, <code>java -version</code> deve devolver o número de versão instalado, sem nenhum erro</li>
+<li><strong>Apache Tomcat</strong>: arrancar o Tomcat e visitar <code>http://localhost:8080</code> num <em>browser</em> deve mostrar a página de boas-vindas por omissão do próprio Tomcat — não é preciso, nem se espera, nenhum código próprio instalado ainda</li>
+<li><strong>Eclipse</strong>: deve abrir sem erros, e o menu de criação de projeto deve incluir a opção “Dynamic Web Project” — sinal de que o suporte Jakarta EE está corretamente instalado</li>
+<li><strong>VSCode ou WebStorm</strong>: deve abrir sem erros; criar um ficheiro <code>.html</code> qualquer e abri-lo diretamente no <em>browser</em> confirma que o essencial já funciona, sem precisar de nenhum servidor</li>
+<li><strong>MySQL ou MariaDB</strong>: arrancar o servidor e ligar-se a ele — por linha de comandos (<code>mysql -u root -p</code>) ou através do cliente gráfico escolhido — deve funcionar sem erros; não é preciso ainda nenhuma base de dados própria criada, só confirmar que o servidor responde</li>
 </ul>
-<p>Os quatro ficheiros partilham a mesma barra de navegação e devem ser guardados na mesma pasta, para que as ligações entre eles funcionem: <code>index.html</code>, <code>login.html</code>, <code>capital.html</code> e <code>paises-editar.html</code>.</p>
-</section>
-<section id="sec-apC-estrutura" class="level2" data-number="C.2">
-<h2 data-number="C.2" class="anchored" data-anchor-id="sec-apC-estrutura"><span class="header-section-number">C.2</span> Estrutura Inicial do Projeto</h2>
-<p>Antes de copiar o código, cria-se a estrutura de pastas que vai acompanhar o projeto ao longo de toda a UC, dos ficheiros estáticos deste apêndice até ao <em>front-office</em> em JavaScript que os LABs práticos lhe vão acrescentar:</p>
-<ol type="1">
-<li>Criar uma pasta de projeto (por exemplo, <code>world-capitals/</code>)</li>
-<li>Dentro dela, colocar os quatro ficheiros <code>.html</code> deste apêndice</li>
-<li>Criar três subpastas, ainda vazias: <code>css/</code>, <code>js/</code> e <code>assets/</code></li>
-</ol>
-<pre><code>world-capitals/
-├── index.html
-├── login.html
-├── capital.html
-├── paises-editar.html
-├── css/
-├── js/
-└── assets/</code></pre>
-<ul>
-<li><code>css/</code>: guarda folhas de estilo ligadas às páginas <code>html</code>. Pode também conter ajustes ao <em>Bootstrap</em> carregado por <em>CDN</em>, por exemplo um <code>custom.css</code> com ajustes visuais específicos desta aplicação. Um só ficheiro de estilos pode ser usado para todas as páginas, ou cada página pode ter o seu.</li>
-<li><code>js/</code>: para guardar os ficheiros <em>javascript</em>. Fica vazia por agora; é aqui que, nos LABs práticos, vai entrar o código <code>fetch()</code> que liga estas páginas à API REST</li>
-<li><code>assets/</code>: imagens, ícones ou outros ficheiros estáticos de que a aplicação venha a precisar</li>
-</ul>
-<p>Esta estrutura não é exigida pelo <em>browser</em>: um ficheiro <code>.html</code> isolado, aberto diretamente, já funciona, como se pode confirmar nas secções seguintes. É, no entanto, a organização que qualquer projeto Web real acaba por adotar, e vale a pena te-lo em consideração desde já.</p>
-</section>
-<section id="sec-apC-index" class="level2" data-number="C.3">
-<h2 data-number="C.3" class="anchored" data-anchor-id="sec-apC-index"><span class="header-section-number">C.3</span> <code>index.html</code>: Listagem de Países</h2>
-<p>A página seguinte tem uma barra de navegação no topo e uma tabela com países. O Bootstrap é carregado por CDN.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb2-1"><a href="#cb2-1"></a><span class="dt">&lt;!DOCTYPE</span> html<span class="dt">&gt;</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="dt">&lt;</span><span class="kw">html</span><span class="ot"> lang</span><span class="op">=</span><span class="st">"pt"</span><span class="dt">&gt;</span></span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="dt">&lt;</span><span class="kw">head</span><span class="dt">&gt;</span></span>
-<span id="cb2-4"><a href="#cb2-4"></a>  <span class="dt">&lt;</span><span class="kw">meta</span><span class="ot"> charset</span><span class="op">=</span><span class="st">"UTF-8"</span><span class="dt">&gt;</span></span>
-<span id="cb2-5"><a href="#cb2-5"></a>  <span class="dt">&lt;</span><span class="kw">meta</span><span class="ot"> name</span><span class="op">=</span><span class="st">"viewport"</span><span class="ot"> content</span><span class="op">=</span><span class="st">"width=device-width, initial-scale=1"</span><span class="dt">&gt;</span></span>
-<span id="cb2-6"><a href="#cb2-6"></a>  <span class="dt">&lt;</span><span class="kw">title</span><span class="dt">&gt;</span>World Capitals<span class="dt">&lt;/</span><span class="kw">title</span><span class="dt">&gt;</span></span>
-<span id="cb2-7"><a href="#cb2-7"></a>  <span class="dt">&lt;</span><span class="kw">link</span><span class="ot"> href</span><span class="op">=</span><span class="st">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"</span><span class="ot"> rel</span><span class="op">=</span><span class="st">"stylesheet"</span><span class="dt">&gt;</span></span>
-<span id="cb2-8"><a href="#cb2-8"></a><span class="dt">&lt;/</span><span class="kw">head</span><span class="dt">&gt;</span></span>
-<span id="cb2-9"><a href="#cb2-9"></a><span class="dt">&lt;</span><span class="kw">body</span><span class="dt">&gt;</span></span>
-<span id="cb2-10"><a href="#cb2-10"></a>  <span class="dt">&lt;</span><span class="kw">nav</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar navbar-expand-md bg-light border-bottom"</span><span class="dt">&gt;</span></span>
-<span id="cb2-11"><a href="#cb2-11"></a>    <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"container"</span><span class="dt">&gt;</span></span>
-<span id="cb2-12"><a href="#cb2-12"></a>      <span class="dt">&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar-brand"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"index.html"</span><span class="dt">&gt;</span>World Capitals<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;</span></span>
-<span id="cb2-13"><a href="#cb2-13"></a>      <span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar-toggler"</span><span class="ot"> type</span><span class="op">=</span><span class="st">"button"</span><span class="ot"> data-bs-toggle</span><span class="op">=</span><span class="st">"collapse"</span><span class="ot"> data-bs-target</span><span class="op">=</span><span class="st">"#nav1"</span><span class="dt">&gt;</span></span>
-<span id="cb2-14"><a href="#cb2-14"></a>        <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar-toggler-icon"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span></span>
-<span id="cb2-15"><a href="#cb2-15"></a>      <span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
-<span id="cb2-16"><a href="#cb2-16"></a>      <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> id</span><span class="op">=</span><span class="st">"nav1"</span><span class="ot"> class</span><span class="op">=</span><span class="st">"collapse navbar-collapse"</span><span class="dt">&gt;</span></span>
-<span id="cb2-17"><a href="#cb2-17"></a>        <span class="dt">&lt;</span><span class="kw">ul</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar-nav ms-auto gap-2"</span><span class="dt">&gt;</span></span>
-<span id="cb2-18"><a href="#cb2-18"></a>          <span class="dt">&lt;</span><span class="kw">li</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-item"</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-link active"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"index.html"</span><span class="dt">&gt;</span>Países<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
-<span id="cb2-19"><a href="#cb2-19"></a>          <span class="dt">&lt;</span><span class="kw">li</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-item"</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-link"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"capital.html"</span><span class="dt">&gt;</span>Consultar Capital<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
-<span id="cb2-20"><a href="#cb2-20"></a>          <span class="dt">&lt;</span><span class="kw">li</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-item"</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-link"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"paises-editar.html"</span><span class="dt">&gt;</span>Gerir Países<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
-<span id="cb2-21"><a href="#cb2-21"></a>          <span class="dt">&lt;</span><span class="kw">li</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-item"</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-link"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"login.html"</span><span class="dt">&gt;</span>Entrar<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
-<span id="cb2-22"><a href="#cb2-22"></a>        <span class="dt">&lt;/</span><span class="kw">ul</span><span class="dt">&gt;</span></span>
-<span id="cb2-23"><a href="#cb2-23"></a>      <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb2-24"><a href="#cb2-24"></a>    <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb2-25"><a href="#cb2-25"></a>  <span class="dt">&lt;/</span><span class="kw">nav</span><span class="dt">&gt;</span></span>
-<span id="cb2-26"><a href="#cb2-26"></a></span>
-<span id="cb2-27"><a href="#cb2-27"></a>  <span class="dt">&lt;</span><span class="kw">main</span><span class="ot"> class</span><span class="op">=</span><span class="st">"container my-4"</span><span class="dt">&gt;</span></span>
-<span id="cb2-28"><a href="#cb2-28"></a>    <span class="dt">&lt;</span><span class="kw">h1</span><span class="ot"> class</span><span class="op">=</span><span class="st">"display-6"</span><span class="dt">&gt;</span>Países<span class="dt">&lt;/</span><span class="kw">h1</span><span class="dt">&gt;</span></span>
-<span id="cb2-29"><a href="#cb2-29"></a>    <span class="dt">&lt;</span><span class="kw">table</span><span class="ot"> class</span><span class="op">=</span><span class="st">"table table-striped"</span><span class="dt">&gt;</span></span>
-<span id="cb2-30"><a href="#cb2-30"></a>      <span class="dt">&lt;</span><span class="kw">thead</span><span class="dt">&gt;</span></span>
-<span id="cb2-31"><a href="#cb2-31"></a>        <span class="dt">&lt;</span><span class="kw">tr</span><span class="dt">&gt;&lt;</span><span class="kw">th</span><span class="dt">&gt;</span>Código<span class="dt">&lt;/</span><span class="kw">th</span><span class="dt">&gt;&lt;</span><span class="kw">th</span><span class="dt">&gt;</span>País<span class="dt">&lt;/</span><span class="kw">th</span><span class="dt">&gt;&lt;</span><span class="kw">th</span><span class="dt">&gt;</span>Capital<span class="dt">&lt;/</span><span class="kw">th</span><span class="dt">&gt;&lt;/</span><span class="kw">tr</span><span class="dt">&gt;</span></span>
-<span id="cb2-32"><a href="#cb2-32"></a>      <span class="dt">&lt;/</span><span class="kw">thead</span><span class="dt">&gt;</span></span>
-<span id="cb2-33"><a href="#cb2-33"></a>      <span class="dt">&lt;</span><span class="kw">tbody</span><span class="dt">&gt;</span></span>
-<span id="cb2-34"><a href="#cb2-34"></a>        <span class="dt">&lt;</span><span class="kw">tr</span><span class="dt">&gt;&lt;</span><span class="kw">td</span><span class="dt">&gt;</span>PT<span class="dt">&lt;/</span><span class="kw">td</span><span class="dt">&gt;&lt;</span><span class="kw">td</span><span class="dt">&gt;</span>Portugal<span class="dt">&lt;/</span><span class="kw">td</span><span class="dt">&gt;&lt;</span><span class="kw">td</span><span class="dt">&gt;</span>Lisboa<span class="dt">&lt;/</span><span class="kw">td</span><span class="dt">&gt;&lt;/</span><span class="kw">tr</span><span class="dt">&gt;</span></span>
-<span id="cb2-35"><a href="#cb2-35"></a>        <span class="dt">&lt;</span><span class="kw">tr</span><span class="dt">&gt;&lt;</span><span class="kw">td</span><span class="dt">&gt;</span>FR<span class="dt">&lt;/</span><span class="kw">td</span><span class="dt">&gt;&lt;</span><span class="kw">td</span><span class="dt">&gt;</span>França<span class="dt">&lt;/</span><span class="kw">td</span><span class="dt">&gt;&lt;</span><span class="kw">td</span><span class="dt">&gt;</span>Paris<span class="dt">&lt;/</span><span class="kw">td</span><span class="dt">&gt;&lt;/</span><span class="kw">tr</span><span class="dt">&gt;</span></span>
-<span id="cb2-36"><a href="#cb2-36"></a>        <span class="dt">&lt;</span><span class="kw">tr</span><span class="dt">&gt;&lt;</span><span class="kw">td</span><span class="dt">&gt;</span>EN<span class="dt">&lt;/</span><span class="kw">td</span><span class="dt">&gt;&lt;</span><span class="kw">td</span><span class="dt">&gt;</span>Reino Unido<span class="dt">&lt;/</span><span class="kw">td</span><span class="dt">&gt;&lt;</span><span class="kw">td</span><span class="dt">&gt;</span>Londres<span class="dt">&lt;/</span><span class="kw">td</span><span class="dt">&gt;&lt;/</span><span class="kw">tr</span><span class="dt">&gt;</span></span>
-<span id="cb2-37"><a href="#cb2-37"></a>      <span class="dt">&lt;/</span><span class="kw">tbody</span><span class="dt">&gt;</span></span>
-<span id="cb2-38"><a href="#cb2-38"></a>    <span class="dt">&lt;/</span><span class="kw">table</span><span class="dt">&gt;</span></span>
-<span id="cb2-39"><a href="#cb2-39"></a>  <span class="dt">&lt;/</span><span class="kw">main</span><span class="dt">&gt;</span></span>
-<span id="cb2-40"><a href="#cb2-40"></a></span>
-<span id="cb2-41"><a href="#cb2-41"></a>  <span class="dt">&lt;</span><span class="kw">script</span><span class="ot"> src</span><span class="op">=</span><span class="st">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"</span><span class="dt">&gt;&lt;/</span><span class="kw">script</span><span class="dt">&gt;</span></span>
-<span id="cb2-42"><a href="#cb2-42"></a><span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span>
-<span id="cb2-43"><a href="#cb2-43"></a><span class="dt">&lt;/</span><span class="kw">html</span><span class="dt">&gt;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="sec-apC-login" class="level2" data-number="C.4">
-<h2 data-number="C.4" class="anchored" data-anchor-id="sec-apC-login"><span class="header-section-number">C.4</span> <code>login.html</code>: Autenticação</h2>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb3-1"><a href="#cb3-1"></a><span class="dt">&lt;!DOCTYPE</span> html<span class="dt">&gt;</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="dt">&lt;</span><span class="kw">html</span><span class="ot"> lang</span><span class="op">=</span><span class="st">"pt"</span><span class="dt">&gt;</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="dt">&lt;</span><span class="kw">head</span><span class="dt">&gt;</span></span>
-<span id="cb3-4"><a href="#cb3-4"></a>  <span class="dt">&lt;</span><span class="kw">meta</span><span class="ot"> charset</span><span class="op">=</span><span class="st">"UTF-8"</span><span class="dt">&gt;</span></span>
-<span id="cb3-5"><a href="#cb3-5"></a>  <span class="dt">&lt;</span><span class="kw">meta</span><span class="ot"> name</span><span class="op">=</span><span class="st">"viewport"</span><span class="ot"> content</span><span class="op">=</span><span class="st">"width=device-width, initial-scale=1"</span><span class="dt">&gt;</span></span>
-<span id="cb3-6"><a href="#cb3-6"></a>  <span class="dt">&lt;</span><span class="kw">title</span><span class="dt">&gt;</span>World Capitals — Entrar<span class="dt">&lt;/</span><span class="kw">title</span><span class="dt">&gt;</span></span>
-<span id="cb3-7"><a href="#cb3-7"></a>  <span class="dt">&lt;</span><span class="kw">link</span><span class="ot"> href</span><span class="op">=</span><span class="st">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"</span><span class="ot"> rel</span><span class="op">=</span><span class="st">"stylesheet"</span><span class="dt">&gt;</span></span>
-<span id="cb3-8"><a href="#cb3-8"></a><span class="dt">&lt;/</span><span class="kw">head</span><span class="dt">&gt;</span></span>
-<span id="cb3-9"><a href="#cb3-9"></a><span class="dt">&lt;</span><span class="kw">body</span><span class="dt">&gt;</span></span>
-<span id="cb3-10"><a href="#cb3-10"></a>  <span class="dt">&lt;</span><span class="kw">nav</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar navbar-expand-md bg-light border-bottom"</span><span class="dt">&gt;</span></span>
-<span id="cb3-11"><a href="#cb3-11"></a>    <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"container"</span><span class="dt">&gt;</span></span>
-<span id="cb3-12"><a href="#cb3-12"></a>      <span class="dt">&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar-brand"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"index.html"</span><span class="dt">&gt;</span>World Capitals<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;</span></span>
-<span id="cb3-13"><a href="#cb3-13"></a>      <span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar-toggler"</span><span class="ot"> type</span><span class="op">=</span><span class="st">"button"</span><span class="ot"> data-bs-toggle</span><span class="op">=</span><span class="st">"collapse"</span><span class="ot"> data-bs-target</span><span class="op">=</span><span class="st">"#nav1"</span><span class="dt">&gt;</span></span>
-<span id="cb3-14"><a href="#cb3-14"></a>        <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar-toggler-icon"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span></span>
-<span id="cb3-15"><a href="#cb3-15"></a>      <span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
-<span id="cb3-16"><a href="#cb3-16"></a>      <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> id</span><span class="op">=</span><span class="st">"nav1"</span><span class="ot"> class</span><span class="op">=</span><span class="st">"collapse navbar-collapse"</span><span class="dt">&gt;</span></span>
-<span id="cb3-17"><a href="#cb3-17"></a>        <span class="dt">&lt;</span><span class="kw">ul</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar-nav ms-auto gap-2"</span><span class="dt">&gt;</span></span>
-<span id="cb3-18"><a href="#cb3-18"></a>          <span class="dt">&lt;</span><span class="kw">li</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-item"</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-link"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"index.html"</span><span class="dt">&gt;</span>Países<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
-<span id="cb3-19"><a href="#cb3-19"></a>          <span class="dt">&lt;</span><span class="kw">li</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-item"</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-link"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"capital.html"</span><span class="dt">&gt;</span>Consultar Capital<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
-<span id="cb3-20"><a href="#cb3-20"></a>          <span class="dt">&lt;</span><span class="kw">li</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-item"</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-link"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"paises-editar.html"</span><span class="dt">&gt;</span>Gerir Países<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
-<span id="cb3-21"><a href="#cb3-21"></a>          <span class="dt">&lt;</span><span class="kw">li</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-item"</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-link active"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"login.html"</span><span class="dt">&gt;</span>Entrar<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
-<span id="cb3-22"><a href="#cb3-22"></a>        <span class="dt">&lt;/</span><span class="kw">ul</span><span class="dt">&gt;</span></span>
-<span id="cb3-23"><a href="#cb3-23"></a>      <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb3-24"><a href="#cb3-24"></a>    <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb3-25"><a href="#cb3-25"></a>  <span class="dt">&lt;/</span><span class="kw">nav</span><span class="dt">&gt;</span></span>
-<span id="cb3-26"><a href="#cb3-26"></a></span>
-<span id="cb3-27"><a href="#cb3-27"></a>  <span class="dt">&lt;</span><span class="kw">main</span><span class="ot"> class</span><span class="op">=</span><span class="st">"container my-4"</span><span class="dt">&gt;</span></span>
-<span id="cb3-28"><a href="#cb3-28"></a>    <span class="dt">&lt;</span><span class="kw">h1</span><span class="ot"> class</span><span class="op">=</span><span class="st">"display-6"</span><span class="dt">&gt;</span>Entrar<span class="dt">&lt;/</span><span class="kw">h1</span><span class="dt">&gt;</span></span>
-<span id="cb3-29"><a href="#cb3-29"></a>    <span class="dt">&lt;</span><span class="kw">form</span><span class="ot"> class</span><span class="op">=</span><span class="st">"row g-3 col-lg-6"</span><span class="ot"> method</span><span class="op">=</span><span class="st">"POST"</span><span class="ot"> action</span><span class="op">=</span><span class="st">"/login"</span><span class="dt">&gt;</span></span>
-<span id="cb3-30"><a href="#cb3-30"></a>      <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"col-12"</span><span class="dt">&gt;</span></span>
-<span id="cb3-31"><a href="#cb3-31"></a>        <span class="dt">&lt;</span><span class="kw">label</span><span class="ot"> for</span><span class="op">=</span><span class="st">"user"</span><span class="ot"> class</span><span class="op">=</span><span class="st">"form-label"</span><span class="dt">&gt;</span>Utilizador<span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
-<span id="cb3-32"><a href="#cb3-32"></a>        <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> id</span><span class="op">=</span><span class="st">"user"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"user"</span><span class="ot"> type</span><span class="op">=</span><span class="st">"text"</span><span class="ot"> class</span><span class="op">=</span><span class="st">"form-control"</span><span class="dt">&gt;</span></span>
-<span id="cb3-33"><a href="#cb3-33"></a>      <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb3-34"><a href="#cb3-34"></a>      <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"col-12"</span><span class="dt">&gt;</span></span>
-<span id="cb3-35"><a href="#cb3-35"></a>        <span class="dt">&lt;</span><span class="kw">label</span><span class="ot"> for</span><span class="op">=</span><span class="st">"pass"</span><span class="ot"> class</span><span class="op">=</span><span class="st">"form-label"</span><span class="dt">&gt;</span>Palavra-passe<span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
-<span id="cb3-36"><a href="#cb3-36"></a>        <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> id</span><span class="op">=</span><span class="st">"pass"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"pass"</span><span class="ot"> type</span><span class="op">=</span><span class="st">"password"</span><span class="ot"> class</span><span class="op">=</span><span class="st">"form-control"</span><span class="dt">&gt;</span></span>
-<span id="cb3-37"><a href="#cb3-37"></a>      <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb3-38"><a href="#cb3-38"></a>      <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"col-12"</span><span class="dt">&gt;</span></span>
-<span id="cb3-39"><a href="#cb3-39"></a>        <span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> class</span><span class="op">=</span><span class="st">"btn btn-primary"</span><span class="ot"> type</span><span class="op">=</span><span class="st">"submit"</span><span class="dt">&gt;</span>Entrar<span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
-<span id="cb3-40"><a href="#cb3-40"></a>      <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb3-41"><a href="#cb3-41"></a>    <span class="dt">&lt;/</span><span class="kw">form</span><span class="dt">&gt;</span></span>
-<span id="cb3-42"><a href="#cb3-42"></a>  <span class="dt">&lt;/</span><span class="kw">main</span><span class="dt">&gt;</span></span>
-<span id="cb3-43"><a href="#cb3-43"></a></span>
-<span id="cb3-44"><a href="#cb3-44"></a>  <span class="dt">&lt;</span><span class="kw">script</span><span class="ot"> src</span><span class="op">=</span><span class="st">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"</span><span class="dt">&gt;&lt;/</span><span class="kw">script</span><span class="dt">&gt;</span></span>
-<span id="cb3-45"><a href="#cb3-45"></a><span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span>
-<span id="cb3-46"><a href="#cb3-46"></a><span class="dt">&lt;/</span><span class="kw">html</span><span class="dt">&gt;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="sec-apC-capital" class="level2" data-number="C.5">
-<h2 data-number="C.5" class="anchored" data-anchor-id="sec-apC-capital"><span class="header-section-number">C.5</span> <code>capital.html</code>: Consulta de Capital</h2>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb4-1"><a href="#cb4-1"></a><span class="dt">&lt;!DOCTYPE</span> html<span class="dt">&gt;</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="dt">&lt;</span><span class="kw">html</span><span class="ot"> lang</span><span class="op">=</span><span class="st">"pt"</span><span class="dt">&gt;</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="dt">&lt;</span><span class="kw">head</span><span class="dt">&gt;</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a>  <span class="dt">&lt;</span><span class="kw">meta</span><span class="ot"> charset</span><span class="op">=</span><span class="st">"UTF-8"</span><span class="dt">&gt;</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a>  <span class="dt">&lt;</span><span class="kw">meta</span><span class="ot"> name</span><span class="op">=</span><span class="st">"viewport"</span><span class="ot"> content</span><span class="op">=</span><span class="st">"width=device-width, initial-scale=1"</span><span class="dt">&gt;</span></span>
-<span id="cb4-6"><a href="#cb4-6"></a>  <span class="dt">&lt;</span><span class="kw">title</span><span class="dt">&gt;</span>World Capitals — Consultar Capital<span class="dt">&lt;/</span><span class="kw">title</span><span class="dt">&gt;</span></span>
-<span id="cb4-7"><a href="#cb4-7"></a>  <span class="dt">&lt;</span><span class="kw">link</span><span class="ot"> href</span><span class="op">=</span><span class="st">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"</span><span class="ot"> rel</span><span class="op">=</span><span class="st">"stylesheet"</span><span class="dt">&gt;</span></span>
-<span id="cb4-8"><a href="#cb4-8"></a><span class="dt">&lt;/</span><span class="kw">head</span><span class="dt">&gt;</span></span>
-<span id="cb4-9"><a href="#cb4-9"></a><span class="dt">&lt;</span><span class="kw">body</span><span class="dt">&gt;</span></span>
-<span id="cb4-10"><a href="#cb4-10"></a>  <span class="dt">&lt;</span><span class="kw">nav</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar navbar-expand-md bg-light border-bottom"</span><span class="dt">&gt;</span></span>
-<span id="cb4-11"><a href="#cb4-11"></a>    <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"container"</span><span class="dt">&gt;</span></span>
-<span id="cb4-12"><a href="#cb4-12"></a>      <span class="dt">&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar-brand"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"index.html"</span><span class="dt">&gt;</span>World Capitals<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;</span></span>
-<span id="cb4-13"><a href="#cb4-13"></a>      <span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar-toggler"</span><span class="ot"> type</span><span class="op">=</span><span class="st">"button"</span><span class="ot"> data-bs-toggle</span><span class="op">=</span><span class="st">"collapse"</span><span class="ot"> data-bs-target</span><span class="op">=</span><span class="st">"#nav1"</span><span class="dt">&gt;</span></span>
-<span id="cb4-14"><a href="#cb4-14"></a>        <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar-toggler-icon"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span></span>
-<span id="cb4-15"><a href="#cb4-15"></a>      <span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
-<span id="cb4-16"><a href="#cb4-16"></a>      <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> id</span><span class="op">=</span><span class="st">"nav1"</span><span class="ot"> class</span><span class="op">=</span><span class="st">"collapse navbar-collapse"</span><span class="dt">&gt;</span></span>
-<span id="cb4-17"><a href="#cb4-17"></a>        <span class="dt">&lt;</span><span class="kw">ul</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar-nav ms-auto gap-2"</span><span class="dt">&gt;</span></span>
-<span id="cb4-18"><a href="#cb4-18"></a>          <span class="dt">&lt;</span><span class="kw">li</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-item"</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-link"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"index.html"</span><span class="dt">&gt;</span>Países<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
-<span id="cb4-19"><a href="#cb4-19"></a>          <span class="dt">&lt;</span><span class="kw">li</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-item"</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-link active"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"capital.html"</span><span class="dt">&gt;</span>Consultar Capital<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
-<span id="cb4-20"><a href="#cb4-20"></a>          <span class="dt">&lt;</span><span class="kw">li</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-item"</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-link"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"paises-editar.html"</span><span class="dt">&gt;</span>Gerir Países<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
-<span id="cb4-21"><a href="#cb4-21"></a>          <span class="dt">&lt;</span><span class="kw">li</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-item"</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-link"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"login.html"</span><span class="dt">&gt;</span>Entrar<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
-<span id="cb4-22"><a href="#cb4-22"></a>        <span class="dt">&lt;/</span><span class="kw">ul</span><span class="dt">&gt;</span></span>
-<span id="cb4-23"><a href="#cb4-23"></a>      <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb4-24"><a href="#cb4-24"></a>    <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb4-25"><a href="#cb4-25"></a>  <span class="dt">&lt;/</span><span class="kw">nav</span><span class="dt">&gt;</span></span>
-<span id="cb4-26"><a href="#cb4-26"></a></span>
-<span id="cb4-27"><a href="#cb4-27"></a>  <span class="dt">&lt;</span><span class="kw">main</span><span class="ot"> class</span><span class="op">=</span><span class="st">"container my-4"</span><span class="dt">&gt;</span></span>
-<span id="cb4-28"><a href="#cb4-28"></a>    <span class="dt">&lt;</span><span class="kw">h1</span><span class="ot"> class</span><span class="op">=</span><span class="st">"display-6"</span><span class="dt">&gt;</span>Consultar Capital<span class="dt">&lt;/</span><span class="kw">h1</span><span class="dt">&gt;</span></span>
-<span id="cb4-29"><a href="#cb4-29"></a>    <span class="dt">&lt;</span><span class="kw">form</span><span class="ot"> class</span><span class="op">=</span><span class="st">"row g-3 col-lg-6"</span><span class="ot"> method</span><span class="op">=</span><span class="st">"GET"</span><span class="ot"> action</span><span class="op">=</span><span class="st">"/capital"</span><span class="dt">&gt;</span></span>
-<span id="cb4-30"><a href="#cb4-30"></a>      <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"col-12"</span><span class="dt">&gt;</span></span>
-<span id="cb4-31"><a href="#cb4-31"></a>        <span class="dt">&lt;</span><span class="kw">label</span><span class="ot"> for</span><span class="op">=</span><span class="st">"countrycode"</span><span class="ot"> class</span><span class="op">=</span><span class="st">"form-label"</span><span class="dt">&gt;</span>Código do país<span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
-<span id="cb4-32"><a href="#cb4-32"></a>        <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> id</span><span class="op">=</span><span class="st">"countrycode"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"countrycode"</span><span class="ot"> type</span><span class="op">=</span><span class="st">"text"</span><span class="ot"> maxlength</span><span class="op">=</span><span class="st">"2"</span><span class="ot"> class</span><span class="op">=</span><span class="st">"form-control"</span><span class="dt">&gt;</span></span>
-<span id="cb4-33"><a href="#cb4-33"></a>      <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb4-34"><a href="#cb4-34"></a>      <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"col-12"</span><span class="dt">&gt;</span></span>
-<span id="cb4-35"><a href="#cb4-35"></a>        <span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> class</span><span class="op">=</span><span class="st">"btn btn-primary"</span><span class="ot"> type</span><span class="op">=</span><span class="st">"submit"</span><span class="dt">&gt;</span>Consultar<span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
-<span id="cb4-36"><a href="#cb4-36"></a>      <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb4-37"><a href="#cb4-37"></a>    <span class="dt">&lt;/</span><span class="kw">form</span><span class="dt">&gt;</span></span>
-<span id="cb4-38"><a href="#cb4-38"></a>  <span class="dt">&lt;/</span><span class="kw">main</span><span class="dt">&gt;</span></span>
-<span id="cb4-39"><a href="#cb4-39"></a></span>
-<span id="cb4-40"><a href="#cb4-40"></a>  <span class="dt">&lt;</span><span class="kw">script</span><span class="ot"> src</span><span class="op">=</span><span class="st">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"</span><span class="dt">&gt;&lt;/</span><span class="kw">script</span><span class="dt">&gt;</span></span>
-<span id="cb4-41"><a href="#cb4-41"></a><span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span>
-<span id="cb4-42"><a href="#cb4-42"></a><span class="dt">&lt;/</span><span class="kw">html</span><span class="dt">&gt;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="sec-apC-paises-editar" class="level2" data-number="C.6">
-<h2 data-number="C.6" class="anchored" data-anchor-id="sec-apC-paises-editar"><span class="header-section-number">C.6</span> <code>paises-editar.html</code>: Gestão de Países</h2>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb5-1"><a href="#cb5-1"></a><span class="dt">&lt;!DOCTYPE</span> html<span class="dt">&gt;</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="dt">&lt;</span><span class="kw">html</span><span class="ot"> lang</span><span class="op">=</span><span class="st">"pt"</span><span class="dt">&gt;</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a><span class="dt">&lt;</span><span class="kw">head</span><span class="dt">&gt;</span></span>
-<span id="cb5-4"><a href="#cb5-4"></a>  <span class="dt">&lt;</span><span class="kw">meta</span><span class="ot"> charset</span><span class="op">=</span><span class="st">"UTF-8"</span><span class="dt">&gt;</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a>  <span class="dt">&lt;</span><span class="kw">meta</span><span class="ot"> name</span><span class="op">=</span><span class="st">"viewport"</span><span class="ot"> content</span><span class="op">=</span><span class="st">"width=device-width, initial-scale=1"</span><span class="dt">&gt;</span></span>
-<span id="cb5-6"><a href="#cb5-6"></a>  <span class="dt">&lt;</span><span class="kw">title</span><span class="dt">&gt;</span>World Capitals — Gerir Países<span class="dt">&lt;/</span><span class="kw">title</span><span class="dt">&gt;</span></span>
-<span id="cb5-7"><a href="#cb5-7"></a>  <span class="dt">&lt;</span><span class="kw">link</span><span class="ot"> href</span><span class="op">=</span><span class="st">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"</span><span class="ot"> rel</span><span class="op">=</span><span class="st">"stylesheet"</span><span class="dt">&gt;</span></span>
-<span id="cb5-8"><a href="#cb5-8"></a><span class="dt">&lt;/</span><span class="kw">head</span><span class="dt">&gt;</span></span>
-<span id="cb5-9"><a href="#cb5-9"></a><span class="dt">&lt;</span><span class="kw">body</span><span class="dt">&gt;</span></span>
-<span id="cb5-10"><a href="#cb5-10"></a>  <span class="dt">&lt;</span><span class="kw">nav</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar navbar-expand-md bg-light border-bottom"</span><span class="dt">&gt;</span></span>
-<span id="cb5-11"><a href="#cb5-11"></a>    <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"container"</span><span class="dt">&gt;</span></span>
-<span id="cb5-12"><a href="#cb5-12"></a>      <span class="dt">&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar-brand"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"index.html"</span><span class="dt">&gt;</span>World Capitals<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;</span></span>
-<span id="cb5-13"><a href="#cb5-13"></a>      <span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar-toggler"</span><span class="ot"> type</span><span class="op">=</span><span class="st">"button"</span><span class="ot"> data-bs-toggle</span><span class="op">=</span><span class="st">"collapse"</span><span class="ot"> data-bs-target</span><span class="op">=</span><span class="st">"#nav1"</span><span class="dt">&gt;</span></span>
-<span id="cb5-14"><a href="#cb5-14"></a>        <span class="dt">&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar-toggler-icon"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;</span></span>
-<span id="cb5-15"><a href="#cb5-15"></a>      <span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
-<span id="cb5-16"><a href="#cb5-16"></a>      <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> id</span><span class="op">=</span><span class="st">"nav1"</span><span class="ot"> class</span><span class="op">=</span><span class="st">"collapse navbar-collapse"</span><span class="dt">&gt;</span></span>
-<span id="cb5-17"><a href="#cb5-17"></a>        <span class="dt">&lt;</span><span class="kw">ul</span><span class="ot"> class</span><span class="op">=</span><span class="st">"navbar-nav ms-auto gap-2"</span><span class="dt">&gt;</span></span>
-<span id="cb5-18"><a href="#cb5-18"></a>          <span class="dt">&lt;</span><span class="kw">li</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-item"</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-link"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"index.html"</span><span class="dt">&gt;</span>Países<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
-<span id="cb5-19"><a href="#cb5-19"></a>          <span class="dt">&lt;</span><span class="kw">li</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-item"</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-link"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"capital.html"</span><span class="dt">&gt;</span>Consultar Capital<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
-<span id="cb5-20"><a href="#cb5-20"></a>          <span class="dt">&lt;</span><span class="kw">li</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-item"</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-link active"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"paises-editar.html"</span><span class="dt">&gt;</span>Gerir Países<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
-<span id="cb5-21"><a href="#cb5-21"></a>          <span class="dt">&lt;</span><span class="kw">li</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-item"</span><span class="dt">&gt;&lt;</span><span class="kw">a</span><span class="ot"> class</span><span class="op">=</span><span class="st">"nav-link"</span><span class="ot"> href</span><span class="op">=</span><span class="st">"login.html"</span><span class="dt">&gt;</span>Entrar<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;&lt;/</span><span class="kw">li</span><span class="dt">&gt;</span></span>
-<span id="cb5-22"><a href="#cb5-22"></a>        <span class="dt">&lt;/</span><span class="kw">ul</span><span class="dt">&gt;</span></span>
-<span id="cb5-23"><a href="#cb5-23"></a>      <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb5-24"><a href="#cb5-24"></a>    <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb5-25"><a href="#cb5-25"></a>  <span class="dt">&lt;/</span><span class="kw">nav</span><span class="dt">&gt;</span></span>
-<span id="cb5-26"><a href="#cb5-26"></a></span>
-<span id="cb5-27"><a href="#cb5-27"></a>  <span class="dt">&lt;</span><span class="kw">main</span><span class="ot"> class</span><span class="op">=</span><span class="st">"container my-4"</span><span class="dt">&gt;</span></span>
-<span id="cb5-28"><a href="#cb5-28"></a>    <span class="dt">&lt;</span><span class="kw">h1</span><span class="ot"> class</span><span class="op">=</span><span class="st">"display-6"</span><span class="dt">&gt;</span>Gerir Países<span class="dt">&lt;/</span><span class="kw">h1</span><span class="dt">&gt;</span></span>
-<span id="cb5-29"><a href="#cb5-29"></a></span>
-<span id="cb5-30"><a href="#cb5-30"></a>    <span class="dt">&lt;</span><span class="kw">h2</span><span class="ot"> class</span><span class="op">=</span><span class="st">"h5 mt-4"</span><span class="dt">&gt;</span>Inserir país<span class="dt">&lt;/</span><span class="kw">h2</span><span class="dt">&gt;</span></span>
-<span id="cb5-31"><a href="#cb5-31"></a>    <span class="dt">&lt;</span><span class="kw">form</span><span class="ot"> class</span><span class="op">=</span><span class="st">"row g-3 col-lg-6"</span><span class="ot"> method</span><span class="op">=</span><span class="st">"POST"</span><span class="ot"> action</span><span class="op">=</span><span class="st">"/countryEdit"</span><span class="dt">&gt;</span></span>
-<span id="cb5-32"><a href="#cb5-32"></a>      <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"hidden"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"operation"</span><span class="ot"> value</span><span class="op">=</span><span class="st">"insert"</span><span class="dt">&gt;</span></span>
-<span id="cb5-33"><a href="#cb5-33"></a>      <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"col-12"</span><span class="dt">&gt;</span></span>
-<span id="cb5-34"><a href="#cb5-34"></a>        <span class="dt">&lt;</span><span class="kw">label</span><span class="ot"> for</span><span class="op">=</span><span class="st">"code-i"</span><span class="ot"> class</span><span class="op">=</span><span class="st">"form-label"</span><span class="dt">&gt;</span>Código<span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
-<span id="cb5-35"><a href="#cb5-35"></a>        <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> id</span><span class="op">=</span><span class="st">"code-i"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"code"</span><span class="ot"> type</span><span class="op">=</span><span class="st">"text"</span><span class="ot"> maxlength</span><span class="op">=</span><span class="st">"2"</span><span class="ot"> required class</span><span class="op">=</span><span class="st">"form-control"</span><span class="dt">&gt;</span></span>
-<span id="cb5-36"><a href="#cb5-36"></a>      <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb5-37"><a href="#cb5-37"></a>      <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"col-12"</span><span class="dt">&gt;</span></span>
-<span id="cb5-38"><a href="#cb5-38"></a>        <span class="dt">&lt;</span><span class="kw">label</span><span class="ot"> for</span><span class="op">=</span><span class="st">"name-i"</span><span class="ot"> class</span><span class="op">=</span><span class="st">"form-label"</span><span class="dt">&gt;</span>Nome<span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
-<span id="cb5-39"><a href="#cb5-39"></a>        <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> id</span><span class="op">=</span><span class="st">"name-i"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"name"</span><span class="ot"> type</span><span class="op">=</span><span class="st">"text"</span><span class="ot"> required class</span><span class="op">=</span><span class="st">"form-control"</span><span class="dt">&gt;</span></span>
-<span id="cb5-40"><a href="#cb5-40"></a>      <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb5-41"><a href="#cb5-41"></a>      <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"col-12"</span><span class="dt">&gt;</span></span>
-<span id="cb5-42"><a href="#cb5-42"></a>        <span class="dt">&lt;</span><span class="kw">label</span><span class="ot"> for</span><span class="op">=</span><span class="st">"capital-i"</span><span class="ot"> class</span><span class="op">=</span><span class="st">"form-label"</span><span class="dt">&gt;</span>Capital<span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
-<span id="cb5-43"><a href="#cb5-43"></a>        <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> id</span><span class="op">=</span><span class="st">"capital-i"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"capital"</span><span class="ot"> type</span><span class="op">=</span><span class="st">"text"</span><span class="ot"> required class</span><span class="op">=</span><span class="st">"form-control"</span><span class="dt">&gt;</span></span>
-<span id="cb5-44"><a href="#cb5-44"></a>      <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb5-45"><a href="#cb5-45"></a>      <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"col-12"</span><span class="dt">&gt;</span></span>
-<span id="cb5-46"><a href="#cb5-46"></a>        <span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> class</span><span class="op">=</span><span class="st">"btn btn-success"</span><span class="ot"> type</span><span class="op">=</span><span class="st">"submit"</span><span class="dt">&gt;</span>Inserir<span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
-<span id="cb5-47"><a href="#cb5-47"></a>      <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb5-48"><a href="#cb5-48"></a>    <span class="dt">&lt;/</span><span class="kw">form</span><span class="dt">&gt;</span></span>
-<span id="cb5-49"><a href="#cb5-49"></a></span>
-<span id="cb5-50"><a href="#cb5-50"></a>    <span class="dt">&lt;</span><span class="kw">h2</span><span class="ot"> class</span><span class="op">=</span><span class="st">"h5 mt-4"</span><span class="dt">&gt;</span>Atualizar país<span class="dt">&lt;/</span><span class="kw">h2</span><span class="dt">&gt;</span></span>
-<span id="cb5-51"><a href="#cb5-51"></a>    <span class="dt">&lt;</span><span class="kw">form</span><span class="ot"> class</span><span class="op">=</span><span class="st">"row g-3 col-lg-6"</span><span class="ot"> method</span><span class="op">=</span><span class="st">"POST"</span><span class="ot"> action</span><span class="op">=</span><span class="st">"/countryEdit"</span><span class="dt">&gt;</span></span>
-<span id="cb5-52"><a href="#cb5-52"></a>      <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"hidden"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"operation"</span><span class="ot"> value</span><span class="op">=</span><span class="st">"update"</span><span class="dt">&gt;</span></span>
-<span id="cb5-53"><a href="#cb5-53"></a>      <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"col-12"</span><span class="dt">&gt;</span></span>
-<span id="cb5-54"><a href="#cb5-54"></a>        <span class="dt">&lt;</span><span class="kw">label</span><span class="ot"> for</span><span class="op">=</span><span class="st">"code-u"</span><span class="ot"> class</span><span class="op">=</span><span class="st">"form-label"</span><span class="dt">&gt;</span>Código<span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
-<span id="cb5-55"><a href="#cb5-55"></a>        <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> id</span><span class="op">=</span><span class="st">"code-u"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"code"</span><span class="ot"> type</span><span class="op">=</span><span class="st">"text"</span><span class="ot"> maxlength</span><span class="op">=</span><span class="st">"2"</span><span class="ot"> required class</span><span class="op">=</span><span class="st">"form-control"</span><span class="dt">&gt;</span></span>
-<span id="cb5-56"><a href="#cb5-56"></a>      <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb5-57"><a href="#cb5-57"></a>      <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"col-12"</span><span class="dt">&gt;</span></span>
-<span id="cb5-58"><a href="#cb5-58"></a>        <span class="dt">&lt;</span><span class="kw">label</span><span class="ot"> for</span><span class="op">=</span><span class="st">"name-u"</span><span class="ot"> class</span><span class="op">=</span><span class="st">"form-label"</span><span class="dt">&gt;</span>Nome<span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
-<span id="cb5-59"><a href="#cb5-59"></a>        <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> id</span><span class="op">=</span><span class="st">"name-u"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"name"</span><span class="ot"> type</span><span class="op">=</span><span class="st">"text"</span><span class="ot"> required class</span><span class="op">=</span><span class="st">"form-control"</span><span class="dt">&gt;</span></span>
-<span id="cb5-60"><a href="#cb5-60"></a>      <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb5-61"><a href="#cb5-61"></a>      <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"col-12"</span><span class="dt">&gt;</span></span>
-<span id="cb5-62"><a href="#cb5-62"></a>        <span class="dt">&lt;</span><span class="kw">label</span><span class="ot"> for</span><span class="op">=</span><span class="st">"capital-u"</span><span class="ot"> class</span><span class="op">=</span><span class="st">"form-label"</span><span class="dt">&gt;</span>Capital<span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
-<span id="cb5-63"><a href="#cb5-63"></a>        <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> id</span><span class="op">=</span><span class="st">"capital-u"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"capital"</span><span class="ot"> type</span><span class="op">=</span><span class="st">"text"</span><span class="ot"> required class</span><span class="op">=</span><span class="st">"form-control"</span><span class="dt">&gt;</span></span>
-<span id="cb5-64"><a href="#cb5-64"></a>      <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb5-65"><a href="#cb5-65"></a>      <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"col-12"</span><span class="dt">&gt;</span></span>
-<span id="cb5-66"><a href="#cb5-66"></a>        <span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> class</span><span class="op">=</span><span class="st">"btn btn-warning"</span><span class="ot"> type</span><span class="op">=</span><span class="st">"submit"</span><span class="dt">&gt;</span>Atualizar<span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
-<span id="cb5-67"><a href="#cb5-67"></a>      <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb5-68"><a href="#cb5-68"></a>    <span class="dt">&lt;/</span><span class="kw">form</span><span class="dt">&gt;</span></span>
-<span id="cb5-69"><a href="#cb5-69"></a></span>
-<span id="cb5-70"><a href="#cb5-70"></a>    <span class="dt">&lt;</span><span class="kw">h2</span><span class="ot"> class</span><span class="op">=</span><span class="st">"h5 mt-4"</span><span class="dt">&gt;</span>Remover país<span class="dt">&lt;/</span><span class="kw">h2</span><span class="dt">&gt;</span></span>
-<span id="cb5-71"><a href="#cb5-71"></a>    <span class="dt">&lt;</span><span class="kw">form</span><span class="ot"> class</span><span class="op">=</span><span class="st">"row g-3 col-lg-6"</span><span class="ot"> method</span><span class="op">=</span><span class="st">"POST"</span><span class="ot"> action</span><span class="op">=</span><span class="st">"/countryEdit"</span><span class="dt">&gt;</span></span>
-<span id="cb5-72"><a href="#cb5-72"></a>      <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"hidden"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"operation"</span><span class="ot"> value</span><span class="op">=</span><span class="st">"delete"</span><span class="dt">&gt;</span></span>
-<span id="cb5-73"><a href="#cb5-73"></a>      <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"col-12"</span><span class="dt">&gt;</span></span>
-<span id="cb5-74"><a href="#cb5-74"></a>        <span class="dt">&lt;</span><span class="kw">label</span><span class="ot"> for</span><span class="op">=</span><span class="st">"code-d"</span><span class="ot"> class</span><span class="op">=</span><span class="st">"form-label"</span><span class="dt">&gt;</span>Código<span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
-<span id="cb5-75"><a href="#cb5-75"></a>        <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> id</span><span class="op">=</span><span class="st">"code-d"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"code"</span><span class="ot"> type</span><span class="op">=</span><span class="st">"text"</span><span class="ot"> maxlength</span><span class="op">=</span><span class="st">"2"</span><span class="ot"> required class</span><span class="op">=</span><span class="st">"form-control"</span><span class="dt">&gt;</span></span>
-<span id="cb5-76"><a href="#cb5-76"></a>      <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb5-77"><a href="#cb5-77"></a>      <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"col-12"</span><span class="dt">&gt;</span></span>
-<span id="cb5-78"><a href="#cb5-78"></a>        <span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> class</span><span class="op">=</span><span class="st">"btn btn-danger"</span><span class="ot"> type</span><span class="op">=</span><span class="st">"submit"</span><span class="dt">&gt;</span>Remover<span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
-<span id="cb5-79"><a href="#cb5-79"></a>      <span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb5-80"><a href="#cb5-80"></a>    <span class="dt">&lt;/</span><span class="kw">form</span><span class="dt">&gt;</span></span>
-<span id="cb5-81"><a href="#cb5-81"></a>  <span class="dt">&lt;/</span><span class="kw">main</span><span class="dt">&gt;</span></span>
-<span id="cb5-82"><a href="#cb5-82"></a></span>
-<span id="cb5-83"><a href="#cb5-83"></a>  <span class="dt">&lt;</span><span class="kw">script</span><span class="ot"> src</span><span class="op">=</span><span class="st">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"</span><span class="dt">&gt;&lt;/</span><span class="kw">script</span><span class="dt">&gt;</span></span>
-<span id="cb5-84"><a href="#cb5-84"></a><span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span>
-<span id="cb5-85"><a href="#cb5-85"></a><span class="dt">&lt;/</span><span class="kw">html</span><span class="dt">&gt;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
 </section>
@@ -1112,11 +946,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../capitulos/apendiceB.html" class="pagination-link" aria-label="LABs Práticos">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">LABs Práticos</span></span>
+      <a href="../capitulos/apendiceB.html" class="pagination-link" aria-label="Assinatura de Tokens JWT">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Assinatura de Tokens JWT</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="../capitulos/apendiceD1.html" class="pagination-link" aria-label="LAB1: Primeiro Endpoint e DAO Simulado">
+        <span class="nav-page-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">LAB1: Primeiro Endpoint e DAO Simulado</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

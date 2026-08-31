@@ -1,5 +1,5 @@
 ---
-title: "Código Completo: Páginas Estáticas \"World Capitals\""
+title: "Configuração do Ambiente de Desenvolvimento"
 author: "João Pavão"
 date: 2026-08-26
 lang: pt-PT
@@ -7,274 +7,54 @@ lang: pt-PT
 
 ## Introdução {#sec-apC-intro}
 
-Este apêndice reúne, em ficheiros completos e autónomos, o código apresentado por partes no [Capítulo 2](cap02.qmd). Cada bloco abaixo é um ficheiro `.html` independente, pronto a copiar para um editor (VSCode ou WebStorm) e a abrir diretamente no *browser*, sem qualquer instalação ou configuração de servidor: o *Bootstrap* é carregado por *CDN*, e os dados apresentados estão fixos no próprio HTML.
+Este apêndice reúne, num único sítio, todas as ferramentas necessárias ao longo desta UC, com as respetivas ligações de instalação, documentação oficial e alternativas possíveis.
 
-Este código serve dois propósitos:
+As instruções e ligações abaixo aplicam-se a **macOS, Windows e Linux** por igual — todas as ferramentas listadas têm versão para os três sistemas. Onde um passo depender do sistema operativo, isso é assinalado explicitamente.
 
-- Em aula, como demonstração imediata: copiar, abrir no *browser*, e ter desde logo um pequeno sítio Web funcional a navegar
-- Nos LABs práticos ([Apêndice B](apendiceB.qmd)), como *boilerplate*: o ponto de partida ao qual se acrescenta o JavaScript necessário para consumir a API REST, sem reescrever HTML de raiz
+## As Ferramentas desta UC {#sec-apC-ferramentas}
 
-Os quatro ficheiros partilham a mesma barra de navegação e devem ser guardados na mesma pasta, para que as ligações entre eles funcionem: `index.html`, `login.html`, `capital.html` e `paises-editar.html`.
+**JDK — *Java Development Kit***
+: A linguagem Java e as ferramentas para a compilar e correr — a base de tudo o resto. Recomenda-se a distribuição [Eclipse Temurin](https://adoptium.net/), gratuita, de código aberto e mantida pela *Eclipse Adoptium Working Group*, disponível para os três sistemas operativos. Alternativa: o [Oracle JDK](https://www.oracle.com/java/technologies/downloads/), oficial da Oracle, com licença diferente. Ajuda: documentação oficial em <https://docs.oracle.com/en/java/>; para dúvidas concretas, a *tag* [`java` no Stack Overflow](https://stackoverflow.com/questions/tagged/java) é o primeiro sítio a consultar.
 
-## Estrutura Inicial do Projeto {#sec-apC-estrutura}
+**Apache Tomcat**
+: O *Servlet Container* usado ao longo de toda a UC (ver [Capítulo 4](cap04.qmd)), para instalar do lado do servidor. Disponível em <https://tomcat.apache.org/>. Alternativas existem (*Jetty*, ou um servidor de aplicações completo como o *WildFly*, já referido no [Capítulo 4](cap04.qmd)), mas não são usadas nesta UC. Ajuda: documentação oficial em <https://tomcat.apache.org/tomcat-10.1-doc/>; a *tag* [`tomcat` no Stack Overflow](https://stackoverflow.com/questions/tagged/tomcat) para dúvidas concretas.
 
-Antes de copiar o código, cria-se a estrutura de pastas que vai acompanhar o projeto ao longo de toda a UC, dos ficheiros estáticos deste apêndice até ao *front-office* em JavaScript que os LABs práticos lhe vão acrescentar:
+**Eclipse IDE for Enterprise Java and Web Developers**
+: O ambiente de desenvolvimento (IDE) usado para o código do lado do servidor (Servlets, Filtros, JSP), com suporte integrado para projetos Jakarta EE e para instalar e gerir o Tomcat diretamente a partir do próprio Eclipse. Descarrega-se em <https://www.eclipse.org/downloads/packages/> (escolher exatamente o pacote "Enterprise Java and Web Developers", não o pacote genérico "Eclipse IDE for Java Developers", que não inclui as ferramentas de projeto Web). Alternativa: [IntelliJ IDEA](https://www.jetbrains.com/idea/download/) (a edição *Ultimate*, paga — mas gratuita para estudantes mediante registo — inclui suporte Jakarta EE equivalente; a edição *Community*, gratuita, não inclui). Ajuda: [Fórum da comunidade Eclipse](https://www.eclipse.org/forums/); a *tag* [`eclipse` no Stack Overflow](https://stackoverflow.com/questions/tagged/eclipse).
 
-1. Criar uma pasta de projeto (por exemplo, `world-capitals/`)
-2. Dentro dela, colocar os quatro ficheiros `.html` deste apêndice
-3. Criar três subpastas, ainda vazias: `css/`, `js/` e `assets/`
+**VSCode ou WebStorm**
+: Um editor mais leve, usado para o código do lado do cliente (HTML, CSS, JavaScript, ver [Capítulo 2](cap02.qmd) e [Capítulo 8](cap08.qmd)) — não precisa de nenhum dos dois suportes específicos de Java EE do Eclipse. O [VSCode](https://code.visualstudio.com/) é gratuito e multiplataforma; o [WebStorm](https://www.jetbrains.com/webstorm/) é pago (gratuito para estudantes mediante registo), mais especializado em JavaScript. Ajuda: documentação oficial em <https://code.visualstudio.com/docs> (VSCode) ou <https://www.jetbrains.com/webstorm/documentation/> (WebStorm).
 
-```
-world-capitals/
-├── index.html
-├── login.html
-├── capital.html
-├── paises-editar.html
-├── css/
-├── js/
-└── assets/
-```
+**Um *browser* moderno, com ferramentas de programador**
+: Chrome, Firefox e Edge servem igualmente bem; o importante é saber abrir as suas ferramentas de programador (*DevTools*, tecla `F12` ou `Cmd+Option+I` no Mac), usadas ao longo da UC para inspecionar pedidos de rede e depurar JavaScript (ver [Capítulo 8](cap08.qmd)). Ajuda: <https://developer.chrome.com/docs/devtools/> (Chrome) ou <https://firefox-source-docs.mozilla.org/devtools-user/> (Firefox).
 
-- `css/`: guarda folhas de estilo ligadas às páginas `html`. Pode também conter ajustes ao *Bootstrap* carregado por *CDN*, por exemplo um `custom.css` com ajustes visuais específicos desta aplicação. Um só ficheiro  de estilos pode ser usado para todas as páginas, ou cada página pode ter o seu.
-- `js/`: para guardar os ficheiros *javascript*. Fica vazia por agora; é aqui que, nos LABs práticos, vai entrar o código `fetch()` que liga estas páginas à API REST
-- `assets/`: imagens, ícones ou outros ficheiros estáticos de que a aplicação venha a precisar
+**Um cliente REST**
+: Uma ferramenta para construir pedidos HTTP à mão (`GET`, `POST`, `PUT`, `DELETE`, com cabeçalhos e corpo à escolha), útil para testar diretamente uma API REST (ver [Capítulo 7](cap07.qmd)) sem depender de nenhum *front-office* já feito. Um simples `GET` pode sempre testar-se diretamente no *browser*, mas `POST`, `PUT` e `DELETE` já não. O [Postman](https://www.postman.com/downloads/) é o mais conhecido; o [Insomnia](https://insomnia.rest/download) é uma alternativa mais leve; quem preferir a linha de comandos pode usar o `curl`, já incluído por omissão em macOS, em Linux, e em Windows 10 e posterior.
 
-Esta estrutura não é exigida pelo *browser*: um ficheiro `.html` isolado, aberto diretamente, já funciona, como se pode confirmar nas secções seguintes. É, no entanto, a organização que qualquer projeto Web real acaba por adotar, e vale a pena te-lo em consideração desde já.
+**MySQL ou MariaDB**
+: O sistema de gestão de base de dados relacional usado a partir do LAB4 ([Apêndice G](apendiceD4.qmd)), quando os dados fixos usados nos LABs anteriores são substituídos por dados reais, acedidos através de JDBC. O [MySQL Community Server](https://dev.mysql.com/downloads/) é a edição gratuita e de código aberto do MySQL; o [MariaDB Server](https://mariadb.org/download/) é uma alternativa também gratuita e de código aberto, diretamente compatível (mesmo protocolo de rede, mesmo *driver* JDBC) — qualquer um dos dois serve para esta UC. Para criar e gerir as tabelas sem depender só da linha de comandos, é útil instalar também um cliente gráfico, como o [MySQL Workbench](https://dev.mysql.com/downloads/workbench/) ou o [DBeaver](https://dbeaver.io/) (multiplataforma, compatível com MySQL e MariaDB). Ajuda: documentação oficial em <https://dev.mysql.com/doc/> (MySQL) ou <https://mariadb.com/kb/en/documentation/> (MariaDB); as *tags* [`mysql`](https://stackoverflow.com/questions/tagged/mysql) e [`mariadb`](https://stackoverflow.com/questions/tagged/mariadb) no Stack Overflow para dúvidas concretas.
 
-## `index.html`: Listagem de Países {#sec-apC-index}
+## Ferramentas Obrigatórias {#sec-apC-obrigatorias}
 
-A página seguinte tem uma barra de navegação no topo e uma tabela com países. O Bootstrap é carregado por CDN.
+Da lista anterior, o que é, de facto, indispensável nesta UC:
 
-```html
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>World Capitals</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-  <nav class="navbar navbar-expand-md bg-light border-bottom">
-    <div class="container">
-      <a class="navbar-brand" href="index.html">World Capitals</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav1">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div id="nav1" class="collapse navbar-collapse">
-        <ul class="navbar-nav ms-auto gap-2">
-          <li class="nav-item"><a class="nav-link active" href="index.html">Países</a></li>
-          <li class="nav-item"><a class="nav-link" href="capital.html">Consultar Capital</a></li>
-          <li class="nav-item"><a class="nav-link" href="paises-editar.html">Gerir Países</a></li>
-          <li class="nav-item"><a class="nav-link" href="login.html">Entrar</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+| Ferramenta | Versão mínima | Nota |
+|---|---|---|
+| JDK | 17 (LTS) | Exigido pelo Tomcat 10.1 (ver abaixo) |
+| Apache Tomcat | 10.1.x | **Não usar a série 9.x**: o código desta UC usa o pacote `jakarta.servlet.*` (ver [Capítulo 6](cap06.qmd)), que só existe a partir do Tomcat 10 |
+| Eclipse IDE for Enterprise Java and Web Developers | Qualquer versão atual | Ou o equivalente IntelliJ IDEA Ultimate |
+| VSCode ou WebStorm | Qualquer versão atual | Para o código do lado do cliente |
+| Um *browser* moderno | Qualquer versão atual | Com *DevTools* |
+| MySQL ou MariaDB | Qualquer versão atual | Só necessário a partir do LAB4 ([Apêndice G](apendiceD4.qmd)) |
 
-  <main class="container my-4">
-    <h1 class="display-6">Países</h1>
-    <table class="table table-striped">
-      <thead>
-        <tr><th>Código</th><th>País</th><th>Capital</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>PT</td><td>Portugal</td><td>Lisboa</td></tr>
-        <tr><td>FR</td><td>França</td><td>Paris</td></tr>
-        <tr><td>EN</td><td>Reino Unido</td><td>Londres</td></tr>
-      </tbody>
-    </table>
-  </main>
+Um cliente REST (Postman, Insomnia, ou `curl`) é recomendado, mas não estritamente obrigatório: os primeiros LABs podem testar-se com formulários HTML simples (ver [Capítulo 3](cap03.qmd)), sem qualquer cliente dedicado.
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
-```
+## Confirmar a Instalação {#sec-apC-confirmar}
 
-## `login.html`: Autenticação {#sec-apC-login}
+Antes de avançar para qualquer LAB, vale a pena confirmar que cada ferramenta está corretamente instalada:
 
-```html
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>World Capitals — Entrar</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-  <nav class="navbar navbar-expand-md bg-light border-bottom">
-    <div class="container">
-      <a class="navbar-brand" href="index.html">World Capitals</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav1">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div id="nav1" class="collapse navbar-collapse">
-        <ul class="navbar-nav ms-auto gap-2">
-          <li class="nav-item"><a class="nav-link" href="index.html">Países</a></li>
-          <li class="nav-item"><a class="nav-link" href="capital.html">Consultar Capital</a></li>
-          <li class="nav-item"><a class="nav-link" href="paises-editar.html">Gerir Países</a></li>
-          <li class="nav-item"><a class="nav-link active" href="login.html">Entrar</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
-  <main class="container my-4">
-    <h1 class="display-6">Entrar</h1>
-    <form class="row g-3 col-lg-6" method="POST" action="/login">
-      <div class="col-12">
-        <label for="user" class="form-label">Utilizador</label>
-        <input id="user" name="user" type="text" class="form-control">
-      </div>
-      <div class="col-12">
-        <label for="pass" class="form-label">Palavra-passe</label>
-        <input id="pass" name="pass" type="password" class="form-control">
-      </div>
-      <div class="col-12">
-        <button class="btn btn-primary" type="submit">Entrar</button>
-      </div>
-    </form>
-  </main>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
-```
-
-## `capital.html`: Consulta de Capital {#sec-apC-capital}
-
-```html
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>World Capitals — Consultar Capital</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-  <nav class="navbar navbar-expand-md bg-light border-bottom">
-    <div class="container">
-      <a class="navbar-brand" href="index.html">World Capitals</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav1">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div id="nav1" class="collapse navbar-collapse">
-        <ul class="navbar-nav ms-auto gap-2">
-          <li class="nav-item"><a class="nav-link" href="index.html">Países</a></li>
-          <li class="nav-item"><a class="nav-link active" href="capital.html">Consultar Capital</a></li>
-          <li class="nav-item"><a class="nav-link" href="paises-editar.html">Gerir Países</a></li>
-          <li class="nav-item"><a class="nav-link" href="login.html">Entrar</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
-  <main class="container my-4">
-    <h1 class="display-6">Consultar Capital</h1>
-    <form class="row g-3 col-lg-6" method="GET" action="/capital">
-      <div class="col-12">
-        <label for="countrycode" class="form-label">Código do país</label>
-        <input id="countrycode" name="countrycode" type="text" maxlength="2" class="form-control">
-      </div>
-      <div class="col-12">
-        <button class="btn btn-primary" type="submit">Consultar</button>
-      </div>
-    </form>
-  </main>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
-```
-
-## `paises-editar.html`: Gestão de Países {#sec-apC-paises-editar}
-
-```html
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>World Capitals — Gerir Países</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-  <nav class="navbar navbar-expand-md bg-light border-bottom">
-    <div class="container">
-      <a class="navbar-brand" href="index.html">World Capitals</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav1">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div id="nav1" class="collapse navbar-collapse">
-        <ul class="navbar-nav ms-auto gap-2">
-          <li class="nav-item"><a class="nav-link" href="index.html">Países</a></li>
-          <li class="nav-item"><a class="nav-link" href="capital.html">Consultar Capital</a></li>
-          <li class="nav-item"><a class="nav-link active" href="paises-editar.html">Gerir Países</a></li>
-          <li class="nav-item"><a class="nav-link" href="login.html">Entrar</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
-  <main class="container my-4">
-    <h1 class="display-6">Gerir Países</h1>
-
-    <h2 class="h5 mt-4">Inserir país</h2>
-    <form class="row g-3 col-lg-6" method="POST" action="/countryEdit">
-      <input type="hidden" name="operation" value="insert">
-      <div class="col-12">
-        <label for="code-i" class="form-label">Código</label>
-        <input id="code-i" name="code" type="text" maxlength="2" required class="form-control">
-      </div>
-      <div class="col-12">
-        <label for="name-i" class="form-label">Nome</label>
-        <input id="name-i" name="name" type="text" required class="form-control">
-      </div>
-      <div class="col-12">
-        <label for="capital-i" class="form-label">Capital</label>
-        <input id="capital-i" name="capital" type="text" required class="form-control">
-      </div>
-      <div class="col-12">
-        <button class="btn btn-success" type="submit">Inserir</button>
-      </div>
-    </form>
-
-    <h2 class="h5 mt-4">Atualizar país</h2>
-    <form class="row g-3 col-lg-6" method="POST" action="/countryEdit">
-      <input type="hidden" name="operation" value="update">
-      <div class="col-12">
-        <label for="code-u" class="form-label">Código</label>
-        <input id="code-u" name="code" type="text" maxlength="2" required class="form-control">
-      </div>
-      <div class="col-12">
-        <label for="name-u" class="form-label">Nome</label>
-        <input id="name-u" name="name" type="text" required class="form-control">
-      </div>
-      <div class="col-12">
-        <label for="capital-u" class="form-label">Capital</label>
-        <input id="capital-u" name="capital" type="text" required class="form-control">
-      </div>
-      <div class="col-12">
-        <button class="btn btn-warning" type="submit">Atualizar</button>
-      </div>
-    </form>
-
-    <h2 class="h5 mt-4">Remover país</h2>
-    <form class="row g-3 col-lg-6" method="POST" action="/countryEdit">
-      <input type="hidden" name="operation" value="delete">
-      <div class="col-12">
-        <label for="code-d" class="form-label">Código</label>
-        <input id="code-d" name="code" type="text" maxlength="2" required class="form-control">
-      </div>
-      <div class="col-12">
-        <button class="btn btn-danger" type="submit">Remover</button>
-      </div>
-    </form>
-  </main>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
-```
+- **JDK**: num terminal, `java -version` deve devolver o número de versão instalado, sem nenhum erro
+- **Apache Tomcat**: arrancar o Tomcat e visitar `http://localhost:8080` num *browser* deve mostrar a página de boas-vindas por omissão do próprio Tomcat — não é preciso, nem se espera, nenhum código próprio instalado ainda
+- **Eclipse**: deve abrir sem erros, e o menu de criação de projeto deve incluir a opção "Dynamic Web Project" — sinal de que o suporte Jakarta EE está corretamente instalado
+- **VSCode ou WebStorm**: deve abrir sem erros; criar um ficheiro `.html` qualquer e abri-lo diretamente no *browser* confirma que o essencial já funciona, sem precisar de nenhum servidor
+- **MySQL ou MariaDB**: arrancar o servidor e ligar-se a ele — por linha de comandos (`mysql -u root -p`) ou através do cliente gráfico escolhido — deve funcionar sem erros; não é preciso ainda nenhuma base de dados própria criada, só confirmar que o servidor responde

@@ -214,19 +214,55 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/apendiceA.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Configuração do Ambiente de Desenvolvimento</span></span></a>
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Código Completo: Páginas Estáticas “World Capitals”</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/apendiceB.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">LABs Práticos</span></span></a>
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Assinatura de Tokens JWT</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../capitulos/apendiceC.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Código Completo: Páginas Estáticas “World Capitals”</span></span></a>
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Configuração do Ambiente de Desenvolvimento</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">LAB1: Primeiro Endpoint e DAO Simulado</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">LAB2: Login e Sessão</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">F</span>&nbsp; <span class="chapter-title">LAB3: AuthenticationFilter e Logout</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">G</span>&nbsp; <span class="chapter-title">LAB4: JDBC e CRUD Completo</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">H</span>&nbsp; <span class="chapter-title">LAB5 (Opcional): Autenticação Sem Estado com JWT</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../capitulos/apendiceD6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">I</span>&nbsp; <span class="chapter-title">LAB6: O Front-Office em JavaScript</span></span></a>
   </div>
 </li>
       </ul>
@@ -297,16 +333,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="sec-05-cookies" class="level2" data-number="5.2">
 <h2 data-number="5.2" class="anchored" data-anchor-id="sec-05-cookies"><span class="header-section-number">5.2</span> <em>Cookies</em></h2>
-<p>Um <em>cookie</em> é um par chave/valor guardado no <em>browser</em>. Quando o servidor envia um <em>cookie</em>, espera que o cliente o devolva em todos os pedidos HTTP seguintes, dirigidos ao mesmo domínio.</p>
+<p>Um <em>cookie</em> é um par chave/valor guardado no <em>browser</em>. Quando o servidor envia um <em>cookie</em>, espera que o cliente o devolva em todos os pedidos HTTP seguintes, dirigidos ao mesmo domínio, implementando deste modo um mecanismo de identificação que se sobrepõe ao estado <code>stateless</code> do HTTP.</p>
 <p>Distinguem-se dois tipos, consoante a sua persistência:</p>
 <ul>
-<li><strong><em>Session cookies</em></strong>: mantidos pelo cliente apenas durante a sessão de navegação (<code>setMaxAge(-1)</code>)</li>
-<li><strong><em>Permanent cookies</em></strong>: guardados de forma persistente, com um tempo de vida definido (<code>setMaxAge(60*60*24*30)</code> para 30 dias, por exemplo)</li>
+<li><strong><em>Session cookies</em></strong>: mantidos pelo cliente apenas durante uma sessão de navegação (<code>setMaxAge(-1)</code>). Enquanto não se fechar a sessão, o cliente continua a identificar-se através do <em>cookie</em>. A partir do momento em que se fecha a sessão (por <em>logout</em> ou fechando o <em>browser</em>) o <em>cookie</em> é destruido.</li>
+<li><strong><em>Permanent cookies</em></strong>: guardados de forma persistente, com um tempo de vida definido (<code>setMaxAge(60*60*24*30)</code> - o tempo é expresso em segundos, neste caso para 30 dias).</li>
 </ul>
 <p>Criar um <em>cookie</em>:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb1-1"><a href="#cb1-1"></a>Cookie cookie <span class="op">=</span> <span class="kw">new</span> <span class="fu">Cookie</span><span class="op">(</span><span class="st">"userName"</span><span class="op">,</span> <span class="st">"Pedro"</span><span class="op">);</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a>cookie<span class="op">.</span><span class="fu">setMaxAge</span><span class="op">(-</span><span class="dv">1</span><span class="op">);</span> <span class="co">// session cookie</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a>response<span class="op">.</span><span class="fu">addCookie</span><span class="op">(</span>cookie<span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-3"><a href="#cb1-3"></a>response<span class="op">.</span><span class="fu">addCookie</span><span class="op">(</span>cookie<span class="op">);</span> <span class="co">// o cookie é adicionado à resposta e enviado ao cliente</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Ler um <em>cookie</em> recebido num pedido:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb2-1"><a href="#cb2-1"></a>Cookie<span class="op">[]</span> cookies <span class="op">=</span> request<span class="op">.</span><span class="fu">getCookies</span><span class="op">();</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="bu">String</span> user <span class="op">=</span> <span class="kw">null</span><span class="op">;</span></span>
@@ -340,7 +376,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="sec-05-autenticacao-sessao" class="level2" data-number="5.4">
 <h2 data-number="5.4" class="anchored" data-anchor-id="sec-05-autenticacao-sessao"><span class="header-section-number">5.4</span> Autenticação Baseada em Sessão</h2>
-<p>Juntando os dois mecanismos anteriores, obtém-se o padrão clássico de autenticação por sessão, usado no LAB2 desta UC (ver <a href="../capitulos/apendiceB.html">Apêndice B</a>). Depois de validar as credenciais, a <code>LoginServlet</code> cria uma sessão e guarda nela o identificador do utilizador:</p>
+<p>Juntando os dois mecanismos anteriores, obtém-se o padrão clássico de autenticação por sessão. Depois de validar as credenciais, a <code>LoginServlet</code> cria uma sessão e guarda nela o identificador do utilizador:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb5-1"><a href="#cb5-1"></a><span class="at">@WebServlet</span><span class="op">(</span><span class="st">"/login"</span><span class="op">)</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a><span class="kw">public</span> <span class="kw">class</span> LoginServlet <span class="kw">extends</span> HttpServlet <span class="op">{</span></span>
 <span id="cb5-3"><a href="#cb5-3"></a>    <span class="kw">protected</span> <span class="dt">void</span> <span class="fu">doPost</span><span class="op">(</span>HttpServletRequest request<span class="op">,</span> HttpServletResponse response<span class="op">)</span></span>
@@ -360,6 +396,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-17"><a href="#cb5-17"></a>        <span class="op">}</span></span>
 <span id="cb5-18"><a href="#cb5-18"></a>    <span class="op">}</span></span>
 <span id="cb5-19"><a href="#cb5-19"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Note-se que <code>dao</code> é uma instância de um <em>Data Access Object</em> (DAO) — um objeto dedicado ao acesso a dados, já referido no <a href="../capitulos/cap04.html">Capítulo 4</a> — responsável, neste caso, por validar as credenciais recebidas: tipicamente consulta uma base de dados de utilizadores, e devolve <code>true</code> ou <code>false</code> consoante o <code>user</code>/<code>pass</code> sejam válidos ou não.</p>
 <p>Qualquer <em>endpoint</em> protegido verifica, no início do seu próprio <code>doGet()</code> ou <code>doPost()</code>, se existe uma sessão válida com esse atributo:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb6-1"><a href="#cb6-1"></a>HttpSession session <span class="op">=</span> request<span class="op">.</span><span class="fu">getSession</span><span class="op">(</span><span class="kw">false</span><span class="op">);</span></span>
 <span id="cb6-2"><a href="#cb6-2"></a><span class="cf">if</span> <span class="op">(</span>session <span class="op">==</span> <span class="kw">null</span> <span class="op">||</span> session<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"UserName"</span><span class="op">)</span> <span class="op">==</span> <span class="kw">null</span><span class="op">)</span> <span class="op">{</span></span>
@@ -373,7 +410,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="sec-05-mvc-jsp" class="level2" data-number="5.5">
 <h2 data-number="5.5" class="anchored" data-anchor-id="sec-05-mvc-jsp"><span class="header-section-number">5.5</span> O Padrão MVC com <em>Servlet</em> e JSP</h2>
-<p>O <a href="../capitulos/cap01.html">Capítulo 1</a> apresentou o padrão MVC a nível conceptual, e o <a href="../capitulos/cap04.html">Capítulo 4</a> mostrou como uma <em>Servlet</em> funciona como Controller. Falta a peça final: a View.</p>
+<p>O <a href="../capitulos/cap01.html">Capítulo 1</a> apresentou o padrão MVC a nível conceptual, e o <a href="../capitulos/cap04.html">Capítulo 4</a> mostrou como uma <em>Servlet</em> funciona como Controller. As páginas construídas no <a href="../capitulos/cap02.html">Capítulo 2</a> já desempenham o papel de View, mas são estáticas: o seu conteúdo não muda consoante o pedido. Esta secção mostra uma forma alternativa de construir a View — desta vez gerada dinamicamente do lado do servidor, a partir dos dados que o Controller lhe entrega.</p>
 <div id="fig-05-mvc-geral" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-05-mvc-geral-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -388,7 +425,7 @@ Figura&nbsp;5.1: O modelo geral do MVC, aplicável a qualquer interface (não s�
 <p>A <em>Servlet</em> liga-se à JSP através de um <code>RequestDispatcher</code>: coloca os dados a mostrar num atributo do pedido, e encaminha (<em>forward</em>) o próprio pedido para a página:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb8-1"><a href="#cb8-1"></a>request<span class="op">.</span><span class="fu">setAttribute</span><span class="op">(</span><span class="st">"user"</span><span class="op">,</span> user<span class="op">);</span></span>
 <span id="cb8-2"><a href="#cb8-2"></a>request<span class="op">.</span><span class="fu">getRequestDispatcher</span><span class="op">(</span><span class="st">"/home.jsp"</span><span class="op">).</span><span class="fu">forward</span><span class="op">(</span>request<span class="op">,</span> response<span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Uma JSP é um documento de texto que mistura dois tipos de conteúdo: HTML estático e elementos de <em>script</em> dinâmico. Na primeira vez que é pedida, o <em>Servlet Container</em> converte-a automaticamente numa classe <em>Servlet</em>, que passa a comportar-se, dali em diante, exatamente como qualquer outra <em>Servlet</em>.</p>
+<p>Uma JSP é um documento de texto que mistura dois tipos de conteúdo: HTML estático e elementos de <em>script</em> dinâmico. Na primeira vez que é pedida, o <em>Servlet Container</em> converte-a automaticamente numa classe <em>Servlet</em>, que passa a comportar-se, dali em diante, exatamente como qualquer outra <em>Servlet</em>, no papel de <code>Controller</code>.</p>
 </section>
 <section id="sec-05-exemplo-jsp" class="level2" data-number="5.6">
 <h2 data-number="5.6" class="anchored" data-anchor-id="sec-05-exemplo-jsp"><span class="header-section-number">5.6</span> Um Exemplo Simples de JSP</h2>

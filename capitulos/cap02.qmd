@@ -388,7 +388,7 @@ A tabela seguinte compara estes *frameworks* pela abordagem que seguem e pela fa
 
 ## Exercício: as Páginas Estáticas da Aplicação "World Capitals" {#sec-02-world-capitals}
 
-Aplicando o que foi apresentado nas secções anteriores, constroem-se agora as páginas visuais da aplicação usada ao longo dos LABs práticos (ver [Apêndice B](apendiceB.qmd)): uma API que serve informação sobre países e as respetivas capitais. Nesta fase, as páginas são inteiramente estáticas, em HTML/CSS/Bootstrap, sem qualquer JavaScript: os dados apresentados são fixos no próprio HTML, e os formulários ainda não estão ligados a nenhum servidor. É esse o trabalho reservado aos LABs, que se limitarão a acrescentar `fetch()` a este código já pronto.
+Aplicando o que foi apresentado nas secções anteriores, constroem-se agora as páginas visuais da aplicação usada ao longo dos LABs práticos (ver [Apêndice D](apendiceD1.qmd) e seguintes): uma API que serve informação sobre países e as respetivas capitais. Nesta fase, as páginas são inteiramente estáticas, em HTML/CSS/Bootstrap, sem qualquer JavaScript: os dados apresentados são fixos no próprio HTML, e os formulários ainda não estão ligados a nenhum servidor. É esse o trabalho reservado aos LABs, que se limitarão a acrescentar `fetch()` a este código já pronto.
 
 Todas as páginas partilham a mesma barra de navegação:
 
@@ -424,4 +424,4 @@ A partir desta *navbar* comum, constroem-se quatro páginas:
 
 Estas quatro páginas, ligadas entre si pela barra de navegação comum, constituem já um pequeno sítio Web completo e funcional, mesmo sem qualquer lógica do lado do servidor: é possível navegar entre elas, preencher os formulários e submetê-los. O que falta, ainda, é haver um servidor a responder a esses pedidos, e é isso que a matéria dos capítulos seguintes vai fornecer.
 
-O código completo e autónomo das quatro páginas, pronto a copiar para um editor e a abrir diretamente no *browser*, está reunido no [Apêndice C](apendiceC.qmd).
+O código completo e autónomo das quatro páginas, pronto a copiar para um editor e a abrir diretamente no *browser*, está reunido no [Apêndice A](apendiceA.qmd).
