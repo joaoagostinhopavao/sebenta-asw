@@ -24,7 +24,6 @@ book:
     - capitulos/cap06.qmd
     - capitulos/cap07.qmd
     - capitulos/cap08.qmd
-    - references.qmd
 
   appendices:
     - capitulos/apendiceA.qmd
@@ -63,6 +62,78 @@ format:
     code-tools: false
     code-line-numbers: true
     fig-align: center
+
+  pdf:
+    documentclass: scrbook
+    classoption: [oneside]
+    papersize: a4
+    fontsize: 11pt
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-line-numbers: true
+    colorlinks: true
+    linkcolor: "NavyBlue"
+    urlcolor: "NavyBlue"
+    geometry:
+      - top=2.5cm
+      - bottom=2.5cm
+      - left=3cm
+      - right=2.5cm
+    include-in-header:
+      text: |
+        \AtBeginDocument{\input{assets/cover.tex}}
+        \usepackage{booktabs}
+        \usepackage{longtable}
+        \usepackage{array}
+        \usepackage{multirow}
+        \usepackage{amssymb}
+        \usepackage{amsmath}
+        \usepackage{caption}
+        \captionsetup{font=small, labelfont=bf}
+        \usepackage{xcolor}
+        \usepackage{tikz}
+        \usepackage{framed}
+        \definecolor{httpmsgbg}{HTML}{f2f3f4}
+        \definecolor{httpmsgborder}{HTML}{c3cacd}
+        \makeatletter
+        \def\FrameCommand{\fboxsep=8pt\fcolorbox{httpmsgborder}{httpmsgbg}}
+        \makeatother
+        \newenvironment{httpmsg}{%
+          \small\ttfamily
+          \begin{framed}
+        }{%
+          \end{framed}
+        }
+        \definecolor{coverDark}{HTML}{0a1420}
+        \definecolor{coverAccent}{HTML}{0e6e8c}
+        \definecolor{coverLight}{HTML}{4dd0e1}
+        \definecolor{chapbg}{HTML}{dcf2f5}
+        \definecolor{chapnum}{HTML}{0a4a5c}
+        \definecolor{chaptxt}{HTML}{0a1a20}
+        \KOMAoption{chapterprefix}{false}
+        \makeatletter
+        \renewcommand{\chapterlinesformat}[3]{%
+          {\setlength{\fboxsep}{12pt}%
+          \noindent\colorbox{chapbg}{%
+            \parbox[c][5cm]{\dimexpr\linewidth-2\fboxsep\relax}{%
+              \def\@chnum{#2}%
+              \ifx\@chnum\@empty%
+                {\raggedright\hyphenpenalty=10000\exhyphenpenalty=10000\color{chaptxt}\huge\bfseries #3}%
+              \else%
+                \begin{minipage}[c]{3cm}%
+                  \centering\color{chapnum}\fontsize{104}{104}\selectfont\bfseries #2%
+                \end{minipage}%
+                \hspace{10pt}%
+                \begin{minipage}[c]{\dimexpr\linewidth-2\fboxsep-3cm-10pt\relax}%
+                  \raggedright\hyphenpenalty=10000\exhyphenpenalty=10000\color{chaptxt}\fontsize{20}{24}\selectfont\bfseries #3%
+                \end{minipage}%
+              \fi%
+            }%
+          }}%
+        }
+        \makeatother
+    pdf-engine: lualatex
 
 execute:
   echo: true

@@ -31,12 +31,13 @@ Sebenta-ASW/
 │   ├── css/custom.css    # Estilos personalizados (paleta azul-petróleo)
 │   ├── images/           # Imagens e figuras (heroes/, capa/Web/, capa/PDF/ — por preencher)
 │   └── cover.tex          # Capa PDF (TikZ, sem foto ainda)
-├── en/                    # Versão em inglês (projecto Quarto próprio, só HTML)
+├── en/                    # Versão em inglês (projecto Quarto próprio, HTML + PDF)
 │   ├── _quarto.yml
 │   ├── index.qmd
-│   ├── references.qmd
+│   ├── references.qmd     # não listado em chapters: (sem citações reais ainda — ver nota abaixo)
 │   ├── capitulos/         # cap01.qmd … cap08.qmd + apendiceA.qmd … apendiceD6.qmd, em inglês (completo)
 │   └── assets/
+│       ├── cover.tex          # Capa PDF em inglês (mesmas cores/layout do PT, só o texto traduzido)
 │       ├── css/custom.css     # cópia do CSS principal (ver nota abaixo)
 │       └── images/capitulos/  # cópia das imagens dos capítulos/apêndices (ver nota abaixo)
 └── referencias.bib        # Bibliografia (a partir da ficha oficial da UC)
@@ -48,7 +49,7 @@ Sebenta-ASW/
 # Versão portuguesa — livro completo (HTML + PDF)
 quarto render
 
-# Versão inglesa — só HTML (sem secção pdf: no en/_quarto.yml)
+# Versão inglesa — HTML + PDF
 quarto render en/
 
 # Preview com hot reload (cada versão tem de ser aberta em separado)
@@ -87,6 +88,14 @@ paleta azul-petróleo da sebenta) não fazem parte do repositório, tal como
 já acontecia com os originais em português — se for preciso voltar a
 ajustar um destes diagramas, terá de se recriar o script do zero a partir
 da imagem existente.
+
+**Nota sobre o PDF da versão inglesa:** `en/references.qmd` existe mas
+**não** está listado em `book.chapters` do `en/_quarto.yml` — tal como o
+`_quarto.yml` principal, que também não tem nenhuma secção de referências
+ainda. Um `::: {#refs} :::` vazio, sem nenhuma citação `[@key]` em todo o
+livro, faz o LuaLaTeX falhar ("missing \item") ao gerar o PDF — mesmo bug
+já documentado para a versão portuguesa. Só voltar a acrescentá-lo quando
+houver citações reais em uso.
 
 ## Estado
 

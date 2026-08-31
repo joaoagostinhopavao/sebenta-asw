@@ -1,0 +1,81 @@
+%% Cover — Sebenta ASW (colours: petrol blue)
+\newgeometry{top=0mm,bottom=0mm,left=0mm,right=0mm}
+\thispagestyle{empty}
+\begin{tikzpicture}[remember picture,overlay]
+
+  %% Full background
+  \fill[coverDark]
+    (current page.south west) rectangle (current page.north east);
+
+  %% Large circle — top right corner
+  \fill[coverAccent,opacity=0.22]
+    ([xshift=17cm,yshift=25cm]current page.south west) circle (9cm);
+
+  %% Medium circle — bottom left corner
+  \fill[coverAccent,opacity=0.11]
+    ([xshift=1.5cm,yshift=5cm]current page.south west) circle (5.5cm);
+
+  %% Small circle — upper centre area
+  \fill[coverLight,opacity=0.07]
+    ([xshift=9.5cm,yshift=28cm]current page.south west) circle (2.8cm);
+
+  %% Title
+  \node[anchor=north west,
+        text=white,
+        font=\fontsize{34}{42}\selectfont\bfseries,
+        text width=14cm, align=left]
+    (TITLE)
+    at ([xshift=2cm,yshift=17.5cm]current page.south west)
+    {Web Applications and Services};
+
+  %% Subtitle
+  \node[anchor=north west,
+        text=white, text opacity=0.73,
+        font=\fontsize{14}{18}\selectfont,
+        text width=14cm]
+    at ([yshift=-0.8cm]TITLE.south west)
+    {Course Study Guide};
+
+  %% Accent bar
+  \fill[coverAccent]
+    ([yshift=-1.6cm]TITLE.south west)
+    rectangle ([xshift=5cm,yshift=-2.05cm]TITLE.south west);
+
+  %% Author
+  \node[anchor=north west,
+        text=white, text opacity=0.88,
+        font=\fontsize{12}{15}\selectfont\bfseries,
+        text width=14cm]
+    at ([yshift=-2.4cm]TITLE.south west)
+    {João Pavão};
+
+  %% Institution
+  \node[anchor=north west,
+        text=white, text opacity=0.52,
+        font=\fontsize{10}{12}\selectfont,
+        text width=14cm]
+    at ([yshift=-3.6cm]TITLE.south west)
+    {University of Trás-os-Montes e Alto Douro};
+
+  %% Bottom band
+  \fill[coverAccent,opacity=0.28]
+    (current page.south west)
+    rectangle ([xshift=21cm,yshift=3.5cm]current page.south west);
+
+  %% Publisher
+  \node[anchor=west,
+        text=white, text opacity=0.90,
+        font=\fontsize{14}{17}\selectfont\bfseries]
+    at ([xshift=2cm,yshift=1.75cm]current page.south west)
+    {Druidas};
+
+  %% Year
+  \node[anchor=east,
+        text=white, text opacity=0.55,
+        font=\fontsize{11}{14}\selectfont]
+    at ([xshift=-2cm,yshift=1.75cm]current page.south east)
+    {2026};
+
+\end{tikzpicture}
+\vfill\clearpage
+\restoregeometry
