@@ -1,0 +1,295 @@
+---
+title: "O Protocolo HTTP"
+subtitle: "O Middleware que Liga Frontend e Backend"
+author: "João Pavão"
+date: 2026-09-18
+lang: pt-PT
+format:
+  revealjs:
+    embed-resources: true
+    css: ../assets/css/slides.css
+    slide-number: true
+    transition: fade
+    center: false
+    footer: "Aplicações e Serviços Web — MEEC, UTAD"
+    fig-align: center
+    auto-stretch: false
+    logo: ""
+    title-slide-attributes:
+      data-background-gradient: "linear-gradient(135deg, #0a1420 0%, #0e6e8c 60%, #4dd0e1 100%)"
+---
+
+## Onde Estamos {.unnumbered}
+
+<span class="eyebrow">Recapitulação</span>
+
+- O **Frontend** (Cap. 2) está pronto e navegável — mas isolado, sem nenhum servidor por trás
+- Falta a peça que liga Frontend e Backend: o **Middleware** (Cap. 1)
+- Esse Middleware, nas aplicações Web, é o protocolo **HTTP**
+
+## O Modelo TCP/IP {.unnumbered}
+
+<span class="eyebrow">Onde o HTTP Encaixa</span>
+
+A pilha de comunicações organiza-se em quatro camadas, cada uma responsável por um aspeto diferente:
+
+![O modelo TCP/IP em quatro camadas. O HTTP vive na camada de Aplicação.](../assets/images/capitulos/cap03/Modelo_TCP_IP.png){height="380px"}
+
+## HTTP e TCP {.unnumbered}
+
+<span class="eyebrow">Onde o HTTP Encaixa</span>
+
+O HTTP é um protocolo da camada de Aplicação: não se preocupa em saber como os dados chegam ao destino, apenas define o formato do pedido e da resposta.
+
+- Essa entrega fica a cargo do `TCP` (camada de Transporte)
+- O `TCP` garante que os dados chegam completos, sem erros, e pela ordem certa
+- O `HTTP` depende dessa garantia, sem nunca a implementar diretamente
+
+## O que é o HTTP? {.unnumbered}
+
+<span class="eyebrow">HTTP — Introdução</span>
+
+- Protocolo de texto, baseado no modelo pedido-resposta
+- O cliente envia um pedido, o servidor devolve uma resposta
+- Não guarda memória de pedidos anteriores: é *stateless* (sem estado)
+- Cada pedido é tratado de forma independente
+
+## Métodos HTTP {.unnumbered}
+
+<span class="eyebrow">HTTP — Pedidos</span>
+
+Cada pedido indica, através de um método, a operação a realizar sobre um recurso (uma página `html`, uma imagem, um `PDF`, ...):
+
+| Método | Semântica típica |
+|---|---|
+| `GET` | Obter um recurso |
+| `POST` | Criar um recurso |
+| `PUT` | Atualizar ou substituir um recurso |
+| `DELETE` | Remover um recurso |
+| `HEAD` | Obter apenas os cabeçalhos, sem corpo |
+
+## GET vs. POST {.unnumbered}
+
+<span class="eyebrow">HTTP — Pedidos</span>
+
+:::: {.columns}
+::: {.column width="50%"}
+**`GET`**
+
+- Parâmetros na *URL* (depois do `?`)
+- Sem corpo na mensagem
+- Fica registado no histórico e nos *logs*
+- Uso típico: consultas, leitura de dados
+:::
+::: {.column width="50%"}
+**`POST`**
+
+- Parâmetros no corpo da mensagem
+- *URL* mantém-se limpa
+- Não fica registado no histórico nem nos *logs*
+- Uso típico: formulários, dados sensíveis
+:::
+::::
+
+## Anatomia de uma Mensagem HTTP {.unnumbered}
+
+<span class="eyebrow">HTTP — Formato</span>
+
+1. **Linha Inicial** — Pedido: método + URL + versão · Resposta: versão + código + motivo
+2. **Cabeçalhos** — Metadados sobre a mensagem (`Host`, `Content-Type`, ...)
+3. **Corpo** (opcional) — Os dados propriamente ditos
+
+Tanto um pedido como a resposta que se lhe segue seguem esta mesma estrutura geral.
+
+## Primeira Linha: Pedido vs. Resposta {.unnumbered}
+
+<span class="eyebrow">HTTP — Formato</span>
+
+Pedido — método · URL · versão
+```http
+GET /capital?countrycode=PT HTTP/1.1
+```
+
+Resposta — versão · código · motivo
+```http
+HTTP/1.1 200 OK
+```
+
+É esta primeira linha que distingue um pedido de uma resposta — o resto da mensagem tem a mesma estrutura.
+
+## Cabeçalhos (Headers) {.unnumbered}
+
+<span class="eyebrow">HTTP — Formato</span>
+
+- Metadados sobre a mensagem, em pares `chave: valor`
+- `Host` — o servidor de destino
+- `Content-Type` — o formato dos dados no corpo
+- `Content-Length` — o tamanho do corpo, em *bytes*
+
+## Corpo (Body) {.unnumbered}
+
+<span class="eyebrow">HTTP — Formato</span>
+
+- Opcional; contém os dados propriamente ditos
+- Um pedido `GET` não tem, tipicamente, corpo — os dados vão na `URL`
+- Um pedido `POST` transporta os dados no corpo, fora da `URL`
+
+![O formato geral de uma mensagem HTTP.](../assets/images/capitulos/cap03/HTTP_message_request_format.png){height="280px"}
+
+## Consulta de Capital {.unnumbered}
+
+<span class="eyebrow">Exemplo — GET</span>
+
+```html
+<form method="GET" action="/capital">
+  <label for="countrycode">Código do país</label>
+  <input type="text" id="countrycode" name="countrycode">
+  <button type="submit">Consultar</button>
+</form>
+```
+
+::: {.browser-mockup}
+<div class="browser-bar">localhost:8080/capital.html</div>
+<div class="browser-content">
+<label for="countrycode">Código do país</label>
+<input type="text" id="countrycode" name="countrycode" value="PT">
+<button type="submit">Consultar</button>
+</div>
+:::
+
+## Pedido GET Gerado {.unnumbered}
+
+<span class="eyebrow">Exemplo — GET</span>
+
+```http
+GET /capital?countrycode=PT HTTP/1.1
+Host: localhost:8080
+```
+
+Por se tratar de um método `GET`, o parâmetro `countrycode` é enviado na `URL` (depois do `?`), sem corpo na mensagem.
+
+Se o formulário usasse `method="POST"`, o parâmetro seguiria no corpo, e a `URL` manter-se-ia limpa (`/capital`).
+
+## Resposta do Servidor {.unnumbered}
+
+<span class="eyebrow">Exemplo — GET</span>
+
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{"country": "Portugal", "capital": "Lisboa", "ccode": "PT"}
+```
+
+## Autenticação {.unnumbered}
+
+<span class="eyebrow">Exemplo — POST</span>
+
+```html
+<form method="POST" action="/login">
+  <label for="user">Utilizador</label>
+  <input type="text" id="user" name="user">
+  <label for="pass">Palavra-passe</label>
+  <input type="password" id="pass" name="pass">
+  <button type="submit">Entrar</button>
+</form>
+```
+
+::: {.browser-mockup}
+<div class="browser-bar">localhost:8080/login.html</div>
+<div class="browser-content">
+<label for="user">Utilizador</label>
+<input type="text" id="user" name="user" value="javaee">
+<label for="pass">Palavra-passe</label>
+<input type="password" id="pass" name="pass" value="asw2026">
+<button type="submit">Entrar</button>
+</div>
+:::
+
+## Pedido POST Gerado {.unnumbered}
+
+<span class="eyebrow">Exemplo — POST</span>
+
+```http
+POST /login HTTP/1.1
+Host: localhost:8080
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 21
+
+user=javaee&pass=asw2026
+```
+
+Ao contrário do `GET`, os parâmetros seguem no corpo, depois de uma linha em branco que o separa dos cabeçalhos.
+
+## Porquê POST para Dados Sensíveis {.unnumbered}
+
+<span class="eyebrow">Exemplo — POST</span>
+
+- O corpo de um pedido `POST` não fica registado no histórico de navegação
+- Nem nos ficheiros de registo (*logs*) do servidor
+- Ao contrário dos parâmetros de uma `URL`, visíveis em ambos
+- Credenciais e outros dados sensíveis enviam-se sempre por `POST`, nunca por `GET`
+
+## Resposta: Apresentação vs. Serviço {.unnumbered}
+
+<span class="eyebrow">Exemplo — POST</span>
+
+:::: {.columns}
+::: {.column width="50%"}
+**Orientada à Apresentação**
+```http
+HTTP/1.1 200 OK
+Content-Type: text/html
+
+<h1>Bem-vindo, javaee</h1>
+<p>Sessão iniciada com sucesso.</p>
+```
+:::
+::: {.column width="50%"}
+**Orientada ao Serviço**
+```http
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{"user": "javaee",
+ "status": "authenticated"}
+```
+:::
+::::
+
+## Códigos de Estado {.unnumbered}
+
+<span class="eyebrow">HTTP — Respostas</span>
+
+| Intervalo | Categoria |
+|---|---|
+| `1xx` | Informativo |
+| `2xx` | Sucesso |
+| `3xx` | Redirecionamento |
+| `4xx` | Erro do cliente |
+| `5xx` | Erro do servidor |
+
+## Códigos Mais Usados {.unnumbered}
+
+<span class="eyebrow">HTTP — Respostas</span>
+
+| Código | Significado |
+|---|---|
+| `200 OK` | O pedido foi processado com sucesso |
+| `201 Created` | Um novo recurso foi criado com sucesso |
+| `400 Bad Request` | O pedido está malformado ou falta um parâmetro obrigatório |
+| `403 Forbidden` | O cliente não tem permissão para aceder ao recurso |
+| `404 Not Found` | O recurso pedido não existe |
+| `500 Internal Server Error` | Ocorreu um erro não tratado do lado do servidor |
+
+## Síntese e Próximos Passos {.unnumbered}
+
+<span class="eyebrow">Fecho</span>
+
+- O Middleware está detalhado: Frontend e Backend comunicam via `HTTP`
+- Pedido e resposta partilham a mesma estrutura: linha inicial, cabeçalhos, corpo
+- Falta agora construir o Backend que recebe estes pedidos e lhes responde
+
+::: {.footer-note}
+Próxima aula: Cap. 4 — Java EE e Fundamentos de Servlets
+:::

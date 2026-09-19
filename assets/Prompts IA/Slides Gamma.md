@@ -43,6 +43,31 @@ Evitar smart layouts complexos (arrows, processSteps) — substituir por listas 
 Smart layouts simples (outlineBoxesWithSideLine, bigBullets, solidBoxes) são aceitáveis
 Imagens em colunas exportam bem; accent images também
 
+📐 REGRA ANTI-OVERFLOW (PowerPoint)
+
+Slides com accent image lateral (image-layout="right" ou "left"):
+
+Máximo 5–6 itens de lista, cada um numa única linha (sem sub-texto a seguir)
+Sem parágrafo de introdução antes da lista
+Sem parágrafo final depois da lista
+Se houver nota final indispensável, usar uma linha curta com → em vez de <p>
+Se o conteúdo não couber nestas regras → dividir em dois slides, reutilizando a mesma accent image no segundo
+Slides com duas colunas (<columns>):
+
+Coluna da imagem/diagrama: só a imagem, sem texto
+Coluna de texto: máximo 4 itens de lista + 1 parágrafo curto de introdução
+Sem parágrafo final
+Slides de código (<pre> / <code>):
+
+Sem accent image — usar image-layout="blank"
+Máximo 1 bloco de código + 3 itens de lista curtos de análise
+Se houver imagem, usar 2 colunas: imagem à esquerda, código à direita
+Slides de agenda/resumo (sem imagem):
+
+Máximo 6 itens de lista, cada um numa linha
+1 parágrafo final curto é aceitável
+
+
 🌍 LÍNGUA
 
 Todo o conteúdo em Português europeu (pt-PT)

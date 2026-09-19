@@ -1,0 +1,209 @@
+---
+title: "Web Services REST e Arquitetura Stateless"
+subtitle: "Parte 1 — Conceitos, Princípios e Contrato HTTP"
+author: "João Pavão"
+date: 2026-09-19
+lang: pt-PT
+format:
+  revealjs:
+    embed-resources: true
+    css: ../assets/css/slides.css
+    slide-number: true
+    transition: fade
+    center: false
+    footer: "Aplicações e Serviços Web — MEEC, UTAD"
+    fig-align: center
+    auto-stretch: false
+    logo: ""
+    title-slide-attributes:
+      data-background-gradient: "linear-gradient(135deg, #0a1420 0%, #0e6e8c 60%, #4dd0e1 100%)"
+---
+
+## Onde Estamos {.unnumbered}
+
+<span class="eyebrow">Recapitulação</span>
+
+- Até aqui, o servidor foi pensado a partir de um único tipo de cliente: um *browser*, com um humano a ler `HTML`
+- Mas um servidor raramente serve só esse tipo de cliente
+- Faltam outros tipos de cliente: apps móveis, outro servidor, o próprio JavaScript do *browser* (Cap. 8)
+
+## Aplicações que Precisam de Comunicar {.unnumbered}
+
+<span class="eyebrow">O Problema</span>
+
+- `HTML` é um formato pensado para apresentação: mistura dados com a forma como são mostrados
+- Um programa que só precise dos dados teria de "desmontar" o `HTML` — frágil e desnecessário
+- Falta uma forma de expor os mesmos dados para qualquer programa consumir diretamente
+
+## O Que é um Web Service {.unnumbered}
+
+<span class="eyebrow">Web Services</span>
+
+- Componente de software acessível através da rede — tipicamente por `HTTP`
+- Expõe dados num formato pensado para ser consumido por outros **programas**, não por um humano
+- Não gera apresentação: devolve dados estruturados; o cliente decide o que fazer com eles
+- O mesmo servidor responde, com a mesma lógica, a app móvel, JavaScript, ou outro servidor
+
+## SOAP vs. REST {.unnumbered}
+
+<span class="eyebrow">Web Services</span>
+
+:::: {.columns}
+::: {.column width="50%"}
+**SOAP**
+
+- Protocolo formal, baseado em `XML`
+- *Envelope* SOAP + contrato *WSDL* à parte
+- Verboso, ferramentas específicas
+- Sistemas empresariais legados
+:::
+::: {.column width="50%"}
+**REST**
+
+- Estilo arquitetural, não um protocolo formal
+- Usa o `HTTP` como transporte **e** contrato
+- Mais leve, mais simples de testar
+- Abordagem dominante hoje — única tratada nesta UC
+:::
+::::
+
+## Cliente-Servidor e Sem Estado {.unnumbered}
+
+<span class="eyebrow">REST — Princípios de Fielding</span>
+
+- **Cliente-servidor** — responsabilidades separadas: o cliente não sabe como os dados são armazenados, o servidor não sabe como são apresentados
+- **Sem estado** (*stateless*) — cada pedido contém toda a informação necessária, sem depender de memória de pedidos anteriores
+
+## Interface Uniforme, Recursos, Cacheável {.unnumbered}
+
+<span class="eyebrow">REST — Princípios de Fielding</span>
+
+- **Interface uniforme** — recursos manipulados sempre da mesma forma, com os verbos e códigos do próprio `HTTP`
+- **Recursos e representações** — tudo o que a API expõe é um recurso, identificado por uma `URL`, com uma representação (tipicamente JSON)
+- **Cacheável** — a resposta pode indicar se pode ser guardada em *cache*
+
+## Arquitetura Orientada a Recursos {.unnumbered}
+
+<span class="eyebrow">Recursos</span>
+
+- Um **recurso** é qualquer coisa identificável e manipulável — um país, um utilizador, uma encomenda
+- Identificado por uma `URL`, nunca por um nome de função
+- Um desenho que nomeia operações na `URL` aproxima-se de um estilo *RPC*, não REST
+
+## RPC vs. REST: um Exemplo {.unnumbered}
+
+<span class="eyebrow">Recursos</span>
+
+Estilo RPC (a URL nomeia a operação):
+```
+GET /getCountry?code=PT
+GET /deleteCountry?code=PT
+```
+
+Estilo REST (a URL identifica o recurso, o verbo indica a operação):
+```
+GET    /country/PT   → obter o país PT
+DELETE /country/PT   → remover o país PT
+```
+
+## Os Métodos HTTP como Contrato {.unnumbered}
+
+<span class="eyebrow">Contrato da API</span>
+
+| Método | Operação | Idempotente? |
+|---|---|---|
+| `GET` | Ler o recurso | Sim |
+| `POST` | Criar um novo recurso | Não |
+| `PUT` | Atualizar ou substituir o recurso | Sim |
+| `DELETE` | Remover o recurso | Sim |
+
+## O que é Idempotência? {.unnumbered}
+
+<span class="eyebrow">Contrato da API</span>
+
+- Repetir a operação várias vezes tem exatamente o mesmo efeito que executá-la uma única vez
+- `DELETE /country/PT` — repetir não remove "mais nada": o resultado final é idêntico
+- `POST /country` — cada chamada cria um novo recurso: repetir duplica
+- Importa em redes pouco fiáveis: um `PUT`/`DELETE` pode repetir-se em segurança; um `POST`, não
+
+## JSON como Representação de um Recurso {.unnumbered}
+
+<span class="eyebrow">Representações</span>
+
+```json
+{"code": "PT", "name": "Portugal", "capital": "Lisboa"}
+```
+
+- Um recurso pode ter mais do que uma representação — nesta UC, é sempre JSON
+- O cabeçalho `Content-Type: application/json` (Cap. 4) informa o cliente qual foi escolhida
+
+## Servlet: HTML vs. JSON {.unnumbered}
+
+<span class="eyebrow">Da Web ao Serviço</span>
+
+:::: {.columns}
+::: {.column width="50%"}
+**Apresentação**
+```java
+response.setContentType("text/html");
+out.println("<h1>Portugal</h1>");
+```
+:::
+::: {.column width="50%"}
+**Serviço REST**
+```java
+response.setContentType("application/json");
+out.print("{\"name\":\"Portugal\"}");
+```
+:::
+::::
+
+É a mesma Servlet, mapeada por `@WebServlet` (Cap. 4) — o que muda é o que a resposta contém.
+
+## De uma Aplicação Web a um Serviço REST {.unnumbered}
+
+<span class="eyebrow">Da Web ao Serviço</span>
+
+- A infraestrutura não é nova: continua a ser uma Servlet a receber um pedido e devolver uma resposta
+- Orientada à apresentação (Cap. 1, 5): devolve `HTML`, pensado para um humano
+- API REST: devolve JSON, pensado para ser interpretado por código
+- A *View* clássica do MVC deixa de existir do lado do servidor — é o cliente quem decide como apresentar
+
+## Stateful vs. Stateless {.unnumbered}
+
+<span class="eyebrow">Arquitetura Sem Estado</span>
+
+- Modelo com estado (Cap. 5): o servidor guarda, na `HttpSession`, informação do utilizador autenticado
+- Modelo sem estado (*stateless*): o servidor não guarda memória nenhuma entre pedidos
+- Cada pedido traz, em si, toda a informação necessária — incluindo a prova de autenticação
+- A base de dados continua persistente; é o **servidor de aplicações** que deixa de guardar sessão
+
+## Porque a Ausência de Estado Importa {.unnumbered}
+
+<span class="eyebrow">Arquitetura Sem Estado</span>
+
+- A limitação do modelo com estado só aparece com mais do que uma instância do servidor
+- Utilizador autentica-se na instância A; pedido seguinte vai para a instância B
+- A instância B não tem essa sessão na memória: o utilizador aparece como não autenticado
+- Sem estado: qualquer instância responde a qualquer pedido, sem coordenação entre elas (Cap. 8)
+
+## POST + operation como Alternativa {.unnumbered}
+
+<span class="eyebrow">Nota Prática</span>
+
+- Comum encontrar APIs que não seguem a semântica "pura" dos verbos HTTP
+- Alternativa pragmática: um único *endpoint*, sempre `POST`, com um parâmetro `operation` (`insert`, `update`, `delete`)
+- Útil em contextos limitados a `GET`/`POST` — ex.: formulário HTML sem JavaScript (Cap. 2)
+- Afasta-se do REST convencional: aproxima-se de um estilo *RPC* sobre `HTTP`
+
+## Síntese e Próximos Passos {.unnumbered}
+
+<span class="eyebrow">Fecho</span>
+
+- REST usa o próprio `HTTP` como contrato: recursos por `URL`, operações pelos verbos
+- APIs REST devolvem JSON, sem estado — qualquer instância do servidor pode responder
+- Falta o outro lado: o cliente em JavaScript que consome esta API
+
+::: {.footer-note}
+Próxima aula: Cap. 8 — Web Services REST (Parte 2) e o Cliente em JavaScript
+:::
