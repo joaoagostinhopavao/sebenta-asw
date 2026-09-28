@@ -16,3 +16,6 @@ __pycache__/
 
 /.quarto/
 lixo.html
+
+# Slides: ficam só locais, fora do repositório remoto
+slides/
