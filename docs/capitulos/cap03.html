@@ -279,12 +279,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#sec-03-middleware-intro" id="toc-sec-03-middleware-intro" class="nav-link active" data-scroll-target="#sec-03-middleware-intro"><span class="header-section-number">3.1</span> O Middleware que Liga Frontend e Backend</a></li>
-  <li><a href="#sec-03-modelo-tcpip" id="toc-sec-03-modelo-tcpip" class="nav-link" data-scroll-target="#sec-03-modelo-tcpip"><span class="header-section-number">3.2</span> O Modelo TCP/IP</a></li>
-  <li><a href="#sec-03-o-http" id="toc-sec-03-o-http" class="nav-link" data-scroll-target="#sec-03-o-http"><span class="header-section-number">3.3</span> O HTTP</a>
+  <li><a href="#sec-03-cliente-servidor" id="toc-sec-03-cliente-servidor" class="nav-link" data-scroll-target="#sec-03-cliente-servidor"><span class="header-section-number">3.2</span> O Modelo Cliente-Servidor</a></li>
+  <li><a href="#sec-03-modelo-tcpip" id="toc-sec-03-modelo-tcpip" class="nav-link" data-scroll-target="#sec-03-modelo-tcpip"><span class="header-section-number">3.3</span> O Modelo TCP/IP</a>
   <ul class="collapse">
-  <li><a href="#métodos" id="toc-métodos" class="nav-link" data-scroll-target="#métodos"><span class="header-section-number">3.3.1</span> Métodos</a></li>
-  <li><a href="#sec-03-formato-mensagem" id="toc-sec-03-formato-mensagem" class="nav-link" data-scroll-target="#sec-03-formato-mensagem"><span class="header-section-number">3.3.2</span> Formato de uma Mensagem</a></li>
-  <li><a href="#sec-03-codigos-estado" id="toc-sec-03-codigos-estado" class="nav-link" data-scroll-target="#sec-03-codigos-estado"><span class="header-section-number">3.3.3</span> Códigos de Estado</a></li>
+  <li><a href="#encapsulamento" id="toc-encapsulamento" class="nav-link" data-scroll-target="#encapsulamento"><span class="header-section-number">3.3.1</span> Encapsulamento</a></li>
+  </ul></li>
+  <li><a href="#sec-03-tcp-portas" id="toc-sec-03-tcp-portas" class="nav-link" data-scroll-target="#sec-03-tcp-portas"><span class="header-section-number">3.4</span> A Camada de Transporte: o TCP e as Portas</a>
+  <ul class="collapse">
+  <li><a href="#as-portas" id="toc-as-portas" class="nav-link" data-scroll-target="#as-portas"><span class="header-section-number">3.4.1</span> As Portas</a></li>
+  <li><a href="#o-tcp" id="toc-o-tcp" class="nav-link" data-scroll-target="#o-tcp"><span class="header-section-number">3.4.2</span> O TCP</a></li>
+  </ul></li>
+  <li><a href="#sec-03-ip-enderecos" id="toc-sec-03-ip-enderecos" class="nav-link" data-scroll-target="#sec-03-ip-enderecos"><span class="header-section-number">3.5</span> A Camada Internet: o IP e os Endereços</a>
+  <ul class="collapse">
+  <li><a href="#os-endereços-ip" id="toc-os-endereços-ip" class="nav-link" data-scroll-target="#os-endereços-ip"><span class="header-section-number">3.5.1</span> Os Endereços IP</a></li>
+  <li><a href="#o-encaminhamento" id="toc-o-encaminhamento" class="nav-link" data-scroll-target="#o-encaminhamento"><span class="header-section-number">3.5.2</span> O Encaminhamento</a></li>
+  <li><a href="#o-dns-de-nomes-a-endereços" id="toc-o-dns-de-nomes-a-endereços" class="nav-link" data-scroll-target="#o-dns-de-nomes-a-endereços"><span class="header-section-number">3.5.3</span> O DNS: de Nomes a Endereços</a></li>
+  </ul></li>
+  <li><a href="#sec-03-url-ligacao" id="toc-sec-03-url-ligacao" class="nav-link" data-scroll-target="#sec-03-url-ligacao"><span class="header-section-number">3.6</span> Do <em>URL</em> à Ligação</a></li>
+  <li><a href="#sec-03-o-http" id="toc-sec-03-o-http" class="nav-link" data-scroll-target="#sec-03-o-http"><span class="header-section-number">3.7</span> O HTTP</a>
+  <ul class="collapse">
+  <li><a href="#métodos" id="toc-métodos" class="nav-link" data-scroll-target="#métodos"><span class="header-section-number">3.7.1</span> Métodos</a></li>
+  <li><a href="#sec-03-formato-mensagem" id="toc-sec-03-formato-mensagem" class="nav-link" data-scroll-target="#sec-03-formato-mensagem"><span class="header-section-number">3.7.2</span> Formato de uma Mensagem</a></li>
+  <li><a href="#sec-03-codigos-estado" id="toc-sec-03-codigos-estado" class="nav-link" data-scroll-target="#sec-03-codigos-estado"><span class="header-section-number">3.7.3</span> Códigos de Estado</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -325,21 +341,55 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="sec-03-middleware-intro" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="sec-03-middleware-intro"><span class="header-section-number">3.1</span> O Middleware que Liga Frontend e Backend</h2>
-<p>O <a href="../capitulos/cap01.html">Capítulo 1</a> identificou três componentes em qualquer aplicação Web: <em>Frontend</em>, <em>Middleware</em> e <em>Backend</em>. O <a href="../capitulos/cap02.html">Capítulo 2</a> dedicou-se à primeira, um conjunto de páginas HTML com formulários, entre eles o de consulta de capital (<code>capital.html</code>) e o de autenticação (<code>login.html</code>). Esses formulários, por si só, não fazem nada: precisam de um protocolo que leve os dados que o utilizador preenche até um servidor, e que traga de volta uma resposta. Esse protocolo, o <em>Middleware</em> usado nas aplicações <em>web</em> é o HTTP (<em>HyperText Transfer Protocol</em>). Este capítulo detalha o seu funcionamento.</p>
+<p>O <a href="../capitulos/cap01.html">Capítulo 1</a> identificou três componentes em qualquer aplicação Web: <em>Frontend</em>, <em>Middleware</em> e <em>Backend</em>. O <a href="../capitulos/cap02.html">Capítulo 2</a> dedicou-se à primeira, um conjunto de páginas HTML com formulários, entre eles o de consulta de capital (<code>capital.html</code>) e o de autenticação (<code>login.html</code>). Esses formulários, por si só, não fazem nada: precisam de um protocolo que leve os dados que o utilizador preenche até um servidor, e que traga de volta uma resposta. Esse protocolo, o <em>Middleware</em> usado nas aplicações <em>web</em>, é o HTTP (<em>HyperText Transfer Protocol</em>).</p>
+<p>O HTTP, no entanto, não trabalha sozinho. Para que um pedido saia do <em>browser</em> e chegue a um servidor, possivelmente do outro lado do mundo, o HTTP apoia-se em dois outros protocolos: o TCP, que entrega os dados à aplicação certa, e o IP, que os faz chegar à máquina certa. Este capítulo percorre esse caminho por ordem: parte do modelo cliente-servidor, desce às camadas de transporte e de rede para mostrar onde entram as portas e os endereços IP, e só depois detalha o funcionamento do HTTP.</p>
 </section>
-<section id="sec-03-modelo-tcpip" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="sec-03-modelo-tcpip"><span class="header-section-number">3.2</span> O Modelo TCP/IP</h2>
-<p>Antes de entrar no detalhe do HTTP propriamente dito, vale a pena recordar onde é que este protocolo encaixa na pilha de comunicações. O modelo TCP/IP organiza essa pilha em quatro camadas, cada uma responsável por um aspeto diferente da comunicação em rede:</p>
+<section id="sec-03-cliente-servidor" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="sec-03-cliente-servidor"><span class="header-section-number">3.2</span> O Modelo Cliente-Servidor</h2>
+<p>Toda a comunicação na <em>web</em> assenta no modelo cliente-servidor. Neste modelo há dois papéis bem distintos:</p>
+<dl>
+<dt>Servidor</dt>
+<dd>
+Um programa que está permanentemente à escuta, à espera de pedidos. Não toma a iniciativa de contactar ninguém: limita-se a responder a quem o contacta. Um mesmo servidor atende, em simultâneo, pedidos de muitos clientes diferentes. Nesta UC, o servidor é o Apache Tomcat.
+</dd>
+<dt>Cliente</dt>
+<dd>
+Um programa que toma a iniciativa da comunicação: envia um pedido ao servidor e aguarda a resposta. Na <em>web</em>, o cliente é tipicamente um <em>browser</em> (Chrome, Firefox, Safari), mas pode ser qualquer programa capaz de enviar pedidos, como o <code>curl</code> na linha de comandos ou uma aplicação móvel.
+</dd>
+</dl>
+<div id="fig-03-cliente-servidor" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-03-cliente-servidor-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap01/Modelo_cliente_servidor.png" class="img-fluid figure-img" style="width:70.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-03-cliente-servidor-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;3.1: O cliente (por exemplo, um browser) envia um pedido HTTP; o servidor processa-o e devolve uma resposta. A troca repete-se a cada interação, sem que o servidor guarde, por si só, memória da anterior.
+</figcaption>
+</figure>
+</div>
+<p>A interação é sempre a mesma: o cliente envia um pedido (<em>request</em>), o servidor processa-o e devolve uma resposta (<em>response</em>). Este par pedido-resposta é a unidade básica de toda a comunicação na <em>web</em>: carregar uma página, submeter um formulário ou obter uma imagem são, cada um, uma ou mais destas trocas.</p>
+<p>Para que esta troca aconteça, o cliente precisa de responder a duas perguntas antes de enviar o que quer que seja:</p>
+<ol type="1">
+<li><strong>Em que máquina</strong> está o servidor? A resposta é um <strong>endereço IP</strong>, tratado pela camada Internet.</li>
+<li><strong>Que programa</strong>, dentro dessa máquina, deve receber o pedido? Uma mesma máquina pode ter vários servidores a correr ao mesmo tempo (um servidor <em>web</em>, um servidor de base de dados, um servidor de correio). A resposta é um <strong>número de porta</strong>, tratado pela camada de Transporte.</li>
+</ol>
+<p>Só depois de resolvidas estas duas questões entra o HTTP, que define <strong>o que</strong> se diz: o formato do pedido e da resposta. As secções seguintes explicam como é que as três peças se organizam.</p>
+</section>
+<section id="sec-03-modelo-tcpip" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="sec-03-modelo-tcpip"><span class="header-section-number">3.3</span> O Modelo TCP/IP</h2>
+<p>As comunicações em rede organizam-se em camadas. Cada camada presta um serviço à camada imediatamente acima e usa os serviços da camada imediatamente abaixo, sem precisar de saber como é que essas outras camadas funcionam por dentro. O modelo TCP/IP, usado na Internet, organiza a pilha de comunicações em quatro camadas:</p>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
 </colgroup>
 <thead>
 <tr class="header">
 <th>Camada</th>
 <th>Responsabilidade</th>
+<th>Endereçamento</th>
 <th>Exemplos de protocolos</th>
 </tr>
 </thead>
@@ -347,21 +397,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>Aplicação</td>
 <td>O formato dos dados trocados entre aplicações</td>
+<td><em>URL</em></td>
 <td>HTTP, FTP, SMTP, DNS</td>
 </tr>
 <tr class="even">
 <td>Transporte</td>
-<td>Entrega dos dados entre processos, fiável (TCP) ou não (UDP)</td>
+<td>Entrega dos dados ao processo certo, de forma fiável (TCP) ou não (UDP)</td>
+<td>Porta</td>
 <td>TCP, UDP</td>
 </tr>
 <tr class="odd">
 <td>Internet</td>
-<td>Encaminhamento dos dados entre redes, por endereço IP</td>
+<td>Encaminhamento dos dados entre redes, até à máquina certa</td>
+<td>Endereço IP</td>
 <td>IP</td>
 </tr>
 <tr class="even">
 <td>Acesso à Rede</td>
 <td>Transmissão física dos dados no meio local</td>
+<td>Endereço MAC</td>
 <td>Ethernet, Wi-Fi</td>
 </tr>
 </tbody>
@@ -372,17 +426,265 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <img src="../assets/images/capitulos/cap03/Modelo_TCP_IP.png" class="img-fluid figure-img" style="width:80.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-03-modelo-tcpip-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;3.1: O modelo TCP/IP em quatro camadas. O HTTP vive na camada de Aplicação, e assenta sobre o TCP (camada de Transporte) para garantir que os dados chegam de forma fiável e pela ordem correta.
+Figura&nbsp;3.2: O modelo TCP/IP em quatro camadas. O HTTP vive na camada de Aplicação, e assenta sobre o TCP (camada de Transporte) para garantir que os dados chegam de forma fiável e pela ordem correta.
 </figcaption>
 </figure>
 </div>
-<p>O HTTP é, portanto, um protocolo da camada de Aplicação: não se preocupa em saber como é que os dados chegam ao destino, apenas define o formato do pedido e da resposta. Essa entrega fica a cargo do TCP, na camada de Transporte, que garante que os dados chegam completos, sem erros e pela ordem em que foram enviados — uma garantia de que o HTTP depende, sem nunca a implementar diretamente.</p>
+<section id="encapsulamento" class="level3" data-number="3.3.1">
+<h3 data-number="3.3.1" class="anchored" data-anchor-id="encapsulamento"><span class="header-section-number">3.3.1</span> Encapsulamento</h3>
+<p>Quando o <em>browser</em> envia um pedido, os dados descem a pilha, da camada de Aplicação até à camada de Acesso à Rede. Em cada camada é acrescentado um cabeçalho próprio, com a informação de que essa camada precisa. A este processo chama-se encapsulamento (<a href="#fig-03-encapsulamento" class="quarto-xref">Figura&nbsp;<span>3.3</span></a>):</p>
+<ol type="1">
+<li><strong>Aplicação:</strong> o <em>browser</em> constrói a mensagem HTTP (por exemplo, <code>GET /capital?countrycode=PT</code>). Estes dados, do ponto de vista das camadas inferiores, são apenas a carga útil (<em>payload</em>).</li>
+<li><strong>Transporte:</strong> o TCP acrescenta um cabeçalho cuja informação mais importante são as <strong>portas de origem e de destino</strong>. O resultado chama-se segmento TCP.</li>
+<li><strong>Internet:</strong> o IP acrescenta um cabeçalho cuja informação mais importante são os <strong>endereços IP de origem e de destino</strong>. O resultado chama-se pacote IP.</li>
+<li><strong>Acesso à Rede:</strong> a placa de rede acrescenta um cabeçalho com os endereços físicos (MAC) e, no fim, um código de verificação (FCS, <em>Frame Check Sequence</em>) que permite ao recetor detetar se a trama foi corrompida pelo caminho. O resultado chama-se trama (<em>frame</em>), que é depois convertida em sinais elétricos, óticos ou rádio.</li>
+</ol>
+<div id="fig-03-encapsulamento" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-03-encapsulamento-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap03/Encapsulamento.png" class="img-fluid figure-img" style="width:100.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-03-encapsulamento-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;3.3: O encapsulamento de um pedido HTTP. Cada camada recebe da camada de cima uma unidade de dados que trata como carga útil, sem a ler, e acrescenta-lhe o seu próprio cabeçalho: as portas no segmento TCP, os endereços IP no pacote IP e os endereços MAC na trama Ethernet.
+</figcaption>
+</figure>
+</div>
+<p>Na receção, o processo inverte-se: cada camada verifica o cabeçalho que lhe diz respeito, retira-o e entrega o resto à camada de cima. A camada Internet confirma que o endereço IP de destino é o da máquina; a camada de Transporte verifica se há alguma aplicação registada na porta de destino e, em caso afirmativo, entrega-lhe os dados; a camada de Aplicação, por fim, recebe a mensagem HTTP tal como o <em>browser</em> a escreveu.</p>
+<p>O HTTP é, portanto, um protocolo da camada de Aplicação: não se preocupa em saber como é que os dados chegam ao destino, apenas define o formato do pedido e da resposta. Essa entrega fica a cargo das camadas inferiores, das quais as duas mais relevantes para o desenvolvimento <em>web</em> são descritas a seguir.</p>
 </section>
-<section id="sec-03-o-http" class="level2 page-columns page-full" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="sec-03-o-http"><span class="header-section-number">3.3</span> O HTTP</h2>
-<p>O <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP">HTTP</a> (<em>HyperText Transfer Protocol</em>) é um protocolo de texto, baseado no modelo pedido-resposta: o cliente envia um pedido, o servidor devolve uma resposta, e a ligação entre os dois não guarda memória de pedidos anteriores — cada pedido é tratado de forma independente, isto é, o HTTP não tem estado (é <em>stateless</em>). Esta secção detalha os três aspetos que definem um pedido e uma resposta: os métodos, o formato geral da mensagem e os códigos de estado.</p>
-<section id="métodos" class="level3" data-number="3.3.1">
-<h3 data-number="3.3.1" class="anchored" data-anchor-id="métodos"><span class="header-section-number">3.3.1</span> Métodos</h3>
+</section>
+<section id="sec-03-tcp-portas" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="sec-03-tcp-portas"><span class="header-section-number">3.4</span> A Camada de Transporte: o TCP e as Portas</h2>
+<section id="as-portas" class="level3" data-number="3.4.1">
+<h3 data-number="3.4.1" class="anchored" data-anchor-id="as-portas"><span class="header-section-number">3.4.1</span> As Portas</h3>
+<p>Um endereço IP identifica uma máquina, mas numa máquina correm muitos programas ao mesmo tempo. A porta é o número que identifica, dentro de uma máquina, o programa a que os dados se destinam. Quando um servidor arranca, regista-se numa porta e fica à escuta: todos os segmentos TCP que chegam com essa porta de destino são-lhe entregues.</p>
+<p>As portas são números inteiros entre 0 e 65535, divididos em três gamas:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Gama</th>
+<th>Designação</th>
+<th>Utilização</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0 a 1023</td>
+<td>Portas bem conhecidas (<em>well-known ports</em>)</td>
+<td>Reservadas a serviços normalizados</td>
+</tr>
+<tr class="even">
+<td>1024 a 49151</td>
+<td>Portas registadas (<em>registered ports</em>)</td>
+<td>Atribuídas a aplicações específicas</td>
+</tr>
+<tr class="odd">
+<td>49152 a 65535</td>
+<td>Portas dinâmicas (<em>ephemeral ports</em>)</td>
+<td>Atribuídas temporariamente aos clientes</td>
+</tr>
+</tbody>
+</table>
+<p>Algumas portas surgem com particular frequência:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Porta</th>
+<th>Serviço</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>21</td>
+<td>FTP (transferência de ficheiros)</td>
+</tr>
+<tr class="even">
+<td>22</td>
+<td>SSH (acesso remoto seguro)</td>
+</tr>
+<tr class="odd">
+<td>25</td>
+<td>SMTP (envio de correio eletrónico)</td>
+</tr>
+<tr class="even">
+<td>53</td>
+<td>DNS (resolução de nomes)</td>
+</tr>
+<tr class="odd">
+<td>80</td>
+<td>HTTP</td>
+</tr>
+<tr class="even">
+<td>443</td>
+<td>HTTPS (HTTP cifrado)</td>
+</tr>
+<tr class="odd">
+<td>3306</td>
+<td>MySQL / MariaDB</td>
+</tr>
+<tr class="even">
+<td>8080</td>
+<td>HTTP alternativo (porta por omissão do Apache Tomcat)</td>
+</tr>
+</tbody>
+</table>
+<p>Quando a porta de destino é a bem conhecida do protocolo, não é preciso escrevê-la no <em>URL</em>: <code>http://www.utad.pt</code> e <code>http://www.utad.pt:80</code> são exatamente o mesmo endereço, porque o <em>browser</em> assume a porta 80 para <code>http</code> e a porta 443 para <code>https</code>. Já o Tomcat, que por omissão escuta na porta 8080, obriga a indicá-la explicitamente, e é por isso que todos os endereços usados nesta UC têm a forma <code>http://localhost:8080/...</code>.</p>
+<p>O cliente também usa uma porta: a porta de origem. Essa não é escolhida pelo utilizador, é atribuída automaticamente pelo sistema operativo, a partir da gama dinâmica, no momento em que a ligação é aberta. É para essa porta que o servidor envia a resposta. Por isso um <em>browser</em> com vários separadores abertos no mesmo <em>site</em> consegue receber as respostas de cada um sem as misturar: cada ligação tem a sua porta de origem.</p>
+<p>Ao par formado por um endereço IP e uma porta chama-se <strong><em>socket</em></strong>. Uma ligação TCP fica completamente identificada por dois <em>sockets</em>: o do cliente (por exemplo, <code>192.168.1.20:51734</code>) e o do servidor (por exemplo, <code>203.0.113.10:80</code>).</p>
+</section>
+<section id="o-tcp" class="level3" data-number="3.4.2">
+<h3 data-number="3.4.2" class="anchored" data-anchor-id="o-tcp"><span class="header-section-number">3.4.2</span> O TCP</h3>
+<p>O TCP (<em>Transmission Control Protocol</em>) é o protocolo de transporte usado pelo HTTP. A sua função é garantir que os dados chegam ao destino <strong>completos, sem erros e pela ordem em que foram enviados</strong>, apesar de a rede por baixo (o IP) não oferecer nenhuma destas garantias. Para isso, o TCP:</p>
+<ul>
+<li><strong>Estabelece uma ligação</strong> antes de enviar dados: cliente e servidor trocam três mensagens de sincronização (o chamado <em>three-way handshake</em>) e só depois começa a transferência. É por isso que se diz que o TCP é orientado à ligação.</li>
+<li><strong>Numera os segmentos:</strong> quando os dados são extensos, o TCP parte-os em vários segmentos e atribui a cada um um número de sequência. O recetor usa esses números para os reordenar e para detetar se falta algum.</li>
+<li><strong>Confirma a receção:</strong> o recetor responde ao emissor com uma confirmação (<em>acknowledgement</em>) dos segmentos recebidos. Se um segmento não for confirmado dentro de um certo tempo, o emissor volta a enviá-lo.</li>
+<li><strong>Controla o fluxo:</strong> o emissor ajusta a quantidade de dados que envia de uma só vez à capacidade de resposta do recetor e ao estado da rede, para não os sobrecarregar.</li>
+</ul>
+<p>Para quem desenvolve aplicações <em>web</em>, a consequência prática é simples: quando o servidor lê um pedido HTTP, pode contar que esse pedido está inteiro e na ordem certa. Toda a complexidade de lidar com perdas e retransmissões fica escondida dentro do TCP.</p>
+<p>A alternativa ao TCP na camada de Transporte é o UDP (<em>User Datagram Protocol</em>), que também usa portas mas dispensa a ligação, a numeração e as confirmações. É mais rápido mas não garante a entrega, e é usado em situações onde perder um pacote ocasional é preferível a esperar pela sua retransmissão, como chamadas de voz, vídeo em direto ou consultas DNS.</p>
+</section>
+</section>
+<section id="sec-03-ip-enderecos" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="sec-03-ip-enderecos"><span class="header-section-number">3.5</span> A Camada Internet: o IP e os Endereços</h2>
+<section id="os-endereços-ip" class="level3" data-number="3.5.1">
+<h3 data-number="3.5.1" class="anchored" data-anchor-id="os-endereços-ip"><span class="header-section-number">3.5.1</span> Os Endereços IP</h3>
+<p>O IP (<em>Internet Protocol</em>) é responsável por fazer chegar cada pacote à máquina de destino, identificada pelo seu endereço IP. Na versão 4 do protocolo (IPv4), ainda a mais comum, um endereço IP é formado por quatro números entre 0 e 255, separados por pontos, como <code>203.0.113.10</code> ou <code>192.168.1.20</code>. Cada um destes números ocupa 8 bits, o que faz de um endereço IPv4 um número de 32 bits, com cerca de 4 300 milhões de combinações possíveis. Esse número revelou-se insuficiente para o crescimento da Internet, e deu origem ao IPv6, com endereços de 128 bits escritos em hexadecimal (por exemplo, <code>2001:db8::10</code>), que coexiste hoje com o IPv4.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Endereços usados nos exemplos
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Os endereços públicos que aparecem neste capítulo (<code>203.0.113.10</code>, <code>2001:db8::10</code>) e o nome <code>www.example.com</code> não pertencem a nenhuma máquina real: fazem parte de blocos reservados pelas normas da Internet exclusivamente para documentação e exemplos (RFC 5737 e RFC 3849 para os endereços, RFC 2606 para os nomes). Os endereços <code>192.168.1.20</code> e <code>127.0.0.1</code>, pelo contrário, são endereços reais, de uso privado e de <em>loopback</em>, respetivamente, e são explicados a seguir.</p>
+</div>
+</div>
+<p>Tal como acontece com as portas, há endereços reservados para fins específicos:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Endereço ou gama</th>
+<th>Utilização</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>127.0.0.1</code></td>
+<td><em>Loopback</em>: a própria máquina (nome <code>localhost</code>)</td>
+</tr>
+<tr class="even">
+<td><code>10.0.0.0</code> a <code>10.255.255.255</code></td>
+<td>Endereços privados (redes internas)</td>
+</tr>
+<tr class="odd">
+<td><code>172.16.0.0</code> a <code>172.31.255.255</code></td>
+<td>Endereços privados (redes internas)</td>
+</tr>
+<tr class="even">
+<td><code>192.168.0.0</code> a <code>192.168.255.255</code></td>
+<td>Endereços privados (redes domésticas e de escritório)</td>
+</tr>
+</tbody>
+</table>
+<p>O endereço <code>127.0.0.1</code> merece destaque nesta UC. Um pedido enviado para <code>localhost</code> nunca sai da máquina: desce a pilha de comunicações e volta a subi-la no mesmo computador, onde o Tomcat o recebe. É isso que permite desenvolver e testar uma aplicação <em>web</em> completa, cliente e servidor, num único portátil e sem ligação à Internet.</p>
+<p>Os endereços privados, por sua vez, só são válidos dentro de uma rede local. É por isso que o portátil de um aluno pode ter o endereço <code>192.168.1.20</code> em casa e outro endereço diferente na rede da universidade. Para comunicar com o exterior, o <em>router</em> da rede local traduz esse endereço privado num endereço público, num processo chamado NAT (<em>Network Address Translation</em>).</p>
+</section>
+<section id="o-encaminhamento" class="level3" data-number="3.5.2">
+<h3 data-number="3.5.2" class="anchored" data-anchor-id="o-encaminhamento"><span class="header-section-number">3.5.2</span> O Encaminhamento</h3>
+<p>O cliente e o servidor raramente estão na mesma rede. Um pacote IP enviado de casa de um aluno para o servidor da UTAD atravessa várias redes intermédias. Em cada uma delas, um equipamento chamado <em>router</em> lê o endereço IP de destino, consulta a sua tabela de encaminhamento (<em>routing table</em>) e decide para que rede vizinha deve reenviar o pacote. O pacote avança assim, salto a salto, até à rede onde está o servidor.</p>
+<p>Este encaminhamento é feito pacote a pacote, e o IP não dá qualquer garantia de entrega: um pacote pode perder-se, chegar duplicado ou chegar fora de ordem em relação aos que foram enviados antes. É precisamente para compensar estas falhas que o TCP existe na camada acima.</p>
+</section>
+<section id="o-dns-de-nomes-a-endereços" class="level3" data-number="3.5.3">
+<h3 data-number="3.5.3" class="anchored" data-anchor-id="o-dns-de-nomes-a-endereços"><span class="header-section-number">3.5.3</span> O DNS: de Nomes a Endereços</h3>
+<p>Os endereços IP são práticos para as máquinas mas difíceis de memorizar para as pessoas. É por isso que no <em>browser</em> se escreve <code>www.example.com</code> e não <code>203.0.113.10</code>. A rede, porém, só conhece endereços IP: antes de poder enviar o que quer que seja, o <em>browser</em> tem de converter o nome no endereço correspondente.</p>
+<p>Essa conversão é feita pelo DNS (<em>Domain Name System</em>), um sistema hierárquico de servidores distribuídos pela Internet. O <em>browser</em> pergunta ao DNS qual o endereço IP associado a um nome, e o DNS responde com o endereço que o <em>browser</em> vai depois colocar no cabeçalho IP dos pacotes. O nome <code>localhost</code> é um caso especial: é resolvido pela própria máquina, diretamente para <code>127.0.0.1</code>, sem consultar nenhum servidor DNS.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Perguntar diretamente ao DNS
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>O comando <code>nslookup</code>, disponível em Windows, macOS e Linux, faz a mesma pergunta que o <em>browser</em> faz ao DNS e mostra a resposta. Num terminal:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">nslookup</span> www.utad.pt</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A resposta indica o servidor DNS que foi consultado e, na linha <code>Address</code>, o endereço IP (ou endereços, IPv4 e IPv6) associado ao nome. Repetir o comando com outros nomes (por exemplo, <code>www.google.com</code>) mostra que um mesmo nome pode estar associado a vários endereços. Note-se que o <code>nslookup</code> consulta sempre um servidor DNS, ao contrário do <em>browser</em>, que resolve <code>localhost</code> localmente; por isso o resultado de <code>nslookup localhost</code> varia de sistema para sistema e não é um bom exemplo.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="sec-03-url-ligacao" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="sec-03-url-ligacao"><span class="header-section-number">3.6</span> Do <em>URL</em> à Ligação</h2>
+<p>Com as três camadas apresentadas, é possível acompanhar tudo o que acontece quando o utilizador submete o formulário de consulta de capital e o <em>browser</em> tem de aceder ao endereço:</p>
+<pre><code>http://localhost:8080/capital?countrycode=PT</code></pre>
+<p>O <em>URL</em> contém, ele próprio, a informação de que cada camada precisa:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parte do <em>URL</em></th>
+<th>Valor</th>
+<th>Camada que a usa</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Protocolo</td>
+<td><code>http</code></td>
+<td>Aplicação: define o protocolo e a porta por omissão (80)</td>
+</tr>
+<tr class="even">
+<td>Anfitrião (<em>host</em>)</td>
+<td><code>localhost</code></td>
+<td>Internet: convertido em endereço IP pelo DNS (<code>127.0.0.1</code>)</td>
+</tr>
+<tr class="odd">
+<td>Porta</td>
+<td><code>8080</code></td>
+<td>Transporte: identifica o Tomcat dentro da máquina</td>
+</tr>
+<tr class="even">
+<td>Caminho e parâmetros</td>
+<td><code>/capital?countrycode=PT</code></td>
+<td>Aplicação: identifica o recurso pedido ao servidor</td>
+</tr>
+</tbody>
+</table>
+<p>A partir daqui, a sequência é sempre a mesma:</p>
+<ol type="1">
+<li>O <em>browser</em> extrai o nome do anfitrião do <em>URL</em> e obtém o seu endereço IP (através do DNS ou, no caso de <code>localhost</code>, diretamente).</li>
+<li>O <em>browser</em> abre uma ligação TCP para o <em>socket</em> do servidor, <code>127.0.0.1:8080</code>. O sistema operativo atribui ao cliente uma porta de origem da gama dinâmica.</li>
+<li>O <em>browser</em> escreve a mensagem de pedido HTTP e entrega-a ao TCP, que a divide em segmentos, lhe acrescenta as portas e a passa ao IP, que lhe acrescenta os endereços.</li>
+<li>Do lado do servidor, os pacotes sobem a pilha: o IP reconhece o seu endereço, o TCP reconstitui a mensagem e entrega-a ao programa registado na porta 8080, o Tomcat.</li>
+<li>O Tomcat processa o pedido e escreve a resposta HTTP, que faz o percurso inverso até à porta de origem do <em>browser</em>.</li>
+<li>O <em>browser</em> lê a resposta e apresenta-a ao utilizador.</li>
+</ol>
+<p>Os passos 1, 2 e 4 são inteiramente tratados pelo sistema operativo e pela rede; os passos 3, 5 e 6, na parte que diz respeito ao conteúdo da mensagem, são definidos pelo HTTP. É esse conteúdo, o que o cliente pede e o que o servidor responde, que o resto deste capítulo detalha.</p>
+</section>
+<section id="sec-03-o-http" class="level2 page-columns page-full" data-number="3.7">
+<h2 data-number="3.7" class="anchored" data-anchor-id="sec-03-o-http"><span class="header-section-number">3.7</span> O HTTP</h2>
+<p>O <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP">HTTP</a> (<em>HyperText Transfer Protocol</em>) é um protocolo de texto, baseado no modelo pedido-resposta: o cliente envia um pedido, o servidor devolve uma resposta, e a ligação entre os dois não guarda memória de pedidos anteriores. Cada pedido é tratado de forma independente, isto é, o HTTP não tem estado (é <em>stateless</em>). Esta secção detalha os três aspetos que definem um pedido e uma resposta: os métodos, o formato geral da mensagem e os códigos de estado.</p>
+<section id="métodos" class="level3" data-number="3.7.1">
+<h3 data-number="3.7.1" class="anchored" data-anchor-id="métodos"><span class="header-section-number">3.7.1</span> Métodos</h3>
 <p>Cada pedido do cliente ao servidor é feito no formato HTTP e indica, através de um método, a operação que se pretende realizar sobre um determinado recurso. O “recurso” no contexto das aplicações <em>web</em> pode ser uma página <code>html</code>, uma imagem, um <code>PDF</code>, ou qualquer outro suscetível de ser manipulado digitalmente:</p>
 <table class="caption-top table">
 <thead>
@@ -416,8 +718,8 @@ Figura&nbsp;3.1: O modelo TCP/IP em quatro camadas. O HTTP vive na camada de Apl
 </table>
 <p>Estes cinco métodos cobrem a generalidade das operações realizadas por uma aplicação Web; os dois primeiros (<code>GET</code> e <code>POST</code>) são, de longe, os mais usados em páginas <em>web</em>, enquanto <code>PUT</code> e <code>DELETE</code> ganham importância sobretudo nos serviços <em>web</em>.</p>
 </section>
-<section id="sec-03-formato-mensagem" class="level3 page-columns page-full" data-number="3.3.2">
-<h3 data-number="3.3.2" class="anchored" data-anchor-id="sec-03-formato-mensagem"><span class="header-section-number">3.3.2</span> Formato de uma Mensagem</h3>
+<section id="sec-03-formato-mensagem" class="level3 page-columns page-full" data-number="3.7.2">
+<h3 data-number="3.7.2" class="anchored" data-anchor-id="sec-03-formato-mensagem"><span class="header-section-number">3.7.2</span> Formato de uma Mensagem</h3>
 <p>Quando a aplicação no computador do cliente quer comunicar com o servidor, ativa a camada de Aplicação da pilha protocolar de comunicações, a qual formata o pedido de acordo com o protocolo HTTP. Tanto um pedido como a resposta que se lhe segue apresentam uma estrutura geral de uma mensagem semelhante:</p>
 <ol type="1">
 <li>Uma primeira linha, diferente consoante se trate de um pedido (método, <em>URL</em> e versão de HTTP) ou de uma resposta (versão de HTTP, código de estado e motivo)</li>
@@ -431,26 +733,26 @@ Figura&nbsp;3.1: O modelo TCP/IP em quatro camadas. O HTTP vive na camada de Apl
 <img src="../assets/images/capitulos/cap03/HTTP_message_request_format.png" class="img-fluid figure-img column-body-outset" style="width:90.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-03-http-formato-mensagem-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;3.2: O formato geral de uma mensagem HTTP: a primeira linha (diferente para pedido e resposta), seguida dos vários grupos de cabeçalhos, e por fim o corpo.
+Figura&nbsp;3.4: O formato geral de uma mensagem HTTP: a primeira linha (diferente para pedido e resposta), seguida dos vários grupos de cabeçalhos, e por fim o corpo.
 </figcaption>
 </figure>
 </div>
 <section id="exemplo-do-formulário-de-consulta-de-capital-a-um-pedido-http" class="level4">
 <h4 class="anchored" data-anchor-id="exemplo-do-formulário-de-consulta-de-capital-a-um-pedido-http">Exemplo: do Formulário de Consulta de Capital a um Pedido HTTP</h4>
 <p>Recorde-se o formulário de consulta de capital construído no <a href="../capitulos/cap02.html">Capítulo 2</a> (<code>capital.html</code>):</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1"></a><span class="dt">&lt;</span><span class="kw">form</span><span class="ot"> method</span><span class="op">=</span><span class="st">"GET"</span><span class="ot"> action</span><span class="op">=</span><span class="st">"/capital"</span><span class="dt">&gt;</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a>  <span class="dt">&lt;</span><span class="kw">label</span><span class="ot"> for</span><span class="op">=</span><span class="st">"countrycode"</span><span class="dt">&gt;</span>Código do país<span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a>  <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"text"</span><span class="ot"> id</span><span class="op">=</span><span class="st">"countrycode"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"countrycode"</span><span class="dt">&gt;</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a>  <span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> type</span><span class="op">=</span><span class="st">"submit"</span><span class="dt">&gt;</span>Consultar<span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="dt">&lt;/</span><span class="kw">form</span><span class="dt">&gt;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Este código <code>HTML</code>renderiza no <em>browser</em> como mostrado na figura <a href="#fig-03-form-capital" class="quarto-xref">Figura&nbsp;<span>3.3</span></a>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb3-1"><a href="#cb3-1"></a><span class="dt">&lt;</span><span class="kw">form</span><span class="ot"> method</span><span class="op">=</span><span class="st">"GET"</span><span class="ot"> action</span><span class="op">=</span><span class="st">"/capital"</span><span class="dt">&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a>  <span class="dt">&lt;</span><span class="kw">label</span><span class="ot"> for</span><span class="op">=</span><span class="st">"countrycode"</span><span class="dt">&gt;</span>Código do país<span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a>  <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"text"</span><span class="ot"> id</span><span class="op">=</span><span class="st">"countrycode"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"countrycode"</span><span class="dt">&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a>  <span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> type</span><span class="op">=</span><span class="st">"submit"</span><span class="dt">&gt;</span>Consultar<span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="dt">&lt;/</span><span class="kw">form</span><span class="dt">&gt;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Este código <code>HTML</code>renderiza no <em>browser</em> como mostrado na figura <a href="#fig-03-form-capital" class="quarto-xref">Figura&nbsp;<span>3.5</span></a>:</p>
 <div id="fig-03-form-capital" class="browser-shot quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-03-form-capital-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="../assets/images/capitulos/cap03/form1.png" class="browser-shot img-fluid figure-img" style="width:50.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-03-form-capital-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;3.3: O formulário de consulta de capital (<code>capital.html</code>), tal como é apresentado no <em>browser</em>.
+Figura&nbsp;3.5: O formulário de consulta de capital (<code>capital.html</code>), tal como é apresentado no <em>browser</em>.
 </figcaption>
 </figure>
 </div>
@@ -470,21 +772,21 @@ Content-Type: application/json</p>
 <section id="exemplo-do-formulário-de-autenticação-a-um-pedido-post-com-corpo" class="level4">
 <h4 class="anchored" data-anchor-id="exemplo-do-formulário-de-autenticação-a-um-pedido-post-com-corpo">Exemplo: do Formulário de Autenticação a um Pedido <code>POST</code> com Corpo</h4>
 <p>Recorde-se agora o formulário de autenticação, também do <a href="../capitulos/cap02.html">Capítulo 2</a> (<code>login.html</code>), com os campos <code>user</code> e <code>pass</code>:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb2-1"><a href="#cb2-1"></a><span class="dt">&lt;</span><span class="kw">form</span><span class="ot"> method</span><span class="op">=</span><span class="st">"POST"</span><span class="ot"> action</span><span class="op">=</span><span class="st">"/login"</span><span class="dt">&gt;</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a>  <span class="dt">&lt;</span><span class="kw">label</span><span class="ot"> for</span><span class="op">=</span><span class="st">"user"</span><span class="dt">&gt;</span>Utilizador<span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
-<span id="cb2-3"><a href="#cb2-3"></a>  <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"text"</span><span class="ot"> id</span><span class="op">=</span><span class="st">"user"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"user"</span><span class="dt">&gt;</span></span>
-<span id="cb2-4"><a href="#cb2-4"></a>  <span class="dt">&lt;</span><span class="kw">label</span><span class="ot"> for</span><span class="op">=</span><span class="st">"pass"</span><span class="dt">&gt;</span>Palavra-passe<span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
-<span id="cb2-5"><a href="#cb2-5"></a>  <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"password"</span><span class="ot"> id</span><span class="op">=</span><span class="st">"pass"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"pass"</span><span class="dt">&gt;</span></span>
-<span id="cb2-6"><a href="#cb2-6"></a>  <span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> type</span><span class="op">=</span><span class="st">"submit"</span><span class="dt">&gt;</span>Entrar<span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
-<span id="cb2-7"><a href="#cb2-7"></a><span class="dt">&lt;/</span><span class="kw">form</span><span class="dt">&gt;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Este código <code>HTML</code>renderiza no <em>browser</em> como mostrado na figura <a href="#fig-03-form-login" class="quarto-xref">Figura&nbsp;<span>3.4</span></a>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource html number-lines code-with-copy"><code class="sourceCode html"><span id="cb4-1"><a href="#cb4-1"></a><span class="dt">&lt;</span><span class="kw">form</span><span class="ot"> method</span><span class="op">=</span><span class="st">"POST"</span><span class="ot"> action</span><span class="op">=</span><span class="st">"/login"</span><span class="dt">&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>  <span class="dt">&lt;</span><span class="kw">label</span><span class="ot"> for</span><span class="op">=</span><span class="st">"user"</span><span class="dt">&gt;</span>Utilizador<span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>  <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"text"</span><span class="ot"> id</span><span class="op">=</span><span class="st">"user"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"user"</span><span class="dt">&gt;</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a>  <span class="dt">&lt;</span><span class="kw">label</span><span class="ot"> for</span><span class="op">=</span><span class="st">"pass"</span><span class="dt">&gt;</span>Palavra-passe<span class="dt">&lt;/</span><span class="kw">label</span><span class="dt">&gt;</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a>  <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"password"</span><span class="ot"> id</span><span class="op">=</span><span class="st">"pass"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"pass"</span><span class="dt">&gt;</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a>  <span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> type</span><span class="op">=</span><span class="st">"submit"</span><span class="dt">&gt;</span>Entrar<span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="dt">&lt;/</span><span class="kw">form</span><span class="dt">&gt;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Este código <code>HTML</code>renderiza no <em>browser</em> como mostrado na figura <a href="#fig-03-form-login" class="quarto-xref">Figura&nbsp;<span>3.6</span></a>:</p>
 <div id="fig-03-form-login" class="browser-shot quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-03-form-login-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="../assets/images/capitulos/cap03/form_login.png" class="browser-shot img-fluid figure-img" style="width:90.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-03-form-login-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;3.4: O formulário de autenticação (<code>login.html</code>), tal como é apresentado no <em>browser</em>.
+Figura&nbsp;3.6: O formulário de autenticação (<code>login.html</code>), tal como é apresentado no <em>browser</em>.
 </figcaption>
 </figure>
 </div>
@@ -497,7 +799,7 @@ Content-Length: 21</p>
 <p>user=javaee&amp;pass=asw2026</p>
 </div>
 <p>Ao contrário do exemplo anterior, os parâmetros já não vão na <em>URL</em>: seguem no corpo do pedido, depois de uma linha em branco que separa os cabeçalhos do corpo. É por isso que credenciais e outros dados sensíveis se enviam tipicamente por <code>POST</code>, nunca por <code>GET</code>: o corpo de um pedido não fica registado nos históricos de navegação nem nos ficheiros de registo (<em>logs</em>) do servidor, ao contrário do que acontece com os parâmetros de uma <em>URL</em>.</p>
-<p>O servidor, ao validar as credenciais com sucesso, devolve uma resposta HTTP como a seguinte — neste caso, uma aplicação orientada à apresentação (ver <a href="../capitulos/cap01.html">Capítulo 1</a>), que responde no corpo da resposta código HTML que vai renderizar no <em>browser</em>. Se a aplicação for orientada ao serviço no corpo da resposta viria JSON em vez de HTML:</p>
+<p>O servidor, ao validar as credenciais com sucesso, devolve uma resposta HTTP. Neste caso trata-se de uma aplicação orientada à apresentação (ver <a href="../capitulos/cap01.html">Capítulo 1</a>), por isso o corpo da resposta traz código HTML para o <em>browser</em> apresentar; numa aplicação orientada ao serviço, traria JSON. A resposta tem a seguinte forma:</p>
 <div class="httpmsg">
 <p>HTTP/1.1 200 OK<br>
 Content-Type: text/html</p>
@@ -506,8 +808,8 @@ Content-Type: text/html</p>
 </div>
 </section>
 </section>
-<section id="sec-03-codigos-estado" class="level3" data-number="3.3.3">
-<h3 data-number="3.3.3" class="anchored" data-anchor-id="sec-03-codigos-estado"><span class="header-section-number">3.3.3</span> Códigos de Estado</h3>
+<section id="sec-03-codigos-estado" class="level3" data-number="3.7.3">
+<h3 data-number="3.7.3" class="anchored" data-anchor-id="sec-03-codigos-estado"><span class="header-section-number">3.7.3</span> Códigos de Estado</h3>
 <p>Toda a resposta HTTP inclui um código de estado numérico, que indica sucintamente o resultado do pedido. Os códigos agrupam-se em cinco categorias, consoante a centena:</p>
 <table class="caption-top table">
 <thead>
