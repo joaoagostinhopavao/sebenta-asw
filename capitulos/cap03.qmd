@@ -1,5 +1,5 @@
 ---
-title: "O Protocolo HTTP"
+title: "Da Rede ao HTTP"
 author: "João Pavão"
 date: 2026-08-26
 lang: pt-PT

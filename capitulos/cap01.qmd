@@ -58,7 +58,7 @@ Tanto a distinção entre apresentação e serviço como o padrão MVC descrevem
 **Backend**
 : A parte da aplicação que corre do lado do servidor, responsável pela lógica de negócio e pelo acesso aos dados. Corresponde, em larga medida, ao Model e ao Controller do MVC.
 
-Esta divisão em três peças é o mapa para todo o resto desta obra: primeiro constrói-se o Frontend ([Capítulo 2](cap02.qmd), em HTML/CSS/Bootstrap), depois estuda-se em detalhe o Middleware que o liga ao servidor ([Capítulo 3](cap03.qmd), o protocolo HTTP), e só depois se constrói o Backend que efetivamente responde a esses pedidos (a partir do [Capítulo 4](cap04.qmd), com *Servlets* e, mais tarde, com APIs REST).
+Esta divisão em três peças é o mapa para todo o resto desta obra: primeiro constrói-se o Frontend ([Capítulo 2](cap02.qmd), em HTML/CSS/Bootstrap), depois estuda-se em detalhe o Middleware que o liga ao servidor ([Capítulo 3](cap03.qmd), as redes e o protocolo HTTP), e só depois se constrói o Backend que efetivamente responde a esses pedidos (a partir do [Capítulo 4](cap04.qmd), com *Servlets* e, mais tarde, com APIs REST).
 
 ## O Modelo Cliente-Servidor {#sec-01-cliente-servidor}
 

@@ -12,7 +12,7 @@ Sebenta-ASW/
 ├── capitulos/
 │   ├── cap01.qmd         # Arquitetura de Aplicações Web (as 3 peças: Frontend/Middleware/Backend)
 │   ├── cap02.qmd         # HTML, CSS e Bootstrap (Frontend)
-│   ├── cap03.qmd         # O Protocolo HTTP (Middleware)
+│   ├── cap03.qmd         # Da Rede ao HTTP (Middleware: TCP/IP e HTTP)
 │   ├── cap04.qmd         # Java EE e Fundamentos de Servlets (Backend)
 │   ├── cap05.qmd         # Modelo Stateful: Sessões e JSP
 │   ├── cap06.qmd         # Segurança e Filtros
