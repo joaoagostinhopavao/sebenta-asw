@@ -655,7 +655,7 @@ Perguntar diretamente ao DNS
 <tr class="even">
 <td>Anfitrião (<em>host</em>)</td>
 <td><code>localhost</code></td>
-<td>Internet: convertido em endereço IP pelo DNS (<code>127.0.0.1</code>)</td>
+<td>Internet: convertido no endereço IP <code>127.0.0.1</code> (normalmente pelo DNS; no caso de <code>localhost</code>, pela própria máquina)</td>
 </tr>
 <tr class="odd">
 <td>Porta</td>
@@ -745,7 +745,7 @@ Figura&nbsp;3.4: O formato geral de uma mensagem HTTP: a primeira linha (diferen
 <span id="cb3-3"><a href="#cb3-3"></a>  <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"text"</span><span class="ot"> id</span><span class="op">=</span><span class="st">"countrycode"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"countrycode"</span><span class="dt">&gt;</span></span>
 <span id="cb3-4"><a href="#cb3-4"></a>  <span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> type</span><span class="op">=</span><span class="st">"submit"</span><span class="dt">&gt;</span>Consultar<span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
 <span id="cb3-5"><a href="#cb3-5"></a><span class="dt">&lt;/</span><span class="kw">form</span><span class="dt">&gt;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Este código <code>HTML</code>renderiza no <em>browser</em> como mostrado na figura <a href="#fig-03-form-capital" class="quarto-xref">Figura&nbsp;<span>3.5</span></a>:</p>
+<p>Este código <code>HTML</code> é apresentado no <em>browser</em> como mostra a <a href="#fig-03-form-capital" class="quarto-xref">Figura&nbsp;<span>3.5</span></a>:</p>
 <div id="fig-03-form-capital" class="browser-shot quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-03-form-capital-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -779,18 +779,18 @@ Content-Type: application/json</p>
 <span id="cb4-5"><a href="#cb4-5"></a>  <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"password"</span><span class="ot"> id</span><span class="op">=</span><span class="st">"pass"</span><span class="ot"> name</span><span class="op">=</span><span class="st">"pass"</span><span class="dt">&gt;</span></span>
 <span id="cb4-6"><a href="#cb4-6"></a>  <span class="dt">&lt;</span><span class="kw">button</span><span class="ot"> type</span><span class="op">=</span><span class="st">"submit"</span><span class="dt">&gt;</span>Entrar<span class="dt">&lt;/</span><span class="kw">button</span><span class="dt">&gt;</span></span>
 <span id="cb4-7"><a href="#cb4-7"></a><span class="dt">&lt;/</span><span class="kw">form</span><span class="dt">&gt;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Este código <code>HTML</code>renderiza no <em>browser</em> como mostrado na figura <a href="#fig-03-form-login" class="quarto-xref">Figura&nbsp;<span>3.6</span></a>:</p>
-<div id="fig-03-form-login" class="browser-shot quarto-float quarto-figure quarto-figure-center anchored">
+<p>Este código <code>HTML</code> é apresentado no <em>browser</em> como mostra a <a href="#fig-03-form-login" class="quarto-xref">Figura&nbsp;<span>3.6</span></a>:</p>
+<div id="fig-03-form-login" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-03-form-login-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../assets/images/capitulos/cap03/form_login.png" class="browser-shot img-fluid figure-img" style="width:90.0%">
+<img src="../assets/images/capitulos/cap03/form_login_preenchido.png" class="img-fluid figure-img" style="width:60.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-03-form-login-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;3.6: O formulário de autenticação (<code>login.html</code>), tal como é apresentado no <em>browser</em>.
+Figura&nbsp;3.6: O formulário de autenticação (<code>login.html</code>) no <em>browser</em>, preenchido com o utilizador <code>javaee</code> e a palavra-passe <code>asw2026</code>, que aparece mascarada por o campo ser do tipo <code>password</code>.
 </figcaption>
 </figure>
 </div>
-<p>Ao ser submetido, este formulário gera o seguinte pedido HTTP:</p>
+<p>Ao clicar em <em>Entrar</em>, o formulário preenchido desta forma gera o seguinte pedido HTTP, em que cada campo dá origem a um parâmetro com o nome indicado no seu atributo <code>name</code> (<code>user</code> e <code>pass</code>):</p>
 <div class="httpmsg">
 <p>POST /login HTTP/1.1<br>
 Host: localhost:8080<br>

@@ -58,7 +58,7 @@ Both the presentation/service distinction and the MVC pattern describe the same 
 **Backend**
 : The part of the application that runs on the server side, responsible for business logic and data access. It largely corresponds to the Model and the Controller in MVC.
 
-This three-way division is the map for the rest of this book: first the Frontend is built ([Chapter 2](cap02.qmd), in HTML/CSS/Bootstrap), then the Middleware that connects it to the server is studied in detail ([Chapter 3](cap03.qmd), the HTTP protocol), and only then is the Backend built that actually answers those requests (from [Chapter 4](cap04.qmd) onward, with *Servlets* and, later, REST APIs).
+This three-way division is the map for the rest of this book: first the Frontend is built ([Chapter 2](cap02.qmd), in HTML/CSS/Bootstrap), then the Middleware that connects it to the server is studied in detail ([Chapter 3](cap03.qmd), networking and the HTTP protocol), and only then is the Backend built that actually answers those requests (from [Chapter 4](cap04.qmd) onward, with *Servlets* and, later, REST APIs).
 
 ## The Client-Server Model {#sec-01-client-server-en}
 

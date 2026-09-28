@@ -332,7 +332,39 @@ Content-Type: application/json
 
 <span class="eyebrow">HTTP: Exemplos</span>
 
-Formulário `login.html`:
+:::: {.columns}
+::: {.column width="55%"}
+**1. O código:** `login.html`
+
+```html
+<form method="POST" action="/login">
+  <label for="user">Utilizador</label>
+  <input type="text" id="user" name="user">
+  <label for="pass">Palavra-passe</label>
+  <input type="password" id="pass" name="pass">
+  <button type="submit">Entrar</button>
+</form>
+```
+:::
+::: {.column width="45%"}
+**2. O que o *browser* mostra**
+
+::: {.browser-mockup}
+<div class="browser-bar">localhost:8080/login.html</div>
+<div class="browser-content">
+<label for="user">Utilizador</label>
+<input type="text" id="user" name="user" value="javaee">
+<label for="pass">Palavra-passe</label>
+<input type="password" id="pass" name="pass" value="asw2026">
+<button type="submit">Entrar</button>
+</div>
+:::
+:::
+::::
+
+:::: {.columns}
+::: {.column width="55%"}
+**3. O pedido enviado ao clicar em Entrar**
 
 ```http
 POST /login HTTP/1.1
@@ -342,10 +374,17 @@ Content-Length: 21
 
 user=javaee&pass=asw2026
 ```
+:::
+::: {.column width="45%"}
+<div style="font-size:0.85em">
 
-- Os parâmetros seguem no **corpo**, depois da linha em branco
-- O corpo não fica no histórico do *browser* nem nos *logs* do servidor
-- Credenciais enviam-se **sempre por `POST`**, nunca por `GET`
+- Cada `name` do formulário vira um parâmetro no **corpo**, depois da linha em branco
+- O corpo não fica no histórico nem nos *logs*
+- Credenciais: **sempre `POST`**
+
+</div>
+:::
+::::
 
 ## Resposta: Apresentação vs. Serviço {.unnumbered}
 

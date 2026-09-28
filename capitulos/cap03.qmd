@@ -168,7 +168,7 @@ O *URL* contém, ele próprio, a informação de que cada camada precisa:
 | Parte do *URL* | Valor | Camada que a usa |
 |---|---|---|
 | Protocolo | `http` | Aplicação: define o protocolo e a porta por omissão (80) |
-| Anfitrião (*host*) | `localhost` | Internet: convertido em endereço IP pelo DNS (`127.0.0.1`) |
+| Anfitrião (*host*) | `localhost` | Internet: convertido no endereço IP `127.0.0.1` (normalmente pelo DNS; no caso de `localhost`, pela própria máquina) |
 | Porta | `8080` | Transporte: identifica o Tomcat dentro da máquina |
 | Caminho e parâmetros | `/capital?countrycode=PT` | Aplicação: identifica o recurso pedido ao servidor |
 
@@ -224,7 +224,7 @@ Recorde-se o formulário de consulta de capital construído no [Capítulo 2](cap
   <button type="submit">Consultar</button>
 </form>
 ```
-Este código `HTML`renderiza no *browser* como mostrado na figura @fig-03-form-capital:
+Este código `HTML` é apresentado no *browser* como mostra a @fig-03-form-capital:
 
 ![O formulário de consulta de capital (`capital.html`), tal como é apresentado no *browser*.](../assets/images/capitulos/cap03/form1.png){#fig-03-form-capital width="50%" .browser-shot}
 
@@ -259,11 +259,11 @@ Recorde-se agora o formulário de autenticação, também do [Capítulo 2](cap02
   <button type="submit">Entrar</button>
 </form>
 ```
-Este código `HTML`renderiza no *browser* como mostrado na figura @fig-03-form-login:
+Este código `HTML` é apresentado no *browser* como mostra a @fig-03-form-login:
 
-![O formulário de autenticação (`login.html`), tal como é apresentado no *browser*.](../assets/images/capitulos/cap03/form_login.png){#fig-03-form-login width="90%" .browser-shot}
+![O formulário de autenticação (`login.html`) no *browser*, preenchido com o utilizador `javaee` e a palavra-passe `asw2026`, que aparece mascarada por o campo ser do tipo `password`.](../assets/images/capitulos/cap03/form_login_preenchido.png){#fig-03-form-login width="60%"}
 
-Ao ser submetido, este formulário gera o seguinte pedido HTTP:
+Ao clicar em *Entrar*, o formulário preenchido desta forma gera o seguinte pedido HTTP, em que cada campo dá origem a um parâmetro com o nome indicado no seu atributo `name` (`user` e `pass`):
 
 ::: {.httpmsg}
 POST /login HTTP/1.1\

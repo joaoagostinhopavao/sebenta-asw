@@ -62,7 +62,7 @@ A minimal HTML document always has the same shape: a document type declaration, 
 </html>
 ```
 
-This code renders in the *browser* as shown in figure @fig-02-minimal-page-en:
+This code is displayed in the *browser* as shown in @fig-02-minimal-page-en:
 
 ![The minimal HTML page, as displayed in the browser: only the title and the paragraph from the `body` are visible.](../assets/images/capitulos/cap02/pagina-minima.png){#fig-02-minimal-page-en width="50%"}
 
@@ -97,7 +97,7 @@ Combining the structural *tags* already introduced, a page gains an organisation
 </html>
 ```
 
-This code renders in the *browser* as shown in figure @fig-02-semantic-structure-en — notice that, with no CSS at all, the structural *tags* carry no visual style of their own; the organisation into blocks exists, but is not yet visible:
+This code is displayed in the *browser* as shown in @fig-02-semantic-structure-en — notice that, with no CSS at all, the structural *tags* carry no visual style of their own; the organisation into blocks exists, but is not yet visible:
 
 ![The semantic page above, with no CSS applied: the `header`, the `nav` and the `section`s inside `main` organise the content, but are not visually distinguishable from one another.](../assets/images/capitulos/cap02/estrutura-semantica.png){#fig-02-semantic-structure-en width="50%"}
 
@@ -113,7 +113,7 @@ Two elements are used with particular frequency in a Web application: a list of 
 </nav>
 ```
 
-This code renders in the *browser* as shown in figure @fig-02-nav-list-en: with no CSS, a list of links still looks like a list, with bullet points and the *browser*'s default blue, underlined formatting for links:
+This code is displayed in the *browser* as shown in @fig-02-nav-list-en: with no CSS, a list of links still looks like a list, with bullet points and the *browser*'s default blue, underlined formatting for links:
 
 ![The navigation list above, as displayed in the browser by default, with no CSS at all.](../assets/images/capitulos/cap02/nav-lista.png){#fig-02-nav-list-en width="25%"}
 
@@ -130,7 +130,7 @@ This code renders in the *browser* as shown in figure @fig-02-nav-list-en: with 
 </section>
 ```
 
-This code renders in the *browser* as shown in figure @fig-02-bare-contact-form-en: once again, with no CSS, the fields and the button appear with the *browser*'s default styling:
+This code is displayed in the *browser* as shown in @fig-02-bare-contact-form-en: once again, with no CSS, the fields and the button appear with the *browser*'s default styling:
 
 ![The contact form above, as displayed in the browser by default, with no CSS at all.](../assets/images/capitulos/cap02/formulario-contacto-bare.png){#fig-02-bare-contact-form-en width="75%"}
 
@@ -151,7 +151,7 @@ CSS can be attached to HTML in three distinct ways.
 <h1 style="color:#0d6efd; margin:0.5rem 0;">Título do Site</h1>
 ```
 
-This code renders in the *browser* as shown in figure @fig-02-inline-style-title-en:
+This code is displayed in the *browser* as shown in @fig-02-inline-style-title-en:
 
 ![The heading above, already coloured blue by the inline style.](../assets/images/capitulos/cap02/titulo-inline-style.png){#fig-02-inline-style-title-en width="50%"}
 
@@ -190,7 +190,7 @@ nav a { text-decoration:none; padding:0.4rem 0.6rem; }
 nav a:hover { background: var(--brand); }
 ```
 
-Applying these rules (through any of the three methods) to the navigation list shown earlier, the result is shown in figure @fig-02-styled-nav-en: the list's bullet points disappear, the links stop being underlined, and they line up side by side:
+Applying these rules (through any of the three methods) to the navigation list shown earlier, the result is shown in @fig-02-styled-nav-en: the list's bullet points disappear, the links stop being underlined, and they line up side by side:
 
 ![The same navigation list, now with the CSS applied (`list-style:none`, `display:flex`, `text-decoration:none`).](../assets/images/capitulos/cap02/nav-estilada.png){#fig-02-styled-nav-en width="55%"}
 
@@ -232,7 +232,7 @@ Consider the following examples:
 .menu__link.ativo { font-weight: 600; }
 ```
 
-This code renders in the *browser* as shown in figure @fig-02-classes-ids-example-en: the heading is coloured by the `#titulo` rule, and the menu is styled by the `.menu`/`.menu__link` rules, with the `ativo` link shown in bold:
+This code is displayed in the *browser* as shown in @fig-02-classes-ids-example-en: the heading is coloured by the `#titulo` rule, and the menu is styled by the `.menu`/`.menu__link` rules, with the `ativo` link shown in bold:
 
 ![The heading and menu above, now styled by the class and identifier rules.](../assets/images/capitulos/cap02/classes-ids-exemplo.png){#fig-02-classes-ids-example-en width="90%"}
 
@@ -253,7 +253,7 @@ h1 { color: black; }
 #titulo { color: green; }  /* wins over the two rules above */
 ```
 
-The identifier (`#titulo`) is more specific than both the class and the element, so it wins: the heading turns green, as shown in figure @fig-02-specificity-1-en:
+The identifier (`#titulo`) is more specific than both the class and the element, so it wins: the heading turns green, as shown in @fig-02-specificity-1-en:
 
 ![The heading above in green: the `#titulo` rule wins over the `h1` and `.titulo` rules, for being more specific.](../assets/images/capitulos/cap02/especificidade-1.png){#fig-02-specificity-1-en width="60%"}
 
@@ -265,7 +265,7 @@ h1 { color: black !important; } /* wins because it has higher specificity */
 #titulo { color: green; }
 ```
 
-Now it is the element rule (`h1`) that wins, despite being the least specific of the three, because it carries `!important`: the heading turns black, as shown in figure @fig-02-specificity-2-en:
+Now it is the element rule (`h1`) that wins, despite being the least specific of the three, because it carries `!important`: the heading turns black, as shown in @fig-02-specificity-2-en:
 
 ![The heading above in black: the `h1` rule wins over the `.titulo` and `#titulo` rules, despite being the least specific, because it carries `!important`.](../assets/images/capitulos/cap02/especificidade-2.png){#fig-02-specificity-2-en width="60%"}
 
@@ -311,7 +311,7 @@ A navigation bar (*navbar*), with *Bootstrap*, is ready in a handful of lines, a
 </nav>
 ```
 
-This code renders in the *browser* as shown in figure @fig-02-bootstrap-navbar-en:
+This code is displayed in the *browser* as shown in @fig-02-bootstrap-navbar-en:
 
 ![The navigation bar above, already styled by Bootstrap.](../assets/images/capitulos/cap02/bootstrap-navbar.png){#fig-02-bootstrap-navbar-en width="95%"}
 
@@ -336,7 +336,7 @@ A form gets the same visual treatment through the `form-label` and `form-control
 </section>
 ```
 
-This code renders in the *browser* as shown in figure @fig-02-bootstrap-form-en: compare it with figure @fig-02-bare-contact-form-en, the same form without Bootstrap:
+This code is displayed in the *browser* as shown in @fig-02-bootstrap-form-en: compare it with @fig-02-bare-contact-form-en, the same form without Bootstrap:
 
 ![The contact form above, already styled by Bootstrap (`form-label`, `form-control`, `btn btn-primary`).](../assets/images/capitulos/cap02/bootstrap-form.png){#fig-02-bootstrap-form-en width="80%"}
 
@@ -355,7 +355,7 @@ The same grid system also organises the main content into columns. Bootstrap's g
 </main>
 ```
 
-This code renders in the *browser* as shown in figure @fig-02-bootstrap-grid-en: the main content and the sidebar sit side by side, each occupying half the width, even though there is no visible border marking the columns — it is Bootstrap's grid that reserves the space for each one:
+This code is displayed in the *browser* as shown in @fig-02-bootstrap-grid-en: the main content and the sidebar sit side by side, each occupying half the width, even though there is no visible border marking the columns — it is Bootstrap's grid that reserves the space for each one:
 
 ![The main content and the sidebar organised by Bootstrap's grid.](../assets/images/capitulos/cap02/bootstrap-grid.png){#fig-02-bootstrap-grid-en width="95%"}
 
@@ -417,7 +417,7 @@ All the pages share the same navigation bar:
 </nav>
 ```
 
-This code renders in the *browser* as shown in figure @fig-02-world-capitals-navbar-en:
+This code is displayed in the *browser* as shown in @fig-02-world-capitals-navbar-en:
 
 ![The navigation bar shared by the four pages of the "World Capitals" application, already styled by Bootstrap.](../assets/images/capitulos/cap02/world-capital-navbar.png){#fig-02-world-capitals-navbar-en width="95%"}
 

@@ -2,6 +2,11 @@ import sys
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+
+# --en: rótulos em inglês, guardado em en/assets/... (versão inglesa do livro)
+EN = "--en" in sys.argv
+def t(pt, en):
+    return en if EN else pt
 from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
 
 TEAL="#106E8C"; LIGHT="#DFF2F6"; DARK="#0D1B24"; ORANGE="#E07A1F"; FADE="#EEF6F8"; GREY="#5B6B73"
@@ -19,10 +24,10 @@ H = 1.5
 rows = [9.0, 6.5, 4.0, 1.5]       # y de cada linha (base)
 X = dict(eth=0.2, ip=3.3, tcp=6.1, app=8.9, end=14.4, fcs=15.4)
 
-layers = [("Aplicação", "HTTP"), ("Transporte", "TCP"), ("Internet", "IP"), ("Acesso à Rede", "Ethernet")]
-pdus = ["mensagem HTTP", "segmento TCP", "pacote IP", "trama Ethernet"]
+layers = [(t("Aplicação", "Application"), "HTTP"), (t("Transporte", "Transport"), "TCP"), ("Internet", "IP"), (t("Acesso à Rede", "Network Access"), "Ethernet")]
+pdus = [t("mensagem HTTP", "HTTP message"), t("segmento TCP", "TCP segment"), t("pacote IP", "IP packet"), t("trama Ethernet", "Ethernet frame")]
 for (name, proto), y in zip(layers, rows):
-    ax.text(-3.4, y+H/2+0.22, name, ha="left", va="center", fontsize=21, fontweight="bold", color=DARK)
+    ax.text(-3.4, y+H/2+0.22, name, ha="left", va="center", fontsize=t(21, 18.5), fontweight="bold", color=DARK)
     ax.text(-3.4, y+H/2-0.33, proto, ha="left", va="center", fontsize=16, color=GREY)
 
 http_txt = "GET /capital?countrycode=PT\nHost: www.example.com"
@@ -31,16 +36,16 @@ y = rows[0]
 box(X["app"], X["end"], y, H, TEAL, http_txt, tc="white", fs=15.5, bold=True)
 # linha 2: transporte
 y = rows[1]
-box(X["tcp"], X["app"], y, H, ORANGE, "Cabeçalho TCP\nportas\n51734 → 80", tc="white", fs=15, bold=True)
-box(X["app"], X["end"], y, H, LIGHT, "dados\n(mensagem HTTP)", fs=15)
+box(X["tcp"], X["app"], y, H, ORANGE, t("Cabeçalho TCP\nportas\n51734 → 80", "TCP header\nports\n51734 → 80"), tc="white", fs=15, bold=True)
+box(X["app"], X["end"], y, H, LIGHT, t("dados\n(mensagem HTTP)", "data\n(HTTP message)"), fs=15)
 # linha 3: internet
 y = rows[2]
-box(X["ip"], X["tcp"], y, H, ORANGE, "Cabeçalho IP\n192.168.1.20 →\n203.0.113.10", tc="white", fs=15, bold=True)
-box(X["tcp"], X["end"], y, H, LIGHT, "dados\n(segmento TCP)", fs=15)
+box(X["ip"], X["tcp"], y, H, ORANGE, t("Cabeçalho IP\n192.168.1.20 →\n203.0.113.10", "IP header\n192.168.1.20 →\n203.0.113.10"), tc="white", fs=15, bold=True)
+box(X["tcp"], X["end"], y, H, LIGHT, t("dados\n(segmento TCP)", "data\n(TCP segment)"), fs=15)
 # linha 4: acesso à rede
 y = rows[3]
-box(X["eth"], X["ip"], y, H, ORANGE, "Cabeçalho\nEthernet\nMAC orig. → dest.", tc="white", fs=15, bold=True)
-box(X["ip"], X["end"], y, H, LIGHT, "dados\n(pacote IP)", fs=15)
+box(X["eth"], X["ip"], y, H, ORANGE, t("Cabeçalho\nEthernet\nMAC orig. → dest.", "Ethernet\nheader\nsrc → dst MAC"), tc="white", fs=15, bold=True)
+box(X["ip"], X["end"], y, H, LIGHT, t("dados\n(pacote IP)", "data\n(IP packet)"), fs=15)
 box(X["end"], X["fcs"], y, H, ORANGE, "FCS", tc="white", fs=14, bold=True)
 
 # linhas guia tracejadas: a PDU inteira de cima passa a "dados" da linha de baixo
@@ -56,7 +61,7 @@ for (x0, x1), y, n in zip(spans, rows, pdus):
 
 # seta de envio
 ax.add_patch(FancyArrowPatch((16.25, rows[0]+H), (16.25, rows[3]), arrowstyle="-|>", mutation_scale=28, lw=3, color=DARK))
-ax.text(16.6, (rows[0]+H+rows[3])/2, "envio (encapsulamento)", rotation=90, ha="center", va="center", fontsize=17, color=DARK)
+ax.text(16.6, (rows[0]+H+rows[3])/2, t("envio (encapsulamento)", "sending (encapsulation)"), rotation=90, ha="center", va="center", fontsize=17, color=DARK)
 
 # variante para os slides: linha a situar o socket entre Aplicação e Transporte
 SOCKET = "--socket" in sys.argv
@@ -66,17 +71,17 @@ if SOCKET:
     ax.plot([-3.4, 15.9], [ys, ys], color=SOCK, lw=3, ls=(0, (6, 3)), zorder=5)
     ax.text(-3.4, ys + 0.12, "socket", ha="left", va="bottom", fontsize=19,
             fontweight="bold", style="italic", color=SOCK)
-    ax.text(-1.95, ys + 0.14, "(IP + porta)", ha="left", va="bottom", fontsize=15, color=SOCK)
+    ax.text(-1.95, ys + 0.14, t("(IP + porta)", "(IP + port)"), ha="left", va="bottom", fontsize=15, color=SOCK)
 
 # legenda (omitida na variante socket, para a figura ficar maior nos slides)
 if not SOCKET:
     ax.add_patch(FancyBboxPatch((-3.4, -0.45), 0.45, 0.35, boxstyle="round,pad=0,rounding_size=0.06", fc=ORANGE, ec=DARK, lw=1.5))
-    ax.text(-2.8, -0.27, "acrescentado por esta camada", va="center", fontsize=15, color=DARK)
+    ax.text(-2.8, -0.27, t("acrescentado por esta camada", "added by this layer"), va="center", fontsize=15, color=DARK)
     ax.add_patch(FancyBboxPatch((4.6, -0.45), 0.45, 0.35, boxstyle="round,pad=0,rounding_size=0.06", fc=LIGHT, ec=DARK, lw=1.5))
-    ax.text(5.2, -0.27, "recebido da camada de cima, transportado sem ser lido", va="center", fontsize=15, color=DARK)
+    ax.text(5.2, -0.27, t("recebido da camada de cima, transportado sem ser lido", "received from the layer above, carried without being read"), va="center", fontsize=15, color=DARK)
 
 
 if SOCKET:
     ax.set_ylim(0.95, 10.6)
 out = "Encapsulamento_socket.png" if SOCKET else "Encapsulamento.png"
-plt.savefig("assets/images/capitulos/cap03/" + out, dpi=110, bbox_inches="tight", facecolor="white")
+plt.savefig(t("", "en/") + "assets/images/capitulos/cap03/" + out, dpi=110, bbox_inches="tight", facecolor="white")

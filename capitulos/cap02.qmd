@@ -56,7 +56,7 @@ Um documento HTML mínimo tem sempre a mesma forma: uma declaração de tipo de 
 </html>
 ```
 
-Este código renderiza no *browser* como mostrado na figura @fig-02-pagina-minima:
+Este código é apresentado no *browser* como mostra a @fig-02-pagina-minima:
 
 ![A página HTML mínima, tal como é apresentada no *browser*: apenas o título e o parágrafo do `body` são visíveis.](../assets/images/capitulos/cap02/pagina-minima.png){#fig-02-pagina-minima width="50%"}
 
@@ -91,7 +91,7 @@ Combinando as *tags* estruturais já apresentadas, uma página ganha uma organiz
 </html>
 ```
 
-Este código renderiza no *browser* como mostrado na figura @fig-02-estrutura-semantica — repare-se que, sem qualquer CSS, as *tags* estruturais não trazem estilo visual próprio; a organização em blocos existe, mas ainda não se vê:
+Este código é apresentado no *browser* como mostra a @fig-02-estrutura-semantica — repare-se que, sem qualquer CSS, as *tags* estruturais não trazem estilo visual próprio; a organização em blocos existe, mas ainda não se vê:
 
 ![A página semântica anterior, sem qualquer CSS aplicado: o `header`, o `nav` e as `section` dentro do `main` organizam o conteúdo, mas visualmente não se distinguem umas das outras.](../assets/images/capitulos/cap02/estrutura-semantica.png){#fig-02-estrutura-semantica width="50%"}
 
@@ -107,7 +107,7 @@ Dois elementos usam-se com particular frequência numa aplicação Web: uma list
 </nav>
 ```
 
-Este código renderiza no *browser* como mostrado na figura @fig-02-nav-lista: sem CSS, uma lista de ligações continua a parecer uma lista, com marcadores e a formatação azul e sublinhada por omissão do *browser* para as ligações:
+Este código é apresentado no *browser* como mostra a @fig-02-nav-lista: sem CSS, uma lista de ligações continua a parecer uma lista, com marcadores e a formatação azul e sublinhada por omissão do *browser* para as ligações:
 
 ![A lista de navegação anterior, tal como é apresentada no *browser* por omissão, sem qualquer CSS.](../assets/images/capitulos/cap02/nav-lista.png){#fig-02-nav-lista width="25%"}
 
@@ -124,7 +124,7 @@ Este código renderiza no *browser* como mostrado na figura @fig-02-nav-lista: s
 </section>
 ```
 
-Este código renderiza no *browser* como mostrado na figura @fig-02-formulario-contacto-bare: mais uma vez, sem CSS, os campos e o botão aparecem com o estilo por omissão do *browser*:
+Este código é apresentado no *browser* como mostra a @fig-02-formulario-contacto-bare: mais uma vez, sem CSS, os campos e o botão aparecem com o estilo por omissão do *browser*:
 
 ![O formulário de contacto anterior, tal como é apresentado no *browser* por omissão, sem qualquer CSS.](../assets/images/capitulos/cap02/formulario-contacto-bare.png){#fig-02-formulario-contacto-bare width="75%"}
 
@@ -145,7 +145,7 @@ O CSS pode ser associado ao HTML de três formas distintas.
 <h1 style="color:#0d6efd; margin:0.5rem 0;">Título do Site</h1>
 ```
 
-Este código renderiza no *browser* como mostrado na figura @fig-02-titulo-inline-style:
+Este código é apresentado no *browser* como mostra a @fig-02-titulo-inline-style:
 
 ![O título anterior, já colorido a azul pelo estilo *inline*.](../assets/images/capitulos/cap02/titulo-inline-style.png){#fig-02-titulo-inline-style width="50%"}
 
@@ -184,7 +184,7 @@ nav a { text-decoration:none; padding:0.4rem 0.6rem; }
 nav a:hover { background: var(--brand); }
 ```
 
-Aplicando estas regras (por qualquer uma das três formas) à lista de navegação apresentada atrás, o resultado é mostrado na figura @fig-02-nav-estilada: os marcadores da lista desaparecem, as ligações deixam de estar sublinhadas, e ficam dispostas lado a lado:
+Aplicando estas regras (por qualquer uma das três formas) à lista de navegação apresentada atrás, o resultado é mostrado na @fig-02-nav-estilada: os marcadores da lista desaparecem, as ligações deixam de estar sublinhadas, e ficam dispostas lado a lado:
 
 ![A mesma lista de navegação, agora com o CSS aplicado (`list-style:none`, `display:flex`, `text-decoration:none`).](../assets/images/capitulos/cap02/nav-estilada.png){#fig-02-nav-estilada width="55%"}
 
@@ -226,7 +226,7 @@ Vejam-se os exemplos seguintes:
 .menu__link.ativo { font-weight: 600; }
 ```
 
-Este código renderiza no *browser* como mostrado na figura @fig-02-classes-ids-exemplo: o título fica colorido pela regra `#titulo`, e o menu fica formatado pelas regras `.menu`/`.menu__link`, com a ligação `ativo` a negrito:
+Este código é apresentado no *browser* como mostra a @fig-02-classes-ids-exemplo: o título fica colorido pela regra `#titulo`, e o menu fica formatado pelas regras `.menu`/`.menu__link`, com a ligação `ativo` a negrito:
 
 ![O título e o menu anteriores, já formatados pelas regras de classe e de identificador.](../assets/images/capitulos/cap02/classes-ids-exemplo.png){#fig-02-classes-ids-exemplo width="90%"}
 
@@ -247,7 +247,7 @@ h1 { color: black; }
 #titulo { color: green; }  /* vence as duas regras anteriores */
 ```
 
-O identificador (`#titulo`) é mais específico do que a classe e do que o elemento, por isso vence: o título fica verde, como mostrado na figura @fig-02-especificidade-1:
+O identificador (`#titulo`) é mais específico do que a classe e do que o elemento, por isso vence: o título fica verde, como mostra a @fig-02-especificidade-1:
 
 ![O título anterior a verde: a regra `#titulo` vence as regras `h1` e `.titulo`, por ser mais específica.](../assets/images/capitulos/cap02/especificidade-1.png){#fig-02-especificidade-1 width="60%"}
 
@@ -259,7 +259,7 @@ h1 { color: black !important; } /* vence porque tem maior especificidade */
 #titulo { color: green; }
 ```
 
-Agora é a regra do elemento (`h1`) que vence, apesar de ser a menos específica das três, porque tem `!important`: o título fica preto, como mostrado na figura @fig-02-especificidade-2:
+Agora é a regra do elemento (`h1`) que vence, apesar de ser a menos específica das três, porque tem `!important`: o título fica preto, como mostra a @fig-02-especificidade-2:
 
 ![O título anterior a preto: a regra `h1` vence as regras `.titulo` e `#titulo`, apesar de ser a menos específica, por ter `!important`.](../assets/images/capitulos/cap02/especificidade-2.png){#fig-02-especificidade-2 width="60%"}
 
@@ -305,7 +305,7 @@ Uma barra de navegação (*navbar*), com o *Bootstrap*, fica pronta em poucas li
 </nav>
 ```
 
-Este código renderiza no *browser* como mostrado na figura @fig-02-bootstrap-navbar:
+Este código é apresentado no *browser* como mostra a @fig-02-bootstrap-navbar:
 
 ![A barra de navegação anterior, já com o estilo do Bootstrap.](../assets/images/capitulos/cap02/bootstrap-navbar.png){#fig-02-bootstrap-navbar width="95%"}
 
@@ -330,7 +330,7 @@ Um formulário ganha o mesmo tratamento visual através das classes `form-label`
 </section>
 ```
 
-Este código renderiza no *browser* como mostrado na figura @fig-02-bootstrap-form: compare-se com a figura @fig-02-formulario-contacto-bare, o mesmo formulário sem Bootstrap:
+Este código é apresentado no *browser* como mostra a @fig-02-bootstrap-form: compare-se com a @fig-02-formulario-contacto-bare, o mesmo formulário sem Bootstrap:
 
 ![O formulário de contacto anterior, já com o estilo do Bootstrap (`form-label`, `form-control`, `btn btn-primary`).](../assets/images/capitulos/cap02/bootstrap-form.png){#fig-02-bootstrap-form width="80%"}
 
@@ -349,7 +349,7 @@ O mesmo sistema de grelha organiza também o conteúdo principal em colunas. A g
 </main>
 ```
 
-Este código renderiza no *browser* como mostrado na figura @fig-02-bootstrap-grid: o conteúdo principal e a barra lateral ficam lado a lado, cada um a ocupar metade da largura, embora sem qualquer borda visível a marcar as colunas — é a grelha do Bootstrap que reserva o espaço de cada uma:
+Este código é apresentado no *browser* como mostra a @fig-02-bootstrap-grid: o conteúdo principal e a barra lateral ficam lado a lado, cada um a ocupar metade da largura, embora sem qualquer borda visível a marcar as colunas — é a grelha do Bootstrap que reserva o espaço de cada uma:
 
 ![O conteúdo principal e a barra lateral organizados pela grelha do Bootstrap.](../assets/images/capitulos/cap02/bootstrap-grid.png){#fig-02-bootstrap-grid width="95%"}
 
@@ -411,7 +411,7 @@ Todas as páginas partilham a mesma barra de navegação:
 </nav>
 ```
 
-Este código renderiza no *browser* como mostrado na figura @fig-02-world-capitals-navbar:
+Este código é apresentado no *browser* como mostra a @fig-02-world-capitals-navbar:
 
 ![A barra de navegação comum às quatro páginas da aplicação "World Capitals", já com o estilo do Bootstrap.](../assets/images/capitulos/cap02/world-capital-navbar.png){#fig-02-world-capitals-navbar width="95%"}
 

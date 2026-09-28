@@ -1,0 +1,18 @@
+<!-- Gera assets/images/capitulos/cap03/form_login_preenchido.png:
+     Chrome --headless --hide-scrollbars --force-device-scale-factor=2 --window-size=540,340 --screenshot=... file://.../mock_form_login.html
+     e depois recortar o branco à volta (margem de 16 px). -->
+<!doctype html><html><head><meta charset="utf-8"><style>
+body{margin:0;padding:30px;background:#fff;font-family:"Source Sans Pro","Helvetica Neue",Arial,sans-serif}
+.browser-mockup{border:1px solid #ccc;border-radius:6px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.12);width:460px}
+.browser-bar{background:#e8e8e8;padding:6px 12px;font-size:13px;color:#555;border-bottom:1px solid #ccc;display:flex;align-items:center;gap:8px}
+.browser-bar::before{content:"● ● ●";color:#aaa;letter-spacing:2px;font-size:11px}
+.browser-content{padding:18px 20px;background:#fff;font-size:16px}
+label{display:block;margin-bottom:5px}
+input{display:block;margin-bottom:14px;padding:6px 8px;font-size:16px;width:100%;box-sizing:border-box;border:1px solid #999;border-radius:2px}
+button{padding:7px 18px;font-size:16px}
+</style></head><body>
+<div class="browser-mockup"><div class="browser-bar">localhost:8080/login.html</div>
+<div class="browser-content">
+<label for="user">Utilizador</label><input type="text" id="user" name="user" value="javaee">
+<label for="pass">Palavra-passe</label><input type="password" id="pass" name="pass" value="asw2026">
+<button type="submit">Entrar</button></div></div></body></html>
