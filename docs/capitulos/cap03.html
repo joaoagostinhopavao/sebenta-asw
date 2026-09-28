@@ -442,10 +442,10 @@ Figura&nbsp;3.2: O modelo TCP/IP em quatro camadas. O HTTP vive na camada de Apl
 <div id="fig-03-encapsulamento" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-03-encapsulamento-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="../assets/images/capitulos/cap03/Encapsulamento.png" class="img-fluid figure-img" style="width:100.0%">
+<img src="../assets/images/capitulos/cap03/Encapsulamento_socket.png" class="img-fluid figure-img" style="width:100.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-03-encapsulamento-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;3.3: O encapsulamento de um pedido HTTP. Cada camada recebe da camada de cima uma unidade de dados que trata como carga útil, sem a ler, e acrescenta-lhe o seu próprio cabeçalho: as portas no segmento TCP, os endereços IP no pacote IP e os endereços MAC na trama Ethernet.
+Figura&nbsp;3.3: O encapsulamento de um pedido HTTP. Cada camada recebe da camada de cima uma unidade de dados que trata como carga útil, sem a ler (a azul-claro), e acrescenta-lhe o seu próprio cabeçalho (a laranja): as portas no segmento TCP, os endereços IP no pacote IP e os endereços MAC na trama Ethernet. A linha tracejada vermelha marca o <em>socket</em> (endereço IP + porta), a fronteira onde a aplicação entrega os dados ao TCP (ver <a href="#sec-03-tcp-portas" class="quarto-xref"><span>Secção 3.4</span></a>).
 </figcaption>
 </figure>
 </div>

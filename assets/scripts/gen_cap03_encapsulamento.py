@@ -1,3 +1,4 @@
+import sys
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -57,10 +58,25 @@ for (x0, x1), y, n in zip(spans, rows, pdus):
 ax.add_patch(FancyArrowPatch((16.25, rows[0]+H), (16.25, rows[3]), arrowstyle="-|>", mutation_scale=28, lw=3, color=DARK))
 ax.text(16.6, (rows[0]+H+rows[3])/2, "envio (encapsulamento)", rotation=90, ha="center", va="center", fontsize=17, color=DARK)
 
-# legenda
-ax.add_patch(FancyBboxPatch((-3.4, -0.45), 0.45, 0.35, boxstyle="round,pad=0,rounding_size=0.06", fc=ORANGE, ec=DARK, lw=1.5))
-ax.text(-2.8, -0.27, "acrescentado por esta camada", va="center", fontsize=15, color=DARK)
-ax.add_patch(FancyBboxPatch((4.6, -0.45), 0.45, 0.35, boxstyle="round,pad=0,rounding_size=0.06", fc=LIGHT, ec=DARK, lw=1.5))
-ax.text(5.2, -0.27, "recebido da camada de cima, transportado sem ser lido", va="center", fontsize=15, color=DARK)
+# variante para os slides: linha a situar o socket entre Aplicação e Transporte
+SOCKET = "--socket" in sys.argv
+if SOCKET:
+    SOCK = "#B03A2E"
+    ys = 8.3
+    ax.plot([-3.4, 15.9], [ys, ys], color=SOCK, lw=3, ls=(0, (6, 3)), zorder=5)
+    ax.text(-3.4, ys + 0.12, "socket", ha="left", va="bottom", fontsize=19,
+            fontweight="bold", style="italic", color=SOCK)
+    ax.text(-1.95, ys + 0.14, "(IP + porta)", ha="left", va="bottom", fontsize=15, color=SOCK)
 
-plt.savefig("assets/images/capitulos/cap03/Encapsulamento.png", dpi=110, bbox_inches="tight", facecolor="white")
+# legenda (omitida na variante socket, para a figura ficar maior nos slides)
+if not SOCKET:
+    ax.add_patch(FancyBboxPatch((-3.4, -0.45), 0.45, 0.35, boxstyle="round,pad=0,rounding_size=0.06", fc=ORANGE, ec=DARK, lw=1.5))
+    ax.text(-2.8, -0.27, "acrescentado por esta camada", va="center", fontsize=15, color=DARK)
+    ax.add_patch(FancyBboxPatch((4.6, -0.45), 0.45, 0.35, boxstyle="round,pad=0,rounding_size=0.06", fc=LIGHT, ec=DARK, lw=1.5))
+    ax.text(5.2, -0.27, "recebido da camada de cima, transportado sem ser lido", va="center", fontsize=15, color=DARK)
+
+
+if SOCKET:
+    ax.set_ylim(0.95, 10.6)
+out = "Encapsulamento_socket.png" if SOCKET else "Encapsulamento.png"
+plt.savefig("assets/images/capitulos/cap03/" + out, dpi=110, bbox_inches="tight", facecolor="white")
