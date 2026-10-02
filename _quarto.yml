@@ -56,7 +56,7 @@ book:
         text: "English version"
 
   page-footer:
-    left: "Aplicações e Serviços Web — UTAD"
+    left: "© 2026 João A. Pavão · Aplicações e Serviços Web, UTAD"
 
 format:
   html:
@@ -95,6 +95,12 @@ format:
     include-in-header:
       text: |
         \AtBeginDocument{\input{assets/cover.tex}}
+        \usepackage{scrlayer-scrpage}
+        \clearpairofpagestyles
+        \ofoot*{\pagemark}
+        \ifoot*{\footnotesize\copyright\ 2026 João A. Pavão}
+        \ohead{\headmark}
+        \automark{chapter}
         \usepackage{booktabs}
         \usepackage{longtable}
         \usepackage{array}
