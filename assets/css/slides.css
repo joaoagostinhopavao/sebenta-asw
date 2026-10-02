@@ -138,3 +138,50 @@
   padding: 0.4em 1em;
   font-size: 1em;
 }
+
+/* ---- Elementos de design: barra lateral, traço sob o título, rodapé em três zonas, número c/t ---- */
+
+/* 1. Barra lateral fina, no bordo esquerdo de cada slide (exceto a capa) */
+.reveal .slides > section:not(#title-slide)::before,
+.reveal .slides > section > section:not(#title-slide)::before {
+  content: "";
+  position: absolute;
+  left: -26px;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, var(--asw-dark) 0%, var(--asw-mid) 40%, var(--asw-accent) 70%, rgba(77, 208, 225, 0) 100%);
+}
+
+/* 3. Traço curto sob o título de cada slide */
+.reveal .slides section:not(#title-slide) > h2::after {
+  content: "";
+  display: block;
+  width: 56px;
+  height: 4px;
+  margin-top: 0.18em;
+  border-radius: 2px;
+  background: var(--asw-accent);
+}
+
+/* 5. Número do slide "8 / 20" (ativado no YAML com slide-number: c/t), um pouco maior */
+.reveal .slide-number {
+  background: transparent;
+  font-weight: 600;
+  right: 18px !important;
+  bottom: 12px !important;
+}
+
+.reveal .slide-number,
+.reveal .slide-number a,
+.reveal .slide-number span {
+  font-size: 22px !important;
+}
+
+/* Rodapé em três zonas: copyright à esquerda, UC/curso/UTAD ao centro, número à direita */
+.reveal .footer .footer-copyright {
+  position: absolute;
+  left: 70px;           /* afastado do botão de menu do canto inferior esquerdo */
+  color: #7a8a92;
+}
