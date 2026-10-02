@@ -185,3 +185,15 @@
   left: 70px;           /* afastado do botão de menu do canto inferior esquerdo */
   color: #7a8a92;
 }
+
+/* Sem rodapé nem número no slide de título (data-state="capa") */
+.capa .reveal .footer,
+.capa .reveal .slide-number,
+.reveal-viewport.capa .footer,
+.reveal-viewport.capa .slide-number {
+  display: none !important;
+}
+.reveal .slides section#title-slide .footer,
+.reveal .slides section#title-slide .slide-number-pdf {
+  display: none !important;
+}
