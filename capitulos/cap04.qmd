@@ -157,7 +157,7 @@ protected void doPost(HttpServletRequest request,
 }
 ```
 
-A chamada a `setCharacterEncoding("UTF-8")` tem de ser feita antes de ler qualquer parâmetro: sem ela, um nome com acentos, como *João*, pode chegar deformado à *Servlet*. O método `getCharacterEncoding()` devolve a codificação que o pedido está a usar.
+A chamada a `request.setCharacterEncoding("UTF-8")` tem de ser feita antes de ler qualquer parâmetro: sem ela, um nome com acentos, como *João*, pode chegar deformado à *Servlet*. O método `request.getCharacterEncoding()` devolve a codificação que o pedido está a usar.
 
 O método `getParameter()` devolve um único valor. Quando o mesmo nome aparece várias vezes no pedido, como acontece com um grupo de *checkboxes* ou uma lista de escolha múltipla (`cor=azul&cor=verde`), `getParameter("cor")` não dá erro, mas devolve apenas o primeiro valor, `"azul"`. Para estes casos, o objeto `request` tem três métodos no plural:
 
@@ -217,6 +217,8 @@ Para definir o código de estado da resposta (ver [Capítulo 3](cap03.qmd)), a c
 | `404` | `HttpServletResponse.SC_NOT_FOUND` |
 | `500` | `HttpServletResponse.SC_INTERNAL_SERVER_ERROR` |
 
+Os códigos `401` e `403` distinguem-se pela identidade: `401` significa que o pedido não está autenticado (não se sabe quem é), e `403` que está autenticado, mas não tem permissão para este recurso (sabe-se quem é, e não pode).
+
 Se a *Servlet* não definir nenhum código, o contentor responde `200 OK`. É por isso que o exemplo do `doGet()` apresentado atrás, quando faltam parâmetros, está incompleto: escreve "Faltam parâmetros", mas a resposta diz ao cliente que correu tudo bem. Um erro do cliente deve ter o código certo, `400 Bad Request`, para que um programa cliente o detete sem ter de interpretar o texto da resposta:
 
 ```java
@@ -246,9 +248,11 @@ try {
 
 ## Onde Ficam os Dados: o DAO {#sec-04-dao}
 
-Nos exemplos deste capítulo, os dados vêm dos parâmetros do pedido ou estão fixos no código, uma simplificação deliberada nesta fase introdutória. Numa aplicação real, viriam de um objeto dedicado ao acesso a dados, um *Data Access Object* (DAO).
+O Tomcat não tem *Enterprise Beans*: a lógica de negócio é implementada em classes Java comuns. Uma *Servlet* que fosse ela própria buscar os dados (a uma lista em memória, a uma base de dados) ficaria presa à origem desses dados.
 
-Um DAO não é um conceito formal da *Jakarta EE* nem exige nenhuma anotação ou interface especial: é apenas uma convenção comum, uma classe Java simples que concentra, num único sítio, a forma como os dados são obtidos. Para os dados de uma pessoa, poderia ter este aspeto:
+Nos exemplos deste capítulo, os dados vêm dos parâmetros do pedido ou estão fixos no código, uma simplificação deliberada nesta fase introdutória. Numa aplicação real, viriam de uma dessas classes comuns, dedicada ao acesso a dados: um *Data Access Object* (DAO).
+
+Um DAO não é um conceito formal da *Jakarta EE* nem exige nenhuma anotação ou interface especial: é apenas uma convenção comum, uma classe Java simples que concentra, num único sítio, a forma como os dados são obtidos. Funciona como uma camada de abstração que isola a camada web da camada de dados: a *Servlet* (camada web) só conhece os métodos do DAO, e tudo o que diz respeito a como e onde os dados são guardados fica do outro lado. Para os dados de uma pessoa, poderia ter este aspeto:
 
 ```java
 public class PessoaDAO {
