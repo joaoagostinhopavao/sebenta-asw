@@ -9,7 +9,7 @@ lang: pt-PT
 
 Com o Frontend construído ([Capítulo 2](cap02.qmd)) e o Middleware detalhado ([Capítulo 3](cap03.qmd)), falta a terceira peça identificada no [Capítulo 1](cap01.qmd): o Backend, que efetivamente recebe os pedidos HTTP e lhes responde. É o tema deste capítulo e dos seguintes.
 
-A [*Jakarta EE*](https://jakarta.ee/) (anteriormente conhecida como *Java EE*, até ser renomeada em 2019) é uma plataforma que fornece um conjunto de serviços e *APIs* prontos a usar para lidar com os problemas comuns a qualquer aplicação Web (ver [Capítulo 1](cap01.qmd)), libertando quem desenvolve para se concentrar na lógica de negócio da aplicação.
+A [*Jakarta EE*](https://jakarta.ee/) (anteriormente conhecida como *Java EE*, até ser renomeada em 2019; a versão atual é a *Jakarta EE* 11, de junho de 2025) é uma plataforma que fornece um conjunto de serviços e *APIs* prontos a usar para lidar com os problemas comuns a qualquer aplicação Web (ver [Capítulo 1](cap01.qmd)), libertando quem desenvolve para se concentrar na lógica de negócio da aplicação.
 
 A plataforma assenta na linguagem Java e na *Java Virtual Machine* (JVM), o que significa que qualquer componente escrito para *Jakarta EE* beneficia da portabilidade e da gestão automática de memória já conhecidas da linguagem.
 
@@ -104,7 +104,7 @@ public class PessoaServlet extends HttpServlet {
 }
 ```
 
-Um pedido de um cliente a `http://localhost:8080/pessoa` é assim encaminhado para a classe `PessoaServlet`. O contentor constrói automaticamente, a partir dos elementos da mensagem HTTP recebida (ver [Capítulo 3](cap03.qmd)), o objeto request; o objeto response, complementar, é o que a Servlet usa para construir a mensagem de saída. Os elementos de cada mensagem correspondem a métodos concretos destes dois objetos (@fig-04-http-request-server):
+Um pedido de um cliente a `http://localhost:8080/pessoa` é assim encaminhado para a classe `PessoaServlet`. O contentor descobre esta anotação no momento da instalação da aplicação (*deployment*). A mesma ligação podia ser declarada no ficheiro `web.xml`, o que ainda se encontra em projetos mais antigos. O contentor constrói automaticamente, a partir dos elementos da mensagem HTTP recebida (ver [Capítulo 3](cap03.qmd)), o objeto request; o objeto response, complementar, é o que a Servlet usa para construir a mensagem de saída. Os elementos de cada mensagem correspondem a métodos concretos destes dois objetos (@fig-04-http-request-server):
 
 ![O contentor converte o texto do pedido HTTP num objeto `HttpServletRequest` e o objeto `HttpServletResponse` no texto da resposta: a linha do pedido, os cabeçalhos e o corpo de cada mensagem correspondem a métodos concretos destes objetos (as cores indicam a correspondência), e a *Servlet* só trabalha com objetos Java.](../assets/images/capitulos/cap04/servlet-http-objetos.png){#fig-04-http-request-server width="100%"}
 
@@ -150,11 +150,14 @@ Neste caso, o browser envia os campos no corpo do pedido, no formato `nome=joao&
 ```java
 protected void doPost(HttpServletRequest request,
                       HttpServletResponse response) throws IOException {
+    request.setCharacterEncoding("UTF-8");             // antes de ler os parâmetros
     String nome = request.getParameter("nome");        // o mesmo método do GET
     String idadeTexto = request.getParameter("idade");
     // ... o resto é igual ao doGet()
 }
 ```
+
+A chamada a `setCharacterEncoding("UTF-8")` tem de ser feita antes de ler qualquer parâmetro: sem ela, um nome com acentos, como *João*, pode chegar deformado à *Servlet*. O método `getCharacterEncoding()` devolve a codificação que o pedido está a usar.
 
 O método `getParameter()` devolve um único valor. Quando o mesmo nome aparece várias vezes no pedido, como acontece com um grupo de *checkboxes* ou uma lista de escolha múltipla (`cor=azul&cor=verde`), `getParameter("cor")` não dá erro, mas devolve apenas o primeiro valor, `"azul"`. Para estes casos, o objeto `request` tem três métodos no plural:
 
@@ -190,10 +193,17 @@ Uma aplicação orientada ao serviço responde com JSON, que um programa cliente
 ```java
 response.setContentType("application/json; charset=UTF-8");
 PrintWriter out = response.getWriter();
-out.print("{\"nome\": \"" + nome + "\", \"idade\": " + idade + "}");
+String json = """
+    {
+      "nome": "%s",
+      "idade": %d
+    }
+    """.formatted(nome, idade);
+
+out.print(json);
 ```
 
-São os mesmos dados, para pessoas (HTML) ou para programas (JSON). Na ausência de uma biblioteca dedicada à geração de JSON, o mais direto é construir a *String* manualmente, como acima, tendo o cuidado de escapar as aspas internas com `\"`. Repare-se também que a idade, sendo um número, entra no JSON sem aspas.
+São os mesmos dados, para pessoas (HTML) ou para programas (JSON). Na ausência de uma biblioteca dedicada à geração de JSON, o mais direto é usar um bloco de texto (delimitado por `"""`, disponível desde o Java 15), que dispensa escapar as aspas, e o método `formatted()`, que substitui `%s` e `%d` pelos valores. Repare-se que a idade, sendo um número, entra no JSON sem aspas (`%d`). Esta construção serve para valores simples: um `nome` que contenha aspas deixaria o JSON inválido, pelo que, para dados arbitrários, deve usar-se uma biblioteca de JSON.
 
 Para definir o código de estado da resposta (ver [Capítulo 3](cap03.qmd)), a classe `HttpServletResponse` disponibiliza uma constante para cada código, evitando o uso de números "mágicos" diretamente no código:
 
@@ -202,6 +212,7 @@ Para definir o código de estado da resposta (ver [Capítulo 3](cap03.qmd)), a c
 | `200` | `HttpServletResponse.SC_OK` |
 | `201` | `HttpServletResponse.SC_CREATED` |
 | `400` | `HttpServletResponse.SC_BAD_REQUEST` |
+| `401` | `HttpServletResponse.SC_UNAUTHORIZED` |
 | `403` | `HttpServletResponse.SC_FORBIDDEN` |
 | `404` | `HttpServletResponse.SC_NOT_FOUND` |
 | `500` | `HttpServletResponse.SC_INTERNAL_SERVER_ERROR` |

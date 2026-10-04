@@ -37,12 +37,16 @@ Ler um *cookie* recebido num pedido:
 Cookie[] cookies = request.getCookies();
 String user = null;
 
-for (Cookie c : cookies) {
-    if (c.getName().equals("userName")) {
-        user = c.getValue();
+if (cookies != null) {                       // null se o pedido não trouxer cookies
+    for (Cookie c : cookies) {
+        if (c.getName().equals("userName")) {
+            user = c.getValue();
+        }
     }
 }
 ```
+
+O método `getCookies()` devolve `null`, e não um vetor vazio, quando o pedido não traz nenhum *cookie*, pelo que a verificação `cookies != null` é obrigatória.
 
 ## Sessões (`HttpSession`) {#sec-05-sessoes-http}
 
@@ -61,6 +65,8 @@ session.setAttribute("email", "foo@fool.com");
 String email = (String) session.getAttribute("email");
 session.invalidate();                    // termina a sessão
 session.setMaxInactiveInterval(1800);     // tempo de inatividade, em segundos
+session.getId();                          // identificador da sessão (o JSESSIONID)
+session.getAttributeNames();              // nomes de todos os atributos guardados
 ```
 
 Falta uma peça: se HTTP não tem memória de pedidos anteriores, como é que o servidor sabe que dois pedidos sucessivos pertencem à mesma sessão? A resposta são, de novo, os *cookies*: por convenção, o identificador de sessão viaja num *cookie* chamado `JSESSIONID`, criado automaticamente pelo *Servlet Container* na primeira chamada a `getSession()`.
@@ -96,8 +102,8 @@ public class LoginServlet extends HttpServlet {
             response.setContentType("application/json");
             response.getWriter().print("{\"message\":\"OK\",\"user\":\"" + user + "\"}");
         } else {
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response.getWriter().print("{\"message\":\"FORBIDDEN\",\"error\":\"Invalid login or password\"}");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().print("{\"message\":\"UNAUTHORIZED\",\"error\":\"Invalid login or password\"}");
         }
     }
 }
@@ -110,7 +116,7 @@ Qualquer *endpoint* protegido verifica, no início do seu próprio `doGet()` ou 
 ```java
 HttpSession session = request.getSession(false);
 if (session == null || session.getAttribute("UserName") == null) {
-    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     response.getWriter().print("{\"error\":\"Authentication required\"}");
     return;
 }

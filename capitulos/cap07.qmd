@@ -107,3 +107,11 @@ Na prática, é comum encontrar APIs que não seguem a semântica "pura" dos ver
 
 Esta solução funciona, mas afasta-se do desenho REST mais convencional: um único *endpoint* deixa de mapear diretamente para um recurso e um verbo, aproximando-se antes de um estilo *RPC* sobre HTTP. Numa API pensada para ser consumida por JavaScript — que pode emitir pedidos `PUT` e `DELETE` sem qualquer limitação (ver [Capítulo 8](cap08.qmd)) — a alternativa mais próxima do REST é reescrever esse *endpoint* como vários, um por verbo HTTP (por exemplo, `PUT /recurso/{id}` para atualizar e `DELETE /recurso/{id}` para remover).
 :::
+
+## Monólito e Microsserviços {#sec-07-monolito-microsservicos}
+
+A ausência de estado tem consequências na forma como uma aplicação é organizada. Num **monólito**, a aplicação é uma única unidade de instalação, frequentemente com estado (a sessão vive na memória do servidor), e só se consegue escalar por inteiro. Numa arquitetura de **microsserviços**, a aplicação é repartida em serviços pequenos e independentes, que comunicam entre si por APIs REST, sem estado e com autenticação por *token*, e cada um pode escalar isoladamente. A ausência de estado é o que torna possível repartir uma aplicação por várias instâncias e por vários serviços.
+
+## REST e RESTful {#sec-07-rest-restful}
+
+**REST** é um estilo arquitetural: sem estado, orientado a recursos e com uma interface uniforme. Uma **API RESTful** é uma API que afirma seguir esse estilo. Como a ausência de estado faz parte da própria definição de REST, uma API que guarde a sessão do utilizador no servidor não é totalmente RESTful.

@@ -35,7 +35,7 @@ if (username.equals("admin") && password.equals("1234")) {
 : Responde a "o que é que este utilizador tem permissão para aceder?". É a verificação de permissões, feita depois de a identidade já estar confirmada.
 
 ```java
-if (session.getAttribute("UserRole").equals("ADMIN")) {
+if ("ADMIN".equals(session.getAttribute("UserRole"))) {
     // acesso permitido
 }
 ```

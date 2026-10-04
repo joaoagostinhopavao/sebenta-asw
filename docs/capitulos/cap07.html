@@ -288,6 +288,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#sec-07-de-web-a-rest" id="toc-sec-07-de-web-a-rest" class="nav-link" data-scroll-target="#sec-07-de-web-a-rest"><span class="header-section-number">7.8</span> De uma Aplicação Web a um Serviço REST</a></li>
   <li><a href="#sec-07-stateful-stateless" id="toc-sec-07-stateful-stateless" class="nav-link" data-scroll-target="#sec-07-stateful-stateless"><span class="header-section-number">7.9</span> Stateful vs.&nbsp;Stateless</a></li>
   <li><a href="#sec-07-porque-stateless-importa" id="toc-sec-07-porque-stateless-importa" class="nav-link" data-scroll-target="#sec-07-porque-stateless-importa"><span class="header-section-number">7.10</span> Porque a Ausência de Estado Importa</a></li>
+  <li><a href="#sec-07-monolito-microsservicos" id="toc-sec-07-monolito-microsservicos" class="nav-link" data-scroll-target="#sec-07-monolito-microsservicos"><span class="header-section-number">7.11</span> Monólito e Microsserviços</a></li>
+  <li><a href="#sec-07-rest-restful" id="toc-sec-07-rest-restful" class="nav-link" data-scroll-target="#sec-07-rest-restful"><span class="header-section-number">7.12</span> REST e RESTful</a></li>
   </ul>
 </nav>
     </div>
@@ -446,6 +448,14 @@ DELETE /country/PT → remover o país PT</p>
 <p>Esta solução funciona, mas afasta-se do desenho REST mais convencional: um único <em>endpoint</em> deixa de mapear diretamente para um recurso e um verbo, aproximando-se antes de um estilo <em>RPC</em> sobre HTTP. Numa API pensada para ser consumida por JavaScript — que pode emitir pedidos <code>PUT</code> e <code>DELETE</code> sem qualquer limitação (ver <a href="../capitulos/cap08.html">Capítulo 8</a>) — a alternativa mais próxima do REST é reescrever esse <em>endpoint</em> como vários, um por verbo HTTP (por exemplo, <code>PUT /recurso/{id}</code> para atualizar e <code>DELETE /recurso/{id}</code> para remover).</p>
 </div>
 </div>
+</section>
+<section id="sec-07-monolito-microsservicos" class="level2" data-number="7.11">
+<h2 data-number="7.11" class="anchored" data-anchor-id="sec-07-monolito-microsservicos"><span class="header-section-number">7.11</span> Monólito e Microsserviços</h2>
+<p>A ausência de estado tem consequências na forma como uma aplicação é organizada. Num <strong>monólito</strong>, a aplicação é uma única unidade de instalação, frequentemente com estado (a sessão vive na memória do servidor), e só se consegue escalar por inteiro. Numa arquitetura de <strong>microsserviços</strong>, a aplicação é repartida em serviços pequenos e independentes, que comunicam entre si por APIs REST, sem estado e com autenticação por <em>token</em>, e cada um pode escalar isoladamente. A ausência de estado é o que torna possível repartir uma aplicação por várias instâncias e por vários serviços.</p>
+</section>
+<section id="sec-07-rest-restful" class="level2" data-number="7.12">
+<h2 data-number="7.12" class="anchored" data-anchor-id="sec-07-rest-restful"><span class="header-section-number">7.12</span> REST e RESTful</h2>
+<p><strong>REST</strong> é um estilo arquitetural: sem estado, orientado a recursos e com uma interface uniforme. Uma <strong>API RESTful</strong> é uma API que afirma seguir esse estilo. Como a ausência de estado faz parte da própria definição de REST, uma API que guarde a sessão do utilizador no servidor não é totalmente RESTful.</p>
 
 
 </section>
