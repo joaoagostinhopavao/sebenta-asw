@@ -227,5 +227,5 @@ Os quatro *scopes* formam uma hierarquia de inclusão, do mais lato ao mais rest
 ::: {.callout-note}
 ## *Scopes* não se instanciam
 
-Os objetos de *scope* (`ServletContext`, `HttpSession`, `ServletRequest`) são fornecidos automaticamente pelo contentor. Nunca se cria uma instância nova com `new`: se um deles ainda não existe, os métodos apropriados (`getServletContext()`, `getSession()`) criam-no ou devolvem o existente.
+Os objetos de *scope* (`ServletContext`, `HttpSession`, `ServletRequest`) são fornecidos automaticamente pelo contentor. Nunca se cria uma instância nova com `new`: obtêm-se a partir do pedido. O método `getServletContext()` devolve sempre o mesmo contexto, que existe enquanto a aplicação está a correr; o método `getSession()` devolve a sessão existente ou, se ainda não houver nenhuma, cria uma nova.
 :::

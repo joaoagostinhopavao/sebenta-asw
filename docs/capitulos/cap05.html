@@ -533,7 +533,7 @@ Figura&nbsp;5.2: Os quatro scopes, do mais lato (Application) ao mais restrito (
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Os objetos de <em>scope</em> (<code>ServletContext</code>, <code>HttpSession</code>, <code>ServletRequest</code>) são fornecidos automaticamente pelo contentor. Nunca se cria uma instância nova com <code>new</code>: se um deles ainda não existe, os métodos apropriados (<code>getServletContext()</code>, <code>getSession()</code>) criam-no ou devolvem o existente.</p>
+<p>Os objetos de <em>scope</em> (<code>ServletContext</code>, <code>HttpSession</code>, <code>ServletRequest</code>) são fornecidos automaticamente pelo contentor. Nunca se cria uma instância nova com <code>new</code>: obtêm-se a partir do pedido. O método <code>getServletContext()</code> devolve sempre o mesmo contexto, que existe enquanto a aplicação está a correr; o método <code>getSession()</code> devolve a sessão existente ou, se ainda não houver nenhuma, cria uma nova.</p>
 </div>
 </div>
 

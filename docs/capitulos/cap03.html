@@ -867,14 +867,18 @@ Content-Type: text/html</p>
 <td>O pedido está malformado ou falta um parâmetro obrigatório</td>
 </tr>
 <tr class="even">
-<td><code>403 Forbidden</code></td>
-<td>O cliente não tem permissão para aceder ao recurso</td>
+<td><code>401 Unauthorized</code></td>
+<td>O pedido não está autenticado: não se sabe quem é o cliente</td>
 </tr>
 <tr class="odd">
+<td><code>403 Forbidden</code></td>
+<td>O cliente está autenticado, mas não tem permissão para aceder ao recurso</td>
+</tr>
+<tr class="even">
 <td><code>404 Not Found</code></td>
 <td>O recurso pedido não existe</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>500 Internal Server Error</code></td>
 <td>Ocorreu um erro não tratado do lado do servidor</td>
 </tr>

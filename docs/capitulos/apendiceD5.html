@@ -340,14 +340,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="sec-apD5-passo1" class="level3" data-number="H.1.2">
 <h3 data-number="H.1.2" class="anchored" data-anchor-id="sec-apD5-passo1"><span class="header-section-number">H.1.2</span> Passo 5.1: Acrescentar uma Biblioteca JWT</h3>
 <p>Para gerar e validar <em>JSON Web Tokens</em> é preciso uma biblioteca externa — a API padrão do Java não inclui suporte nativo para JWT. Neste LAB usa-se a biblioteca <strong>JJWT</strong> (<em>Java JWT</em>, ver <a href="../capitulos/apendiceB.html">Apêndice B</a>).</p>
-<p><strong>Onde descarregar</strong>: a biblioteca está disponível no Maven Central (procurar por <code>io.jsonwebtoken jjwt</code>). É preciso descarregar os três artefactos seguintes (exemplo para a versão <code>0.11.5</code>):</p>
+<p><strong>Onde descarregar</strong>: a biblioteca está disponível no Maven Central (procurar por <code>io.jsonwebtoken jjwt</code>). É preciso descarregar os três artefactos seguintes (exemplo para a versão <code>0.13.0</code>):</p>
 <ul>
-<li><code>jjwt-api-0.11.5.jar</code></li>
-<li><code>jjwt-impl-0.11.5.jar</code></li>
-<li><code>jjwt-jackson-0.11.5.jar</code></li>
+<li><code>jjwt-api-0.13.0.jar</code></li>
+<li><code>jjwt-impl-0.13.0.jar</code></li>
+<li><code>jjwt-jackson-0.13.0.jar</code></li>
 </ul>
-<p>É preciso descarregar os três ficheiros JAR.</p>
-<p><strong>Onde colocar os ficheiros JAR</strong>: copiar os três ficheiros para <code>src/main/webapp/WEB-INF/lib</code> — o mesmo sítio já usado antes para o <em>driver</em> JDBC (ver <a href="../capitulos/apendiceD4.html">Apêndice G</a>).</p>
+<p>O <code>jjwt-jackson</code> usa a biblioteca <em>Jackson</em> para ler e escrever o JSON do <em>token</em>, por isso é preciso descarregar também os seus três JAR (procurar por <code>com.fasterxml.jackson.core</code> no Maven Central):</p>
+<ul>
+<li><code>jackson-databind-2.12.7.1.jar</code></li>
+<li><code>jackson-core-2.12.7.jar</code></li>
+<li><code>jackson-annotations-2.12.7.jar</code></li>
+</ul>
+<p>São estas as versões que o JJWT 0.13.0 declara; uma versão 2.x mais recente do <em>Jackson</em> também funciona, desde que os três JAR sejam da mesma versão.</p>
+<p><strong>Onde colocar os ficheiros JAR</strong>: copiar os seis ficheiros para <code>src/main/webapp/WEB-INF/lib</code> — o mesmo sítio já usado antes para o <em>driver</em> JDBC (ver <a href="../capitulos/apendiceD4.html">Apêndice G</a>).</p>
 <p>Depois de copiar os ficheiros:</p>
 <ol type="1">
 <li>Parar o servidor Tomcat</li>
@@ -373,51 +379,52 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Exemplo de implementação:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">package</span><span class="im"> capitaisapi</span><span class="op">.</span><span class="im">security</span><span class="op">;</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">import</span> <span class="im">io</span><span class="op">.</span><span class="im">jsonwebtoken</span><span class="op">.*;</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="kw">import</span> <span class="im">io</span><span class="op">.</span><span class="im">jsonwebtoken</span><span class="op">.</span><span class="im">security</span><span class="op">.</span><span class="im">Keys</span><span class="op">;</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="kw">import</span> <span class="im">java</span><span class="op">.</span><span class="im">security</span><span class="op">.</span><span class="im">Key</span><span class="op">;</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="kw">import</span> <span class="im">java</span><span class="op">.</span><span class="im">util</span><span class="op">.</span><span class="im">Date</span><span class="op">;</span></span>
-<span id="cb1-7"><a href="#cb1-7"></a></span>
-<span id="cb1-8"><a href="#cb1-8"></a><span class="kw">public</span> <span class="kw">class</span> JWTUtil <span class="op">{</span></span>
-<span id="cb1-9"><a href="#cb1-9"></a>    <span class="co">// Chave secreta (tem de ter pelo menos 256 bits para HS256)</span></span>
-<span id="cb1-10"><a href="#cb1-10"></a>    <span class="kw">private</span> <span class="dt">static</span> <span class="dt">final</span> <span class="bu">String</span> SECRET <span class="op">=</span></span>
-<span id="cb1-11"><a href="#cb1-11"></a>        <span class="st">"MySuperSecretKeyForJwtSigningMustBeLongEnough12345"</span><span class="op">;</span></span>
-<span id="cb1-12"><a href="#cb1-12"></a></span>
-<span id="cb1-13"><a href="#cb1-13"></a>    <span class="kw">private</span> <span class="dt">static</span> <span class="dt">final</span> <span class="dt">long</span> EXPIRATION_TIME <span class="op">=</span> <span class="dv">1000</span> <span class="op">*</span> <span class="dv">60</span> <span class="op">*</span> <span class="dv">30</span><span class="op">;</span> <span class="co">// 30 minutos</span></span>
-<span id="cb1-14"><a href="#cb1-14"></a></span>
-<span id="cb1-15"><a href="#cb1-15"></a>    <span class="kw">private</span> <span class="dt">static</span> <span class="bu">Key</span> <span class="fu">getSigningKey</span><span class="op">()</span> <span class="op">{</span></span>
-<span id="cb1-16"><a href="#cb1-16"></a>        <span class="cf">return</span> Keys<span class="op">.</span><span class="fu">hmacShaKeyFor</span><span class="op">(</span>SECRET<span class="op">.</span><span class="fu">getBytes</span><span class="op">());</span></span>
-<span id="cb1-17"><a href="#cb1-17"></a>    <span class="op">}</span></span>
-<span id="cb1-18"><a href="#cb1-18"></a></span>
-<span id="cb1-19"><a href="#cb1-19"></a>    <span class="co">// Gera o token</span></span>
-<span id="cb1-20"><a href="#cb1-20"></a>    <span class="kw">public</span> <span class="dt">static</span> <span class="bu">String</span> <span class="fu">generateToken</span><span class="op">(</span><span class="bu">String</span> username<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb1-21"><a href="#cb1-21"></a>        <span class="bu">Date</span> now <span class="op">=</span> <span class="kw">new</span> <span class="bu">Date</span><span class="op">();</span></span>
-<span id="cb1-22"><a href="#cb1-22"></a>        <span class="bu">Date</span> expiryDate <span class="op">=</span> <span class="kw">new</span> <span class="bu">Date</span><span class="op">(</span>now<span class="op">.</span><span class="fu">getTime</span><span class="op">()</span> <span class="op">+</span> EXPIRATION_TIME<span class="op">);</span></span>
-<span id="cb1-23"><a href="#cb1-23"></a></span>
-<span id="cb1-24"><a href="#cb1-24"></a>        JwtBuilder builder <span class="op">=</span> Jwts<span class="op">.</span><span class="fu">builder</span><span class="op">();</span></span>
-<span id="cb1-25"><a href="#cb1-25"></a>        builder<span class="op">.</span><span class="fu">setSubject</span><span class="op">(</span>username<span class="op">);</span></span>
-<span id="cb1-26"><a href="#cb1-26"></a>        builder<span class="op">.</span><span class="fu">setIssuedAt</span><span class="op">(</span>now<span class="op">);</span></span>
-<span id="cb1-27"><a href="#cb1-27"></a>        builder<span class="op">.</span><span class="fu">setExpiration</span><span class="op">(</span>expiryDate<span class="op">);</span></span>
-<span id="cb1-28"><a href="#cb1-28"></a>        builder<span class="op">.</span><span class="fu">signWith</span><span class="op">(</span><span class="fu">getSigningKey</span><span class="op">(),</span> SignatureAlgorithm<span class="op">.</span><span class="fu">HS256</span><span class="op">);</span></span>
-<span id="cb1-29"><a href="#cb1-29"></a></span>
-<span id="cb1-30"><a href="#cb1-30"></a>        <span class="bu">String</span> token <span class="op">=</span> builder<span class="op">.</span><span class="fu">compact</span><span class="op">();</span></span>
-<span id="cb1-31"><a href="#cb1-31"></a>        <span class="cf">return</span> token<span class="op">;</span></span>
-<span id="cb1-32"><a href="#cb1-32"></a>    <span class="op">}</span></span>
-<span id="cb1-33"><a href="#cb1-33"></a></span>
-<span id="cb1-34"><a href="#cb1-34"></a>    <span class="co">// Valida o token e devolve o username se for válido, ou null caso contrário</span></span>
-<span id="cb1-35"><a href="#cb1-35"></a>    <span class="kw">public</span> <span class="dt">static</span> <span class="bu">String</span> <span class="fu">validateToken</span><span class="op">(</span><span class="bu">String</span> token<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb1-36"><a href="#cb1-36"></a>        <span class="cf">try</span> <span class="op">{</span></span>
-<span id="cb1-37"><a href="#cb1-37"></a>            Claims claims <span class="op">=</span> Jwts<span class="op">.</span><span class="fu">parserBuilder</span><span class="op">()</span></span>
-<span id="cb1-38"><a href="#cb1-38"></a>                    <span class="op">.</span><span class="fu">setSigningKey</span><span class="op">(</span><span class="fu">getSigningKey</span><span class="op">())</span></span>
-<span id="cb1-39"><a href="#cb1-39"></a>                    <span class="op">.</span><span class="fu">build</span><span class="op">()</span></span>
-<span id="cb1-40"><a href="#cb1-40"></a>                    <span class="op">.</span><span class="fu">parseClaimsJws</span><span class="op">(</span>token<span class="op">)</span></span>
-<span id="cb1-41"><a href="#cb1-41"></a>                    <span class="op">.</span><span class="fu">getBody</span><span class="op">();</span></span>
-<span id="cb1-42"><a href="#cb1-42"></a>            <span class="cf">return</span> claims<span class="op">.</span><span class="fu">getSubject</span><span class="op">();</span> <span class="co">// username</span></span>
-<span id="cb1-43"><a href="#cb1-43"></a>        <span class="op">}</span> <span class="cf">catch</span> <span class="op">(</span>JwtException <span class="op">|</span> <span class="bu">IllegalArgumentException</span> e<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb1-44"><a href="#cb1-44"></a>            <span class="cf">return</span> <span class="kw">null</span><span class="op">;</span></span>
-<span id="cb1-45"><a href="#cb1-45"></a>        <span class="op">}</span></span>
-<span id="cb1-46"><a href="#cb1-46"></a>    <span class="op">}</span></span>
-<span id="cb1-47"><a href="#cb1-47"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">import</span> <span class="im">io</span><span class="op">.</span><span class="im">jsonwebtoken</span><span class="op">.</span><span class="im">Claims</span><span class="op">;</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="kw">import</span> <span class="im">io</span><span class="op">.</span><span class="im">jsonwebtoken</span><span class="op">.</span><span class="im">JwtException</span><span class="op">;</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="kw">import</span> <span class="im">io</span><span class="op">.</span><span class="im">jsonwebtoken</span><span class="op">.</span><span class="im">Jwts</span><span class="op">;</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="kw">import</span> <span class="im">io</span><span class="op">.</span><span class="im">jsonwebtoken</span><span class="op">.</span><span class="im">security</span><span class="op">.</span><span class="im">Keys</span><span class="op">;</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="kw">import</span> <span class="im">java</span><span class="op">.</span><span class="im">nio</span><span class="op">.</span><span class="im">charset</span><span class="op">.</span><span class="im">StandardCharsets</span><span class="op">;</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="kw">import</span> <span class="im">java</span><span class="op">.</span><span class="im">util</span><span class="op">.</span><span class="im">Date</span><span class="op">;</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="kw">import</span> <span class="im">javax</span><span class="op">.</span><span class="im">crypto</span><span class="op">.</span><span class="im">SecretKey</span><span class="op">;</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a></span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="kw">public</span> <span class="kw">class</span> JwtUtil <span class="op">{</span></span>
+<span id="cb1-12"><a href="#cb1-12"></a>    <span class="co">// Chave secreta (tem de ter pelo menos 256 bits para HS256)</span></span>
+<span id="cb1-13"><a href="#cb1-13"></a>    <span class="kw">private</span> <span class="dt">static</span> <span class="dt">final</span> <span class="bu">String</span> SECRET <span class="op">=</span></span>
+<span id="cb1-14"><a href="#cb1-14"></a>        <span class="st">"MySuperSecretKeyForJwtSigningMustBeLongEnough12345"</span><span class="op">;</span></span>
+<span id="cb1-15"><a href="#cb1-15"></a></span>
+<span id="cb1-16"><a href="#cb1-16"></a>    <span class="kw">private</span> <span class="dt">static</span> <span class="dt">final</span> <span class="dt">long</span> EXPIRATION_TIME <span class="op">=</span> <span class="dv">1000</span> <span class="op">*</span> <span class="dv">60</span> <span class="op">*</span> <span class="dv">30</span><span class="op">;</span> <span class="co">// 30 minutos</span></span>
+<span id="cb1-17"><a href="#cb1-17"></a></span>
+<span id="cb1-18"><a href="#cb1-18"></a>    <span class="kw">private</span> <span class="dt">static</span> <span class="bu">SecretKey</span> <span class="fu">getSigningKey</span><span class="op">()</span> <span class="op">{</span></span>
+<span id="cb1-19"><a href="#cb1-19"></a>        <span class="cf">return</span> Keys<span class="op">.</span><span class="fu">hmacShaKeyFor</span><span class="op">(</span>SECRET<span class="op">.</span><span class="fu">getBytes</span><span class="op">(</span>StandardCharsets<span class="op">.</span><span class="fu">UTF_8</span><span class="op">));</span></span>
+<span id="cb1-20"><a href="#cb1-20"></a>    <span class="op">}</span></span>
+<span id="cb1-21"><a href="#cb1-21"></a></span>
+<span id="cb1-22"><a href="#cb1-22"></a>    <span class="co">// Gera o token</span></span>
+<span id="cb1-23"><a href="#cb1-23"></a>    <span class="kw">public</span> <span class="dt">static</span> <span class="bu">String</span> <span class="fu">generateToken</span><span class="op">(</span><span class="bu">String</span> username<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-24"><a href="#cb1-24"></a>        <span class="bu">Date</span> now <span class="op">=</span> <span class="kw">new</span> <span class="bu">Date</span><span class="op">();</span></span>
+<span id="cb1-25"><a href="#cb1-25"></a>        <span class="bu">Date</span> expiryDate <span class="op">=</span> <span class="kw">new</span> <span class="bu">Date</span><span class="op">(</span>now<span class="op">.</span><span class="fu">getTime</span><span class="op">()</span> <span class="op">+</span> EXPIRATION_TIME<span class="op">);</span></span>
+<span id="cb1-26"><a href="#cb1-26"></a></span>
+<span id="cb1-27"><a href="#cb1-27"></a>        <span class="cf">return</span> Jwts<span class="op">.</span><span class="fu">builder</span><span class="op">()</span></span>
+<span id="cb1-28"><a href="#cb1-28"></a>                <span class="op">.</span><span class="fu">subject</span><span class="op">(</span>username<span class="op">)</span></span>
+<span id="cb1-29"><a href="#cb1-29"></a>                <span class="op">.</span><span class="fu">issuedAt</span><span class="op">(</span>now<span class="op">)</span></span>
+<span id="cb1-30"><a href="#cb1-30"></a>                <span class="op">.</span><span class="fu">expiration</span><span class="op">(</span>expiryDate<span class="op">)</span></span>
+<span id="cb1-31"><a href="#cb1-31"></a>                <span class="op">.</span><span class="fu">signWith</span><span class="op">(</span><span class="fu">getSigningKey</span><span class="op">(),</span> Jwts<span class="op">.</span><span class="fu">SIG</span><span class="op">.</span><span class="fu">HS256</span><span class="op">)</span></span>
+<span id="cb1-32"><a href="#cb1-32"></a>                <span class="op">.</span><span class="fu">compact</span><span class="op">();</span></span>
+<span id="cb1-33"><a href="#cb1-33"></a>    <span class="op">}</span></span>
+<span id="cb1-34"><a href="#cb1-34"></a></span>
+<span id="cb1-35"><a href="#cb1-35"></a>    <span class="co">// Valida o token e devolve o username se for válido, ou null caso contrário</span></span>
+<span id="cb1-36"><a href="#cb1-36"></a>    <span class="kw">public</span> <span class="dt">static</span> <span class="bu">String</span> <span class="fu">validateToken</span><span class="op">(</span><span class="bu">String</span> token<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-37"><a href="#cb1-37"></a>        <span class="cf">try</span> <span class="op">{</span></span>
+<span id="cb1-38"><a href="#cb1-38"></a>            Claims claims <span class="op">=</span> Jwts<span class="op">.</span><span class="fu">parser</span><span class="op">()</span></span>
+<span id="cb1-39"><a href="#cb1-39"></a>                    <span class="op">.</span><span class="fu">verifyWith</span><span class="op">(</span><span class="fu">getSigningKey</span><span class="op">())</span></span>
+<span id="cb1-40"><a href="#cb1-40"></a>                    <span class="op">.</span><span class="fu">build</span><span class="op">()</span></span>
+<span id="cb1-41"><a href="#cb1-41"></a>                    <span class="op">.</span><span class="fu">parseSignedClaims</span><span class="op">(</span>token<span class="op">)</span></span>
+<span id="cb1-42"><a href="#cb1-42"></a>                    <span class="op">.</span><span class="fu">getPayload</span><span class="op">();</span></span>
+<span id="cb1-43"><a href="#cb1-43"></a>            <span class="cf">return</span> claims<span class="op">.</span><span class="fu">getSubject</span><span class="op">();</span> <span class="co">// username</span></span>
+<span id="cb1-44"><a href="#cb1-44"></a>        <span class="op">}</span> <span class="cf">catch</span> <span class="op">(</span>JwtException <span class="op">|</span> <span class="bu">IllegalArgumentException</span> e<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb1-45"><a href="#cb1-45"></a>            <span class="cf">return</span> <span class="kw">null</span><span class="op">;</span></span>
+<span id="cb1-46"><a href="#cb1-46"></a>        <span class="op">}</span></span>
+<span id="cb1-47"><a href="#cb1-47"></a>    <span class="op">}</span></span>
+<span id="cb1-48"><a href="#cb1-48"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Importante: nunca guardar palavras-passe dentro do <em>token</em>.</p>
 </section>
 <section id="sec-apD5-passo3" class="level3" data-number="H.1.4">

@@ -25,7 +25,7 @@ Antes de resolver o problema, vale a pena precisar dois conceitos frequentemente
 : Responde a "quem é o utilizador?". É a verificação de identidade, tipicamente feita no momento do *login*.
 
 ```java
-if (username.equals("admin") && password.equals("1234")) {
+if (dao.validateUserCredentials(username, password)) {
     HttpSession session = request.getSession(true);
     session.setAttribute("UserName", username);
 }

@@ -38,7 +38,7 @@ Um *JSON Web Token* (JWT) é um formato normalizado de *token*, desenhado para t
 **Assinatura**
 : O resultado de assinar criptograficamente o *header* e o *payload* com uma chave secreta, conhecida apenas pelo servidor
 
-Cada uma destas três partes é codificada em *Base64* e concatenada com pontos, resultando na *string* longa e ilegível característica de um JWT (como a do exemplo do cabeçalho `Authorization` acima). O *header* e o *payload* são apenas codificados, não cifrados — qualquer pessoa os consegue ler, sem precisar de nenhuma chave. O que garante que ninguém consegue **forjar** um *token* válido é a assinatura: só quem conhece a chave secreta do servidor a consegue gerar corretamente, e qualquer alteração ao *header* ou ao *payload*, por mínima que seja, invalida a assinatura. O servidor, ao receber um pedido, recalcula a assinatura a partir do *header* e do *payload* recebidos, e compara-a com a que veio no *token*: se coincidirem, o conteúdo é de confiar, sem que o servidor tenha precisado de guardar, ele próprio, absolutamente nada.
+Cada uma destas três partes é codificada em *Base64URL* (uma variante do *Base64* que só usa caracteres seguros numa *URL*) e concatenada com pontos, resultando na *string* longa e ilegível característica de um JWT (como a do exemplo do cabeçalho `Authorization` acima). O *header* e o *payload* são apenas codificados, não cifrados — qualquer pessoa os consegue ler, sem precisar de nenhuma chave. O que garante que ninguém consegue **forjar** um *token* válido é a assinatura: só quem conhece a chave secreta do servidor a consegue gerar corretamente, e qualquer alteração ao *header* ou ao *payload*, por mínima que seja, invalida a assinatura. O servidor, ao receber um pedido, recalcula a assinatura a partir do *header* e do *payload* recebidos, e compara-a com a que veio no *token*: se coincidirem, o conteúdo é de confiar, sem que o servidor tenha precisado de guardar, ele próprio, absolutamente nada.
 
 ## O Ciclo de Vida de um *Token* {#sec-08-ciclo-vida-token}
 
@@ -205,10 +205,16 @@ fetch("/country")
     const tabela = document.querySelector("#tabela-paises");
     paises.forEach(pais => {
       const linha = document.createElement("tr");
-      linha.innerHTML = `<td>${pais.code}</td><td>${pais.name}</td><td>${pais.capital}</td>`;
+      for (const valor of [pais.code, pais.name, pais.capital]) {
+        const celula = document.createElement("td");
+        celula.textContent = valor;     // texto, nunca HTML
+        linha.appendChild(celula);
+      }
       tabela.appendChild(linha);
     });
   });
 ```
+
+Cada célula é preenchida com `textContent`, e não com `innerHTML`. A diferença importa: `innerHTML` interpreta o valor como HTML, e um nome de país vindo do servidor que contivesse, por exemplo, `<img src=x onerror="...">` faria o *browser* executar esse JavaScript na página (um ataque de *Cross-Site Scripting*, ou XSS). Com `textContent`, o valor é sempre inserido como texto, seja qual for o seu conteúdo.
 
 Este padrão — pedir dados a uma API REST com `fetch()`, e usar o DOM para os mostrar — é a base de qualquer *front-office* em JavaScript ligado a um serviço REST, independentemente da aplicação concreta ou dos dados envolvidos.

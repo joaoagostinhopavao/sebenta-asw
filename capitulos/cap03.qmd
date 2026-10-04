@@ -305,7 +305,8 @@ Dentro destas categorias, alguns códigos surgem com particular frequência no d
 | `200 OK` | O pedido foi processado com sucesso |
 | `201 Created` | Um novo recurso foi criado com sucesso |
 | `400 Bad Request` | O pedido está malformado ou falta um parâmetro obrigatório |
-| `403 Forbidden` | O cliente não tem permissão para aceder ao recurso |
+| `401 Unauthorized` | O pedido não está autenticado: não se sabe quem é o cliente |
+| `403 Forbidden` | O cliente está autenticado, mas não tem permissão para aceder ao recurso |
 | `404 Not Found` | O recurso pedido não existe |
 | `500 Internal Server Error` | Ocorreu um erro não tratado do lado do servidor |
 
