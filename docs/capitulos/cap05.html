@@ -325,7 +325,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="sec-05-problema-estado" class="level2" data-number="5.1">
 <h2 data-number="5.1" class="anchored" data-anchor-id="sec-05-problema-estado"><span class="header-section-number">5.1</span> HTTP é Sem Estado: o Problema</h2>
-<p>O protocolo HTTP é <em>stateless</em> (ver <a href="../capitulos/cap01.html">Capítulo 1</a>): cada pedido é independente, e o servidor não guarda, por si só, qualquer memória de pedidos anteriores. Não existe, ao nível do protocolo, nenhuma noção de “utilizador com sessão iniciada”.</p>
+<p>O protocolo HTTP é <em>stateless</em> (ver <a href="../capitulos/cap03.html">Capítulo 3</a>): cada pedido é independente, e o servidor não guarda, por si só, qualquer memória de pedidos anteriores. Não existe, ao nível do protocolo, nenhuma noção de “utilizador com sessão iniciada”.</p>
 <p>Isto levanta um problema prático imediato: se um utilizador se autentica num pedido, como é que um pedido seguinte, minutos depois, sabe que esse utilizador continua autenticado? A resposta passa por dois mecanismos complementares:</p>
 <ul>
 <li><strong><em>Cookies</em></strong>: um pequeno pedaço de informação guardado do lado do <strong>cliente</strong>, reenviado automaticamente pelo <em>browser</em> em cada pedido seguinte</li>
@@ -334,24 +334,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="sec-05-cookies" class="level2" data-number="5.2">
 <h2 data-number="5.2" class="anchored" data-anchor-id="sec-05-cookies"><span class="header-section-number">5.2</span> <em>Cookies</em></h2>
-<p>Um <em>cookie</em> é um par chave/valor guardado no <em>browser</em>. Quando o servidor envia um <em>cookie</em>, espera que o cliente o devolva em todos os pedidos HTTP seguintes, dirigidos ao mesmo domínio, implementando deste modo um mecanismo de identificação que se sobrepõe ao estado <code>stateless</code> do HTTP.</p>
+<p>Um <em>cookie</em> é um par chave/valor guardado no <em>browser</em>. Quando o servidor envia um <em>cookie</em>, espera que o cliente o devolva em todos os pedidos HTTP seguintes, dirigidos ao mesmo domínio, implementando deste modo um mecanismo de identificação que contorna a natureza <em>stateless</em> do HTTP.</p>
 <p>Distinguem-se dois tipos, consoante a sua persistência:</p>
 <ul>
-<li><strong><em>Session cookies</em></strong>: mantidos pelo cliente apenas durante uma sessão de navegação (<code>setMaxAge(-1)</code>). Enquanto não se fechar a sessão, o cliente continua a identificar-se através do <em>cookie</em>. A partir do momento em que se fecha a sessão (por <em>logout</em> ou fechando o <em>browser</em>) o <em>cookie</em> é destruido.</li>
+<li><strong><em>Session cookies</em></strong>: mantidos pelo cliente apenas durante uma sessão de navegação (<code>setMaxAge(-1)</code>). Enquanto não se fechar a sessão, o cliente continua a identificar-se através do <em>cookie</em>. A partir do momento em que se fecha a sessão (por <em>logout</em> ou fechando o <em>browser</em>) o <em>cookie</em> é destruído.</li>
 <li><strong><em>Permanent cookies</em></strong>: guardados de forma persistente, com um tempo de vida definido (<code>setMaxAge(60*60*24*30)</code> - o tempo é expresso em segundos, neste caso para 30 dias).</li>
 </ul>
 <p>Criar um <em>cookie</em>:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb1-1"><a href="#cb1-1"></a>Cookie cookie <span class="op">=</span> <span class="kw">new</span> <span class="fu">Cookie</span><span class="op">(</span><span class="st">"userName"</span><span class="op">,</span> <span class="st">"Pedro"</span><span class="op">);</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a>cookie<span class="op">.</span><span class="fu">setMaxAge</span><span class="op">(-</span><span class="dv">1</span><span class="op">);</span> <span class="co">// session cookie</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a>response<span class="op">.</span><span class="fu">addCookie</span><span class="op">(</span>cookie<span class="op">);</span> <span class="co">// o cookie é adicionado à resposta e enviado ao cliente</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb1-1"><a href="#cb1-1"></a>Cookie cookie <span class="op">=</span> <span class="kw">new</span> <span class="fu">Cookie</span><span class="op">(</span><span class="st">"tema"</span><span class="op">,</span> <span class="st">"escuro"</span><span class="op">);</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a>cookie<span class="op">.</span><span class="fu">setMaxAge</span><span class="op">(</span><span class="dv">60</span> <span class="op">*</span> <span class="dv">60</span> <span class="op">*</span> <span class="dv">24</span> <span class="op">*</span> <span class="dv">30</span><span class="op">);</span> <span class="co">// permanent cookie: 30 dias</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>response<span class="op">.</span><span class="fu">addCookie</span><span class="op">(</span>cookie<span class="op">);</span>          <span class="co">// o cookie é adicionado à resposta e enviado ao cliente</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Ler um <em>cookie</em> recebido num pedido:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb2-1"><a href="#cb2-1"></a>Cookie<span class="op">[]</span> cookies <span class="op">=</span> request<span class="op">.</span><span class="fu">getCookies</span><span class="op">();</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="bu">String</span> user <span class="op">=</span> <span class="kw">null</span><span class="op">;</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="bu">String</span> tema <span class="op">=</span> <span class="kw">null</span><span class="op">;</span></span>
 <span id="cb2-3"><a href="#cb2-3"></a></span>
 <span id="cb2-4"><a href="#cb2-4"></a><span class="cf">if</span> <span class="op">(</span>cookies <span class="op">!=</span> <span class="kw">null</span><span class="op">)</span> <span class="op">{</span>                       <span class="co">// null se o pedido não trouxer cookies</span></span>
 <span id="cb2-5"><a href="#cb2-5"></a>    <span class="cf">for</span> <span class="op">(</span>Cookie c <span class="op">:</span> cookies<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb2-6"><a href="#cb2-6"></a>        <span class="cf">if</span> <span class="op">(</span>c<span class="op">.</span><span class="fu">getName</span><span class="op">().</span><span class="fu">equals</span><span class="op">(</span><span class="st">"userName"</span><span class="op">))</span> <span class="op">{</span></span>
-<span id="cb2-7"><a href="#cb2-7"></a>            user <span class="op">=</span> c<span class="op">.</span><span class="fu">getValue</span><span class="op">();</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a>        <span class="cf">if</span> <span class="op">(</span>c<span class="op">.</span><span class="fu">getName</span><span class="op">().</span><span class="fu">equals</span><span class="op">(</span><span class="st">"tema"</span><span class="op">))</span> <span class="op">{</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a>            tema <span class="op">=</span> c<span class="op">.</span><span class="fu">getValue</span><span class="op">();</span></span>
 <span id="cb2-8"><a href="#cb2-8"></a>        <span class="op">}</span></span>
 <span id="cb2-9"><a href="#cb2-9"></a>    <span class="op">}</span></span>
 <span id="cb2-10"><a href="#cb2-10"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -359,7 +359,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="sec-05-sessoes-http" class="level2" data-number="5.3">
 <h2 data-number="5.3" class="anchored" data-anchor-id="sec-05-sessoes-http"><span class="header-section-number">5.3</span> Sessões (<code>HttpSession</code>)</h2>
-<p>Guardar estado do lado do servidor exige um objeto próprio para o efeito: a <code>HttpSession</code>. Uma sessão obtém-se, ou cria-se, a partir do pedido:</p>
+<p>Guardar estado do lado do servidor exige um objeto próprio para o efeito: a <code>HttpSession</code>. A diferença essencial em relação a um <em>cookie</em> está no sítio onde ficam os dados (<a href="#fig-05-cookie-vs-sessao" class="quarto-xref">Figura&nbsp;<span>5.1</span></a>): o <em>browser</em> guarda apenas um identificador, e é o servidor que guarda, associados a esse identificador, todos os dados da sessão. Os dados nunca saem do servidor, e o cliente não os pode ler nem alterar.</p>
+<div id="fig-05-cookie-vs-sessao" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-05-cookie-vs-sessao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap05/cookie-vs-sessao.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-05-cookie-vs-sessao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;5.1: Um <em>cookie</em> guarda os dados no cliente; uma sessão guarda-os no servidor. No caso da sessão, o <em>browser</em> fica apenas com o identificador (<code>JSESSIONID</code>), que funciona como a chave para encontrar a sessão certa no servidor.
+</figcaption>
+</figure>
+</div>
+<p>Uma sessão obtém-se, ou cria-se, a partir do pedido:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb3-1"><a href="#cb3-1"></a>HttpSession session <span class="op">=</span> request<span class="op">.</span><span class="fu">getSession</span><span class="op">();</span>          <span class="co">// cria se não existir</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a>HttpSession session <span class="op">=</span> request<span class="op">.</span><span class="fu">getSession</span><span class="op">(</span><span class="kw">true</span><span class="op">);</span>      <span class="co">// equivalente, explícito</span></span>
 <span id="cb3-3"><a href="#cb3-3"></a>HttpSession session <span class="op">=</span> request<span class="op">.</span><span class="fu">getSession</span><span class="op">(</span><span class="kw">false</span><span class="op">);</span>     <span class="co">// NUNCA cria; devolve null se não houver</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -374,9 +385,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="httpmsg">
 <p>JSESSIONID=22562577CE80EF3B1DAAA0E48F2B6392</p>
 </div>
+<p>A <a href="#fig-05-jsessionid" class="quarto-xref">Figura&nbsp;<span>5.2</span></a> mostra o mecanismo completo, passo a passo:</p>
+<ol type="1">
+<li>O <em>browser</em> envia as credenciais (<code>POST /login</code>). Ainda não tem nenhum <em>cookie</em> deste servidor.</li>
+<li>A <em>Servlet</em> chama <code>getSession()</code>, o contentor cria uma sessão nova com um identificador único e a resposta leva o cabeçalho <code>Set-Cookie: JSESSIONID=...</code>.</li>
+<li>Num pedido seguinte (<code>GET /perfil</code>), o <em>browser</em> devolve automaticamente o <em>cookie</em> no cabeçalho <code>Cookie</code>. O contentor usa o identificador para encontrar a sessão certa entre todas as que guarda.</li>
+<li>A <em>Servlet</em> lê os atributos dessa sessão e responde com os dados daquele utilizador.</li>
+</ol>
+<div id="fig-05-jsessionid" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-05-jsessionid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap05/sessao-jsessionid.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-05-jsessionid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;5.2: O <em>cookie</em> <code>JSESSIONID</code> liga pedidos sucessivos à mesma sessão. O identificador (aqui abreviado para A3F9) é criado pelo servidor no primeiro pedido, enviado ao <em>browser</em> com <code>Set-Cookie</code> e devolvido por este, com <code>Cookie</code>, em todos os pedidos seguintes.
+</figcaption>
+</figure>
+</div>
 <p>Quando o cliente não aceita <em>cookies</em>, existe uma alternativa: codificar o identificador de sessão diretamente na <em>URL</em>.</p>
 <div class="httpmsg">
-<p>http://localhost:8080/CapitaisAPI/country;jsessionid=829F8836C240B51DD2F074259F242833</p>
+<p>http://localhost:8080/loja/perfil;jsessionid=829F8836C240B51DD2F074259F242833</p>
 </div>
 <p>É boa prática chamar sempre <code>response.encodeURL(url)</code> ao construir uma <em>URL</em> de destino: se os <em>cookies</em> estiverem ativos, o método devolve a <em>URL</em> inalterada; se não estiverem, acrescenta automaticamente o <code>jsessionid</code>.</p>
 </section>
@@ -387,27 +415,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-2"><a href="#cb5-2"></a><span class="kw">public</span> <span class="kw">class</span> LoginServlet <span class="kw">extends</span> HttpServlet <span class="op">{</span></span>
 <span id="cb5-3"><a href="#cb5-3"></a>    <span class="kw">protected</span> <span class="dt">void</span> <span class="fu">doPost</span><span class="op">(</span>HttpServletRequest request<span class="op">,</span> HttpServletResponse response<span class="op">)</span></span>
 <span id="cb5-4"><a href="#cb5-4"></a>            <span class="kw">throws</span> ServletException<span class="op">,</span> <span class="bu">IOException</span> <span class="op">{</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a>        <span class="bu">String</span> user <span class="op">=</span> request<span class="op">.</span><span class="fu">getParameter</span><span class="op">(</span><span class="st">"user"</span><span class="op">);</span></span>
-<span id="cb5-6"><a href="#cb5-6"></a>        <span class="bu">String</span> pass <span class="op">=</span> request<span class="op">.</span><span class="fu">getParameter</span><span class="op">(</span><span class="st">"pass"</span><span class="op">);</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a>        <span class="bu">String</span> utilizador <span class="op">=</span> request<span class="op">.</span><span class="fu">getParameter</span><span class="op">(</span><span class="st">"utilizador"</span><span class="op">);</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a>        <span class="bu">String</span> palavraPasse <span class="op">=</span> request<span class="op">.</span><span class="fu">getParameter</span><span class="op">(</span><span class="st">"palavra-passe"</span><span class="op">);</span></span>
 <span id="cb5-7"><a href="#cb5-7"></a></span>
-<span id="cb5-8"><a href="#cb5-8"></a>        <span class="cf">if</span> <span class="op">(</span>dao<span class="op">.</span><span class="fu">validateUserCredentials</span><span class="op">(</span>user<span class="op">,</span> pass<span class="op">))</span> <span class="op">{</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a>        <span class="cf">if</span> <span class="op">(</span>dao<span class="op">.</span><span class="fu">validarCredenciais</span><span class="op">(</span>utilizador<span class="op">,</span> palavraPasse<span class="op">))</span> <span class="op">{</span></span>
 <span id="cb5-9"><a href="#cb5-9"></a>            HttpSession session <span class="op">=</span> request<span class="op">.</span><span class="fu">getSession</span><span class="op">(</span><span class="kw">true</span><span class="op">);</span></span>
-<span id="cb5-10"><a href="#cb5-10"></a>            session<span class="op">.</span><span class="fu">setAttribute</span><span class="op">(</span><span class="st">"UserName"</span><span class="op">,</span> user<span class="op">);</span></span>
+<span id="cb5-10"><a href="#cb5-10"></a>            session<span class="op">.</span><span class="fu">setAttribute</span><span class="op">(</span><span class="st">"utilizador"</span><span class="op">,</span> utilizador<span class="op">);</span></span>
 <span id="cb5-11"><a href="#cb5-11"></a></span>
-<span id="cb5-12"><a href="#cb5-12"></a>            response<span class="op">.</span><span class="fu">setContentType</span><span class="op">(</span><span class="st">"application/json"</span><span class="op">);</span></span>
-<span id="cb5-13"><a href="#cb5-13"></a>            response<span class="op">.</span><span class="fu">getWriter</span><span class="op">().</span><span class="fu">print</span><span class="op">(</span><span class="st">"{</span><span class="sc">\"</span><span class="st">message</span><span class="sc">\"</span><span class="st">:</span><span class="sc">\"</span><span class="st">OK</span><span class="sc">\"</span><span class="st">,</span><span class="sc">\"</span><span class="st">user</span><span class="sc">\"</span><span class="st">:</span><span class="sc">\"</span><span class="st">"</span> <span class="op">+</span> user <span class="op">+</span> <span class="st">"</span><span class="sc">\"</span><span class="st">}"</span><span class="op">);</span></span>
+<span id="cb5-12"><a href="#cb5-12"></a>            response<span class="op">.</span><span class="fu">setContentType</span><span class="op">(</span><span class="st">"text/plain; charset=UTF-8"</span><span class="op">);</span></span>
+<span id="cb5-13"><a href="#cb5-13"></a>            response<span class="op">.</span><span class="fu">getWriter</span><span class="op">().</span><span class="fu">print</span><span class="op">(</span><span class="st">"Bem-vindo, "</span> <span class="op">+</span> utilizador<span class="op">);</span></span>
 <span id="cb5-14"><a href="#cb5-14"></a>        <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
 <span id="cb5-15"><a href="#cb5-15"></a>            response<span class="op">.</span><span class="fu">setStatus</span><span class="op">(</span>HttpServletResponse<span class="op">.</span><span class="fu">SC_UNAUTHORIZED</span><span class="op">);</span></span>
-<span id="cb5-16"><a href="#cb5-16"></a>            response<span class="op">.</span><span class="fu">getWriter</span><span class="op">().</span><span class="fu">print</span><span class="op">(</span><span class="st">"{</span><span class="sc">\"</span><span class="st">message</span><span class="sc">\"</span><span class="st">:</span><span class="sc">\"</span><span class="st">UNAUTHORIZED</span><span class="sc">\"</span><span class="st">,</span><span class="sc">\"</span><span class="st">error</span><span class="sc">\"</span><span class="st">:</span><span class="sc">\"</span><span class="st">Invalid login or password</span><span class="sc">\"</span><span class="st">}"</span><span class="op">);</span></span>
-<span id="cb5-17"><a href="#cb5-17"></a>        <span class="op">}</span></span>
-<span id="cb5-18"><a href="#cb5-18"></a>    <span class="op">}</span></span>
-<span id="cb5-19"><a href="#cb5-19"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Note-se que <code>dao</code> é uma instância de um <em>Data Access Object</em> (DAO) — um objeto dedicado ao acesso a dados, já referido no <a href="../capitulos/cap04.html">Capítulo 4</a> — responsável, neste caso, por validar as credenciais recebidas: tipicamente consulta uma base de dados de utilizadores, e devolve <code>true</code> ou <code>false</code> consoante o <code>user</code>/<code>pass</code> sejam válidos ou não.</p>
+<span id="cb5-16"><a href="#cb5-16"></a>            response<span class="op">.</span><span class="fu">setContentType</span><span class="op">(</span><span class="st">"text/plain; charset=UTF-8"</span><span class="op">);</span></span>
+<span id="cb5-17"><a href="#cb5-17"></a>            response<span class="op">.</span><span class="fu">getWriter</span><span class="op">().</span><span class="fu">print</span><span class="op">(</span><span class="st">"Utilizador ou palavra-passe inválidos"</span><span class="op">);</span></span>
+<span id="cb5-18"><a href="#cb5-18"></a>        <span class="op">}</span></span>
+<span id="cb5-19"><a href="#cb5-19"></a>    <span class="op">}</span></span>
+<span id="cb5-20"><a href="#cb5-20"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Note-se que <code>dao</code> é uma instância de um <em>Data Access Object</em> (DAO), o objeto dedicado ao acesso a dados já referido no <a href="../capitulos/cap04.html">Capítulo 4</a> (por exemplo, um <code>UtilizadorDAO</code>). Neste caso, é responsável por validar as credenciais recebidas: tipicamente consulta uma base de dados de utilizadores e devolve <code>true</code> ou <code>false</code> consoante o par utilizador/palavra-passe seja válido ou não.</p>
 <p>Qualquer <em>endpoint</em> protegido verifica, no início do seu próprio <code>doGet()</code> ou <code>doPost()</code>, se existe uma sessão válida com esse atributo:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb6-1"><a href="#cb6-1"></a>HttpSession session <span class="op">=</span> request<span class="op">.</span><span class="fu">getSession</span><span class="op">(</span><span class="kw">false</span><span class="op">);</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="cf">if</span> <span class="op">(</span>session <span class="op">==</span> <span class="kw">null</span> <span class="op">||</span> session<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"UserName"</span><span class="op">)</span> <span class="op">==</span> <span class="kw">null</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="cf">if</span> <span class="op">(</span>session <span class="op">==</span> <span class="kw">null</span> <span class="op">||</span> session<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"utilizador"</span><span class="op">)</span> <span class="op">==</span> <span class="kw">null</span><span class="op">)</span> <span class="op">{</span></span>
 <span id="cb6-3"><a href="#cb6-3"></a>    response<span class="op">.</span><span class="fu">setStatus</span><span class="op">(</span>HttpServletResponse<span class="op">.</span><span class="fu">SC_UNAUTHORIZED</span><span class="op">);</span></span>
-<span id="cb6-4"><a href="#cb6-4"></a>    response<span class="op">.</span><span class="fu">getWriter</span><span class="op">().</span><span class="fu">print</span><span class="op">(</span><span class="st">"{</span><span class="sc">\"</span><span class="st">error</span><span class="sc">\"</span><span class="st">:</span><span class="sc">\"</span><span class="st">Authentication required</span><span class="sc">\"</span><span class="st">}"</span><span class="op">);</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a>    response<span class="op">.</span><span class="fu">getWriter</span><span class="op">().</span><span class="fu">print</span><span class="op">(</span><span class="st">"Autenticação necessária"</span><span class="op">);</span></span>
 <span id="cb6-5"><a href="#cb6-5"></a>    <span class="cf">return</span><span class="op">;</span></span>
 <span id="cb6-6"><a href="#cb6-6"></a><span class="op">}</span></span>
 <span id="cb6-7"><a href="#cb6-7"></a><span class="co">// pedido autenticado: continuar o processamento normal</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -416,28 +445,39 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="sec-05-mvc-jsp" class="level2" data-number="5.5">
 <h2 data-number="5.5" class="anchored" data-anchor-id="sec-05-mvc-jsp"><span class="header-section-number">5.5</span> O Padrão MVC com <em>Servlet</em> e JSP</h2>
-<p>O <a href="../capitulos/cap01.html">Capítulo 1</a> apresentou o padrão MVC a nível conceptual, e o <a href="../capitulos/cap04.html">Capítulo 4</a> mostrou como uma <em>Servlet</em> funciona como Controller. As páginas construídas no <a href="../capitulos/cap02.html">Capítulo 2</a> já desempenham o papel de View, mas são estáticas: o seu conteúdo não muda consoante o pedido. Esta secção mostra uma forma alternativa de construir a View — desta vez gerada dinamicamente do lado do servidor, a partir dos dados que o Controller lhe entrega.</p>
+<p>O <a href="../capitulos/cap01.html">Capítulo 1</a> apresentou o padrão MVC a nível conceptual, e o <a href="../capitulos/cap04.html">Capítulo 4</a> mostrou como uma <em>Servlet</em> funciona como Controller. As páginas construídas no <a href="../capitulos/cap02.html">Capítulo 2</a> já desempenham o papel de View, mas são estáticas: o seu conteúdo não muda consoante o pedido. Esta secção mostra uma forma alternativa de construir a View, desta vez gerada dinamicamente do lado do servidor, a partir dos dados que o Controller lhe entrega.</p>
 <div id="fig-05-mvc-geral" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-05-mvc-geral-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="../assets/images/capitulos/cap05/Modelo_MVC_Geral.png" class="img-fluid figure-img" style="width:55.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-05-mvc-geral-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;5.1: O modelo geral do MVC, aplicável a qualquer interface (não só Web): o Controller atualiza o Model e a apresentação; a View lê o Model para se apresentar.
+Figura&nbsp;5.3: O modelo geral do MVC, aplicável a qualquer interface (não só Web): o Controller atualiza o Model e a apresentação; a View lê o Model para se apresentar.
 </figcaption>
 </figure>
 </div>
 <p>Numa aplicação orientada à apresentação, a <em>Servlet</em> recebe o pedido e decide <strong>o quê</strong> mostrar, mas delega a <strong>geração do HTML</strong> propriamente dita a uma <a href="https://jakarta.ee/specifications/pages/"><em>JavaServer Page</em></a> (JSP). O Model, por sua vez, é uma classe Java comum (por exemplo, um <em>DAO</em>), independente de ambos.</p>
 <p>A <em>Servlet</em> liga-se à JSP através de um <code>RequestDispatcher</code>: coloca os dados a mostrar num atributo do pedido, e encaminha (<em>forward</em>) o próprio pedido para a página:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb8-1"><a href="#cb8-1"></a>request<span class="op">.</span><span class="fu">setAttribute</span><span class="op">(</span><span class="st">"user"</span><span class="op">,</span> user<span class="op">);</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a>request<span class="op">.</span><span class="fu">getRequestDispatcher</span><span class="op">(</span><span class="st">"/home.jsp"</span><span class="op">).</span><span class="fu">forward</span><span class="op">(</span>request<span class="op">,</span> response<span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb8-1"><a href="#cb8-1"></a>request<span class="op">.</span><span class="fu">setAttribute</span><span class="op">(</span><span class="st">"utilizador"</span><span class="op">,</span> utilizador<span class="op">);</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a>request<span class="op">.</span><span class="fu">getRequestDispatcher</span><span class="op">(</span><span class="st">"/perfil.jsp"</span><span class="op">).</span><span class="fu">forward</span><span class="op">(</span>request<span class="op">,</span> response<span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>O percurso completo de um pedido está na <a href="#fig-05-servlet-jsp" class="quarto-xref">Figura&nbsp;<span>5.4</span></a>. O <em>browser</em> não chega a saber que existiu um <em>forward</em>: do seu ponto de vista, pediu <code>/perfil</code> e recebeu uma página HTML.</p>
+<div id="fig-05-servlet-jsp" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-05-servlet-jsp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap05/servlet-jsp.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-05-servlet-jsp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;5.4: MVC com <em>Servlet</em> e JSP: (1) o pedido chega à <em>Servlet</em>, o Controller; (2) a <em>Servlet</em> obtém os dados do Model (o DAO); (3) coloca-os num atributo do pedido e encaminha-o para a JSP, a View; (4) a JSP gera o HTML que é devolvido ao <em>browser</em>.
+</figcaption>
+</figure>
+</div>
 <p>Uma JSP é um documento de texto que mistura dois tipos de conteúdo: HTML estático e elementos de <em>script</em> dinâmico. Na primeira vez que é pedida, o <em>Servlet Container</em> converte-a automaticamente numa classe <em>Servlet</em>, que passa a comportar-se, dali em diante, exatamente como qualquer outra <em>Servlet</em>, no papel de <code>Controller</code>.</p>
 </section>
 <section id="sec-05-exemplo-jsp" class="level2" data-number="5.6">
 <h2 data-number="5.6" class="anchored" data-anchor-id="sec-05-exemplo-jsp"><span class="header-section-number">5.6</span> Um Exemplo Simples de JSP</h2>
 <div class="sourceCode" id="cb9"><pre class="sourceCode numberSource jsp number-lines code-with-copy"><code class="sourceCode jsp"><span id="cb9-1"><a href="#cb9-1"></a><span class="bu">&lt;%@ page</span><span class="ot"> language</span>=<span class="st">"java"</span><span class="ot"> contentType</span>=<span class="st">"text/html; charset=UTF-8"</span><span class="ot"> pageEncoding</span>=<span class="st">"UTF-8"</span><span class="bu">%&gt;</span></span>
 <span id="cb9-2"><a href="#cb9-2"></a></span>
-<span id="cb9-3"><a href="#cb9-3"></a><span class="pp">&lt;%</span> <span class="bu">String</span> name <span class="op">=</span> <span class="op">(</span><span class="bu">String</span><span class="op">)</span> request<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"userName"</span><span class="op">);</span> <span class="pp">%&gt;</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="pp">&lt;%</span> <span class="bu">String</span> utilizador <span class="op">=</span> <span class="op">(</span><span class="bu">String</span><span class="op">)</span> request<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"utilizador"</span><span class="op">);</span> <span class="pp">%&gt;</span></span>
 <span id="cb9-4"><a href="#cb9-4"></a></span>
 <span id="cb9-5"><a href="#cb9-5"></a>&lt;<span class="ot">!DOCTYPE html</span>&gt;</span>
 <span id="cb9-6"><a href="#cb9-6"></a>&lt;html&gt;</span>
@@ -446,10 +486,24 @@ Figura&nbsp;5.1: O modelo geral do MVC, aplicável a qualquer interface (não s�
 <span id="cb9-9"><a href="#cb9-9"></a>  &lt;title&gt;Uma Página JSP&lt;/title&gt;</span>
 <span id="cb9-10"><a href="#cb9-10"></a>&lt;/head&gt;</span>
 <span id="cb9-11"><a href="#cb9-11"></a>&lt;body&gt;</span>
-<span id="cb9-12"><a href="#cb9-12"></a>  &lt;h1&gt;Olá, <span class="pp">&lt;%=</span> name <span class="pp">%&gt;</span>!&lt;/h1&gt;</span>
+<span id="cb9-12"><a href="#cb9-12"></a>  &lt;h1&gt;Olá, <span class="pp">&lt;%=</span> utilizador <span class="pp">%&gt;</span>!&lt;/h1&gt;</span>
 <span id="cb9-13"><a href="#cb9-13"></a>&lt;/body&gt;</span>
 <span id="cb9-14"><a href="#cb9-14"></a>&lt;/html&gt;</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>O bloco <code>&lt;% ... %&gt;</code> (<em>scriptlet</em>) contém código Java arbitrário; o bloco <code>&lt;%= ... %&gt;</code> (expressão) insere o valor de uma expressão Java diretamente no HTML gerado. É exatamente este atributo <code>userName</code>, colocado no pedido pela <em>Servlet</em> através de <code>request.setAttribute(...)</code>, que a JSP aqui recupera.</p>
+<p>O bloco <code>&lt;% ... %&gt;</code> (<em>scriptlet</em>) contém código Java arbitrário; o bloco <code>&lt;%= ... %&gt;</code> (expressão) insere o valor de uma expressão Java diretamente no HTML gerado. É exatamente o atributo <code>utilizador</code>, colocado no pedido pela <em>Servlet</em> através de <code>request.setAttribute(...)</code>, que a JSP aqui recupera.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<em>Expression Language</em> (EL)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Os <em>scriptlets</em> são hoje considerados prática antiga, porque misturam código Java com HTML. Nas JSP atuais, a mesma linha escreve-se com a <em>Expression Language</em>, que procura o atributo pelo nome nos vários <em>scopes</em> (ver <a href="#sec-05-scopes" class="quarto-xref"><span>Secção 5.8</span></a>), do mais restrito para o mais lato:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource jsp number-lines code-with-copy"><code class="sourceCode jsp"><span id="cb10-1"><a href="#cb10-1"></a>&lt;h1&gt;Olá, <span class="pp">${</span>utilizador<span class="pp">}</span>!&lt;/h1&gt;</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
 </section>
 <section id="sec-05-ciclo-vida-jsp" class="level2" data-number="5.7">
 <h2 data-number="5.7" class="anchored" data-anchor-id="sec-05-ciclo-vida-jsp"><span class="header-section-number">5.7</span> Ciclo de Vida e Objetos Implícitos</h2>
@@ -484,12 +538,16 @@ Figura&nbsp;5.1: O modelo geral do MVC, aplicável a qualquer interface (não s�
 <td><code>HttpSession</code></td>
 </tr>
 <tr class="odd">
+<td><code>application</code></td>
+<td><code>ServletContext</code></td>
+</tr>
+<tr class="even">
 <td><code>page</code></td>
 <td><code>Object</code></td>
 </tr>
 </tbody>
 </table>
-<p>Por causa do objeto implícito <code>out</code>, uma JSP nunca precisa de obter explicitamente um <code>PrintWriter</code>: usa-se <code>out</code> diretamente.</p>
+<p>Por causa do objeto implícito <code>out</code>, uma JSP nunca precisa de obter explicitamente um <code>PrintWriter</code>: usa-se <code>out</code> diretamente. Do mesmo modo, <code>request</code>, <code>session</code> e <code>application</code> dão acesso direto aos três <em>scopes</em> descritos a seguir.</p>
 </section>
 <section id="sec-05-scopes" class="level2" data-number="5.8">
 <h2 data-number="5.8" class="anchored" data-anchor-id="sec-05-scopes"><span class="header-section-number">5.8</span> <em>Scopes</em>: Partilhar Informação Dentro do Servidor</h2>
@@ -502,16 +560,16 @@ Figura&nbsp;5.1: O modelo geral do MVC, aplicável a qualquer interface (não s�
 </ul>
 <p>Todos os <em>scopes</em> seguem a mesma interface: métodos <code>setAttribute</code>/<code>getAttribute</code>, e <code>getAttributeNames()</code> para listar tudo o que lá está guardado.</p>
 <p><strong>Web context</strong>, partilhado por toda a aplicação:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb10-1"><a href="#cb10-1"></a>ServletContext context <span class="op">=</span> request<span class="op">.</span><span class="fu">getServletContext</span><span class="op">();</span></span>
-<span id="cb10-2"><a href="#cb10-2"></a>context<span class="op">.</span><span class="fu">setAttribute</span><span class="op">(</span><span class="st">"dbHost"</span><span class="op">,</span> <span class="st">"localhost"</span><span class="op">);</span></span>
-<span id="cb10-3"><a href="#cb10-3"></a><span class="bu">String</span> dbHost <span class="op">=</span> <span class="op">(</span><span class="bu">String</span><span class="op">)</span> context<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"dbHost"</span><span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb11-1"><a href="#cb11-1"></a>ServletContext context <span class="op">=</span> request<span class="op">.</span><span class="fu">getServletContext</span><span class="op">();</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a>context<span class="op">.</span><span class="fu">setAttribute</span><span class="op">(</span><span class="st">"dbHost"</span><span class="op">,</span> <span class="st">"localhost"</span><span class="op">);</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="bu">String</span> dbHost <span class="op">=</span> <span class="op">(</span><span class="bu">String</span><span class="op">)</span> context<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"dbHost"</span><span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>Session</strong>, já apresentado, partilhado apenas pelo mesmo utilizador:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb11-1"><a href="#cb11-1"></a>HttpSession session <span class="op">=</span> request<span class="op">.</span><span class="fu">getSession</span><span class="op">();</span></span>
-<span id="cb11-2"><a href="#cb11-2"></a>session<span class="op">.</span><span class="fu">setAttribute</span><span class="op">(</span><span class="st">"email"</span><span class="op">,</span> <span class="st">"foo@fool.com"</span><span class="op">);</span></span>
-<span id="cb11-3"><a href="#cb11-3"></a><span class="bu">String</span> email <span class="op">=</span> <span class="op">(</span><span class="bu">String</span><span class="op">)</span> session<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"email"</span><span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb12-1"><a href="#cb12-1"></a>HttpSession session <span class="op">=</span> request<span class="op">.</span><span class="fu">getSession</span><span class="op">();</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a>session<span class="op">.</span><span class="fu">setAttribute</span><span class="op">(</span><span class="st">"email"</span><span class="op">,</span> <span class="st">"foo@fool.com"</span><span class="op">);</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="bu">String</span> email <span class="op">=</span> <span class="op">(</span><span class="bu">String</span><span class="op">)</span> session<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"email"</span><span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>Request</strong>, o mais restrito de todos, partilhado apenas entre módulos que processam o mesmo pedido (por exemplo, entre uma <em>Servlet</em> e a JSP para a qual reencaminha):</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb12-1"><a href="#cb12-1"></a>request<span class="op">.</span><span class="fu">setAttribute</span><span class="op">(</span><span class="st">"email"</span><span class="op">,</span> <span class="st">"foo@fool.com"</span><span class="op">);</span></span>
-<span id="cb12-2"><a href="#cb12-2"></a><span class="bu">String</span> email <span class="op">=</span> <span class="op">(</span><span class="bu">String</span><span class="op">)</span> request<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"email"</span><span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb13-1"><a href="#cb13-1"></a>request<span class="op">.</span><span class="fu">setAttribute</span><span class="op">(</span><span class="st">"email"</span><span class="op">,</span> <span class="st">"foo@fool.com"</span><span class="op">);</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="bu">String</span> email <span class="op">=</span> <span class="op">(</span><span class="bu">String</span><span class="op">)</span> request<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"email"</span><span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Os quatro <em>scopes</em> formam uma hierarquia de inclusão, do mais lato ao mais restrito: <em>Application</em> contém <em>Session</em>, que contém <em>Request</em>, que contém <em>Page</em>. Quanto maior o <em>scope</em>, mais partilhada fica a informação, e maior a responsabilidade de a gerir corretamente (por exemplo, de a remover quando deixa de ser necessária).</p>
 <div id="fig-05-scopes-comparacao" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -519,7 +577,7 @@ Figura&nbsp;5.1: O modelo geral do MVC, aplicável a qualquer interface (não s�
 <img src="../assets/images/capitulos/cap05/Comparacao_Scopes.png" class="img-fluid figure-img" style="width:60.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-05-scopes-comparacao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;5.2: Os quatro scopes, do mais lato (Application) ao mais restrito (Page): cada um contém o seguinte, e um scope maior implica mais partilha, mas também mais responsabilidade na sua gestão.
+Figura&nbsp;5.5: Os quatro scopes, do mais lato (Application) ao mais restrito (Page): cada um contém o seguinte, e um scope maior implica mais partilha, mas também mais responsabilidade na sua gestão.
 </figcaption>
 </figure>
 </div>

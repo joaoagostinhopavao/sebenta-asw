@@ -7,7 +7,7 @@ lang: pt-PT
 
 ## HTTP é Sem Estado: o Problema {#sec-05-problema-estado}
 
-O protocolo HTTP é *stateless* (ver [Capítulo 1](cap01.qmd)): cada pedido é independente, e o servidor não guarda, por si só, qualquer memória de pedidos anteriores. Não existe, ao nível do protocolo, nenhuma noção de "utilizador com sessão iniciada".
+O protocolo HTTP é *stateless* (ver [Capítulo 3](cap03.qmd)): cada pedido é independente, e o servidor não guarda, por si só, qualquer memória de pedidos anteriores. Não existe, ao nível do protocolo, nenhuma noção de "utilizador com sessão iniciada".
 
 Isto levanta um problema prático imediato: se um utilizador se autentica num pedido, como é que um pedido seguinte, minutos depois, sabe que esse utilizador continua autenticado? A resposta passa por dois mecanismos complementares:
 
@@ -16,31 +16,31 @@ Isto levanta um problema prático imediato: se um utilizador se autentica num pe
 
 ## *Cookies* {#sec-05-cookies}
 
-Um *cookie* é um par chave/valor guardado no *browser*. Quando o servidor envia um *cookie*, espera que o cliente o devolva em todos os pedidos HTTP seguintes, dirigidos ao mesmo domínio, implementando deste modo um mecanismo de identificação que se sobrepõe ao estado `stateless` do HTTP.
+Um *cookie* é um par chave/valor guardado no *browser*. Quando o servidor envia um *cookie*, espera que o cliente o devolva em todos os pedidos HTTP seguintes, dirigidos ao mesmo domínio, implementando deste modo um mecanismo de identificação que contorna a natureza *stateless* do HTTP.
 
 Distinguem-se dois tipos, consoante a sua persistência:
 
-- **_Session cookies_**: mantidos pelo cliente apenas durante uma sessão de navegação (`setMaxAge(-1)`). Enquanto não se fechar a sessão, o cliente continua a identificar-se através do *cookie*. A partir do momento em que se fecha a sessão (por *logout* ou fechando o *browser*) o *cookie* é destruido.
+- **_Session cookies_**: mantidos pelo cliente apenas durante uma sessão de navegação (`setMaxAge(-1)`). Enquanto não se fechar a sessão, o cliente continua a identificar-se através do *cookie*. A partir do momento em que se fecha a sessão (por *logout* ou fechando o *browser*) o *cookie* é destruído.
 - **_Permanent cookies_**: guardados de forma persistente, com um tempo de vida definido (`setMaxAge(60*60*24*30)` - o tempo é expresso em segundos, neste caso para 30 dias).
 
 Criar um *cookie*:
 
 ```java
-Cookie cookie = new Cookie("userName", "Pedro");
-cookie.setMaxAge(-1); // session cookie
-response.addCookie(cookie); // o cookie é adicionado à resposta e enviado ao cliente
+Cookie cookie = new Cookie("tema", "escuro");
+cookie.setMaxAge(60 * 60 * 24 * 30); // permanent cookie: 30 dias
+response.addCookie(cookie);          // o cookie é adicionado à resposta e enviado ao cliente
 ```
 
 Ler um *cookie* recebido num pedido:
 
 ```java
 Cookie[] cookies = request.getCookies();
-String user = null;
+String tema = null;
 
 if (cookies != null) {                       // null se o pedido não trouxer cookies
     for (Cookie c : cookies) {
-        if (c.getName().equals("userName")) {
-            user = c.getValue();
+        if (c.getName().equals("tema")) {
+            tema = c.getValue();
         }
     }
 }
@@ -50,7 +50,11 @@ O método `getCookies()` devolve `null`, e não um vetor vazio, quando o pedido 
 
 ## Sessões (`HttpSession`) {#sec-05-sessoes-http}
 
-Guardar estado do lado do servidor exige um objeto próprio para o efeito: a `HttpSession`. Uma sessão obtém-se, ou cria-se, a partir do pedido:
+Guardar estado do lado do servidor exige um objeto próprio para o efeito: a `HttpSession`. A diferença essencial em relação a um *cookie* está no sítio onde ficam os dados (@fig-05-cookie-vs-sessao): o *browser* guarda apenas um identificador, e é o servidor que guarda, associados a esse identificador, todos os dados da sessão. Os dados nunca saem do servidor, e o cliente não os pode ler nem alterar.
+
+![Um *cookie* guarda os dados no cliente; uma sessão guarda-os no servidor. No caso da sessão, o *browser* fica apenas com o identificador (`JSESSIONID`), que funciona como a chave para encontrar a sessão certa no servidor.](../assets/images/capitulos/cap05/cookie-vs-sessao.png){#fig-05-cookie-vs-sessao width="90%"}
+
+Uma sessão obtém-se, ou cria-se, a partir do pedido:
 
 ```java
 HttpSession session = request.getSession();          // cria se não existir
@@ -75,10 +79,19 @@ Falta uma peça: se HTTP não tem memória de pedidos anteriores, como é que o 
 JSESSIONID=22562577CE80EF3B1DAAA0E48F2B6392
 :::
 
+A @fig-05-jsessionid mostra o mecanismo completo, passo a passo:
+
+1. O *browser* envia as credenciais (`POST /login`). Ainda não tem nenhum *cookie* deste servidor.
+2. A *Servlet* chama `getSession()`, o contentor cria uma sessão nova com um identificador único e a resposta leva o cabeçalho `Set-Cookie: JSESSIONID=...`.
+3. Num pedido seguinte (`GET /perfil`), o *browser* devolve automaticamente o *cookie* no cabeçalho `Cookie`. O contentor usa o identificador para encontrar a sessão certa entre todas as que guarda.
+4. A *Servlet* lê os atributos dessa sessão e responde com os dados daquele utilizador.
+
+![O *cookie* `JSESSIONID` liga pedidos sucessivos à mesma sessão. O identificador (aqui abreviado para A3F9) é criado pelo servidor no primeiro pedido, enviado ao *browser* com `Set-Cookie` e devolvido por este, com `Cookie`, em todos os pedidos seguintes.](../assets/images/capitulos/cap05/sessao-jsessionid.png){#fig-05-jsessionid width="90%"}
+
 Quando o cliente não aceita *cookies*, existe uma alternativa: codificar o identificador de sessão diretamente na *URL*.
 
 ::: {.httpmsg}
-http://localhost:8080/CapitaisAPI/country;jsessionid=829F8836C240B51DD2F074259F242833
+http://localhost:8080/loja/perfil;jsessionid=829F8836C240B51DD2F074259F242833
 :::
 
 É boa prática chamar sempre `response.encodeURL(url)` ao construir uma *URL* de destino: se os *cookies* estiverem ativos, o método devolve a *URL* inalterada; se não estiverem, acrescenta automaticamente o `jsessionid`.
@@ -92,32 +105,33 @@ Juntando os dois mecanismos anteriores, obtém-se o padrão clássico de autenti
 public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String user = request.getParameter("user");
-        String pass = request.getParameter("pass");
+        String utilizador = request.getParameter("utilizador");
+        String palavraPasse = request.getParameter("palavra-passe");
 
-        if (dao.validateUserCredentials(user, pass)) {
+        if (dao.validarCredenciais(utilizador, palavraPasse)) {
             HttpSession session = request.getSession(true);
-            session.setAttribute("UserName", user);
+            session.setAttribute("utilizador", utilizador);
 
-            response.setContentType("application/json");
-            response.getWriter().print("{\"message\":\"OK\",\"user\":\"" + user + "\"}");
+            response.setContentType("text/plain; charset=UTF-8");
+            response.getWriter().print("Bem-vindo, " + utilizador);
         } else {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().print("{\"message\":\"UNAUTHORIZED\",\"error\":\"Invalid login or password\"}");
+            response.setContentType("text/plain; charset=UTF-8");
+            response.getWriter().print("Utilizador ou palavra-passe inválidos");
         }
     }
 }
 ```
 
-Note-se que `dao` é uma instância de um *Data Access Object* (DAO) — um objeto dedicado ao acesso a dados, já referido no [Capítulo 4](cap04.qmd) — responsável, neste caso, por validar as credenciais recebidas: tipicamente consulta uma base de dados de utilizadores, e devolve `true` ou `false` consoante o `user`/`pass` sejam válidos ou não.
+Note-se que `dao` é uma instância de um *Data Access Object* (DAO), o objeto dedicado ao acesso a dados já referido no [Capítulo 4](cap04.qmd) (por exemplo, um `UtilizadorDAO`). Neste caso, é responsável por validar as credenciais recebidas: tipicamente consulta uma base de dados de utilizadores e devolve `true` ou `false` consoante o par utilizador/palavra-passe seja válido ou não.
 
 Qualquer *endpoint* protegido verifica, no início do seu próprio `doGet()` ou `doPost()`, se existe uma sessão válida com esse atributo:
 
 ```java
 HttpSession session = request.getSession(false);
-if (session == null || session.getAttribute("UserName") == null) {
+if (session == null || session.getAttribute("utilizador") == null) {
     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-    response.getWriter().print("{\"error\":\"Authentication required\"}");
+    response.getWriter().print("Autenticação necessária");
     return;
 }
 // pedido autenticado: continuar o processamento normal
@@ -131,7 +145,7 @@ session.invalidate();
 
 ## O Padrão MVC com *Servlet* e JSP {#sec-05-mvc-jsp}
 
-O [Capítulo 1](cap01.qmd) apresentou o padrão MVC a nível conceptual, e o [Capítulo 4](cap04.qmd) mostrou como uma *Servlet* funciona como Controller. As páginas construídas no [Capítulo 2](cap02.qmd) já desempenham o papel de View, mas são estáticas: o seu conteúdo não muda consoante o pedido. Esta secção mostra uma forma alternativa de construir a View — desta vez gerada dinamicamente do lado do servidor, a partir dos dados que o Controller lhe entrega.
+O [Capítulo 1](cap01.qmd) apresentou o padrão MVC a nível conceptual, e o [Capítulo 4](cap04.qmd) mostrou como uma *Servlet* funciona como Controller. As páginas construídas no [Capítulo 2](cap02.qmd) já desempenham o papel de View, mas são estáticas: o seu conteúdo não muda consoante o pedido. Esta secção mostra uma forma alternativa de construir a View, desta vez gerada dinamicamente do lado do servidor, a partir dos dados que o Controller lhe entrega.
 
 ![O modelo geral do MVC, aplicável a qualquer interface (não só Web): o Controller atualiza o Model e a apresentação; a View lê o Model para se apresentar.](../assets/images/capitulos/cap05/Modelo_MVC_Geral.png){#fig-05-mvc-geral width="55%"}
 
@@ -140,9 +154,13 @@ Numa aplicação orientada à apresentação, a *Servlet* recebe o pedido e deci
 A *Servlet* liga-se à JSP através de um `RequestDispatcher`: coloca os dados a mostrar num atributo do pedido, e encaminha (*forward*) o próprio pedido para a página:
 
 ```java
-request.setAttribute("user", user);
-request.getRequestDispatcher("/home.jsp").forward(request, response);
+request.setAttribute("utilizador", utilizador);
+request.getRequestDispatcher("/perfil.jsp").forward(request, response);
 ```
+
+O percurso completo de um pedido está na @fig-05-servlet-jsp. O *browser* não chega a saber que existiu um *forward*: do seu ponto de vista, pediu `/perfil` e recebeu uma página HTML.
+
+![MVC com *Servlet* e JSP: (1) o pedido chega à *Servlet*, o Controller; (2) a *Servlet* obtém os dados do Model (o DAO); (3) coloca-os num atributo do pedido e encaminha-o para a JSP, a View; (4) a JSP gera o HTML que é devolvido ao *browser*.](../assets/images/capitulos/cap05/servlet-jsp.png){#fig-05-servlet-jsp width="90%"}
 
 Uma JSP é um documento de texto que mistura dois tipos de conteúdo: HTML estático e elementos de *script* dinâmico. Na primeira vez que é pedida, o *Servlet Container* converte-a automaticamente numa classe *Servlet*, que passa a comportar-se, dali em diante, exatamente como qualquer outra *Servlet*, no papel de `Controller`.
 
@@ -151,7 +169,7 @@ Uma JSP é um documento de texto que mistura dois tipos de conteúdo: HTML está
 ```jsp
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-<% String name = (String) request.getAttribute("userName"); %>
+<% String utilizador = (String) request.getAttribute("utilizador"); %>
 
 <!DOCTYPE html>
 <html>
@@ -160,12 +178,22 @@ Uma JSP é um documento de texto que mistura dois tipos de conteúdo: HTML está
   <title>Uma Página JSP</title>
 </head>
 <body>
-  <h1>Olá, <%= name %>!</h1>
+  <h1>Olá, <%= utilizador %>!</h1>
 </body>
 </html>
 ```
 
-O bloco `<% ... %>` (*scriptlet*) contém código Java arbitrário; o bloco `<%= ... %>` (expressão) insere o valor de uma expressão Java diretamente no HTML gerado. É exatamente este atributo `userName`, colocado no pedido pela *Servlet* através de `request.setAttribute(...)`, que a JSP aqui recupera.
+O bloco `<% ... %>` (*scriptlet*) contém código Java arbitrário; o bloco `<%= ... %>` (expressão) insere o valor de uma expressão Java diretamente no HTML gerado. É exatamente o atributo `utilizador`, colocado no pedido pela *Servlet* através de `request.setAttribute(...)`, que a JSP aqui recupera.
+
+::: {.callout-tip}
+## *Expression Language* (EL)
+
+Os *scriptlets* são hoje considerados prática antiga, porque misturam código Java com HTML. Nas JSP atuais, a mesma linha escreve-se com a *Expression Language*, que procura o atributo pelo nome nos vários *scopes* (ver @sec-05-scopes), do mais restrito para o mais lato:
+
+```jsp
+<h1>Olá, ${utilizador}!</h1>
+```
+:::
 
 ## Ciclo de Vida e Objetos Implícitos {#sec-05-ciclo-vida-jsp}
 
@@ -182,9 +210,10 @@ Outra diferença prática: dentro de uma JSP, um conjunto de objetos está dispo
 | `request` | `HttpServletRequest` |
 | `response` | `HttpServletResponse` |
 | `session` | `HttpSession` |
+| `application` | `ServletContext` |
 | `page` | `Object` |
 
-Por causa do objeto implícito `out`, uma JSP nunca precisa de obter explicitamente um `PrintWriter`: usa-se `out` diretamente.
+Por causa do objeto implícito `out`, uma JSP nunca precisa de obter explicitamente um `PrintWriter`: usa-se `out` diretamente. Do mesmo modo, `request`, `session` e `application` dão acesso direto aos três *scopes* descritos a seguir.
 
 ## *Scopes*: Partilhar Informação Dentro do Servidor {#sec-05-scopes}
 
