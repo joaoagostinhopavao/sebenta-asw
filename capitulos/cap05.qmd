@@ -158,7 +158,15 @@ request.setAttribute("utilizador", utilizador);
 request.getRequestDispatcher("/perfil.jsp").forward(request, response);
 ```
 
-O percurso completo de um pedido está na @fig-05-servlet-jsp. O *browser* não chega a saber que existiu um *forward*: do seu ponto de vista, pediu `/perfil` e recebeu uma página HTML.
+Um *forward* é uma passagem interna: a *Servlet* entrega o pedido a outro componente do mesmo servidor, sem o devolver ao *browser*. O percurso completo de um pedido está na @fig-05-servlet-jsp:
+
+1. O *browser* pede `GET /perfil` e o pedido chega à *Servlet*.
+2. A *Servlet* obtém os dados (através do DAO) e guarda-os no pedido, com `request.setAttribute(...)`.
+3. A *Servlet* entrega à `perfil.jsp` o mesmo objeto `request` e o mesmo objeto `response` que recebeu.
+4. A JSP lê os dados do `request` e escreve o HTML no `response`.
+5. O *browser* recebe uma única resposta, e a barra de endereço continua a mostrar `/perfil`.
+
+Tudo acontece dentro do servidor: existe um só pedido HTTP, e o *browser* não chega a saber que a JSP existiu. É por isso que os atributos colocados no pedido pela *Servlet* continuam disponíveis na JSP: os dois componentes trabalham sobre o mesmo objeto `request`.
 
 ![MVC com *Servlet* e JSP: (1) o pedido chega à *Servlet*, o Controller; (2) a *Servlet* obtém os dados do Model (o DAO); (3) coloca-os num atributo do pedido e encaminha-o para a JSP, a View; (4) a JSP gera o HTML que é devolvido ao *browser*.](../assets/images/capitulos/cap05/servlet-jsp.png){#fig-05-servlet-jsp width="90%"}
 
@@ -219,9 +227,9 @@ Por causa do objeto implícito `out`, uma JSP nunca precisa de obter explicitame
 
 Tal como as *Servlets* podem partilhar informação com outros módulos através de atributos (ver [Capítulo 4](cap04.qmd)), esses atributos existem sempre dentro de um determinado âmbito, ou *scope*. Existem quatro classes de *scope*:
 
-- ***Web context*** (ou *application context*): um único por aplicação, partilhado por todos os módulos e todos os utilizadores
-- ***Session***: um por utilizador, mantido entre vários pedidos desse utilizador
-- ***Request***: um por pedido, perdido assim que a resposta é enviada
+- ***Web context*** (ou *application context*): os dados são vistos por toda a aplicação, em todos os pedidos de todos os utilizadores (por exemplo, o endereço da base de dados)
+- ***Session***: os dados pertencem a um utilizador e mantêm-se entre os pedidos desse utilizador (por exemplo, quem fez *login*)
+- ***Request***: os dados existem só durante um pedido e perdem-se assim que a resposta é enviada (por exemplo, os dados que a *Servlet* passa à JSP)
 - ***Page***: exclusivo de JSP, não é usado nesta UC
 
 Todos os *scopes* seguem a mesma interface: métodos `setAttribute`/`getAttribute`, e `getAttributeNames()` para listar tudo o que lá está guardado.

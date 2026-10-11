@@ -460,7 +460,15 @@ Figura&nbsp;5.3: O modelo geral do MVC, aplicável a qualquer interface (não s�
 <p>A <em>Servlet</em> liga-se à JSP através de um <code>RequestDispatcher</code>: coloca os dados a mostrar num atributo do pedido, e encaminha (<em>forward</em>) o próprio pedido para a página:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb8-1"><a href="#cb8-1"></a>request<span class="op">.</span><span class="fu">setAttribute</span><span class="op">(</span><span class="st">"utilizador"</span><span class="op">,</span> utilizador<span class="op">);</span></span>
 <span id="cb8-2"><a href="#cb8-2"></a>request<span class="op">.</span><span class="fu">getRequestDispatcher</span><span class="op">(</span><span class="st">"/perfil.jsp"</span><span class="op">).</span><span class="fu">forward</span><span class="op">(</span>request<span class="op">,</span> response<span class="op">);</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>O percurso completo de um pedido está na <a href="#fig-05-servlet-jsp" class="quarto-xref">Figura&nbsp;<span>5.4</span></a>. O <em>browser</em> não chega a saber que existiu um <em>forward</em>: do seu ponto de vista, pediu <code>/perfil</code> e recebeu uma página HTML.</p>
+<p>Um <em>forward</em> é uma passagem interna: a <em>Servlet</em> entrega o pedido a outro componente do mesmo servidor, sem o devolver ao <em>browser</em>. O percurso completo de um pedido está na <a href="#fig-05-servlet-jsp" class="quarto-xref">Figura&nbsp;<span>5.4</span></a>:</p>
+<ol type="1">
+<li>O <em>browser</em> pede <code>GET /perfil</code> e o pedido chega à <em>Servlet</em>.</li>
+<li>A <em>Servlet</em> obtém os dados (através do DAO) e guarda-os no pedido, com <code>request.setAttribute(...)</code>.</li>
+<li>A <em>Servlet</em> entrega à <code>perfil.jsp</code> o mesmo objeto <code>request</code> e o mesmo objeto <code>response</code> que recebeu.</li>
+<li>A JSP lê os dados do <code>request</code> e escreve o HTML no <code>response</code>.</li>
+<li>O <em>browser</em> recebe uma única resposta, e a barra de endereço continua a mostrar <code>/perfil</code>.</li>
+</ol>
+<p>Tudo acontece dentro do servidor: existe um só pedido HTTP, e o <em>browser</em> não chega a saber que a JSP existiu. É por isso que os atributos colocados no pedido pela <em>Servlet</em> continuam disponíveis na JSP: os dois componentes trabalham sobre o mesmo objeto <code>request</code>.</p>
 <div id="fig-05-servlet-jsp" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-05-servlet-jsp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -553,9 +561,9 @@ Figura&nbsp;5.4: MVC com <em>Servlet</em> e JSP: (1) o pedido chega à <em>Servl
 <h2 data-number="5.8" class="anchored" data-anchor-id="sec-05-scopes"><span class="header-section-number">5.8</span> <em>Scopes</em>: Partilhar Informação Dentro do Servidor</h2>
 <p>Tal como as <em>Servlets</em> podem partilhar informação com outros módulos através de atributos (ver <a href="../capitulos/cap04.html">Capítulo 4</a>), esses atributos existem sempre dentro de um determinado âmbito, ou <em>scope</em>. Existem quatro classes de <em>scope</em>:</p>
 <ul>
-<li><strong><em>Web context</em></strong> (ou <em>application context</em>): um único por aplicação, partilhado por todos os módulos e todos os utilizadores</li>
-<li><strong><em>Session</em></strong>: um por utilizador, mantido entre vários pedidos desse utilizador</li>
-<li><strong><em>Request</em></strong>: um por pedido, perdido assim que a resposta é enviada</li>
+<li><strong><em>Web context</em></strong> (ou <em>application context</em>): os dados são vistos por toda a aplicação, em todos os pedidos de todos os utilizadores (por exemplo, o endereço da base de dados)</li>
+<li><strong><em>Session</em></strong>: os dados pertencem a um utilizador e mantêm-se entre os pedidos desse utilizador (por exemplo, quem fez <em>login</em>)</li>
+<li><strong><em>Request</em></strong>: os dados existem só durante um pedido e perdem-se assim que a resposta é enviada (por exemplo, os dados que a <em>Servlet</em> passa à JSP)</li>
 <li><strong><em>Page</em></strong>: exclusivo de JSP, não é usado nesta UC</li>
 </ul>
 <p>Todos os <em>scopes</em> seguem a mesma interface: métodos <code>setAttribute</code>/<code>getAttribute</code>, e <code>getAttributeNames()</code> para listar tudo o que lá está guardado.</p>
