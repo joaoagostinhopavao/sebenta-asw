@@ -190,7 +190,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 ```
 
-Este `localStorage` é só uma conveniência para a interface — não é, de forma nenhuma, segurança real. Quem continua a decidir se um pedido a `/country`, `/countrycodes` ou `/countryEdit` é aceite é o `AuthenticationFilter`, do lado do servidor (ver [Apêndice F](apendiceD3.qmd)). Se alguém abrir as ferramentas de programador do *browser* e alterar manualmente este valor, o pior que acontece é ver um botão que não devia — os pedidos protegidos continuam, do lado do servidor, a responder `403`.
+Este `localStorage` é só uma conveniência para a interface — não é, de forma nenhuma, segurança real. Quem continua a decidir se um pedido a `/country`, `/countrycodes` ou `/countryEdit` é aceite é o `AuthenticationFilter`, do lado do servidor (ver [Apêndice F](apendiceD3.qmd)). Se alguém abrir as ferramentas de programador do *browser* e alterar manualmente este valor, o pior que acontece é ver um botão que não devia — os pedidos protegidos continuam, do lado do servidor, a responder `401`.
 
 Já que `paises-editar.html` só faz sentido para quem tem sessão iniciada, acrescentar no início de `js/paises-editar.js` (ver [Passo 6.7](#sec-apD6-passo7)) uma verificação simples:
 

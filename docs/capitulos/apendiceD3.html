@@ -355,14 +355,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-10"><a href="#cb2-10"></a>    <span class="cf">if</span> <span class="op">(</span>session <span class="op">!=</span> <span class="kw">null</span> <span class="op">&amp;&amp;</span> session<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"UserName"</span><span class="op">)</span> <span class="op">!=</span> <span class="kw">null</span><span class="op">)</span> <span class="op">{</span></span>
 <span id="cb2-11"><a href="#cb2-11"></a>        chain<span class="op">.</span><span class="fu">doFilter</span><span class="op">(</span>request<span class="op">,</span> response<span class="op">);</span></span>
 <span id="cb2-12"><a href="#cb2-12"></a>    <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
-<span id="cb2-13"><a href="#cb2-13"></a>        httpResponse<span class="op">.</span><span class="fu">setStatus</span><span class="op">(</span>HttpServletResponse<span class="op">.</span><span class="fu">SC_FORBIDDEN</span><span class="op">);</span></span>
+<span id="cb2-13"><a href="#cb2-13"></a>        httpResponse<span class="op">.</span><span class="fu">setStatus</span><span class="op">(</span>HttpServletResponse<span class="op">.</span><span class="fu">SC_UNAUTHORIZED</span><span class="op">);</span></span>
 <span id="cb2-14"><a href="#cb2-14"></a>        httpResponse<span class="op">.</span><span class="fu">setContentType</span><span class="op">(</span><span class="st">"application/json"</span><span class="op">);</span></span>
 <span id="cb2-15"><a href="#cb2-15"></a>        <span class="bu">PrintWriter</span> out <span class="op">=</span> httpResponse<span class="op">.</span><span class="fu">getWriter</span><span class="op">();</span></span>
 <span id="cb2-16"><a href="#cb2-16"></a>        <span class="bu">String</span> jsonResponse <span class="op">=</span> <span class="st">"{</span><span class="sc">\"</span><span class="st">error</span><span class="sc">\"</span><span class="st">: </span><span class="sc">\"</span><span class="st">Authentication required</span><span class="sc">\"</span><span class="st">}"</span><span class="op">;</span></span>
 <span id="cb2-17"><a href="#cb2-17"></a>        out<span class="op">.</span><span class="fu">print</span><span class="op">(</span>jsonResponse<span class="op">);</span></span>
 <span id="cb2-18"><a href="#cb2-18"></a>    <span class="op">}</span></span>
 <span id="cb2-19"><a href="#cb2-19"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>A chamada a <code>chain.doFilter(request, response)</code> é o que deixa o pedido continuar para a <em>Servlet</em> de destino — se a sessão não for válida, essa chamada não deve ser feita, e o Filtro responde diretamente com <code>403 FORBIDDEN</code>.</p>
+<p>A chamada a <code>chain.doFilter(request, response)</code> é o que deixa o pedido continuar para a <em>Servlet</em> de destino — se a sessão não for válida, essa chamada não deve ser feita, e o Filtro responde diretamente com <code>401 UNAUTHORIZED</code>.</p>
 </section>
 <section id="sec-apD3-passo3" class="level3" data-number="F.1.3">
 <h3 data-number="F.1.3" class="anchored" data-anchor-id="sec-apD3-passo3"><span class="header-section-number">F.1.3</span> Passo 3.3: Remover a Verificação Manual da <em>Servlet</em></h3>
@@ -390,11 +390,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="sec-apD3-passo5" class="level3" data-number="F.1.5">
 <h3 data-number="F.1.5" class="anchored" data-anchor-id="sec-apD3-passo5"><span class="header-section-number">F.1.5</span> Passo 3.5: Teste Integrado</h3>
 <ol type="1">
-<li>Aceder a <code>/country?countrycode=PT</code> sem fazer <em>login</em>. Resultado esperado: <code>HTTP 403</code>, <code>{"error": "Authentication required"}</code></li>
+<li>Aceder a <code>/country?countrycode=PT</code> sem fazer <em>login</em>. Resultado esperado: <code>HTTP 401</code>, <code>{"error": "Authentication required"}</code></li>
 <li>Fazer <em>login</em> através de <code>login.html</code> (<a href="../capitulos/apendiceD2.html">Apêndice E</a>) com <code>javaee</code> / <code>asw2026</code>. Resultado esperado: <code>HTTP 200</code> com a resposta de sucesso — e, nesta altura, confirmar (por exemplo, nas ferramentas de programador do <em>browser</em>) que foi criado automaticamente um <em>cookie</em> <code>JSESSIONID</code></li>
 <li>Repetir o pedido a <code>/country?countrycode=PT</code>. Resultado esperado: <code>HTTP 200</code>, com os dados do país</li>
 <li>Aceder a <code>/logout</code>. Resultado esperado: <code>HTTP 200</code>, <code>{"message": "Logout OK"}</code></li>
-<li>Repetir mais uma vez o pedido a <code>/country?countrycode=PT</code>. Resultado esperado: <code>HTTP 403</code> de novo — o <em>logout</em> invalidou a sessão</li>
+<li>Repetir mais uma vez o pedido a <code>/country?countrycode=PT</code>. Resultado esperado: <code>HTTP 401</code> de novo — o <em>logout</em> invalidou a sessão</li>
 </ol>
 </section>
 <section id="sec-apD3-conclusao" class="level3" data-number="F.1.6">

@@ -19,3 +19,5 @@ lixo.html
 
 # Slides: ficam só locais, fora do repositório remoto
 slides/
+
+**/*.quarto_ipynb

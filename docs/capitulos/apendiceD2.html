@@ -365,9 +365,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="httpmsg">
 <p>{“message”: “BAD REQUEST!”, “error”: “Missing parameter user or pass”}</p>
 </div>
-<p><strong>Credenciais inválidas</strong> — se <code>validateUserCredentials()</code> devolver <code>false</code>, responder com <code>HTTP 403 FORBIDDEN</code>:</p>
+<p><strong>Credenciais inválidas</strong> — se <code>validateUserCredentials()</code> devolver <code>false</code>, responder com <code>HTTP 401 UNAUTHORIZED</code>:</p>
 <div class="httpmsg">
-<p>{“message”: “FORBIDDEN!”, “error”: “Invalid login or password”}</p>
+<p>{“message”: “UNAUTHORIZED!”, “error”: “Invalid login or password”}</p>
 </div>
 <p>Note-se que, em nenhum destes casos, a <em>Servlet</em> redireciona o cliente para outra página — é o cliente que decide o que fazer a seguir, com base no código de estado e no corpo JSON recebidos.</p>
 </section>
@@ -390,19 +390,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode" id="cb4"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb4-1"><a href="#cb4-1"></a>HttpSession session <span class="op">=</span> request<span class="op">.</span><span class="fu">getSession</span><span class="op">(</span><span class="kw">false</span><span class="op">);</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a></span>
 <span id="cb4-3"><a href="#cb4-3"></a><span class="cf">if</span> <span class="op">(</span>session <span class="op">==</span> <span class="kw">null</span> <span class="op">||</span> session<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"UserName"</span><span class="op">)</span> <span class="op">==</span> <span class="kw">null</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a>    response<span class="op">.</span><span class="fu">setStatus</span><span class="op">(</span>HttpServletResponse<span class="op">.</span><span class="fu">SC_FORBIDDEN</span><span class="op">);</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a>    response<span class="op">.</span><span class="fu">setStatus</span><span class="op">(</span>HttpServletResponse<span class="op">.</span><span class="fu">SC_UNAUTHORIZED</span><span class="op">);</span></span>
 <span id="cb4-5"><a href="#cb4-5"></a>    response<span class="op">.</span><span class="fu">setContentType</span><span class="op">(</span><span class="st">"application/json"</span><span class="op">);</span></span>
 <span id="cb4-6"><a href="#cb4-6"></a>    <span class="bu">PrintWriter</span> out <span class="op">=</span> response<span class="op">.</span><span class="fu">getWriter</span><span class="op">();</span></span>
 <span id="cb4-7"><a href="#cb4-7"></a>    <span class="bu">String</span> jsonResponse <span class="op">=</span> <span class="st">"{</span><span class="sc">\"</span><span class="st">error</span><span class="sc">\"</span><span class="st">: </span><span class="sc">\"</span><span class="st">Authentication required</span><span class="sc">\"</span><span class="st">}"</span><span class="op">;</span></span>
 <span id="cb4-8"><a href="#cb4-8"></a>    out<span class="op">.</span><span class="fu">print</span><span class="op">(</span>jsonResponse<span class="op">);</span></span>
 <span id="cb4-9"><a href="#cb4-9"></a>    <span class="cf">return</span><span class="op">;</span></span>
 <span id="cb4-10"><a href="#cb4-10"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Note-se o uso de <code>request.getSession(false)</code>: ao contrário do que acontece no <em>login</em> (<code>getSession(true)</code>), aqui não se quer criar uma sessão nova só para verificar se ela existe — se não houver sessão, <code>getSession(false)</code> devolve <code>null</code>. É essencial não esquecer o <code>return</code> depois de escrever a resposta de erro: sem ele, o código continuaria a executar o resto do método, mesmo depois de já ter enviado uma resposta <code>403</code>.</p>
+<p>Note-se o uso de <code>request.getSession(false)</code>: ao contrário do que acontece no <em>login</em> (<code>getSession(true)</code>), aqui não se quer criar uma sessão nova só para verificar se ela existe — se não houver sessão, <code>getSession(false)</code> devolve <code>null</code>. É essencial não esquecer o <code>return</code> depois de escrever a resposta de erro: sem ele, o código continuaria a executar o resto do método, mesmo depois de já ter enviado uma resposta <code>401</code>.</p>
 </section>
 <section id="sec-apD2-testar" class="level3" data-number="E.1.7">
 <h3 data-number="E.1.7" class="anchored" data-anchor-id="sec-apD2-testar"><span class="header-section-number">E.1.7</span> Como Testar</h3>
 <ol type="1">
-<li>Aceder diretamente a <code>/country?countrycode=PT</code>, sem fazer <em>login</em> primeiro. Resultado esperado: <code>HTTP 403</code>, com o corpo <code>{"error": "Authentication required"}</code></li>
+<li>Aceder diretamente a <code>/country?countrycode=PT</code>, sem fazer <em>login</em> primeiro. Resultado esperado: <code>HTTP 401</code>, com o corpo <code>{"error": "Authentication required"}</code></li>
 <li>Submeter o formulário <code>login.html</code> com <code>javaee</code> / <code>asw2026</code>. Resultado esperado: <code>HTTP 200</code>, com o corpo <code>{"message": "OK", "user": "javaee"}</code></li>
 <li>Repetir o pedido a <code>/country?countrycode=PT</code>. Resultado esperado agora: <code>HTTP 200</code>, com os dados do país</li>
 </ol>

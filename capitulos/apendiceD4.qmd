@@ -197,7 +197,7 @@ Basta acrescentar estas *URLs* a `urlPatterns` no `@WebFilter` do Filtro. O *end
 5. Atualizar o país
 6. Remover o país
 7. Fazer *logout*
-8. Confirmar que o acesso volta a ser negado (`403`)
+8. Confirmar que o acesso volta a ser negado (`401`)
 
 ### Conclusão {#sec-apD4-conclusao}
 
