@@ -149,10 +149,10 @@ Esta divisão pode ler-se como uma segunda aplicação do mesmo padrão, agora d
 A [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) é a forma normalizada de um *browser* emitir pedidos HTTP a partir de JavaScript, sem recarregar a página. Um pedido simples, sem autenticação, tem esta forma:
 
 ```javascript
-fetch("/country/PT")
+fetch("/livros/12")
   .then(response => response.json())
   .then(data => {
-    console.log(data.capital);
+    console.log(data.titulo);
   });
 ```
 
@@ -161,7 +161,7 @@ fetch("/country/PT")
 Para um pedido autenticado (ver @sec-08-authorization-header e @sec-08-jwt), o *token* viaja num cabeçalho, tal como qualquer outro pedido HTTP autenticado:
 
 ```javascript
-fetch("/country", {
+fetch("/livros", {
   headers: { "Authorization": "Bearer " + token }
 })
   .then(response => response.json())
@@ -173,10 +173,10 @@ fetch("/country", {
 Um pedido `POST`, a criar um recurso, transporta o corpo já em JSON, indicando explicitamente esse formato no cabeçalho `Content-Type` (ver [Capítulo 4](cap04.qmd)):
 
 ```javascript
-fetch("/country", {
+fetch("/livros", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ code: "PT", name: "Portugal", capital: "Lisboa" })
+  body: JSON.stringify({ titulo: "Os Maias", autor: "Eça de Queirós" })
 })
   .then(response => response.json())
   .then(data => {
@@ -189,23 +189,23 @@ fetch("/country", {
 O [*DOM*](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model) (*Document Object Model*) é a representação, em memória, da página HTML que o *browser* está a mostrar — uma árvore de objetos, um por cada elemento da página, que o JavaScript pode ler e alterar diretamente. É através do DOM que o JavaScript desempenha o papel de View (ver @sec-08-mvc-distribuido): não gera HTML como texto, à semelhança de uma JSP (ver [Capítulo 5](cap05.qmd)), mas antes localiza elementos já existentes na página e atualiza o seu conteúdo.
 
 ```javascript
-fetch("/country/PT")
+fetch("/livros/12")
   .then(response => response.json())
   .then(data => {
-    document.querySelector("#capital").textContent = data.capital;
+    document.querySelector("#titulo").textContent = data.titulo;
   });
 ```
 
-`document.querySelector(seletor)` localiza o primeiro elemento da página que corresponda ao seletor indicado (aqui, o elemento com `id="capital"`), devolvendo uma referência a esse elemento do DOM; `textContent` é a propriedade que define o texto mostrado dentro dele. O mesmo princípio aplica-se a uma lista de resultados: para cada item devolvido pela API, cria-se um novo elemento HTML e insere-se na página.
+`document.querySelector(seletor)` localiza o primeiro elemento da página que corresponda ao seletor indicado (aqui, o elemento com `id="titulo"`), devolvendo uma referência a esse elemento do DOM; `textContent` é a propriedade que define o texto mostrado dentro dele. O mesmo princípio aplica-se a uma lista de resultados: para cada item devolvido pela API, cria-se um novo elemento HTML e insere-se na página.
 
 ```javascript
-fetch("/country")
+fetch("/livros")
   .then(response => response.json())
-  .then(paises => {
-    const tabela = document.querySelector("#tabela-paises");
-    paises.forEach(pais => {
+  .then(livros => {
+    const tabela = document.querySelector("#tabela-livros");
+    livros.forEach(livro => {
       const linha = document.createElement("tr");
-      for (const valor of [pais.code, pais.name, pais.capital]) {
+      for (const valor of [livro.id, livro.titulo, livro.autor]) {
         const celula = document.createElement("td");
         celula.textContent = valor;     // texto, nunca HTML
         linha.appendChild(celula);
@@ -215,6 +215,6 @@ fetch("/country")
   });
 ```
 
-Cada célula é preenchida com `textContent`, e não com `innerHTML`. A diferença importa: `innerHTML` interpreta o valor como HTML, e um nome de país vindo do servidor que contivesse, por exemplo, `<img src=x onerror="...">` faria o *browser* executar esse JavaScript na página (um ataque de *Cross-Site Scripting*, ou XSS). Com `textContent`, o valor é sempre inserido como texto, seja qual for o seu conteúdo.
+Cada célula é preenchida com `textContent`, e não com `innerHTML`. A diferença importa: `innerHTML` interpreta o valor como HTML, e um título de livro vindo do servidor que contivesse, por exemplo, `<img src=x onerror="...">` faria o *browser* executar esse JavaScript na página (um ataque de *Cross-Site Scripting*, ou XSS). Com `textContent`, o valor é sempre inserido como texto, seja qual for o seu conteúdo.
 
 Este padrão — pedir dados a uma API REST com `fetch()`, e usar o DOM para os mostrar — é a base de qualquer *front-office* em JavaScript ligado a um serviço REST, independentemente da aplicação concreta ou dos dados envolvidos.
