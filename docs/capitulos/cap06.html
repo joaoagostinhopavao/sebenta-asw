@@ -344,9 +344,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 Responde a “quem é o utilizador?”. É a verificação de identidade, tipicamente feita no momento do <em>login</em>.
 </dd>
 </dl>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb1-1"><a href="#cb1-1"></a><span class="cf">if</span> <span class="op">(</span>dao<span class="op">.</span><span class="fu">validateUserCredentials</span><span class="op">(</span>username<span class="op">,</span> password<span class="op">))</span> <span class="op">{</span></span>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb1-1"><a href="#cb1-1"></a><span class="cf">if</span> <span class="op">(</span>dao<span class="op">.</span><span class="fu">validarCredenciais</span><span class="op">(</span>utilizador<span class="op">,</span> palavraPasse<span class="op">))</span> <span class="op">{</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a>    HttpSession session <span class="op">=</span> request<span class="op">.</span><span class="fu">getSession</span><span class="op">(</span><span class="kw">true</span><span class="op">);</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a>    session<span class="op">.</span><span class="fu">setAttribute</span><span class="op">(</span><span class="st">"UserName"</span><span class="op">,</span> username<span class="op">);</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>    session<span class="op">.</span><span class="fu">setAttribute</span><span class="op">(</span><span class="st">"utilizador"</span><span class="op">,</span> utilizador<span class="op">);</span></span>
 <span id="cb1-4"><a href="#cb1-4"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <dl>
 <dt><strong>Autorização</strong></dt>
@@ -354,9 +354,10 @@ Responde a “quem é o utilizador?”. É a verificação de identidade, tipica
 Responde a “o que é que este utilizador tem permissão para aceder?”. É a verificação de permissões, feita depois de a identidade já estar confirmada.
 </dd>
 </dl>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb2-1"><a href="#cb2-1"></a><span class="cf">if</span> <span class="op">(</span><span class="st">"ADMIN"</span><span class="op">.</span><span class="fu">equals</span><span class="op">(</span>session<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"UserRole"</span><span class="op">)))</span> <span class="op">{</span></span>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb2-1"><a href="#cb2-1"></a><span class="cf">if</span> <span class="op">(</span><span class="st">"admin"</span><span class="op">.</span><span class="fu">equals</span><span class="op">(</span>session<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"perfil"</span><span class="op">)))</span> <span class="op">{</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a>    <span class="co">// acesso permitido</span></span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Neste exemplo, o <em>login</em> guardou na sessão, além do utilizador, o seu perfil (por exemplo, <code>"admin"</code>), e só os utilizadores com esse perfil têm acesso ao recurso.</p>
 <p>A autenticação acontece sempre primeiro: não faz sentido verificar permissões de alguém cuja identidade ainda não foi confirmada. Esta distinção reflete-se diretamente nos códigos de estado HTTP usados na resposta (ver <a href="../capitulos/cap03.html">Capítulo 3</a>):</p>
 <ul>
 <li><code>401 Unauthorized</code>: o pedido não está autenticado</li>
@@ -376,8 +377,7 @@ Responde a “o que é que este utilizador tem permissão para aceder?”. É a 
 </section>
 <section id="sec-06-onde-situa" class="level2" data-number="6.4">
 <h2 data-number="6.4" class="anchored" data-anchor-id="sec-06-onde-situa"><span class="header-section-number">6.4</span> Onde um Filtro se Situa no Pedido</h2>
-<p>Um ou mais Filtros podem ser encadeados entre o cliente e a <em>Servlet</em> que trata efetivamente o pedido:</p>
-<pre><code>Cliente → Filtro 1 → ... → Filtro N → Servlet (lógica de negócio) → Resposta</code></pre>
+<p>Um ou mais Filtros podem ser encadeados entre o cliente e a <em>Servlet</em> que trata efetivamente o pedido. O pedido atravessa os Filtros pela ordem da cadeia e só depois chega à <em>Servlet</em>, onde está a lógica de negócio; a resposta faz o caminho inverso, de volta ao cliente.</p>
 <div id="fig-06-filter-chain" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-06-filter-chain-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -394,16 +394,24 @@ Figura&nbsp;6.1: Um pedido atravessa a cadeia de Filtros antes de chegar à Serv
 <li><strong>Modificar o pedido</strong>: normalização e validação de dados, registo de atividade, entre outros</li>
 <li><strong>Deixar prosseguir</strong>: chamando <code>chain.doFilter(request, response)</code>, passando o controlo ao próximo elemento da cadeia</li>
 </ul>
+<p>Considere-se uma aplicação com um Filtro de autenticação à frente da <em>Servlet</em> que mostra o perfil do utilizador, mapeada em <code>/perfil</code>. O percurso de um pedido é este:</p>
+<ol type="1">
+<li>O <em>browser</em> envia <code>GET /perfil</code>.</li>
+<li>Antes de o pedido chegar à <em>Servlet</em>, o contentor entrega-o ao Filtro, que procura a sessão com <code>getSession(false)</code> e, dentro dela, o atributo <code>utilizador</code>.</li>
+<li><strong>Sem sessão</strong> (o utilizador ainda não fez <em>login</em>): o Filtro responde <code>401</code> e o pedido termina ali. A <em>Servlet</em> nunca chega a ser executada.</li>
+<li><strong>Com sessão</strong>: o Filtro chama <code>chain.doFilter(request, response)</code> e o pedido segue para a <em>Servlet</em>, que produz a página do perfil.</li>
+<li>A resposta da <em>Servlet</em> volta a passar pelo Filtro, a caminho do <em>browser</em>.</li>
+</ol>
 </section>
 <section id="sec-06-ciclo-vida-filter" class="level2" data-number="6.5">
 <h2 data-number="6.5" class="anchored" data-anchor-id="sec-06-ciclo-vida-filter"><span class="header-section-number">6.5</span> Ciclo de Vida de um Filtro</h2>
 <p>O ciclo de vida de um Filtro segue o mesmo modelo já apresentado para as <em>Servlets</em> (ver <a href="../capitulos/cap04.html">Capítulo 4</a>):</p>
 <ul>
 <li><code>init()</code>: executado uma única vez, quando o contentor coloca o Filtro em serviço</li>
-<li><code>doFilter()</code>: executado a cada pedido; pode inspecionar, bloquear ou modificar o pedido e a resposta, e deve chamar <code>chain.doFilter()</code> para continuar a cadeia</li>
+<li><code>doFilter()</code>: executado a cada pedido; pode inspecionar, bloquear ou modificar o pedido e a resposta, e deve chamar <code>chain.doFilter()</code> para continuar a cadeia; pode ainda executar código depois de <code>chain.doFilter()</code> regressar, já com a resposta produzida pela <em>Servlet</em></li>
 <li><code>destroy()</code>: executado uma única vez, quando o Filtro é retirado de serviço, para libertar recursos</li>
 </ul>
-<p>Tal como uma <em>Servlet</em>, existe <strong>uma única instância</strong> de cada Filtro, partilhada por múltiplos pedidos concorrentes: aplica-se aqui exatamente o mesmo cuidado já referido no Capítulo 3, evitar estado mutável partilhado, e preferir variáveis locais dentro de <code>doFilter()</code>.</p>
+<p>Tal como uma <em>Servlet</em>, existe <strong>uma única instância</strong> de cada Filtro, partilhada por múltiplos pedidos concorrentes: aplica-se aqui exatamente o mesmo cuidado já referido no <a href="../capitulos/cap04.html">Capítulo 4</a>, evitar estado mutável partilhado, e preferir variáveis locais dentro de <code>doFilter()</code>.</p>
 <div id="fig-06-filter-lifecycle" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-06-filter-lifecycle-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -439,12 +447,30 @@ Figura&nbsp;6.3: Sem Filtro, cada Servlet acumula autenticação, logging, valid
 <section id="sec-06-declarar-filter" class="level2" data-number="6.7">
 <h2 data-number="6.7" class="anchored" data-anchor-id="sec-06-declarar-filter"><span class="header-section-number">6.7</span> Declarar e Implementar um Filtro</h2>
 <p>Um Filtro declara-se com a anotação <code>@WebFilter</code>, indicando o padrão de <em>URLs</em> a que se aplica:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb4-1"><a href="#cb4-1"></a><span class="at">@WebFilter</span><span class="op">(</span><span class="st">"/*"</span><span class="op">)</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="kw">public</span> <span class="kw">class</span> AuthenticationFilter <span class="kw">implements</span> <span class="bu">Filter</span> <span class="op">{</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a>    <span class="co">// ...</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb3-1"><a href="#cb3-1"></a><span class="at">@WebFilter</span><span class="op">(</span><span class="st">"/*"</span><span class="op">)</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="kw">public</span> <span class="kw">class</span> AuthenticationFilter <span class="kw">implements</span> <span class="bu">Filter</span> <span class="op">{</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a>    <span class="co">// ...</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>O padrão <code>"/*"</code> intercepta todos os pedidos, sem exceção. A classe tem de implementar <code>jakarta.servlet.Filter</code>, e o contentor descobre-a automaticamente no momento da implantação (<em>deployment</em>). Tal como as <em>Servlets</em>, um Filtro também pode ser declarado de forma equivalente no ficheiro <code>web.xml</code>, embora esta prática já não esteja muito em uso.</p>
 <p>Um <code>doFilter()</code> típico, que protege todos os pedidos exigindo uma sessão válida, tem esta forma:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">public</span> <span class="dt">void</span> <span class="fu">doFilter</span><span class="op">(</span>ServletRequest request<span class="op">,</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>                      ServletResponse response<span class="op">,</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>                      FilterChain chain<span class="op">)</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a>        <span class="kw">throws</span> <span class="bu">IOException</span><span class="op">,</span> ServletException <span class="op">{</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a></span>
+<span id="cb4-6"><a href="#cb4-6"></a>    HttpServletRequest req <span class="op">=</span> <span class="op">(</span>HttpServletRequest<span class="op">)</span> request<span class="op">;</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a>    HttpServletResponse res <span class="op">=</span> <span class="op">(</span>HttpServletResponse<span class="op">)</span> response<span class="op">;</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a></span>
+<span id="cb4-9"><a href="#cb4-9"></a>    HttpSession session <span class="op">=</span> req<span class="op">.</span><span class="fu">getSession</span><span class="op">(</span><span class="kw">false</span><span class="op">);</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a></span>
+<span id="cb4-11"><a href="#cb4-11"></a>    <span class="cf">if</span> <span class="op">(</span>session <span class="op">==</span> <span class="kw">null</span> <span class="op">||</span> session<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"utilizador"</span><span class="op">)</span> <span class="op">==</span> <span class="kw">null</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a>        res<span class="op">.</span><span class="fu">sendError</span><span class="op">(</span>HttpServletResponse<span class="op">.</span><span class="fu">SC_UNAUTHORIZED</span><span class="op">);</span> <span class="co">// 401</span></span>
+<span id="cb4-13"><a href="#cb4-13"></a>        <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb4-14"><a href="#cb4-14"></a>    <span class="op">}</span></span>
+<span id="cb4-15"><a href="#cb4-15"></a></span>
+<span id="cb4-16"><a href="#cb4-16"></a>    chain<span class="op">.</span><span class="fu">doFilter</span><span class="op">(</span>request<span class="op">,</span> response<span class="op">);</span></span>
+<span id="cb4-17"><a href="#cb4-17"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Na prática, nem todos os pedidos devem ser protegidos: o próprio <code>/login</code>, e recursos estáticos como <code>/css</code>, <code>/js</code> ou <code>/images</code>, precisam de ficar acessíveis sem autenticação, sob pena de o utilizador nunca conseguir sequer chegar ao formulário de <em>login</em>. A versão completa do <code>doFilter()</code> trata primeiro estas exceções e só depois verifica a sessão:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">public</span> <span class="dt">void</span> <span class="fu">doFilter</span><span class="op">(</span>ServletRequest request<span class="op">,</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a>                      ServletResponse response<span class="op">,</span></span>
 <span id="cb5-3"><a href="#cb5-3"></a>                      FilterChain chain<span class="op">)</span></span>
@@ -453,27 +479,48 @@ Figura&nbsp;6.3: Sem Filtro, cada Servlet acumula autenticação, logging, valid
 <span id="cb5-6"><a href="#cb5-6"></a>    HttpServletRequest req <span class="op">=</span> <span class="op">(</span>HttpServletRequest<span class="op">)</span> request<span class="op">;</span></span>
 <span id="cb5-7"><a href="#cb5-7"></a>    HttpServletResponse res <span class="op">=</span> <span class="op">(</span>HttpServletResponse<span class="op">)</span> response<span class="op">;</span></span>
 <span id="cb5-8"><a href="#cb5-8"></a></span>
-<span id="cb5-9"><a href="#cb5-9"></a>    HttpSession session <span class="op">=</span> req<span class="op">.</span><span class="fu">getSession</span><span class="op">(</span><span class="kw">false</span><span class="op">);</span></span>
-<span id="cb5-10"><a href="#cb5-10"></a></span>
-<span id="cb5-11"><a href="#cb5-11"></a>    <span class="cf">if</span> <span class="op">(</span>session <span class="op">==</span> <span class="kw">null</span> <span class="op">||</span> session<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"UserName"</span><span class="op">)</span> <span class="op">==</span> <span class="kw">null</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb5-12"><a href="#cb5-12"></a>        res<span class="op">.</span><span class="fu">sendError</span><span class="op">(</span>HttpServletResponse<span class="op">.</span><span class="fu">SC_UNAUTHORIZED</span><span class="op">);</span> <span class="co">// 401</span></span>
-<span id="cb5-13"><a href="#cb5-13"></a>        <span class="cf">return</span><span class="op">;</span></span>
-<span id="cb5-14"><a href="#cb5-14"></a>    <span class="op">}</span></span>
-<span id="cb5-15"><a href="#cb5-15"></a></span>
-<span id="cb5-16"><a href="#cb5-16"></a>    chain<span class="op">.</span><span class="fu">doFilter</span><span class="op">(</span>request<span class="op">,</span> response<span class="op">);</span></span>
-<span id="cb5-17"><a href="#cb5-17"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Na prática, nem todos os pedidos devem ser protegidos: o próprio <code>/login</code>, e recursos estáticos como <code>/css</code>, <code>/js</code> ou <code>/images</code>, precisam de ficar acessíveis sem autenticação, sob pena de o utilizador nunca conseguir sequer chegar ao formulário de <em>login</em>.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb6-1"><a href="#cb6-1"></a><span class="bu">String</span> path <span class="op">=</span> req<span class="op">.</span><span class="fu">getRequestURI</span><span class="op">();</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a></span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="dt">boolean</span> isLogin <span class="op">=</span> path<span class="op">.</span><span class="fu">endsWith</span><span class="op">(</span><span class="st">"/login"</span><span class="op">);</span></span>
-<span id="cb6-4"><a href="#cb6-4"></a><span class="dt">boolean</span> isStatic <span class="op">=</span> path<span class="op">.</span><span class="fu">startsWith</span><span class="op">(</span>req<span class="op">.</span><span class="fu">getContextPath</span><span class="op">()</span> <span class="op">+</span> <span class="st">"/css"</span><span class="op">)</span></span>
-<span id="cb6-5"><a href="#cb6-5"></a>                 <span class="op">||</span> path<span class="op">.</span><span class="fu">startsWith</span><span class="op">(</span>req<span class="op">.</span><span class="fu">getContextPath</span><span class="op">()</span> <span class="op">+</span> <span class="st">"/js"</span><span class="op">)</span></span>
-<span id="cb6-6"><a href="#cb6-6"></a>                 <span class="op">||</span> path<span class="op">.</span><span class="fu">startsWith</span><span class="op">(</span>req<span class="op">.</span><span class="fu">getContextPath</span><span class="op">()</span> <span class="op">+</span> <span class="st">"/images"</span><span class="op">);</span></span>
-<span id="cb6-7"><a href="#cb6-7"></a></span>
-<span id="cb6-8"><a href="#cb6-8"></a><span class="cf">if</span> <span class="op">(</span>isLogin <span class="op">||</span> isStatic<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb6-9"><a href="#cb6-9"></a>    chain<span class="op">.</span><span class="fu">doFilter</span><span class="op">(</span>request<span class="op">,</span> response<span class="op">);</span></span>
-<span id="cb6-10"><a href="#cb6-10"></a>    <span class="cf">return</span><span class="op">;</span></span>
-<span id="cb6-11"><a href="#cb6-11"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-9"><a href="#cb5-9"></a>    <span class="bu">String</span> ctx <span class="op">=</span> req<span class="op">.</span><span class="fu">getContextPath</span><span class="op">();</span>   <span class="co">// ex.: "/MinhaApp"</span></span>
+<span id="cb5-10"><a href="#cb5-10"></a>    <span class="bu">String</span> path <span class="op">=</span> req<span class="op">.</span><span class="fu">getRequestURI</span><span class="op">();</span>   <span class="co">// ex.: "/MinhaApp/css/estilo.css"</span></span>
+<span id="cb5-11"><a href="#cb5-11"></a></span>
+<span id="cb5-12"><a href="#cb5-12"></a>    <span class="dt">boolean</span> isLogin <span class="op">=</span> path<span class="op">.</span><span class="fu">endsWith</span><span class="op">(</span><span class="st">"/login"</span><span class="op">);</span></span>
+<span id="cb5-13"><a href="#cb5-13"></a>    <span class="dt">boolean</span> isStatic <span class="op">=</span> path<span class="op">.</span><span class="fu">startsWith</span><span class="op">(</span>ctx <span class="op">+</span> <span class="st">"/css"</span><span class="op">)</span></span>
+<span id="cb5-14"><a href="#cb5-14"></a>                     <span class="op">||</span> path<span class="op">.</span><span class="fu">startsWith</span><span class="op">(</span>ctx <span class="op">+</span> <span class="st">"/js"</span><span class="op">)</span></span>
+<span id="cb5-15"><a href="#cb5-15"></a>                     <span class="op">||</span> path<span class="op">.</span><span class="fu">startsWith</span><span class="op">(</span>ctx <span class="op">+</span> <span class="st">"/images"</span><span class="op">);</span></span>
+<span id="cb5-16"><a href="#cb5-16"></a></span>
+<span id="cb5-17"><a href="#cb5-17"></a>    <span class="cf">if</span> <span class="op">(</span>isLogin <span class="op">||</span> isStatic<span class="op">)</span> <span class="op">{</span>           <span class="co">// recursos públicos</span></span>
+<span id="cb5-18"><a href="#cb5-18"></a>        chain<span class="op">.</span><span class="fu">doFilter</span><span class="op">(</span>request<span class="op">,</span> response<span class="op">);</span></span>
+<span id="cb5-19"><a href="#cb5-19"></a>        <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb5-20"><a href="#cb5-20"></a>    <span class="op">}</span></span>
+<span id="cb5-21"><a href="#cb5-21"></a></span>
+<span id="cb5-22"><a href="#cb5-22"></a>    HttpSession session <span class="op">=</span> req<span class="op">.</span><span class="fu">getSession</span><span class="op">(</span><span class="kw">false</span><span class="op">);</span></span>
+<span id="cb5-23"><a href="#cb5-23"></a></span>
+<span id="cb5-24"><a href="#cb5-24"></a>    <span class="cf">if</span> <span class="op">(</span>session <span class="op">==</span> <span class="kw">null</span> <span class="op">||</span> session<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"utilizador"</span><span class="op">)</span> <span class="op">==</span> <span class="kw">null</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-25"><a href="#cb5-25"></a>        res<span class="op">.</span><span class="fu">sendError</span><span class="op">(</span>HttpServletResponse<span class="op">.</span><span class="fu">SC_UNAUTHORIZED</span><span class="op">);</span> <span class="co">// 401</span></span>
+<span id="cb5-26"><a href="#cb5-26"></a>        <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb5-27"><a href="#cb5-27"></a>    <span class="op">}</span></span>
+<span id="cb5-28"><a href="#cb5-28"></a></span>
+<span id="cb5-29"><a href="#cb5-29"></a>    chain<span class="op">.</span><span class="fu">doFilter</span><span class="op">(</span>request<span class="op">,</span> response<span class="op">);</span></span>
+<span id="cb5-30"><a href="#cb5-30"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>O método <code>getContextPath()</code> devolve o prefixo com que a aplicação está instalada no servidor, e <code>getRequestURI()</code> devolve o caminho completo pedido. Comparar o início do caminho com <code>ctx + "/css"</code> funciona qualquer que seja o nome com que a aplicação foi instalada.</p>
+<p>Tudo o que um Filtro faz depois de <code>chain.doFilter()</code> regressar acontece já com a resposta produzida pela <em>Servlet</em>. Um Filtro de registo de atividade, por exemplo, anota a hora antes de passar o pedido à cadeia e calcula a duração quando a cadeia regressa:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb6-1"><a href="#cb6-1"></a><span class="at">@WebFilter</span><span class="op">(</span><span class="st">"/*"</span><span class="op">)</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="kw">public</span> <span class="kw">class</span> RegistoFilter <span class="kw">implements</span> <span class="bu">Filter</span> <span class="op">{</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a></span>
+<span id="cb6-4"><a href="#cb6-4"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">doFilter</span><span class="op">(</span>ServletRequest request<span class="op">,</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a>                          ServletResponse response<span class="op">,</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a>                          FilterChain chain<span class="op">)</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a>            <span class="kw">throws</span> <span class="bu">IOException</span><span class="op">,</span> ServletException <span class="op">{</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a></span>
+<span id="cb6-9"><a href="#cb6-9"></a>        <span class="dt">long</span> inicio <span class="op">=</span> <span class="bu">System</span><span class="op">.</span><span class="fu">currentTimeMillis</span><span class="op">();</span>   <span class="co">// antes da Servlet</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a></span>
+<span id="cb6-11"><a href="#cb6-11"></a>        chain<span class="op">.</span><span class="fu">doFilter</span><span class="op">(</span>request<span class="op">,</span> response<span class="op">);</span>          <span class="co">// a Servlet corre aqui</span></span>
+<span id="cb6-12"><a href="#cb6-12"></a></span>
+<span id="cb6-13"><a href="#cb6-13"></a>        <span class="dt">long</span> duracao <span class="op">=</span> <span class="bu">System</span><span class="op">.</span><span class="fu">currentTimeMillis</span><span class="op">()</span> <span class="op">-</span> inicio<span class="op">;</span>   <span class="co">// depois</span></span>
+<span id="cb6-14"><a href="#cb6-14"></a>        HttpServletRequest req <span class="op">=</span> <span class="op">(</span>HttpServletRequest<span class="op">)</span> request<span class="op">;</span></span>
+<span id="cb6-15"><a href="#cb6-15"></a>        <span class="bu">System</span><span class="op">.</span><span class="fu">out</span><span class="op">.</span><span class="fu">println</span><span class="op">(</span>req<span class="op">.</span><span class="fu">getRequestURI</span><span class="op">()</span> <span class="op">+</span> <span class="st">": "</span> <span class="op">+</span> duracao <span class="op">+</span> <span class="st">" ms"</span><span class="op">);</span></span>
+<span id="cb6-16"><a href="#cb6-16"></a>    <span class="op">}</span></span>
+<span id="cb6-17"><a href="#cb6-17"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>As variáveis <code>inicio</code> e <code>duracao</code> são locais: cada pedido tem as suas, e pedidos concorrentes não interferem uns com os outros, tal como recomendado no ciclo de vida.</p>
 </section>
 <section id="sec-06-redirect-vs-401" class="level2" data-number="6.8">
 <h2 data-number="6.8" class="anchored" data-anchor-id="sec-06-redirect-vs-401"><span class="header-section-number">6.8</span> Redirecionamento vs.&nbsp;<code>401</code>: uma Diferença Arquitetural</h2>
@@ -486,7 +533,7 @@ Figura&nbsp;6.3: Sem Filtro, cada Servlet acumula autenticação, logging, valid
 </section>
 <section id="sec-06-preparacao-sem-estado" class="level2" data-number="6.9">
 <h2 data-number="6.9" class="anchored" data-anchor-id="sec-06-preparacao-sem-estado"><span class="header-section-number">6.9</span> Preparação para uma Segurança Sem Estado</h2>
-<p>O modelo apresentado neste capítulo assenta inteiramente em sessão: o servidor guarda o estado do utilizador autenticado (<code>HttpSession</code>), e o Filtro verifica essa sessão em cada pedido. Este modelo tem uma limitação: exige que o servidor mantenha memória de cada utilizador, o que se torna problemático assim que existe mais do que uma instância do servidor (ver <a href="../capitulos/cap08.html">Capítulo 8</a>).</p>
+<p>O modelo apresentado neste capítulo assenta inteiramente em sessão: o servidor guarda o estado do utilizador autenticado (<code>HttpSession</code>), e o Filtro verifica essa sessão em cada pedido. Este modelo tem uma limitação: exige que o servidor mantenha memória de cada utilizador, o que se torna problemático assim que existe mais do que uma instância do servidor (ver <a href="../capitulos/cap07.html">Capítulo 7</a>).</p>
 <p>A alternativa é a autenticação baseada em <em>token</em>: em vez de o servidor guardar sessão nenhuma, o próprio pedido transporta, em cada chamada, toda a informação necessária para se autenticar. Esta mudança, de um modelo com estado (<em>stateful</em>) para um modelo sem estado (<em>stateless</em>), é o tema dos capítulos seguintes.</p>
 
 

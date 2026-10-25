@@ -25,9 +25,9 @@ Antes de resolver o problema, vale a pena precisar dois conceitos frequentemente
 : Responde a "quem é o utilizador?". É a verificação de identidade, tipicamente feita no momento do *login*.
 
 ```java
-if (dao.validateUserCredentials(username, password)) {
+if (dao.validarCredenciais(utilizador, palavraPasse)) {
     HttpSession session = request.getSession(true);
-    session.setAttribute("UserName", username);
+    session.setAttribute("utilizador", utilizador);
 }
 ```
 
@@ -35,10 +35,12 @@ if (dao.validateUserCredentials(username, password)) {
 : Responde a "o que é que este utilizador tem permissão para aceder?". É a verificação de permissões, feita depois de a identidade já estar confirmada.
 
 ```java
-if ("ADMIN".equals(session.getAttribute("UserRole"))) {
+if ("admin".equals(session.getAttribute("perfil"))) {
     // acesso permitido
 }
 ```
+
+Neste exemplo, o *login* guardou na sessão, além do utilizador, o seu perfil (por exemplo, `"admin"`), e só os utilizadores com esse perfil têm acesso ao recurso.
 
 A autenticação acontece sempre primeiro: não faz sentido verificar permissões de alguém cuja identidade ainda não foi confirmada. Esta distinção reflete-se diretamente nos códigos de estado HTTP usados na resposta (ver [Capítulo 3](cap03.qmd)):
 
@@ -59,11 +61,7 @@ Além da autenticação e da autorização, os Filtros são o mecanismo natural 
 
 ## Onde um Filtro se Situa no Pedido {#sec-06-onde-situa}
 
-Um ou mais Filtros podem ser encadeados entre o cliente e a *Servlet* que trata efetivamente o pedido:
-
-```
-Cliente → Filtro 1 → ... → Filtro N → Servlet (lógica de negócio) → Resposta
-```
+Um ou mais Filtros podem ser encadeados entre o cliente e a *Servlet* que trata efetivamente o pedido. O pedido atravessa os Filtros pela ordem da cadeia e só depois chega à *Servlet*, onde está a lógica de negócio; a resposta faz o caminho inverso, de volta ao cliente.
 
 ![Um pedido atravessa a cadeia de Filtros antes de chegar à Servlet; cada Filtro pode bloquear o pedido (vermelho), modificá-lo (amarelo) ou deixá-lo prosseguir (verde, chamando chain.doFilter()).](../assets/images/capitulos/cap06/Filter_Chain.png){#fig-06-filter-chain width="80%"}
 
@@ -73,15 +71,23 @@ Cada Filtro na cadeia tem, essencialmente, três comportamentos possíveis:
 - **Modificar o pedido**: normalização e validação de dados, registo de atividade, entre outros
 - **Deixar prosseguir**: chamando `chain.doFilter(request, response)`, passando o controlo ao próximo elemento da cadeia
 
+Considere-se uma aplicação com um Filtro de autenticação à frente da *Servlet* que mostra o perfil do utilizador, mapeada em `/perfil`. O percurso de um pedido é este:
+
+1. O *browser* envia `GET /perfil`.
+2. Antes de o pedido chegar à *Servlet*, o contentor entrega-o ao Filtro, que procura a sessão com `getSession(false)` e, dentro dela, o atributo `utilizador`.
+3. **Sem sessão** (o utilizador ainda não fez *login*): o Filtro responde `401` e o pedido termina ali. A *Servlet* nunca chega a ser executada.
+4. **Com sessão**: o Filtro chama `chain.doFilter(request, response)` e o pedido segue para a *Servlet*, que produz a página do perfil.
+5. A resposta da *Servlet* volta a passar pelo Filtro, a caminho do *browser*.
+
 ## Ciclo de Vida de um Filtro {#sec-06-ciclo-vida-filter}
 
 O ciclo de vida de um Filtro segue o mesmo modelo já apresentado para as *Servlets* (ver [Capítulo 4](cap04.qmd)):
 
 - `init()`: executado uma única vez, quando o contentor coloca o Filtro em serviço
-- `doFilter()`: executado a cada pedido; pode inspecionar, bloquear ou modificar o pedido e a resposta, e deve chamar `chain.doFilter()` para continuar a cadeia
+- `doFilter()`: executado a cada pedido; pode inspecionar, bloquear ou modificar o pedido e a resposta, e deve chamar `chain.doFilter()` para continuar a cadeia; pode ainda executar código depois de `chain.doFilter()` regressar, já com a resposta produzida pela *Servlet*
 - `destroy()`: executado uma única vez, quando o Filtro é retirado de serviço, para libertar recursos
 
-Tal como uma *Servlet*, existe **uma única instância** de cada Filtro, partilhada por múltiplos pedidos concorrentes: aplica-se aqui exatamente o mesmo cuidado já referido no Capítulo 3, evitar estado mutável partilhado, e preferir variáveis locais dentro de `doFilter()`.
+Tal como uma *Servlet*, existe **uma única instância** de cada Filtro, partilhada por múltiplos pedidos concorrentes: aplica-se aqui exatamente o mesmo cuidado já referido no [Capítulo 4](cap04.qmd), evitar estado mutável partilhado, e preferir variáveis locais dentro de `doFilter()`.
 
 ![O ciclo de vida de um Filtro espelha o de uma Servlet: init() e destroy() correm uma única vez, doFilter() corre a cada pedido, para múltiplos pedidos concorrentes.](../assets/images/capitulos/cap06/Filter_Lifecycle.png){#fig-06-filter-lifecycle width="85%"}
 
@@ -124,7 +130,7 @@ public void doFilter(ServletRequest request,
 
     HttpSession session = req.getSession(false);
 
-    if (session == null || session.getAttribute("UserName") == null) {
+    if (session == null || session.getAttribute("utilizador") == null) {
         res.sendError(HttpServletResponse.SC_UNAUTHORIZED); // 401
         return;
     }
@@ -133,21 +139,66 @@ public void doFilter(ServletRequest request,
 }
 ```
 
-Na prática, nem todos os pedidos devem ser protegidos: o próprio `/login`, e recursos estáticos como `/css`, `/js` ou `/images`, precisam de ficar acessíveis sem autenticação, sob pena de o utilizador nunca conseguir sequer chegar ao formulário de *login*.
+Na prática, nem todos os pedidos devem ser protegidos: o próprio `/login`, e recursos estáticos como `/css`, `/js` ou `/images`, precisam de ficar acessíveis sem autenticação, sob pena de o utilizador nunca conseguir sequer chegar ao formulário de *login*. A versão completa do `doFilter()` trata primeiro estas exceções e só depois verifica a sessão:
 
 ```java
-String path = req.getRequestURI();
+public void doFilter(ServletRequest request,
+                      ServletResponse response,
+                      FilterChain chain)
+        throws IOException, ServletException {
 
-boolean isLogin = path.endsWith("/login");
-boolean isStatic = path.startsWith(req.getContextPath() + "/css")
-                 || path.startsWith(req.getContextPath() + "/js")
-                 || path.startsWith(req.getContextPath() + "/images");
+    HttpServletRequest req = (HttpServletRequest) request;
+    HttpServletResponse res = (HttpServletResponse) response;
 
-if (isLogin || isStatic) {
+    String ctx = req.getContextPath();   // ex.: "/MinhaApp"
+    String path = req.getRequestURI();   // ex.: "/MinhaApp/css/estilo.css"
+
+    boolean isLogin = path.endsWith("/login");
+    boolean isStatic = path.startsWith(ctx + "/css")
+                     || path.startsWith(ctx + "/js")
+                     || path.startsWith(ctx + "/images");
+
+    if (isLogin || isStatic) {           // recursos públicos
+        chain.doFilter(request, response);
+        return;
+    }
+
+    HttpSession session = req.getSession(false);
+
+    if (session == null || session.getAttribute("utilizador") == null) {
+        res.sendError(HttpServletResponse.SC_UNAUTHORIZED); // 401
+        return;
+    }
+
     chain.doFilter(request, response);
-    return;
 }
 ```
+
+O método `getContextPath()` devolve o prefixo com que a aplicação está instalada no servidor, e `getRequestURI()` devolve o caminho completo pedido. Comparar o início do caminho com `ctx + "/css"` funciona qualquer que seja o nome com que a aplicação foi instalada.
+
+Tudo o que um Filtro faz depois de `chain.doFilter()` regressar acontece já com a resposta produzida pela *Servlet*. Um Filtro de registo de atividade, por exemplo, anota a hora antes de passar o pedido à cadeia e calcula a duração quando a cadeia regressa:
+
+```java
+@WebFilter("/*")
+public class RegistoFilter implements Filter {
+
+    public void doFilter(ServletRequest request,
+                          ServletResponse response,
+                          FilterChain chain)
+            throws IOException, ServletException {
+
+        long inicio = System.currentTimeMillis();   // antes da Servlet
+
+        chain.doFilter(request, response);          // a Servlet corre aqui
+
+        long duracao = System.currentTimeMillis() - inicio;   // depois
+        HttpServletRequest req = (HttpServletRequest) request;
+        System.out.println(req.getRequestURI() + ": " + duracao + " ms");
+    }
+}
+```
+
+As variáveis `inicio` e `duracao` são locais: cada pedido tem as suas, e pedidos concorrentes não interferem uns com os outros, tal como recomendado no ciclo de vida.
 
 ## Redirecionamento vs. `401`: uma Diferença Arquitetural {#sec-06-redirect-vs-401}
 
@@ -160,6 +211,6 @@ A diferença resume-se a uma frase: numa aplicação Web tradicional, uma falha 
 
 ## Preparação para uma Segurança Sem Estado {#sec-06-preparacao-sem-estado}
 
-O modelo apresentado neste capítulo assenta inteiramente em sessão: o servidor guarda o estado do utilizador autenticado (`HttpSession`), e o Filtro verifica essa sessão em cada pedido. Este modelo tem uma limitação: exige que o servidor mantenha memória de cada utilizador, o que se torna problemático assim que existe mais do que uma instância do servidor (ver [Capítulo 8](cap08.qmd)).
+O modelo apresentado neste capítulo assenta inteiramente em sessão: o servidor guarda o estado do utilizador autenticado (`HttpSession`), e o Filtro verifica essa sessão em cada pedido. Este modelo tem uma limitação: exige que o servidor mantenha memória de cada utilizador, o que se torna problemático assim que existe mais do que uma instância do servidor (ver [Capítulo 7](cap07.qmd)).
 
 A alternativa é a autenticação baseada em *token*: em vez de o servidor guardar sessão nenhuma, o próprio pedido transporta, em cada chamada, toda a informação necessária para se autenticar. Esta mudança, de um modelo com estado (*stateful*) para um modelo sem estado (*stateless*), é o tema dos capítulos seguintes.
