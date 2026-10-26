@@ -287,7 +287,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#sec-apD5-passo4" id="toc-sec-apD5-passo4" class="nav-link" data-scroll-target="#sec-apD5-passo4"><span class="header-section-number">H.1.5</span> Passo 5.4: Criar um Filtro de Autenticação JWT</a></li>
   <li><a href="#sec-apD5-passo5" id="toc-sec-apD5-passo5" class="nav-link" data-scroll-target="#sec-apD5-passo5"><span class="header-section-number">H.1.6</span> Passo 5.5: Remover o Filtro Baseado em Sessão (ou Desativá-lo)</a></li>
   <li><a href="#sec-apD5-passo6" id="toc-sec-apD5-passo6" class="nav-link" data-scroll-target="#sec-apD5-passo6"><span class="header-section-number">H.1.7</span> Passo 5.6: <code>401</code> vs.&nbsp;<code>403</code> Neste Projeto</a></li>
-  <li><a href="#sec-apD5-passo7" id="toc-sec-apD5-passo7" class="nav-link" data-scroll-target="#sec-apD5-passo7"><span class="header-section-number">H.1.8</span> Passo 5.7: Como Testar (<em>Browser</em> + <code>curl</code>/Postman)</a></li>
+  <li><a href="#sec-apD5-passo7" id="toc-sec-apD5-passo7" class="nav-link" data-scroll-target="#sec-apD5-passo7"><span class="header-section-number">H.1.8</span> Passo 5.7: Como Testar com um Cliente REST</a></li>
   <li><a href="#sec-apD5-conclusao" id="toc-sec-apD5-conclusao" class="nav-link" data-scroll-target="#sec-apD5-conclusao"><span class="header-section-number">H.1.9</span> Conclusão</a></li>
   </ul></li>
   </ul>
@@ -479,8 +479,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Neste tutorial usa-se sobretudo o <code>401</code>, porque ainda não se implementam papéis/permissões. Se mais tarde se acrescentarem papéis (por exemplo, administrador vs.&nbsp;utilizador normal), o <code>403</code> passa a ser relevante. Recorde-se: a autenticação responde a “quem és tu?”; a autorização responde a “tens permissão para fazer isto?” (ver <a href="../capitulos/cap06.html">Capítulo 6</a>).</p>
 </section>
 <section id="sec-apD5-passo7" class="level3" data-number="H.1.8">
-<h3 data-number="H.1.8" class="anchored" data-anchor-id="sec-apD5-passo7"><span class="header-section-number">H.1.8</span> Passo 5.7: Como Testar (<em>Browser</em> + <code>curl</code>/Postman)</h3>
-<p>Como os <em>browsers</em> não permitem facilmente definir cabeçalhos personalizados numa navegação normal, testar um JWT faz-se melhor com <code>curl</code> ou com Postman (ver <a href="../capitulos/apendiceC.html">Apêndice C</a>).</p>
+<h3 data-number="H.1.8" class="anchored" data-anchor-id="sec-apD5-passo7"><span class="header-section-number">H.1.8</span> Passo 5.7: Como Testar com um Cliente REST</h3>
+<p>Como os <em>browsers</em> não permitem facilmente definir cabeçalhos personalizados numa navegação normal, testar um JWT faz-se melhor com um cliente REST, como o Yaak ou a extensão REST Client do VSCode, ou com <code>curl</code> (ver <a href="../capitulos/apendiceC.html">Apêndice C</a>).</p>
 <p><strong>1) Fazer <em>login</em> e obter um <em>token</em></strong>: enviar um pedido <code>POST</code> a <code>/login</code> com credenciais válidas (<code>javaee</code> / <code>asw2026</code>) e copiar o <em>token</em> da resposta JSON.</p>
 <p><strong>2) Chamar um <em>endpoint</em> protegido com o <em>token</em></strong>: enviar um pedido <code>GET</code> a <code>/country?countrycode=PT</code>, com o cabeçalho <code>Authorization: Bearer &lt;token&gt;</code>. Resultado esperado: <em>token</em> válido → <code>HTTP 200</code> com dados JSON; <em>token</em> em falta ou inválido → <code>HTTP 401</code> com um erro JSON.</p>
 <p>Neste LAB, enviar sempre o <em>token</em> através do cabeçalho <code>Authorization</code>. Não guardar o JWT em <em>cookies</em> — isso reintroduziria, na prática, um comportamento de sessão implícito.</p>

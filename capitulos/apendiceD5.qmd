@@ -175,9 +175,9 @@ Usar sempre estas definições: `401 Unauthorized` — o pedido não está auten
 
 Neste tutorial usa-se sobretudo o `401`, porque ainda não se implementam papéis/permissões. Se mais tarde se acrescentarem papéis (por exemplo, administrador vs. utilizador normal), o `403` passa a ser relevante. Recorde-se: a autenticação responde a "quem és tu?"; a autorização responde a "tens permissão para fazer isto?" (ver [Capítulo 6](cap06.qmd)).
 
-### Passo 5.7: Como Testar (*Browser* + `curl`/Postman) {#sec-apD5-passo7}
+### Passo 5.7: Como Testar com um Cliente REST {#sec-apD5-passo7}
 
-Como os *browsers* não permitem facilmente definir cabeçalhos personalizados numa navegação normal, testar um JWT faz-se melhor com `curl` ou com Postman (ver [Apêndice C](apendiceC.qmd)).
+Como os *browsers* não permitem facilmente definir cabeçalhos personalizados numa navegação normal, testar um JWT faz-se melhor com um cliente REST, como o Yaak ou a extensão REST Client do VSCode, ou com `curl` (ver [Apêndice C](apendiceC.qmd)).
 
 **1) Fazer *login* e obter um *token***: enviar um pedido `POST` a `/login` com credenciais válidas (`javaee` / `asw2026`) e copiar o *token* da resposta JSON.
 
