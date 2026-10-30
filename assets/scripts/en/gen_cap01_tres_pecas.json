@@ -1,0 +1,8 @@
+{
+ "corre no cliente\n(browser)": "runs on the client\n(browser)",
+ "Aula 02\nHTML, CSS e Bootstrap": "Class 02\nHTML, CSS and Bootstrap",
+ "liga o cliente ao servidor:\nnesta UC, sempre o HTTP": "links client and server:\nin this course, always HTTP",
+ "Aula 03\nDa rede ao HTTP": "Class 03\nFrom the network to HTTP",
+ "corre no servidor:\nlógica de negócio e dados": "runs on the server:\nbusiness logic and data",
+ "Aulas 04 a 08\nServlets, sessões, REST, JWT": "Classes 04 to 08\nServlets, sessions, REST, JWT"
+}
