@@ -1,0 +1,15 @@
+{
+ "Cliente\n(Client Tier)": "Client\n(Client Tier)",
+ "Browser · aplicações cliente": "Browser · client applications",
+ "Web\n(Web Tier)": "",
+ "Servlets · JSP · serviços Web": "Servlets · JSP · Web services",
+ "Negócio\n(Business Tier)": "Business\n(Business Tier)",
+ "Enterprise Beans": "",
+ "Dados\n(EIS Tier)": "Data\n(EIS Tier)",
+ "Bases de dados · sistemas de\ninformação empresarial (EIS)": "Databases · enterprise\ninformation systems (EIS)",
+ "máquina do cliente": "client machine",
+ "servidor Jakarta EE": "Jakarta EE server",
+ "servidor de base de dados": "database server",
+ "Tomcat (esta UC)": "Tomcat (this course)",
+ "no Tomcat: classes Java comuns (ex.: o DAO)": "in Tomcat: ordinary Java classes (e.g. the DAO)"
+}

@@ -3,6 +3,7 @@ aceite pelos outros serviços, cada um a validá-lo sozinho (Cap08 / Aula 08 da 
 
 Uso: python gen_cap08_microsservicos.py <ficheiro_saida.png>
 """
+import os
 import sys
 
 import matplotlib
@@ -18,6 +19,9 @@ GREEN = "#218c4a"
 GREY = "#9aa7ad"
 FS = 18
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from traduzir_figura import ativar  # noqa: E402
+ativar(__file__)                     # --en: textos em inglês (assets/scripts/en/)
 out = sys.argv[1] if len(sys.argv) > 1 else "microsservicos.png"
 
 

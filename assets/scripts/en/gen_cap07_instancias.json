@@ -1,0 +1,21 @@
+{
+ "Com sessão no servidor (stateful)": "With a session on the server (stateful)",
+ "Cliente": "Client",
+ "Balanceador": "Load balancer",
+ "distribui os pedidos": "distributes the requests",
+ "Servidor A": "Server A",
+ "sessão: utilizador = \"ana\"": "session: utilizador = \"ana\"",
+ "Servidor B": "Server B",
+ "sem sessão": "no session",
+ "1": "",
+ "login": "",
+ "2": "",
+ "GET /livros": "",
+ "401": "",
+ "B não conhece a sessão criada em A": "B does not know the session created on A",
+ "Sem estado no servidor (stateless)": "No state on the server (stateless)",
+ "sem sessão (emite o token)": "no session (issues the token)",
+ "GET /livros + token": "",
+ "200": "",
+ "o próprio pedido traz o token": "the request itself carries the token"
+}

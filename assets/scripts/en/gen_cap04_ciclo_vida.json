@@ -1,0 +1,17 @@
+{
+ "Carregar a classe\ne criar a instância": "Load the class,\ncreate instance",
+ "1.º pedido\n(ou arranque do servidor)": "1st request\n(or server start-up)",
+ "init()": "",
+ "uma vez": "once",
+ "preparar recursos\n(ex.: ligação à BD)": "prepare resources\n(e.g. DB connection)",
+ "service()": "",
+ "uma vez por pedido HTTP,\nnum thread próprio": "once per HTTP request,\nin its own thread",
+ "doGet()": "",
+ "GET": "",
+ "doPost()": "",
+ "POST": "",
+ "… consoante o verbo HTTP": "… depending on the HTTP verb",
+ "destroy()": "",
+ "uma vez, ao desligar o servidor\nou retirar a aplicação": "once, when the server shuts down\nor the application is removed",
+ "libertar recursos": "release resources"
+}

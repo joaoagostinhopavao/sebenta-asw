@@ -3,6 +3,7 @@
 O token do esquema é verdadeiro (HS256), o mesmo do exemplo do capítulo.
 Uso: python gen_cap08_jwt_anatomia.py <ficheiro_saida.png>
 """
+import os
 import sys
 
 import matplotlib
@@ -22,6 +23,9 @@ HEADER = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
 PAYLOAD = "eyJzdWIiOiJhbmEiLCJyb2xlIjoidXNlciIsImV4cCI6MTg5MzQ1NjAwMH0"
 SIGNATURE = "O1M0ymsf-ceCK3OxAewCVLReDaVliYUirWclbBC4-LE"
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from traduzir_figura import ativar  # noqa: E402
+ativar(__file__)                     # --en: textos em inglês (assets/scripts/en/)
 out = sys.argv[1] if len(sys.argv) > 1 else "jwt_anatomia.png"
 
 

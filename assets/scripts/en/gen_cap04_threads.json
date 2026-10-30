@@ -1,0 +1,15 @@
+{
+ "Servlet Container (Tomcat)": "",
+ "uma só instância\nda Servlet": "a single instance\nof the Servlet",
+ "service()": "",
+ "→ doGet() / doPost()": "",
+ "Pedido 1": "Request 1",
+ "thread 1": "",
+ "Pedido 2": "Request 2",
+ "thread 2": "",
+ "Pedido 3": "Request 3",
+ "thread 3": "",
+ "pedidos em simultâneo": "simultaneous requests",
+ "um thread por pedido": "one thread per request",
+ "todos usam a mesma instância": "all use the same instance"
+}

@@ -2,6 +2,7 @@
 
 Uso: python gen_cap06_servlet_vs_filtro.py <ficheiro_saida.png>
 """
+import os
 import sys
 
 import matplotlib
@@ -15,6 +16,9 @@ ACCENT = "#4dd0e1"
 ORANGE = "#e08a2e"
 FS = 19
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from traduzir_figura import ativar  # noqa: E402
+ativar(__file__)                     # --en: textos em inglês (assets/scripts/en/)
 out = sys.argv[1] if len(sys.argv) > 1 else "Servlet_vs_Filter.png"
 
 

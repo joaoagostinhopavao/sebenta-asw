@@ -1,0 +1,12 @@
+{
+ "Só Servlets": "Servlets only",
+ "Em cada Servlet:": "In each Servlet:",
+ "autenticação": "authentication",
+ "logging": "",
+ "validação": "validation",
+ "lógica de negócio": "business logic",
+ "Servlet + Filtro": "Servlet + Filter",
+ "Num só Filtro:": "In a single Filter:",
+ "DRY": "",
+ "E se for preciso mudar a lógica de autenticação em 15 Servlets?": "What if the authentication logic has to change in 15 Servlets?"
+}

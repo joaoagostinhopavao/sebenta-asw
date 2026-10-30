@@ -3,6 +3,7 @@
 
 Uso: python gen_cap08_filtros.py <ficheiro_saida.png>
 """
+import os
 import sys
 
 import matplotlib
@@ -19,6 +20,9 @@ GREEN = "#218c4a"
 GREY = "#5f6b70"
 FS = 18
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from traduzir_figura import ativar  # noqa: E402
+ativar(__file__)                     # --en: textos em inglês (assets/scripts/en/)
 out = sys.argv[1] if len(sys.argv) > 1 else "filtros.png"
 
 

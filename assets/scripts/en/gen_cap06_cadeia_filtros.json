@@ -1,0 +1,14 @@
+{
+ "Servlet Container (Tomcat)": "",
+ "Cliente": "Client",
+ "Filtro 1": "Filter 1",
+ "…": "",
+ "Filtro N": "Filter N",
+ "Servlet\n(lógica de\nnegócio)": "Servlet\n(business\nlogic)",
+ "pedido": "request",
+ "resposta": "response",
+ "chain.doFilter()": "",
+ "Bloquear o pedido (400 / 401 / 403)": "Block the request (400 / 401 / 403)",
+ "Modificar o pedido (validação, logging, …)": "Modify the request (validation, logging, …)",
+ "Deixar prosseguir: chain.doFilter()": "Let it proceed: chain.doFilter()"
+}

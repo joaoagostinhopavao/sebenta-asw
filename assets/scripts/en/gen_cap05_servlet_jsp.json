@@ -1,0 +1,19 @@
+{
+ "Browser": "",
+ "Servidor (Tomcat)": "Server (Tomcat)",
+ "Servlet": "",
+ "Controller": "",
+ "DAO": "",
+ "Model": "",
+ "perfil.jsp": "",
+ "View": "",
+ "1": "",
+ "GET /perfil": "",
+ "2": "",
+ "dados": "data",
+ "3": "",
+ "request.setAttribute(…)": "",
+ "forward(request, response)": "",
+ "4": "",
+ "HTML gerado": "generated HTML"
+}

@@ -1,0 +1,15 @@
+{
+ "Filtro por sessão": "Session Filter",
+ "pedido HTTP": "HTTP request",
+ "existe sessão com\n\"utilizador\"?": "is there a session with\n\"utilizador\"?",
+ "não": "no",
+ "401": "",
+ "sim": "yes",
+ "chain.doFilter()": "",
+ "Servlet": "",
+ "Filtro por JWT": "JWT Filter",
+ "Authorization começa\npor \"Bearer \"?": "does Authorization start\nwith \"Bearer \"?",
+ "assinatura e exp\nválidas? (JJWT)": "signature and exp\nvalid? (JJWT)",
+ "token forjado\nou expirado": "forged or\nexpired token",
+ "a mesma estrutura: verificar → 401 ou chain.doFilter(); só muda a verificação": "same structure: check → 401 or chain.doFilter(); only the check changes"
+}

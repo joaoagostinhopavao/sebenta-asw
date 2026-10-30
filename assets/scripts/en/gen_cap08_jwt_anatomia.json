@@ -1,0 +1,19 @@
+{
+ "O token, tal como viaja no cabeçalho Authorization (as três partes em Base64URL):": "The token, as it travels in the Authorization header (all three parts in Base64URL):",
+ "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9": "",
+ ".": "",
+ "eyJzdWIiOiJhbmEiLCJyb2xlIjoidXNlciIsImV4cCI6MTg5MzQ1NjAwMH0": "",
+ "O1M0ymsf-ceCK3OxAewCVLReDaVliYUirWclbBC4-LE": "",
+ "Header": "",
+ "descodifica": "decodes",
+ "{\"alg\":\"HS256\",\"typ\":\"JWT\"}": "",
+ "o algoritmo da assinatura": "the signature algorithm",
+ "só codificado: qualquer um lê": "only encoded: anyone can read it",
+ "Payload": "",
+ "{\"sub\":\"ana\",\"role\":\"user\",\n \"exp\":1893456000}": "",
+ "as claims: quem é, que perfil tem, até quando vale": "the claims: who it is, which role, valid until when",
+ "Assinatura": "Signature",
+ "3b 53 34 ca 6b 1f f9 c7 ... f8 b1\n(32 bytes, ilegível: não é texto)": "3b 53 34 ca 6b 1f f9 c7 ... f8 b1\n(32 bytes, unreadable: not text)",
+ "= HMAC-SHA256(header.payload, chave secreta)": "= HMAC-SHA256(header.payload, secret key)",
+ "ninguém a consegue forjar sem a chave": "nobody can forge it without the key"
+}

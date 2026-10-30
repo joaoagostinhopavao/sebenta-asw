@@ -3,6 +3,7 @@
 
 Uso: python gen_cap08_base64.py <ficheiro_saida.png>
 """
+import os
 import sys
 
 import matplotlib
@@ -18,6 +19,9 @@ CORES = ["#0e6e8c", "#d4651a", "#218c4a"]       # uma cor por byte de origem
 FS = 18
 ALFABETO = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from traduzir_figura import ativar  # noqa: E402
+ativar(__file__)                     # --en: textos em inglês (assets/scripts/en/)
 out = sys.argv[1] if len(sys.argv) > 1 else "base64.png"
 
 texto = "Ana"

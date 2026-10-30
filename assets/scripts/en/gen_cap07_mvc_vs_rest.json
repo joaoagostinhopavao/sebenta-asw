@@ -1,0 +1,15 @@
+{
+ "Aplicação Web (MVC)": "Web application (MVC)",
+ "Servidor": "Server",
+ "Controller (Servlet)": "",
+ "Model (DAO)": "",
+ "Cliente": "Client",
+ "API REST": "REST API",
+ "View (JSP): gera a página HTML": "View (JSP): generates the HTML page",
+ "o browser mostra o HTML recebido": "the browser shows the HTML received",
+ "pedido": "request",
+ "HTML": "",
+ "sem View no servidor": "no View on the server",
+ "View (JavaScript): desenha a página": "View (JavaScript): draws the page",
+ "JSON": ""
+}

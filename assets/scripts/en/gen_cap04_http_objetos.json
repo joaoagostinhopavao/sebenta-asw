@@ -1,0 +1,23 @@
+{
+ "Servlet Container (Tomcat)": "",
+ "Pedido HTTP (texto)": "HTTP request (text)",
+ "GET /recurso?nome=valor HTTP/1.1": "",
+ "Host: servidor:8080": "",
+ "Accept: application/json": "",
+ "HttpServletRequest request": "",
+ "getParameter(\"nome\")": "",
+ "   → \"valor\"": "",
+ "getHeader(\"Accept\")": "",
+ "   → \"application/json\"": "",
+ "Servlet": "",
+ "doGet(request,\nresponse)": "",
+ "HttpServletResponse response": "",
+ "setStatus(200)": "",
+ "setContentType(\"application/json\")": "",
+ "getWriter().print(corpo)": "getWriter().print(body)",
+ "Resposta HTTP (texto)": "HTTP response (text)",
+ "HTTP/1.1 200 OK": "",
+ "Content-Type: application/json": "",
+ "{ … corpo da resposta … }": "{ … response body … }",
+ "o contentor converte\ntexto ⇄ objetos Java": "the container converts\ntext ⇄ Java objects"
+}

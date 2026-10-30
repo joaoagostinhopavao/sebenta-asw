@@ -2,6 +2,7 @@
 
 Uso: python gen_cap04_servlet_http.py <ficheiro_saida.png>
 """
+import os
 import sys
 
 import matplotlib
@@ -16,6 +17,9 @@ LIGHT = "#eaf6f8"
 ORANGE = "#d4651a"
 FS = 15
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from traduzir_figura import ativar  # noqa: E402
+ativar(__file__)                     # --en: textos em inglês (assets/scripts/en/)
 out = sys.argv[1] if len(sys.argv) > 1 else "servlet-cliente.png"
 
 

@@ -1,0 +1,15 @@
+{
+ "Servidor (Tomcat)": "Server (Tomcat)",
+ "Cliente\n(página HTML + JS,\napp móvel, …)": "Client\n(HTML page + JS,\nmobile app, …)",
+ "View no cliente:\nrecebe dados (JSON)": "View in the client:\nreceives data (JSON)",
+ "Browser": "",
+ "View no browser:\nrecebe a página (HTML)": "View in the browser:\nreceives the page (HTML)",
+ "Servlet\n(Controller)": "",
+ "JSP\n(gera o HTML)": "JSP\n(builds HTML)",
+ "Model\n(DAO)": "",
+ "Dados\n(lista, BD, …)": "Data\n(list, DB, …)",
+ "pedido HTTP": "HTTP request",
+ "JSON": "",
+ "encaminha,\ncom os dados": "forwards,\nwith the data",
+ "HTML": ""
+}

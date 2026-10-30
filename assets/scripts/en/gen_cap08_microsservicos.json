@@ -1,0 +1,15 @@
+{
+ "Cliente": "Client",
+ "guarda o token": "stores the token",
+ "no mesmo servidor (portas diferentes) ou em servidores diferentes": "on the same server (different ports) or on different servers",
+ "Serviço de autenticação": "Authentication service",
+ "valida as credenciais e emite o JWT": "checks credentials, issues the JWT",
+ "Serviço de livros": "Books service",
+ "valida o token sozinho": "validates the token on its own",
+ "Serviço de encomendas": "Orders service",
+ "1  POST /login": "",
+ "2  JWT": "",
+ "3  GET /livros + o mesmo JWT": "3  GET /livros + the same JWT",
+ "4  POST /encomendas + o mesmo JWT": "4  POST /encomendas + the same JWT",
+ "nenhum serviço\npergunta ao de\nautenticação: basta\nverificar a assinatura": "no service asks\nthe authentication\nservice: checking the\nsignature is enough"
+}

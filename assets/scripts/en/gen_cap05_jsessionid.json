@@ -1,0 +1,22 @@
+{
+ "Browser": "",
+ "Servidor": "Server",
+ "Sessões guardadas": "Stored sessions",
+ "id A3F9": "",
+ "utilizador = \"ana\"": "",
+ "id 7C21 (outro)": "id 7C21 (another)",
+ "1": "",
+ "POST /login": "",
+ "utilizador=ana&palavra-passe=…": "",
+ "ainda sem cookie": "no cookie yet",
+ "getSession()\ncria a sessão": "getSession()\nnew session",
+ "2": "",
+ "200 OK": "",
+ "Set-Cookie: JSESSIONID=A3F9": "",
+ "3": "",
+ "GET /perfil": "",
+ "Cookie: JSESSIONID=A3F9": "",
+ "procura a sessão A3F9:\nencontra \"ana\"": "looks up session A3F9:\nfinds \"ana\"",
+ "4": "",
+ "página com os dados de \"ana\"": "page with ana's data"
+}

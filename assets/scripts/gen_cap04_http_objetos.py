@@ -2,6 +2,7 @@
 
 Uso: python gen_cap04_http_objetos.py <ficheiro_saida.png>
 """
+import os
 import sys
 
 import matplotlib
@@ -18,6 +19,9 @@ GREEN = "#2e8b57"
 PAPER = "#f7f7f5"
 FS = 14
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from traduzir_figura import ativar  # noqa: E402
+ativar(__file__)                     # --en: textos em inglês (assets/scripts/en/)
 out = sys.argv[1] if len(sys.argv) > 1 else "servlet-http-objetos.png"
 
 

@@ -1,0 +1,15 @@
+{
+ "Sticky sessions": "",
+ "Cliente\n(ana)": "Client\n(ana)",
+ "Balanceador": "Load balancer",
+ "Servidor A": "Server A",
+ "Servidor B": "Server B",
+ "sessão de ana": "ana's session",
+ "(não conhece ana)": "(ana unknown)",
+ "sempre\npara A": "always\nto A",
+ "simples, mas se A falhar a sessão perde-se\ne a carga não se reparte por igual": "simple, but if A fails the session is lost\nand the load is not shared evenly",
+ "Replicação de sessões": "Session replication",
+ "cópia da sessão": "session copy",
+ "sincroniza": "syncs",
+ "qualquer servidor responde,\nmas é preciso copiar todas as sessões": "any server can answer,\nbut every session has to be copied"
+}
