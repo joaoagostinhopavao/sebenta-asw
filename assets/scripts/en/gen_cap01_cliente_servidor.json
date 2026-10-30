@@ -1,0 +1,8 @@
+{
+ "Cliente": "Client",
+ "por exemplo, um browser": "e.g. a browser",
+ "Servidor": "Server",
+ "por exemplo, o Tomcat": "e.g. Tomcat",
+ "pedido HTTP (request)": "HTTP request",
+ "resposta HTTP (response)": "HTTP response"
+}
