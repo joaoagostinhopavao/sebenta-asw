@@ -299,6 +299,13 @@ ul.task-list li input[type="checkbox"] {
 <li>Protecting resources from unauthorised access</li>
 </ul>
 <p>Solving all of these problems again and again, application after application, would be a waste of effort. This is exactly why enterprise platforms exist, providing these services ready to use, and freeing developers to focus on the business logic of the application.</p>
+<p>These services fall, essentially, into three areas:</p>
+<ul>
+<li><strong>Network infrastructure</strong>: receives requests and manages connections and <em>threads</em></li>
+<li><strong>Data access</strong>: connects the application to databases</li>
+<li><strong>Security</strong>: authentication, authorisation and resource protection</li>
+</ul>
+<p>In this course, the platform used is Java EE (today <em>Jakarta EE</em>), with <em>Apache Tomcat</em> as the server (see <a href="../capitulos/cap04.html">Chapter 4</a>).</p>
 </section>
 <section id="sec-01-frontend-backend-en" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="sec-01-frontend-backend-en"><span class="header-section-number">1.2</span> Two Orientations: Presentation vs.&nbsp;Service</h2>
@@ -332,7 +339,17 @@ Responsible for presenting the data to whoever requests it, without containing b
 Receives the request, decides which operation to perform on the Model, and chooses the View (or response format) to return. The Controller is what bridges the incoming HTTP request and the application’s logic.
 </dd>
 </dl>
-<p>This separation of responsibilities is one of the most recurring design principles throughout this subject. It shows up in its classic form when a server-side component acts as Controller and delegates presentation to another, which acts as View; and it shows up in a far less obvious form when the View stops existing on the server side and is instead rebuilt in the <em>browser</em>, from JSON data.</p>
+<p>This separation of responsibilities is one of the most recurring design principles throughout this subject. It shows up in its classic form when a server-side component acts as Controller and delegates presentation to another, which acts as View; and it shows up in a far less obvious form when the View stops existing on the server side and is instead rebuilt in the <em>browser</em>, from JSON data (<a href="#fig-01-classic-distributed-mvc-en" class="quarto-xref">Figure&nbsp;<span>1.1</span></a>).</p>
+<div id="fig-01-classic-distributed-mvc-en" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-01-classic-distributed-mvc-en-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap07/MVC_vs_REST.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-01-classic-distributed-mvc-en-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.1: Classic MVC and distributed MVC: on the left, the View (a JSP) lives on the server and generates the HTML that the <em>browser</em> merely displays; on the right, the server returns only data (JSON) and the View is drawn in the <em>browser</em> by JavaScript.
+</figcaption>
+</figure>
+</div>
 </section>
 <section id="sec-01-three-pieces-en" class="level2" data-number="1.4">
 <h2 data-number="1.4" class="anchored" data-anchor-id="sec-01-three-pieces-en"><span class="header-section-number">1.4</span> Three Pieces: Frontend, Middleware and Backend</h2>
@@ -351,7 +368,17 @@ The protocol that connects the Frontend to the Backend, carrying requests and re
 The part of the application that runs on the server side, responsible for business logic and data access. It largely corresponds to the Model and the Controller in MVC.
 </dd>
 </dl>
-<p>This three-way division is the map for the rest of this book: first the Frontend is built (<a href="../capitulos/cap02.html">Chapter 2</a>, in HTML/CSS/Bootstrap), then the Middleware that connects it to the server is studied in detail (<a href="../capitulos/cap03.html">Chapter 3</a>, networking and the HTTP protocol), and only then is the Backend built that actually answers those requests (from <a href="../capitulos/cap04.html">Chapter 4</a> onward, with <em>Servlets</em> and, later, REST APIs).</p>
+<p>This three-way division is the map for the rest of this book: first the Frontend is built (<a href="../capitulos/cap02.html">Chapter 2</a>, in HTML/CSS/Bootstrap), then the Middleware that connects it to the server is studied in detail (<a href="../capitulos/cap03.html">Chapter 3</a>, networking and the HTTP protocol), and only then is the Backend built that actually answers those requests (from <a href="../capitulos/cap04.html">Chapter 4</a> onward, with <em>Servlets</em> and, later, REST APIs) (<a href="#fig-01-three-pieces-en" class="quarto-xref">Figure&nbsp;<span>1.2</span></a>).</p>
+<div id="fig-01-three-pieces-en" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-01-three-pieces-en-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap01/Tres_Pecas_Livro.png" class="img-fluid figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-01-three-pieces-en-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.2: The three pieces of a Web application, how they map onto MVC and the chapters where each one is studied.
+</figcaption>
+</figure>
+</div>
 </section>
 <section id="sec-01-client-server-en" class="level2" data-number="1.5">
 <h2 data-number="1.5" class="anchored" data-anchor-id="sec-01-client-server-en"><span class="header-section-number">1.5</span> The Client-Server Model</h2>
@@ -362,7 +389,7 @@ The part of the application that runs on the server side, responsible for busine
 <img src="../assets/images/capitulos/cap01/Modelo_cliente_servidor.png" class="img-fluid figure-img" style="width:70.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-01-client-server-en-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1.1: The client (for example, a browser) sends an HTTP request; the server processes it and returns a response. The exchange repeats at every interaction, without the server, by itself, retaining memory of the previous one.
+Figure&nbsp;1.3: The client (for example, a browser) sends an HTTP request; the server processes it and returns a response. The exchange repeats at every interaction, without the server, by itself, retaining memory of the previous one.
 </figcaption>
 </figure>
 </div>

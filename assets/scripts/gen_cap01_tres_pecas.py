@@ -1,7 +1,8 @@
 """As três peças de uma aplicação Web (Frontend, Middleware, Backend), a correspondência com o MVC e as aulas
 onde cada uma é estudada (Cap01 / Aula 01 da ASW).
 
-Uso: python gen_cap01_tres_pecas.py <ficheiro_saida.png> [--en]
+Uso: python gen_cap01_tres_pecas.py <ficheiro_saida.png> [--en] [--livro]
+     --livro: capítulos em vez de aulas (versão do livro)
 """
 import os
 import sys
@@ -24,6 +25,7 @@ GREY = "#5f6b70"
 FS = 18
 
 out = sys.argv[1] if len(sys.argv) > 1 else "tres-pecas.png"
+LIVRO = "--livro" in sys.argv
 
 fig, ax = plt.subplots(figsize=(18, 7.2), dpi=200)
 ax.set_xlim(0, 18)
@@ -41,6 +43,9 @@ pecas = [
     (6.4, "Middleware", "liga o cliente ao servidor:\nnesta UC, sempre o HTTP", "", "Aula 03\nDa rede ao HTTP", ORANGE),
     (12.5, "Backend", "corre no servidor:\nlógica de negócio e dados", "Controller + Model", "Aulas 04 a 08\nServlets, sessões, REST, JWT", MID),
 ]
+if LIVRO:
+    capitulos = ["Capítulo 2\nHTML, CSS e Bootstrap", "Capítulo 3\nDa rede ao HTTP", "Capítulos 4 a 8\nServlets, sessões, REST, JWT"]
+    pecas = [p[:4] + (c,) + p[5:] for p, c in zip(pecas, capitulos)]
 for x, nome, desc, mvc, aula, cor in pecas:
     box(x, 3.4, 5.2, 3.6, LIGHT, cor)
     ax.text(x + 2.6, 6.3, nome, ha="center", va="center", fontsize=FS + 6, color=cor, fontweight="bold", zorder=3)

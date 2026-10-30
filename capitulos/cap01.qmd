@@ -16,7 +16,15 @@ Uma aplicação Web não é apenas um programa que corre num computador: é um p
 - Manter informação entre pedidos sucessivos do mesmo utilizador
 - Proteger recursos de acessos não autorizados
 
-Resolver todos estes problemas repetidamente, aplicação a aplicação, seria um desperdício de esforço. É exactamente para evitar essa repetição que existem plataformas empresariais que fornecem estes serviços prontos a usar, libertando quem desenvolve para se concentrar na lógica de negócio da aplicação.
+Resolver todos estes problemas repetidamente, aplicação a aplicação, seria um desperdício de esforço. É exatamente para evitar essa repetição que existem plataformas empresariais que fornecem estes serviços prontos a usar, libertando quem desenvolve para se concentrar na lógica de negócio da aplicação.
+
+Esses serviços agrupam-se, essencialmente, em três áreas:
+
+- **Infraestrutura de rede**: recebe os pedidos e gere as ligações e os *threads*
+- **Acesso a dados**: liga a aplicação às bases de dados
+- **Segurança**: autenticação, autorização e proteção de recursos
+
+Nesta UC, a plataforma usada é o Java EE (hoje *Jakarta EE*), com o *Apache Tomcat* como servidor (ver [Capítulo 4](cap04.qmd)).
 
 ## Duas Orientações: Apresentação vs. Serviço {#sec-01-frontend-backend}
 
@@ -43,7 +51,9 @@ Organizar todo o código de uma aplicação num único bloco indiferenciado rapi
 **Controller** (Controlador)
 : Recebe o pedido, decide que operação realizar sobre o Model, e escolhe a View (ou o formato de resposta) a devolver. É o Controller que faz a ponte entre o pedido HTTP recebido e a lógica da aplicação.
 
-Esta separação de responsabilidades é um dos princípios de desenho mais recorrentes de toda esta matéria. Manifesta-se de forma clássica quando um componente do lado do servidor funciona como Controller e delega a apresentação a outro, que funciona como View; e manifesta-se de forma bem menos óbvia quando a View deixa de existir do lado do servidor e passa a ser reconstruída no *browser*, a partir de dados JSON.
+Esta separação de responsabilidades é um dos princípios de desenho mais recorrentes de toda esta matéria. Manifesta-se de forma clássica quando um componente do lado do servidor funciona como Controller e delega a apresentação a outro, que funciona como View; e manifesta-se de forma bem menos óbvia quando a View deixa de existir do lado do servidor e passa a ser reconstruída no *browser*, a partir de dados JSON (@fig-01-mvc-classico-distribuido).
+
+![MVC clássico e MVC distribuído: à esquerda, a View (uma JSP) vive no servidor e gera o HTML que o *browser* apenas mostra; à direita, o servidor devolve só dados (JSON) e a View é desenhada no *browser* por JavaScript.](../assets/images/capitulos/cap07/MVC_vs_REST.png){#fig-01-mvc-classico-distribuido width="90%"}
 
 ## Três Peças: Frontend, Middleware e Backend {#sec-01-tres-pecas}
 
@@ -58,7 +68,9 @@ Tanto a distinção entre apresentação e serviço como o padrão MVC descrevem
 **Backend**
 : A parte da aplicação que corre do lado do servidor, responsável pela lógica de negócio e pelo acesso aos dados. Corresponde, em larga medida, ao Model e ao Controller do MVC.
 
-Esta divisão em três peças é o mapa para todo o resto desta obra: primeiro constrói-se o Frontend ([Capítulo 2](cap02.qmd), em HTML/CSS/Bootstrap), depois estuda-se em detalhe o Middleware que o liga ao servidor ([Capítulo 3](cap03.qmd), as redes e o protocolo HTTP), e só depois se constrói o Backend que efetivamente responde a esses pedidos (a partir do [Capítulo 4](cap04.qmd), com *Servlets* e, mais tarde, com APIs REST).
+Esta divisão em três peças é o mapa para todo o resto desta obra: primeiro constrói-se o Frontend ([Capítulo 2](cap02.qmd), em HTML/CSS/Bootstrap), depois estuda-se em detalhe o Middleware que o liga ao servidor ([Capítulo 3](cap03.qmd), as redes e o protocolo HTTP), e só depois se constrói o Backend que efetivamente responde a esses pedidos (a partir do [Capítulo 4](cap04.qmd), com *Servlets* e, mais tarde, com APIs REST) (@fig-01-tres-pecas).
+
+![As três peças de uma aplicação Web, a sua correspondência com o MVC e os capítulos onde cada uma é estudada.](../assets/images/capitulos/cap01/Tres_Pecas_Livro.png){#fig-01-tres-pecas width="95%"}
 
 ## O Modelo Cliente-Servidor {#sec-01-cliente-servidor}
 

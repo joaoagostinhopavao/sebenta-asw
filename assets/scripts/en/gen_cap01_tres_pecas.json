@@ -4,5 +4,8 @@
  "liga o cliente ao servidor:\nnesta UC, sempre o HTTP": "links client and server:\nin this course, always HTTP",
  "Aula 03\nDa rede ao HTTP": "Class 03\nFrom the network to HTTP",
  "corre no servidor:\nlógica de negócio e dados": "runs on the server:\nbusiness logic and data",
- "Aulas 04 a 08\nServlets, sessões, REST, JWT": "Classes 04 to 08\nServlets, sessions, REST, JWT"
+ "Aulas 04 a 08\nServlets, sessões, REST, JWT": "Classes 04 to 08\nServlets, sessions, REST, JWT",
+ "Capítulo 2\nHTML, CSS e Bootstrap": "Chapter 2\nHTML, CSS and Bootstrap",
+ "Capítulo 3\nDa rede ao HTTP": "Chapter 3\nFrom the network to HTTP",
+ "Capítulos 4 a 8\nServlets, sessões, REST, JWT": "Chapters 4 to 8\nServlets, sessions, REST, JWT"
 }

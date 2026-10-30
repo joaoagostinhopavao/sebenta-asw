@@ -297,7 +297,14 @@ ul.task-list li input[type="checkbox"] {
 <li>Manter informação entre pedidos sucessivos do mesmo utilizador</li>
 <li>Proteger recursos de acessos não autorizados</li>
 </ul>
-<p>Resolver todos estes problemas repetidamente, aplicação a aplicação, seria um desperdício de esforço. É exactamente para evitar essa repetição que existem plataformas empresariais que fornecem estes serviços prontos a usar, libertando quem desenvolve para se concentrar na lógica de negócio da aplicação.</p>
+<p>Resolver todos estes problemas repetidamente, aplicação a aplicação, seria um desperdício de esforço. É exatamente para evitar essa repetição que existem plataformas empresariais que fornecem estes serviços prontos a usar, libertando quem desenvolve para se concentrar na lógica de negócio da aplicação.</p>
+<p>Esses serviços agrupam-se, essencialmente, em três áreas:</p>
+<ul>
+<li><strong>Infraestrutura de rede</strong>: recebe os pedidos e gere as ligações e os <em>threads</em></li>
+<li><strong>Acesso a dados</strong>: liga a aplicação às bases de dados</li>
+<li><strong>Segurança</strong>: autenticação, autorização e proteção de recursos</li>
+</ul>
+<p>Nesta UC, a plataforma usada é o Java EE (hoje <em>Jakarta EE</em>), com o <em>Apache Tomcat</em> como servidor (ver <a href="../capitulos/cap04.html">Capítulo 4</a>).</p>
 </section>
 <section id="sec-01-frontend-backend" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="sec-01-frontend-backend"><span class="header-section-number">1.2</span> Duas Orientações: Apresentação vs.&nbsp;Serviço</h2>
@@ -331,7 +338,17 @@ Responsável por apresentar os dados a quem os pede, sem conter lógica de negó
 Recebe o pedido, decide que operação realizar sobre o Model, e escolhe a View (ou o formato de resposta) a devolver. É o Controller que faz a ponte entre o pedido HTTP recebido e a lógica da aplicação.
 </dd>
 </dl>
-<p>Esta separação de responsabilidades é um dos princípios de desenho mais recorrentes de toda esta matéria. Manifesta-se de forma clássica quando um componente do lado do servidor funciona como Controller e delega a apresentação a outro, que funciona como View; e manifesta-se de forma bem menos óbvia quando a View deixa de existir do lado do servidor e passa a ser reconstruída no <em>browser</em>, a partir de dados JSON.</p>
+<p>Esta separação de responsabilidades é um dos princípios de desenho mais recorrentes de toda esta matéria. Manifesta-se de forma clássica quando um componente do lado do servidor funciona como Controller e delega a apresentação a outro, que funciona como View; e manifesta-se de forma bem menos óbvia quando a View deixa de existir do lado do servidor e passa a ser reconstruída no <em>browser</em>, a partir de dados JSON (<a href="#fig-01-mvc-classico-distribuido" class="quarto-xref">Figura&nbsp;<span>1.1</span></a>).</p>
+<div id="fig-01-mvc-classico-distribuido" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-01-mvc-classico-distribuido-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap07/MVC_vs_REST.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-01-mvc-classico-distribuido-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;1.1: MVC clássico e MVC distribuído: à esquerda, a View (uma JSP) vive no servidor e gera o HTML que o <em>browser</em> apenas mostra; à direita, o servidor devolve só dados (JSON) e a View é desenhada no <em>browser</em> por JavaScript.
+</figcaption>
+</figure>
+</div>
 </section>
 <section id="sec-01-tres-pecas" class="level2" data-number="1.4">
 <h2 data-number="1.4" class="anchored" data-anchor-id="sec-01-tres-pecas"><span class="header-section-number">1.4</span> Três Peças: Frontend, Middleware e Backend</h2>
@@ -350,7 +367,17 @@ O protocolo que liga o Frontend ao Backend, transportando pedidos e respostas en
 A parte da aplicação que corre do lado do servidor, responsável pela lógica de negócio e pelo acesso aos dados. Corresponde, em larga medida, ao Model e ao Controller do MVC.
 </dd>
 </dl>
-<p>Esta divisão em três peças é o mapa para todo o resto desta obra: primeiro constrói-se o Frontend (<a href="../capitulos/cap02.html">Capítulo 2</a>, em HTML/CSS/Bootstrap), depois estuda-se em detalhe o Middleware que o liga ao servidor (<a href="../capitulos/cap03.html">Capítulo 3</a>, as redes e o protocolo HTTP), e só depois se constrói o Backend que efetivamente responde a esses pedidos (a partir do <a href="../capitulos/cap04.html">Capítulo 4</a>, com <em>Servlets</em> e, mais tarde, com APIs REST).</p>
+<p>Esta divisão em três peças é o mapa para todo o resto desta obra: primeiro constrói-se o Frontend (<a href="../capitulos/cap02.html">Capítulo 2</a>, em HTML/CSS/Bootstrap), depois estuda-se em detalhe o Middleware que o liga ao servidor (<a href="../capitulos/cap03.html">Capítulo 3</a>, as redes e o protocolo HTTP), e só depois se constrói o Backend que efetivamente responde a esses pedidos (a partir do <a href="../capitulos/cap04.html">Capítulo 4</a>, com <em>Servlets</em> e, mais tarde, com APIs REST) (<a href="#fig-01-tres-pecas" class="quarto-xref">Figura&nbsp;<span>1.2</span></a>).</p>
+<div id="fig-01-tres-pecas" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-01-tres-pecas-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap01/Tres_Pecas_Livro.png" class="img-fluid figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-01-tres-pecas-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;1.2: As três peças de uma aplicação Web, a sua correspondência com o MVC e os capítulos onde cada uma é estudada.
+</figcaption>
+</figure>
+</div>
 </section>
 <section id="sec-01-cliente-servidor" class="level2" data-number="1.5">
 <h2 data-number="1.5" class="anchored" data-anchor-id="sec-01-cliente-servidor"><span class="header-section-number">1.5</span> O Modelo Cliente-Servidor</h2>
@@ -361,7 +388,7 @@ A parte da aplicação que corre do lado do servidor, responsável pela lógica 
 <img src="../assets/images/capitulos/cap01/Modelo_cliente_servidor.png" class="img-fluid figure-img" style="width:70.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-01-cliente-servidor-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;1.1: O cliente (por exemplo, um browser) envia um pedido HTTP; o servidor processa-o e devolve uma resposta. A troca repete-se a cada interação, sem que o servidor guarde, por si só, memória da anterior.
+Figura&nbsp;1.3: O cliente (por exemplo, um browser) envia um pedido HTTP; o servidor processa-o e devolve uma resposta. A troca repete-se a cada interação, sem que o servidor guarde, por si só, memória da anterior.
 </figcaption>
 </figure>
 </div>
