@@ -9,17 +9,17 @@ lang: pt-PT
 
 O [Capítulo 7](cap07.qmd) terminou a apontar o problema: um modelo de autenticação baseado em `HttpSession` (ver [Capítulo 5](cap05.qmd)) exige que o servidor guarde, em memória, o estado de cada utilizador autenticado. Assim que existe mais do que uma instância do servidor, essa memória deixa de ser automaticamente partilhada entre elas.
 
-Existem paliativos conhecidos para este problema — *sticky sessions* (encaminhar sempre o mesmo cliente para a mesma instância) ou replicação de sessões entre instâncias — mas ambos têm um custo: o primeiro limita a forma como os pedidos podem ser distribuídos, e o segundo exige infraestrutura adicional só para manter as instâncias sincronizadas. Nenhum dos dois resolve o problema na raiz; ambos são formas de contornar uma dependência de estado que, para uma API REST (ver [Capítulo 7](cap07.qmd)), não deveria sequer existir.
+Existem paliativos conhecidos para este problema, as *sticky sessions* (encaminhar sempre o mesmo cliente para a mesma instância) e a replicação de sessões entre instâncias, mas ambos têm um custo: o primeiro limita a forma como os pedidos podem ser distribuídos, e o segundo exige infraestrutura adicional só para manter as instâncias sincronizadas. Nenhum dos dois resolve o problema na raiz; ambos são formas de contornar uma dependência de estado que, para uma API REST (ver [Capítulo 7](cap07.qmd)), não deveria sequer existir.
 
 ## Autenticação Sem Estado: o Cabeçalho `Authorization` {#sec-08-authorization-header}
 
-A alternativa sem estado inverte a responsabilidade: em vez de o servidor guardar quem está autenticado, é o **próprio cliente** que guarda um comprovativo da sua autenticação — um *token* — e o reenvia em cada pedido, tipicamente no cabeçalho HTTP `Authorization`:
+A alternativa sem estado inverte a responsabilidade: em vez de o servidor guardar quem está autenticado, é o **próprio cliente** que guarda um comprovativo da sua autenticação, um *token*, e o reenvia em cada pedido, tipicamente no cabeçalho HTTP `Authorization`:
 
 ::: {.httpmsg}
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYXZhZWUifQ.dGhpc19pc19hX2Zha2Vfc2lnbmF0dXJl
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhbmEiLCJyb2xlIjoidXNlciIsImV4cCI6MTg5MzQ1NjAwMH0.O1M0ymsf-ceCK3OxAewCVLReDaVliYUirWclbBC4-LE
 :::
 
-A palavra `Bearer` indica o tipo de credencial que se segue (literalmente, "portador": quem apresenta este *token* é tratado como o seu legítimo dono). O servidor, ao receber o pedido, não precisa de consultar memória nenhuma: basta validar o *token* em si — o que ele é, e como essa validação funciona, é o tema da secção seguinte.
+A palavra `Bearer` indica o tipo de credencial que se segue (literalmente, "portador": quem apresenta este *token* é tratado como o seu legítimo dono). O servidor, ao receber o pedido, não precisa de consultar memória nenhuma: basta validar o *token* em si. O que ele é, e como essa validação funciona, é o tema da secção seguinte.
 
 ## JWT: um *Token* Sem Estado {#sec-08-jwt}
 
@@ -30,31 +30,50 @@ Um *JSON Web Token* (JWT) é um formato normalizado de *token*, desenhado para t
 ```
 
 **Header**
-: Metadados sobre o próprio *token*, tipicamente o algoritmo de assinatura usado — por exemplo, `{"alg":"HS256","typ":"JWT"}`
+: Metadados sobre o próprio *token*, tipicamente o algoritmo de assinatura usado, por exemplo `{"alg":"HS256","typ":"JWT"}`
 
 **Payload**
-: Os dados que o *token* transporta (as *claims*) — por exemplo, `{"sub":"javaee","role":"user","exp":1893456000}`, identificando o utilizador, a sua função, e a data de expiração
+: Os dados que o *token* transporta (as *claims*), por exemplo `{"sub":"ana","role":"user","exp":1893456000}`, que identificam o utilizador, o seu perfil e a data de expiração
 
 **Assinatura**
 : O resultado de assinar criptograficamente o *header* e o *payload* com uma chave secreta, conhecida apenas pelo servidor
 
-Cada uma destas três partes é codificada em *Base64URL* (uma variante do *Base64* que só usa caracteres seguros numa *URL*) e concatenada com pontos, resultando na *string* longa e ilegível característica de um JWT (como a do exemplo do cabeçalho `Authorization` acima). O *header* e o *payload* são apenas codificados, não cifrados — qualquer pessoa os consegue ler, sem precisar de nenhuma chave. O que garante que ninguém consegue **forjar** um *token* válido é a assinatura: só quem conhece a chave secreta do servidor a consegue gerar corretamente, e qualquer alteração ao *header* ou ao *payload*, por mínima que seja, invalida a assinatura. O servidor, ao receber um pedido, recalcula a assinatura a partir do *header* e do *payload* recebidos, e compara-a com a que veio no *token*: se coincidirem, o conteúdo é de confiar, sem que o servidor tenha precisado de guardar, ele próprio, absolutamente nada.
+Cada uma destas três partes é codificada em *Base64URL* (uma variante do *Base64* que só usa caracteres seguros numa *URL*) e concatenada com pontos, resultando na *string* longa e ilegível característica de um JWT (como a do exemplo do cabeçalho `Authorization` acima). O *header* e o *payload* são apenas codificados, não cifrados: qualquer pessoa os consegue ler, sem precisar de nenhuma chave. O que garante que ninguém consegue **forjar** um *token* válido é a assinatura: só quem conhece a chave secreta do servidor a consegue gerar corretamente, e qualquer alteração ao *header* ou ao *payload*, por mínima que seja, invalida a assinatura. O servidor, ao receber um pedido, recalcula a assinatura a partir do *header* e do *payload* recebidos, e compara-a com a que veio no *token*: se coincidirem, o conteúdo é de confiar, sem que o servidor tenha precisado de guardar, ele próprio, absolutamente nada (@fig-08-jwt-anatomia).
+
+![As três partes de um JWT verdadeiro: o *header* e o *payload* são só codificados em *Base64URL* e qualquer pessoa os lê; a assinatura é calculada com a chave secreta do servidor e é ela que impede forjar o *token*.](../assets/images/capitulos/cap08/JWT_Anatomia.png){#fig-08-jwt-anatomia width="95%"}
+
+No algoritmo `HS256`, a assinatura é um HMAC com SHA-256: um código calculado a partir do *header*, do *payload* e da chave secreta. Como a mesma chave serve para gerar e para verificar a assinatura, só o servidor a deve conhecer.
 
 ## O Ciclo de Vida de um *Token* {#sec-08-ciclo-vida-token}
 
-Um *token* não substitui o momento de autenticação em si — substitui apenas a forma como o servidor se lembra dela.
+Um *token* não substitui o momento de autenticação em si: substitui apenas a forma como o servidor se lembra dela (@fig-08-ciclo-token).
 
 **Emissão**
-: O cliente autentica-se exatamente como no [Capítulo 5](cap05.qmd), enviando `user`/`pass` a um *endpoint* de *login*. O servidor valida as credenciais (por exemplo, através de um DAO, ver [Capítulo 4](cap04.qmd)) mas, em vez de criar uma `HttpSession`, gera um novo JWT, assina-o com a sua chave secreta, e devolve-o ao cliente no corpo da resposta
+: O cliente autentica-se exatamente como no [Capítulo 5](cap05.qmd), enviando `utilizador` e `palavraPasse` a um *endpoint* de *login*. O servidor valida as credenciais (por exemplo, com `dao.validarCredenciais()`, ver [Capítulo 4](cap04.qmd)) mas, em vez de criar uma `HttpSession`, gera um novo JWT, assina-o com a sua chave secreta e devolve-o ao cliente no corpo da resposta
 
 **Armazenamento e reenvio**
-: Ao contrário do `JSESSIONID` (ver [Capítulo 5](cap05.qmd)), que o *browser* reenvia automaticamente através de um *cookie*, o cliente é responsável por guardar o *token* recebido e por o reenviar, explicitamente, no cabeçalho `Authorization` de cada pedido seguinte
+: Ao contrário do `JSESSIONID` (ver [Capítulo 5](cap05.qmd)), que o *browser* reenvia automaticamente através de um *cookie*, o cliente é responsável por guardar o *token* recebido e por o reenviar, explicitamente, no cabeçalho `Authorization` de cada pedido seguinte. Num cliente em JavaScript, o *token* fica numa variável ou em `sessionStorage` (um espaço de armazenamento do *browser* que dura enquanto o separador estiver aberto). Qualquer JavaScript da página consegue ler o que lá estiver, incluindo código injetado por um ataque XSS (ver @sec-08-dom-view): é mais uma razão para nunca inserir dados recebidos como HTML
 
 **Validação**
 : Cada pedido é validado de forma completamente independente dos anteriores: o servidor recalcula a assinatura, sem consultar sessão nenhuma (ver @sec-08-escalabilidade-horizontal)
 
 **Expiração**
-: A *claim* `exp` do *payload* define até quando o *token* é válido. Passado esse momento, o servidor rejeita-o (`401`) mesmo que a assinatura continue correta, obrigando a um novo *login*. Isto limita a janela de tempo em que um *token* intercetado poderia ser reutilizado indevidamente — ao contrário de uma `HttpSession`, que só termina por *logout* explícito ou por inatividade prolongada (ver [Capítulo 5](cap05.qmd)), um JWT expira sempre, mesmo que continue a ser usado
+: A *claim* `exp` do *payload* define até quando o *token* é válido. Passado esse momento, o servidor rejeita-o (`401`) mesmo que a assinatura continue correta, obrigando a um novo *login*. Isto limita a janela de tempo em que um *token* intercetado poderia ser reutilizado indevidamente. Ao contrário de uma `HttpSession`, que só termina por *logout* explícito ou por inatividade prolongada (ver [Capítulo 5](cap05.qmd)), um JWT expira sempre, mesmo que continue a ser usado
+
+![O ciclo de vida de um *token*: o *login* devolve um JWT, que o cliente reenvia em cada pedido; quando a *claim* `exp` passa, o servidor responde `401` e o cliente tem de fazer *login* de novo.](../assets/images/capitulos/cap08/Ciclo_Token.png){#fig-08-ciclo-token width="85%"}
+
+Na emissão, com a biblioteca [JJWT](https://github.com/jwtk/jjwt) apresentada mais à frente, gerar o *token* resume-se a indicar o utilizador, a expiração e a chave:
+
+```java
+String token = Jwts.builder()
+        .subject(utilizador)                                   // a claim "sub"
+        .issuedAt(new Date())                                  // a claim "iat"
+        .expiration(new Date(System.currentTimeMillis() + 30 * 60 * 1000)) // "exp": daqui a 30 minutos
+        .signWith(SECRET_KEY, Jwts.SIG.HS256)                  // a assinatura
+        .compact();                                            // as três partes, separadas por pontos
+```
+
+O *servlet* de *login* devolve depois esta *string* no corpo da resposta, por exemplo dentro de um JSON como `{"token":"eyJhbGciOi..."}`. O código completo, com a classe `JwtUtil`, está no [Apêndice D5](apendiceD5.qmd).
 
 A tabela seguinte resume a diferença entre os dois modelos de autenticação já vistos nesta UC:
 
@@ -76,7 +95,7 @@ public void doFilter(ServletRequest request, ServletResponse response, FilterCha
 
     HttpSession session = req.getSession(false);
 
-    if (session == null || session.getAttribute("UserName") == null) {
+    if (session == null || session.getAttribute("utilizador") == null) {
         res.sendError(HttpServletResponse.SC_UNAUTHORIZED); // 401
         return;
     }
@@ -85,7 +104,7 @@ public void doFilter(ServletRequest request, ServletResponse response, FilterCha
 }
 ```
 
-A versão equivalente, baseada num *token*, tem exatamente a mesma estrutura — só a verificação em si é que muda, de uma consulta à `HttpSession` para a validação da assinatura e da validade do *token*. Essa validação raramente é escrita de raiz: é código sensível, que envolve criptografia, e compensa deixar a cargo de uma biblioteca testada e mantida ativamente, em vez de reimplementada. A [JJWT](https://github.com/jwtk/jjwt) é uma das mais usadas em Java, e uma das mais cuidadas em segurança do ecossistema (por exemplo, obriga a indicar explicitamente o algoritmo esperado, para impedir um ataque comum em que um *token* sem assinatura nenhuma seria aceite como válido):
+A versão equivalente, baseada num *token*, tem exatamente a mesma estrutura: só a verificação em si é que muda, de uma consulta à `HttpSession` para a validação da assinatura e da validade do *token*. Essa validação raramente é escrita de raiz: é código sensível, que envolve criptografia, e compensa deixar a cargo de uma biblioteca testada e mantida ativamente, em vez de reimplementada. A JJWT é uma das mais usadas em Java, e uma das mais cuidadas em segurança. Por exemplo, protege contra o ataque `"alg":"none"`: o atacante altera o *payload* (por exemplo, para `"role":"admin"`), escreve `"alg":"none"` no *header* e apaga a assinatura. Uma biblioteca descuidada leria o *header*, concluiria que não há assinatura para verificar e aceitaria o *token* forjado, dando ao atacante os privilégios que ele próprio escreveu. A JJWT rejeita *tokens* sem assinatura sempre que se lhe indica uma chave com `verifyWith()`:
 
 ```java
 public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -110,7 +129,7 @@ public void doFilter(ServletRequest request, ServletResponse response, FilterCha
                 .parseSignedClaims(token)
                 .getPayload();
 
-        req.setAttribute("UserName", claims.getSubject());
+        req.setAttribute("utilizador", claims.getSubject());
     } catch (JwtException e) {
         res.sendError(HttpServletResponse.SC_UNAUTHORIZED); // assinatura inválida ou token expirado
         return;
@@ -120,19 +139,19 @@ public void doFilter(ServletRequest request, ServletResponse response, FilterCha
 }
 ```
 
-A chamada a `parseSignedClaims(token)` faz, internamente, tudo o que a validação exige: descodifica o *header* e o *payload*, recalcula a assinatura com `SECRET_KEY` e compara-a com a recebida, e verifica a *claim* `exp` — lançando uma `JwtException` (ou uma das suas subclasses, como `ExpiredJwtException` para um *token* expirado, ou `SignatureException` para uma assinatura inválida) caso alguma destas verificações falhe. Note-se a semelhança estrutural com o Filtro baseado em sessão: em ambos os casos, uma condição de falha termina o pedido com `401`, e só se a autenticação for válida se continua a cadeia com `chain.doFilter()`.
+A chamada a `parseSignedClaims(token)` faz, internamente, tudo o que a validação exige: descodifica o *header* e o *payload*, recalcula a assinatura com `SECRET_KEY` e compara-a com a recebida, e verifica a *claim* `exp`; lança uma `JwtException` (ou uma das suas subclasses, como `ExpiredJwtException` para um *token* expirado, ou `SignatureException` para uma assinatura inválida) caso alguma destas verificações falhe. Note-se a semelhança estrutural com o Filtro baseado em sessão: em ambos os casos, uma condição de falha termina o pedido com `401`, e só se a autenticação for válida se continua a cadeia com `chain.doFilter()`.
 
 ## Escalabilidade Horizontal {#sec-08-escalabilidade-horizontal}
 
 Escalar uma aplicação significa aumentar a sua capacidade de resposta a mais pedidos. Existem, tipicamente, duas formas de o fazer:
 
 **Escalabilidade vertical**
-: Aumentar os recursos (CPU, memória) da máquina existente — tem um limite físico, e não resolve o problema de um único ponto de falha
+: Aumentar os recursos (CPU, memória) da máquina existente: tem um limite físico e não resolve o problema de um único ponto de falha
 
 **Escalabilidade horizontal**
-: Acrescentar mais instâncias do servidor, a correr em paralelo, distribuindo os pedidos entre elas — tipicamente através de um *load balancer*
+: Acrescentar mais instâncias do servidor, a correr em paralelo, distribuindo os pedidos entre elas, tipicamente através de um *load balancer*
 
-A escalabilidade horizontal só funciona sem complicações quando qualquer instância pode responder a qualquer pedido, indiferentemente — exatamente a propriedade que um serviço sem estado oferece. Com autenticação baseada em JWT, nenhuma instância precisa de saber nada sobre nenhuma outra: cada uma valida o *token* recebido de forma completamente independente, com a mesma chave secreta partilhada por todas. É esta independência entre instâncias que torna a arquitetura sem estado a base de qualquer sistema pensado para escalar.
+A escalabilidade horizontal só funciona sem complicações quando qualquer instância pode responder a qualquer pedido, indiferentemente, que é exatamente a propriedade que um serviço sem estado oferece. Com autenticação baseada em JWT, nenhuma instância precisa de saber nada sobre nenhuma outra: cada uma valida o *token* recebido de forma completamente independente, com a mesma chave secreta partilhada por todas. É esta independência entre instâncias que torna a arquitetura sem estado a base de qualquer sistema pensado para escalar.
 
 ## MVC Distribuído: o Padrão Divide-se entre Servidor e Cliente {#sec-08-mvc-distribuido}
 
@@ -156,7 +175,7 @@ fetch("/livros/12")
   });
 ```
 
-`fetch()` devolve uma *promise* — um valor que ainda não está disponível, mas que o será, mais tarde, quando o pedido terminar. O primeiro `.then()` recebe a resposta HTTP em bruto, e converte o seu corpo, em texto JSON, para um objeto JavaScript comum através de `response.json()` — este passo, por sua vez, também devolve uma *promise*, por isso encadeia-se com um segundo `.then()`, já com os dados prontos a usar.
+`fetch()` devolve uma *promise*: um valor que ainda não está disponível, mas que o será, mais tarde, quando o pedido terminar. O primeiro `.then()` recebe a resposta HTTP em bruto e converte o seu corpo, em texto JSON, para um objeto JavaScript comum através de `response.json()`. Este passo também devolve uma *promise*, por isso encadeia-se com um segundo `.then()`, já com os dados prontos a usar.
 
 Para um pedido autenticado (ver @sec-08-authorization-header e @sec-08-jwt), o *token* viaja num cabeçalho, tal como qualquer outro pedido HTTP autenticado:
 
@@ -167,6 +186,27 @@ fetch("/livros", {
   .then(response => response.json())
   .then(data => {
     // ...
+  });
+```
+
+Um `fetch()` com um *token* expirado ou inválido não falha: o pedido chega ao servidor e volta com o estado `401`. Cabe ao cliente verificar o estado da resposta antes de usar o corpo, através de `response.ok` (verdadeiro para os estados `2xx`), e pedir um novo *login* quando o servidor recusa o *token*:
+
+```javascript
+fetch("/livros", {
+  headers: { "Authorization": "Bearer " + token }
+})
+  .then(response => {
+    if (response.status === 401) {
+      window.location.href = "/login.html";   // token expirado ou inválido: novo login
+      return;
+    }
+    if (!response.ok) {
+      throw new Error("Erro " + response.status);
+    }
+    return response.json();
+  })
+  .then(livros => {
+    // ... mostrar os livros
   });
 ```
 
@@ -186,7 +226,7 @@ fetch("/livros", {
 
 ## O DOM como "View" do *Browser* {#sec-08-dom-view}
 
-O [*DOM*](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model) (*Document Object Model*) é a representação, em memória, da página HTML que o *browser* está a mostrar — uma árvore de objetos, um por cada elemento da página, que o JavaScript pode ler e alterar diretamente. É através do DOM que o JavaScript desempenha o papel de View (ver @sec-08-mvc-distribuido): não gera HTML como texto, à semelhança de uma JSP (ver [Capítulo 5](cap05.qmd)), mas antes localiza elementos já existentes na página e atualiza o seu conteúdo.
+O [*DOM*](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model) (*Document Object Model*) é a representação, em memória, da página HTML que o *browser* está a mostrar: uma árvore de objetos, um por cada elemento da página, que o JavaScript pode ler e alterar diretamente. É através do DOM que o JavaScript desempenha o papel de View (ver @sec-08-mvc-distribuido): não gera HTML como texto, como faz uma JSP (ver [Capítulo 5](cap05.qmd)), mas localiza elementos já existentes na página e atualiza o seu conteúdo.
 
 ```javascript
 fetch("/livros/12")
@@ -217,4 +257,4 @@ fetch("/livros")
 
 Cada célula é preenchida com `textContent`, e não com `innerHTML`. A diferença importa: `innerHTML` interpreta o valor como HTML, e um título de livro vindo do servidor que contivesse, por exemplo, `<img src=x onerror="...">` faria o *browser* executar esse JavaScript na página (um ataque de *Cross-Site Scripting*, ou XSS). Com `textContent`, o valor é sempre inserido como texto, seja qual for o seu conteúdo.
 
-Este padrão — pedir dados a uma API REST com `fetch()`, e usar o DOM para os mostrar — é a base de qualquer *front-office* em JavaScript ligado a um serviço REST, independentemente da aplicação concreta ou dos dados envolvidos.
+Este padrão, pedir dados a uma API REST com `fetch()` e usar o DOM para os mostrar, é a base de qualquer *front-office* em JavaScript ligado a um serviço REST, independentemente da aplicação concreta ou dos dados envolvidos.
