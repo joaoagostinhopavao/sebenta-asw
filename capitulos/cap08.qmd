@@ -7,9 +7,21 @@ lang: pt-PT
 
 ## Limitações de Sessões em Sistemas Distribuídos {#sec-08-limitacoes-sessao}
 
-O [Capítulo 7](cap07.qmd) terminou a apontar o problema: um modelo de autenticação baseado em `HttpSession` (ver [Capítulo 5](cap05.qmd)) exige que o servidor guarde, em memória, o estado de cada utilizador autenticado. Assim que existe mais do que uma instância do servidor, essa memória deixa de ser automaticamente partilhada entre elas.
+Uma aplicação web com muitos utilizadores tem de **escalar**, isto é, de aguentar mais trabalho (mais utilizadores, mais pedidos por segundo) sem ficar lenta nem parar. Há duas formas de o fazer:
 
-Existem paliativos conhecidos para este problema, as *sticky sessions* (encaminhar sempre o mesmo cliente para a mesma instância) e a replicação de sessões entre instâncias, mas ambos têm um custo: o primeiro limita a forma como os pedidos podem ser distribuídos, e o segundo exige infraestrutura adicional só para manter as instâncias sincronizadas. Nenhum dos dois resolve o problema na raiz; ambos são formas de contornar uma dependência de estado que, para uma API REST (ver [Capítulo 7](cap07.qmd)), não deveria sequer existir.
+**Escalabilidade vertical**
+: Dar mais recursos (processadores, memória) à mesma máquina. É simples, porque a aplicação não muda, mas tem um limite físico e não resolve o problema do *ponto único de falha*: se essa única máquina avariar ou tiver de ser reiniciada, a aplicação inteira fica indisponível
+
+**Escalabilidade horizontal**
+: Juntar mais servidores iguais, a correr em paralelo, com um balanceador (*load balancer*) a repartir os pedidos entre eles. Quase não tem limite, porque basta acrescentar servidores, e, se um falhar, os outros continuam a responder
+
+A diferença é a mesma que num supermercado: em vez de ter um único operador de caixa cada vez mais rápido (vertical), abrem-se mais caixas, com uma fila única que encaminha cada cliente para a primeira caixa livre (horizontal). Para isto funcionar, qualquer caixa tem de conseguir atender qualquer cliente. As aplicações web com muitos utilizadores escalam na horizontal, e é aí que as sessões levantam problemas.
+
+O [Capítulo 7](cap07.qmd) terminou a apontar esse problema: um modelo de autenticação baseado em `HttpSession` (ver [Capítulo 5](cap05.qmd)) exige que o servidor guarde, em memória, o estado de cada utilizador autenticado. Assim que existe mais do que um servidor (vários Tomcats, cada um com a mesma aplicação instalada, à frente dos quais um balanceador reparte os pedidos), essa memória deixa de ser automaticamente partilhada entre eles. Não se trata de várias instâncias da mesma *Servlet*: dentro de um Tomcat, os pedidos simultâneos são atendidos por vários *threads* da mesma instância (ver [Capítulo 4](cap04.qmd)), que partilham a mesma memória e, portanto, as mesmas sessões.
+
+Existem paliativos conhecidos para este problema (@fig-08-sticky-replicacao), as *sticky sessions* (encaminhar sempre o mesmo cliente para o mesmo servidor) e a replicação de sessões entre servidores, mas ambos têm um custo: o primeiro limita a forma como os pedidos podem ser distribuídos, e o segundo exige infraestrutura adicional só para manter os servidores sincronizados. Nenhum dos dois resolve o problema na raiz; ambos são formas de contornar uma dependência de estado que, para uma API REST (ver [Capítulo 7](cap07.qmd)), não deveria sequer existir.
+
+![Os dois paliativos: com *sticky sessions*, o balanceador envia sempre a mesma utilizadora para o servidor que tem a sua sessão; com replicação, os servidores copiam as sessões entre si e qualquer um pode responder.](../assets/images/capitulos/cap08/Sticky_Replicacao.png){#fig-08-sticky-replicacao width="95%"}
 
 ## Autenticação Sem Estado: o Cabeçalho `Authorization` {#sec-08-authorization-header}
 
@@ -19,7 +31,17 @@ A alternativa sem estado inverte a responsabilidade: em vez de o servidor guarda
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhbmEiLCJyb2xlIjoidXNlciIsImV4cCI6MTg5MzQ1NjAwMH0.O1M0ymsf-ceCK3OxAewCVLReDaVliYUirWclbBC4-LE
 :::
 
-A palavra `Bearer` indica o tipo de credencial que se segue (literalmente, "portador": quem apresenta este *token* é tratado como o seu legítimo dono). O servidor, ao receber o pedido, não precisa de consultar memória nenhuma: basta validar o *token* em si. O que ele é, e como essa validação funciona, é o tema da secção seguinte.
+O cabeçalho `Authorization` não é exclusivo dos *tokens*: a norma do HTTP define-o sempre com o formato `Authorization: <esquema> <credenciais>`, e a primeira palavra, o **esquema**, diz ao servidor como interpretar o que vem a seguir.
+
+| Esquema | O que vem a seguir | Exemplo |
+|---|---|---|
+| `Basic` | `utilizador:palavra-passe` em *Base64* | `Authorization: Basic YW5hOnNlZ3JlZG8=` |
+| `Bearer` | um *token* (por exemplo, um JWT) | `Authorization: Bearer eyJhbGciOi...` |
+| `Digest` | um resumo calculado a partir da palavra-passe | hoje pouco usado |
+
+: Alguns esquemas do cabeçalho `Authorization`. {#tbl-08-esquemas-authorization}
+
+Sem o esquema, o servidor não saberia se `eyJhbGciOi...` é um *token*, uma palavra-passe codificada ou outra coisa; é também uma convenção seguida por clientes, bibliotecas e servidores, que escrevem e esperam `Bearer <token>`. A palavra `Bearer` significa, literalmente, "portador": quem apresenta este *token* é tratado como o seu legítimo dono, sem mais perguntas. Por isso, o *token* tem de viajar sempre em HTTPS e nunca pode ser exposto. O servidor, ao receber o pedido, não precisa de consultar memória nenhuma: basta validar o *token* em si. O que ele é, e como essa validação funciona, é o tema da secção seguinte.
 
 ## JWT: um *Token* Sem Estado {#sec-08-jwt}
 
@@ -30,19 +52,25 @@ Um *JSON Web Token* (JWT) é um formato normalizado de *token*, desenhado para t
 ```
 
 **Header**
-: Metadados sobre o próprio *token*, tipicamente o algoritmo de assinatura usado, por exemplo `{"alg":"HS256","typ":"JWT"}`
+: Metadados sobre o próprio *token*, por exemplo `{"alg":"HS256","typ":"JWT"}`: `alg` indica o algoritmo da assinatura (`HS256` é um HMAC com SHA-256); `typ` indica que se trata de um JWT, é opcional e, na prática, tem quase sempre este valor
 
 **Payload**
-: Os dados que o *token* transporta (as *claims*), por exemplo `{"sub":"ana","role":"user","exp":1893456000}`, que identificam o utilizador, o seu perfil e a data de expiração
+: Os dados que o *token* transporta, as *claims* (afirmações sobre o utilizador), por exemplo `{"sub":"ana","role":"user","exp":1893456000}`. `sub` (*subject*) indica quem é o utilizador; `role` é o seu perfil, uma *claim* definida pela própria aplicação; `exp` (*expiration*) é o momento até ao qual o *token* vale, contado em segundos desde 1 de janeiro de 1970 (aqui, 1 de janeiro de 2030)
 
 **Assinatura**
 : O resultado de assinar criptograficamente o *header* e o *payload* com uma chave secreta, conhecida apenas pelo servidor
 
-Cada uma destas três partes é codificada em *Base64URL* (uma variante do *Base64* que só usa caracteres seguros numa *URL*) e concatenada com pontos, resultando na *string* longa e ilegível característica de um JWT (como a do exemplo do cabeçalho `Authorization` acima). O *header* e o *payload* são apenas codificados, não cifrados: qualquer pessoa os consegue ler, sem precisar de nenhuma chave. O que garante que ninguém consegue **forjar** um *token* válido é a assinatura: só quem conhece a chave secreta do servidor a consegue gerar corretamente, e qualquer alteração ao *header* ou ao *payload*, por mínima que seja, invalida a assinatura. O servidor, ao receber um pedido, recalcula a assinatura a partir do *header* e do *payload* recebidos, e compara-a com a que veio no *token*: se coincidirem, o conteúdo é de confiar, sem que o servidor tenha precisado de guardar, ele próprio, absolutamente nada (@fig-08-jwt-anatomia).
+Cada uma destas três partes é codificada em *Base64URL* e concatenada com pontos, resultando na *string* longa e ilegível característica de um JWT (como a do exemplo do cabeçalho `Authorization` acima). O *Base64* escreve quaisquer dados usando só 64 caracteres seguros (as letras maiúsculas e minúsculas, os algarismos e mais dois símbolos): cada 3 bytes passam a 4 caracteres. A variante *Base64URL* troca esses dois símbolos, `+` e `/`, por `-` e `_`, e dispensa o `=` de enchimento no fim, para que o resultado possa ir num *URL* ou num cabeçalho HTTP sem ser alterado. Codificar não é cifrar: qualquer pessoa faz o caminho inverso. Por exemplo, o texto `Ana` (3 bytes) codifica-se em `QW5h` (4 caracteres), e `QW5h` volta a dar `Ana` sem chave nenhuma (@fig-08-base64). Do mesmo modo, `{"alg":"HS256",...}` dá `eyJhbGciOiJIUzI1NiIs...`, e é por isso que todos os JWT começam por `eyJ` (o `{"` inicial, codificado: os 8 bits da chaveta repartem-se pelo `e` e por parte do `y`, porque o *Base64* converte bits e não caracteres um a um).
 
-![As três partes de um JWT verdadeiro: o *header* e o *payload* são só codificados em *Base64URL* e qualquer pessoa os lê; a assinatura é calculada com a chave secreta do servidor e é ela que impede forjar o *token*.](../assets/images/capitulos/cap08/JWT_Anatomia.png){#fig-08-jwt-anatomia width="95%"}
+Há três razões para usar esta codificação num JWT. A assinatura são bytes em bruto (32, no caso do `HS256`), com valores que não correspondem a nenhum carácter imprimível e que não podem ir assim num cabeçalho HTTP. O JSON do *header* e do *payload* tem caracteres como `{`, `"`, `:`, espaços ou acentos, alguns dos quais têm significado especial num *URL* ou num cabeçalho. E, como o `.` não faz parte dos 64 caracteres do *Base64URL*, pode servir de separador entre as três partes sem ambiguidade. O *Base64* não protege nem comprime: qualquer pessoa o descodifica, e o resultado fica cerca de um terço maior do que o original.
 
-No algoritmo `HS256`, a assinatura é um HMAC com SHA-256: um código calculado a partir do *header*, do *payload* e da chave secreta. Como a mesma chave serve para gerar e para verificar a assinatura, só o servidor a deve conhecer.
+![Base64 passo a passo: os 3 bytes de `Ana` (65, 110 e 97) dão 24 bits; lidos em 4 grupos de 6 bits valem 16, 22, 57 e 33, que na tabela do Base64 correspondem a `Q`, `W`, `5` e `h`.](../assets/images/capitulos/cap08/Base64_Ana.png){#fig-08-base64 width="95%"}
+
+O *header* e o *payload* são apenas codificados, não cifrados: qualquer pessoa os consegue ler, sem precisar de nenhuma chave. O que garante que ninguém consegue **forjar** um *token* válido é a assinatura: só quem conhece a chave secreta do servidor a consegue gerar corretamente, e qualquer alteração ao *header* ou ao *payload*, por mínima que seja, invalida a assinatura. O servidor, ao receber um pedido, recalcula a assinatura a partir do *header* e do *payload* recebidos, e compara-a com a que veio no *token*: se coincidirem, o conteúdo é de confiar, sem que o servidor tenha precisado de guardar, ele próprio, absolutamente nada (@fig-08-jwt-anatomia).
+
+![As três partes de um JWT verdadeiro, todas em *Base64URL*: o *header* e o *payload* descodificam-se em JSON que qualquer pessoa lê; a assinatura descodifica-se em 32 bytes ilegíveis, calculados com a chave secreta do servidor, e é ela que impede forjar o *token*.](../assets/images/capitulos/cap08/JWT_Anatomia.png){#fig-08-jwt-anatomia width="95%"}
+
+No algoritmo `HS256`, a assinatura é um HMAC com SHA-256: um código de 32 bytes calculado a partir do *header* e do *payload* já codificados (`header.payload`) e da chave secreta. Esses 32 bytes também seguem no *token* em *Base64URL*; descodificados, não dão texto nenhum, só bytes em bruto. Como a mesma chave serve para gerar e para verificar a assinatura, só o servidor a deve conhecer.
 
 ## O Ciclo de Vida de um *Token* {#sec-08-ciclo-vida-token}
 
@@ -52,7 +80,7 @@ Um *token* não substitui o momento de autenticação em si: substitui apenas a 
 : O cliente autentica-se exatamente como no [Capítulo 5](cap05.qmd), enviando `utilizador` e `palavraPasse` a um *endpoint* de *login*. O servidor valida as credenciais (por exemplo, com `dao.validarCredenciais()`, ver [Capítulo 4](cap04.qmd)) mas, em vez de criar uma `HttpSession`, gera um novo JWT, assina-o com a sua chave secreta e devolve-o ao cliente no corpo da resposta
 
 **Armazenamento e reenvio**
-: Ao contrário do `JSESSIONID` (ver [Capítulo 5](cap05.qmd)), que o *browser* reenvia automaticamente através de um *cookie*, o cliente é responsável por guardar o *token* recebido e por o reenviar, explicitamente, no cabeçalho `Authorization` de cada pedido seguinte. Num cliente em JavaScript, o *token* fica numa variável ou em `sessionStorage` (um espaço de armazenamento do *browser* que dura enquanto o separador estiver aberto). Qualquer JavaScript da página consegue ler o que lá estiver, incluindo código injetado por um ataque XSS (ver @sec-08-dom-view): é mais uma razão para nunca inserir dados recebidos como HTML
+: Ao contrário do `JSESSIONID` (ver [Capítulo 5](cap05.qmd)), que o *browser* reenvia automaticamente através de um *cookie*, o cliente é responsável por guardar o *token* recebido e por o reenviar, explicitamente, no cabeçalho `Authorization` de cada pedido seguinte. Num cliente em JavaScript, o *token* fica numa variável ou em `sessionStorage` (um espaço de armazenamento do *browser* que dura enquanto o separador estiver aberto). Qualquer JavaScript da página consegue ler o que lá estiver, incluindo código malicioso injetado na página (ver @sec-08-seguranca)
 
 **Validação**
 : Cada pedido é validado de forma completamente independente dos anteriores: o servidor recalcula a assinatura, sem consultar sessão nenhuma (ver @sec-08-escalabilidade-horizontal)
@@ -62,18 +90,44 @@ Um *token* não substitui o momento de autenticação em si: substitui apenas a 
 
 ![O ciclo de vida de um *token*: o *login* devolve um JWT, que o cliente reenvia em cada pedido; quando a *claim* `exp` passa, o servidor responde `401` e o cliente tem de fazer *login* de novo.](../assets/images/capitulos/cap08/Ciclo_Token.png){#fig-08-ciclo-token width="85%"}
 
-Na emissão, com a biblioteca [JJWT](https://github.com/jwtk/jjwt) apresentada mais à frente, gerar o *token* resume-se a indicar o utilizador, a expiração e a chave:
+Na emissão, o *token* raramente é construído à mão. A [JJWT](https://github.com/jwtk/jjwt) é uma biblioteca Java, de código aberto, para criar e validar JWT; a sua classe principal, `Jwts`, tem um método para cada uma dessas tarefas: `Jwts.builder()` cria um *token* e `Jwts.parser()` valida-o. Gerar um *token* resume-se a indicar o utilizador, a expiração e a chave:
 
 ```java
 String token = Jwts.builder()
-        .subject(utilizador)                                   // a claim "sub"
-        .issuedAt(new Date())                                  // a claim "iat"
-        .expiration(new Date(System.currentTimeMillis() + 30 * 60 * 1000)) // "exp": daqui a 30 minutos
-        .signWith(SECRET_KEY, Jwts.SIG.HS256)                  // a assinatura
-        .compact();                                            // as três partes, separadas por pontos
+        .subject(utilizador)                  // claim "sub"
+        .issuedAt(new Date())                 // claim "iat" (issued at): agora
+        .expiration(new Date(System.currentTimeMillis()
+                + 30 * 60 * 1000))            // "exp": daqui a 30 min (em ms)
+        .signWith(SECRET_KEY, Jwts.SIG.HS256) // a assinatura
+        .compact();                           // junta as três partes
 ```
 
-O *servlet* de *login* devolve depois esta *string* no corpo da resposta, por exemplo dentro de um JSON como `{"token":"eyJhbGciOi..."}`. O código completo, com a classe `JwtUtil`, está no [Apêndice D5](apendiceD5.qmd).
+A *Servlet* de *login* devolve depois esta *string* no corpo da resposta, por exemplo dentro de um JSON como `{"token":"eyJhbGciOi..."}`. O código completo, com a classe `JwtUtil`, está no [Apêndice D5](apendiceD5.qmd).
+
+Repare-se nas unidades: o Java conta o tempo em milissegundos (`System.currentTimeMillis()`, `new Date(...)`), por isso 30 minutos são `30 * 60 * 1000`; a *claim* `exp`, pelo contrário, é contada em segundos. Não é preciso fazer a conversão à mão: a JJWT converte a data para segundos ao escrever a *claim*.
+
+A `SECRET_KEY` merece cuidado, porque é dela que depende toda a segurança: quem a tiver consegue forjar *tokens* de qualquer utilizador. Deve ser gerada uma vez, ao acaso, com pelo menos 32 bytes (256 bits) para o `HS256` (por exemplo, com `Jwts.SIG.HS256.key().build()` ou `openssl rand -base64 32`), e guardada fora do código, tipicamente numa variável de ambiente do servidor:
+
+```java
+SecretKey SECRET_KEY = Keys.hmacShaKeyFor(
+        System.getenv("JWT_SECRET").getBytes(StandardCharsets.UTF_8));
+```
+
+Todos os servidores usam a mesma chave (ver @sec-08-escalabilidade-horizontal), e ela nunca deve ir para um repositório Git nem chegar ao cliente.
+
+Uma **variável de ambiente** é um par nome = valor que o sistema operativo guarda fora de qualquer programa e entrega a cada programa quando ele arranca; o programa lê o valor pelo nome, sem que esse valor esteja escrito no código. Qualquer computador já tem várias, como `PATH` (as pastas onde o sistema procura os programas), `HOME` (a pasta do utilizador) ou `JAVA_HOME` (onde está instalado o Java, usada pelo próprio Tomcat). Para a chave do JWT, define-se a variável na máquina do servidor antes de arrancar a aplicação:
+
+```bash
+export JWT_SECRET="k3J9...32-bytes-ou-mais-ao-acaso..."   # macOS e Linux
+```
+
+```bat
+set JWT_SECRET=k3J9...32-bytes-ou-mais-ao-acaso...        :: Windows
+```
+
+No Tomcat, o sítio habitual para estas definições é o ficheiro `bin/setenv.sh` (ou `bin/setenv.bat`, no Windows), que o Tomcat executa sempre que arranca. No código Java, o valor lê-se com `System.getenv("JWT_SECRET")`, como no excerto acima.
+
+Esta solução tem três vantagens: o segredo não fica no código, e por isso quem vê o código ou o repositório não fica com ele; pode ser mudado sem recompilar a aplicação, bastando alterar a variável e reiniciar o servidor; e cada máquina pode ter o seu valor (a do programador, a de testes e a de produção), com todos os servidores de produção a receber o mesmo. Não é, contudo, um cofre: a variável fica visível para os programas dessa máquina e para quem a administra. Sistemas maiores recorrem a serviços próprios de gestão de segredos, que ficam fora do âmbito desta UC.
 
 A tabela seguinte resume a diferença entre os dois modelos de autenticação já vistos nesta UC:
 
@@ -82,13 +136,13 @@ A tabela seguinte resume a diferença entre os dois modelos de autenticação j�
 | Onde vive o estado | No servidor, em memória | No próprio *token*, do lado do cliente |
 | O que o cliente guarda | Um identificador (`JSESSIONID`) | O *token* completo, já com os dados |
 | Validação a cada pedido | Consulta à memória do servidor | Verificação da assinatura, sem consultar nada |
-| Várias instâncias do servidor | Precisam de partilhar a sessão entre si | Cada uma valida de forma independente |
+| Vários servidores | Precisam de partilhar a sessão entre si | Cada um valida de forma independente |
 
 Na prática, um Filtro (ver [Capítulo 6](cap06.qmd)) continua a ser o sítio natural onde esta validação acontece. Recorde-se o Filtro de autenticação baseado em sessão, já apresentado nesse capítulo:
 
 ```java
-public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-        throws IOException, ServletException {
+public void doFilter(ServletRequest request, ServletResponse response,
+                     FilterChain chain) throws IOException, ServletException {
 
     HttpServletRequest req = (HttpServletRequest) request;
     HttpServletResponse res = (HttpServletResponse) response;
@@ -104,11 +158,15 @@ public void doFilter(ServletRequest request, ServletResponse response, FilterCha
 }
 ```
 
-A versão equivalente, baseada num *token*, tem exatamente a mesma estrutura: só a verificação em si é que muda, de uma consulta à `HttpSession` para a validação da assinatura e da validade do *token*. Essa validação raramente é escrita de raiz: é código sensível, que envolve criptografia, e compensa deixar a cargo de uma biblioteca testada e mantida ativamente, em vez de reimplementada. A JJWT é uma das mais usadas em Java, e uma das mais cuidadas em segurança. Por exemplo, protege contra o ataque `"alg":"none"`: o atacante altera o *payload* (por exemplo, para `"role":"admin"`), escreve `"alg":"none"` no *header* e apaga a assinatura. Uma biblioteca descuidada leria o *header*, concluiria que não há assinatura para verificar e aceitaria o *token* forjado, dando ao atacante os privilégios que ele próprio escreveu. A JJWT rejeita *tokens* sem assinatura sempre que se lhe indica uma chave com `verifyWith()`:
+A versão equivalente, baseada num *token*, tem exatamente a mesma estrutura: só a verificação em si é que muda, de uma consulta à `HttpSession` para a validação da assinatura e da validade do *token*. A @fig-08-filtros mostra os dois lado a lado.
+
+![Filtro por sessão e Filtro por JWT: em ambos, uma verificação falhada termina o pedido com `401` e uma verificação bem-sucedida continua a cadeia com `chain.doFilter()`; o Filtro por JWT só tem mais um passo, porque primeiro confirma que o cabeçalho traz um *token* `Bearer` e depois valida-o.](../assets/images/capitulos/cap08/Filtros_Sessao_JWT.png){#fig-08-filtros width="90%"}
+
+Essa validação raramente é escrita de raiz: é código sensível, que envolve criptografia, e compensa deixar a cargo de uma biblioteca testada e mantida ativamente, em vez de reimplementada. A JJWT, já usada na emissão, é uma das mais usadas em Java, e uma das mais cuidadas em segurança. Por exemplo, protege contra o ataque `"alg":"none"`: o atacante altera o *payload* (por exemplo, para `"role":"admin"`), escreve `"alg":"none"` no *header* e apaga a assinatura. Uma biblioteca descuidada leria o *header*, concluiria que não há assinatura para verificar e aceitaria o *token* forjado, dando ao atacante os privilégios que ele próprio escreveu. A JJWT rejeita *tokens* sem assinatura sempre que se lhe indica uma chave com `verifyWith()`:
 
 ```java
-public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-        throws IOException, ServletException {
+public void doFilter(ServletRequest request, ServletResponse response,
+                     FilterChain chain) throws IOException, ServletException {
 
     HttpServletRequest req = (HttpServletRequest) request;
     HttpServletResponse res = (HttpServletResponse) response;
@@ -120,6 +178,7 @@ public void doFilter(ServletRequest request, ServletResponse response, FilterCha
         return;
     }
 
+    // tira "Bearer " (7 caracteres): fica só o token
     String token = authHeader.substring("Bearer ".length());
 
     try {
@@ -131,7 +190,8 @@ public void doFilter(ServletRequest request, ServletResponse response, FilterCha
 
         req.setAttribute("utilizador", claims.getSubject());
     } catch (JwtException e) {
-        res.sendError(HttpServletResponse.SC_UNAUTHORIZED); // assinatura inválida ou token expirado
+        // assinatura inválida ou token expirado
+        res.sendError(HttpServletResponse.SC_UNAUTHORIZED);
         return;
     }
 
@@ -141,17 +201,46 @@ public void doFilter(ServletRequest request, ServletResponse response, FilterCha
 
 A chamada a `parseSignedClaims(token)` faz, internamente, tudo o que a validação exige: descodifica o *header* e o *payload*, recalcula a assinatura com `SECRET_KEY` e compara-a com a recebida, e verifica a *claim* `exp`; lança uma `JwtException` (ou uma das suas subclasses, como `ExpiredJwtException` para um *token* expirado, ou `SignatureException` para uma assinatura inválida) caso alguma destas verificações falhe. Note-se a semelhança estrutural com o Filtro baseado em sessão: em ambos os casos, uma condição de falha termina o pedido com `401`, e só se a autenticação for válida se continua a cadeia com `chain.doFilter()`.
 
-## Escalabilidade Horizontal {#sec-08-escalabilidade-horizontal}
+## A Grande Vantagem do JWT: Escalar Sem Estado {#sec-08-escalabilidade-horizontal}
 
-Escalar uma aplicação significa aumentar a sua capacidade de resposta a mais pedidos. Existem, tipicamente, duas formas de o fazer:
+A escalabilidade horizontal (ver @sec-08-limitacoes-sessao) só funciona sem complicações quando qualquer servidor pode responder a qualquer pedido, indiferentemente. Com sessões, isso obriga a *sticky sessions* ou a replicação; com autenticação baseada em JWT, acontece naturalmente: o estado viaja no próprio pedido, nenhum servidor precisa de saber nada sobre nenhum outro, e cada um valida o *token* recebido de forma completamente independente, com a mesma chave secreta partilhada por todos (@fig-08-servidores-sem-estado). É esta a principal vantagem do JWT sobre as sessões, e a razão pela qual as APIs REST usam *tokens* em vez de sessões.
 
-**Escalabilidade vertical**
-: Aumentar os recursos (CPU, memória) da máquina existente: tem um limite físico e não resolve o problema de um único ponto de falha
+![Sem estado no servidor: o *login* é tratado pelo servidor A, o pedido seguinte cai no servidor B, e B responde `200` porque o próprio pedido traz o *token*.](../assets/images/capitulos/cap08/Servidores_Sem_Estado.png){#fig-08-servidores-sem-estado width="95%"}
 
-**Escalabilidade horizontal**
-: Acrescentar mais instâncias do servidor, a correr em paralelo, distribuindo os pedidos entre elas, tipicamente através de um *load balancer*
+## JWT e Microsserviços {#sec-08-microsservicos}
 
-A escalabilidade horizontal só funciona sem complicações quando qualquer instância pode responder a qualquer pedido, indiferentemente, que é exatamente a propriedade que um serviço sem estado oferece. Com autenticação baseada em JWT, nenhuma instância precisa de saber nada sobre nenhuma outra: cada uma valida o *token* recebido de forma completamente independente, com a mesma chave secreta partilhada por todas. É esta independência entre instâncias que torna a arquitetura sem estado a base de qualquer sistema pensado para escalar.
+A mesma lógica aplica-se, com ainda mais força, a uma aplicação repartida em **microsserviços** (ver @sec-07-monolito-microsservicos): em vez de uma única aplicação web, há vários serviços pequenos, cada um uma aplicação web própria (por exemplo, um serviço de autenticação, um de livros e um de encomendas), instalados no mesmo servidor, em portas ou caminhos diferentes, ou em servidores diferentes.
+
+Com sessões, cada serviço teria as suas próprias sessões: o `JSESSIONID` criado pelo serviço de autenticação não significa nada para o serviço de livros, que teria de voltar a pedir as credenciais ou de perguntar ao primeiro, a cada pedido, quem é aquele utilizador. Com JWT, o cliente faz *login* uma única vez, no serviço de autenticação, e envia o mesmo *token* a todos os outros; cada serviço verifica a assinatura sozinho, sem perguntar nada a ninguém (@fig-08-microsservicos). Cada serviço pode, além disso, escalar independentemente dos restantes: se o serviço de livros for o mais procurado, acrescentam-se servidores só para ele.
+
+![JWT com microsserviços: o cliente faz *login* no serviço de autenticação, recebe o JWT e envia-o aos serviços de livros e de encomendas, que o validam sem consultar o serviço de autenticação.](../assets/images/capitulos/cap08/JWT_Microsservicos.png){#fig-08-microsservicos width="95%"}
+
+Há um cuidado a ter: com `HS256`, todos os serviços teriam de conhecer a chave secreta e, com ela, qualquer um poderia emitir *tokens*. Em sistemas com vários serviços usa-se, por isso, um algoritmo assimétrico (`RS256` ou `ES256`): só o serviço de autenticação assina, com uma chave privada, e os restantes apenas verificam, com a chave pública correspondente (ver @sec-apB-assimetrico).
+
+## Cuidados de Segurança com *Tokens* {#sec-08-seguranca}
+
+Um JWT é uma credencial "de portador": quem o tiver é tratado como o seu dono até ele expirar. A assinatura impede que seja **forjado**, mas não impede que seja **roubado**, e é contra o roubo que estão a maior parte dos cuidados.
+
+**Interceção na rede**
+: Sem HTTPS, o pedido viaja em claro, e quem estiver na mesma rede (num Wi-Fi público, por exemplo) consegue ler o cabeçalho `Authorization` e copiar o *token*. A defesa é usar HTTPS sempre, sem exceções
+
+**XSS (*Cross-Site Scripting*)**
+: O atacante consegue pôr JavaScript seu a correr na página que outra pessoa está a ver. A forma mais comum é através de dados que a aplicação recebe de um utilizador e mostra a outros sem os tratar: um comentário, um nome, o título de um livro. Se a página inserir esse texto como HTML, o *browser* executa o código que lá vier escondido, com os mesmos direitos da própria página. Esse código pode, por exemplo, ler o *token* guardado em `sessionStorage` e enviá-lo ao atacante, que passa a fazer-se passar pela vítima (@fig-08-xss)
+
+![Roubo de um *token* por XSS: o atacante publica um comentário com código escondido (1); o servidor guarda-o e devolve-o à vítima (2); a página mostra-o como HTML e o *browser* executa o código, que lê o *token* (3) e o envia ao atacante (4); o atacante usa-o nos seus pedidos (5), e o servidor não o distingue da vítima.](../assets/images/capitulos/cap08/XSS_Roubo_Token.png){#fig-08-xss width="95%"}
+
+O exemplo usa uma imagem com um endereço inválido (`<img src=x onerror="...">`) e não uma etiqueta `<script>`: os *browsers* não executam um `<script>` inserido com `innerHTML`, mas executam o código do atributo `onerror` quando a imagem falha a carregar. A defesa é inserir sempre os dados recebidos como texto, com `textContent`, e nunca como HTML, com `innerHTML` (ver @sec-08-dom-view): o comentário aparece tal como foi escrito e nada é executado.
+
+Além destes dois riscos, há um conjunto de boas práticas a seguir sempre que se usam *tokens*:
+
+- **Expiração curta**: a *claim* `exp` deve ser de minutos ou de poucas horas, para limitar o que um *token* roubado permite fazer;
+- **Um JWT não se "desliga" antes de expirar**: como o servidor não guarda nada, o *logout* limita-se a apagar o *token* do lado do cliente; para o revogar a sério seria preciso manter uma lista de *tokens* proibidos, ou seja, voltar a ter estado no servidor (mais uma razão para a expiração ser curta);
+- **Nada de dados sensíveis no *payload***: qualquer pessoa o lê, por isso nunca deve conter palavras-passe, NIF ou dados pessoais desnecessários;
+- **Chave secreta longa, aleatória e fora do código** (ver @sec-08-ciclo-vida-token);
+- **Impor o algoritmo na validação**, com `verifyWith()`, contra o ataque `"alg":"none"` (ver @sec-08-ciclo-vida-token);
+- **Validar sempre no servidor, em cada pedido**, a assinatura e a expiração: é o trabalho do Filtro.
+
+O [Apêndice B](apendiceB.qmd) aprofunda estas questões, em particular a escolha entre guardar o *token* no `sessionStorage`/`localStorage` ou num *cookie* `HttpOnly` (ver @sec-apB-armazenamento).
 
 ## MVC Distribuído: o Padrão Divide-se entre Servidor e Cliente {#sec-08-mvc-distribuido}
 
@@ -197,7 +286,7 @@ fetch("/livros", {
 })
   .then(response => {
     if (response.status === 401) {
-      window.location.href = "/login.html";   // token expirado ou inválido: novo login
+      window.location.href = "/login.html";   // token inválido: novo login
       return;
     }
     if (!response.ok) {

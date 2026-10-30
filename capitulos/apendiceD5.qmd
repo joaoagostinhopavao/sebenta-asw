@@ -116,6 +116,8 @@ public class JwtUtil {
 
 Importante: nunca guardar palavras-passe dentro do *token*.
 
+Importante: neste LAB, a chave `SECRET` está escrita no código só por simplicidade. Numa aplicação real, quem tivesse acesso ao código (por exemplo, num repositório Git) ficava com a chave e podia forjar *tokens* de qualquer utilizador. A chave deve ser gerada ao acaso, com pelo menos 32 bytes, e lida de fora do código, por exemplo de uma variável de ambiente, com `System.getenv("JWT_SECRET")`.
+
 ### Passo 5.3: Alterar o `/login` para Devolver um Token (Sem Sessão) {#sec-apD5-passo3}
 
 Neste LAB, o `/login` deixa de criar sessão:

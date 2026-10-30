@@ -30,13 +30,13 @@ def box(ax, x0, y0, w, h, fc, ec, lw=2.2):
                                 fc=fc, ec=ec, lw=lw, zorder=1))
 
 
-fig, ax = plt.subplots(figsize=(17, 8.4), dpi=200)
-ax.set_xlim(0, 17)
+fig, ax = plt.subplots(figsize=(17.6, 8.4), dpi=200)
+ax.set_xlim(0, 17.6)
 ax.set_ylim(0, 8.4)
 ax.axis("off")
 
 # o token inteiro, em três cores, em duas linhas
-ax.text(0.2, 7.95, "O token, tal como viaja no cabeçalho Authorization:", ha="left", va="center",
+ax.text(0.2, 7.95, "O token, tal como viaja no cabeçalho Authorization (as três partes em Base64URL):", ha="left", va="center",
         fontsize=FS, color=DARK, fontweight="bold")
 linha1 = [(HEADER, MID), (".", DARK), (PAYLOAD, ORANGE), (".", DARK)]
 linha2 = [(SIGNATURE, GREEN)]
@@ -55,20 +55,21 @@ linhas = [
     ("Header", MID, '{"alg":"HS256","typ":"JWT"}', "o algoritmo da assinatura", "só codificado: qualquer um lê"),
     ("Payload", ORANGE, '{"sub":"ana","role":"user",\n "exp":1893456000}',
      "as claims: quem é, que perfil tem, até quando vale", "só codificado: qualquer um lê"),
-    ("Assinatura", GREEN, "HMAC-SHA256(header.payload,\n             chave secreta)",
-     "calculada com a chave secreta do servidor", "ninguém a consegue forjar sem a chave"),
+    ("Assinatura", GREEN, "3b 53 34 ca 6b 1f f9 c7 ... f8 b1\n(32 bytes, ilegível: não é texto)",
+     "= HMAC-SHA256(header.payload, chave secreta)", "ninguém a consegue forjar sem a chave"),
 ]
 y = 4.95
 for nome, cor, conteudo, desc, nota in linhas:
     box(ax, 0.2, y - 0.75, 2.4, 1.5, cor, cor)
     ax.text(1.4, y, nome, ha="center", va="center", fontsize=FS + 1, color="white", fontweight="bold")
-    ax.add_patch(FancyArrowPatch((2.75, y), (3.55, y), arrowstyle="-|>", mutation_scale=20, color=cor,
+    ax.add_patch(FancyArrowPatch((2.75, y), (4.15, y), arrowstyle="-|>", mutation_scale=20, color=cor,
                                  lw=2.4, zorder=3))
-    box(ax, 3.7, y - 0.75, 6.6, 1.5, LIGHT, cor, lw=2.0)
-    ax.text(3.95, y, conteudo, ha="left", va="center", fontsize=FS - 2, family="monospace", color=DARK,
+    ax.text(3.45, y + 0.15, "descodifica", ha="center", va="bottom", fontsize=FS - 7, color=cor, style="italic")
+    box(ax, 4.3, y - 0.75, 6.6, 1.5, LIGHT, cor, lw=2.0)
+    ax.text(4.55, y, conteudo, ha="left", va="center", fontsize=FS - 2, family="monospace", color=DARK,
             linespacing=1.3)
-    ax.text(10.6, y + 0.28, desc, ha="left", va="center", fontsize=FS - 2, color=DARK)
-    ax.text(10.6, y - 0.28, nota, ha="left", va="center", fontsize=FS - 2, color=cor, style="italic",
+    ax.text(11.2, y + 0.28, desc, ha="left", va="center", fontsize=FS - 2, color=DARK)
+    ax.text(11.2, y - 0.28, nota, ha="left", va="center", fontsize=FS - 2, color=cor, style="italic",
             fontweight="bold")
     y -= 1.85
 

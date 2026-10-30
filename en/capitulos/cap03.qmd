@@ -305,7 +305,8 @@ Within these categories, a handful of codes come up particularly often when deve
 | `200 OK` | The request was processed successfully |
 | `201 Created` | A new resource was successfully created |
 | `400 Bad Request` | The request is malformed, or a required parameter is missing |
-| `403 Forbidden` | The client lacks permission to access the resource |
+| `401 Unauthorized` | The request is not authenticated: the server does not know who the client is |
+| `403 Forbidden` | The client is authenticated but lacks permission to access the resource |
 | `404 Not Found` | The requested resource does not exist |
 | `500 Internal Server Error` | An unhandled error occurred on the server side |
 

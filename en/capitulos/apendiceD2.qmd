@@ -56,10 +56,10 @@ Not every request to `/login` corresponds to a successful *login*. There are two
 {"message": "BAD REQUEST!", "error": "Missing parameter user or pass"}
 :::
 
-**Invalid credentials** — if `validateUserCredentials()` returns `false`, respond with `HTTP 403 FORBIDDEN`:
+**Invalid credentials** — if `validateUserCredentials()` returns `false`, respond with `HTTP 401 UNAUTHORIZED`:
 
 ::: {.httpmsg}
-{"message": "FORBIDDEN!", "error": "Invalid login or password"}
+{"message": "UNAUTHORIZED!", "error": "Invalid login or password"}
 :::
 
 Note that, in neither of these cases, does the *Servlet* redirect the client to another page — it is the client that decides what to do next, based on the status code and the JSON body received.
@@ -92,7 +92,7 @@ At the start of `CountryServlet`'s `doGet` method, add:
 HttpSession session = request.getSession(false);
 
 if (session == null || session.getAttribute("UserName") == null) {
-    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     response.setContentType("application/json");
     PrintWriter out = response.getWriter();
     String jsonResponse = "{\"error\": \"Authentication required\"}";
@@ -101,11 +101,11 @@ if (session == null || session.getAttribute("UserName") == null) {
 }
 ```
 
-Note the use of `request.getSession(false)`: unlike what happens at *login* (`getSession(true)`), here a new session should not be created just to check whether it exists — if there is no session, `getSession(false)` returns `null`. It is essential not to forget the `return` after writing the error response: without it, the code would keep executing the rest of the method, even after already having sent a `403` response.
+Note the use of `request.getSession(false)`: unlike what happens at *login* (`getSession(true)`), here a new session should not be created just to check whether it exists — if there is no session, `getSession(false)` returns `null`. It is essential not to forget the `return` after writing the error response: without it, the code would keep executing the rest of the method, even after already having sent a `401` response.
 
 ### How to Test {#sec-apD2-test-en}
 
-1. Access `/country?countrycode=PT` directly, without logging in first. Expected result: `HTTP 403`, with the body `{"error": "Authentication required"}`
+1. Access `/country?countrycode=PT` directly, without logging in first. Expected result: `HTTP 401`, with the body `{"error": "Authentication required"}`
 2. Submit the `login.html` form with `javaee` / `asw2026`. Expected result: `HTTP 200`, with the body `{"message": "OK", "user": "javaee"}`
 3. Repeat the request to `/country?countrycode=PT`. Expected result now: `HTTP 200`, with the country's data
 

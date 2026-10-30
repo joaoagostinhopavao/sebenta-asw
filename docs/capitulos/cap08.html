@@ -282,10 +282,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#sec-08-authorization-header" id="toc-sec-08-authorization-header" class="nav-link" data-scroll-target="#sec-08-authorization-header"><span class="header-section-number">8.2</span> Autenticação Sem Estado: o Cabeçalho <code>Authorization</code></a></li>
   <li><a href="#sec-08-jwt" id="toc-sec-08-jwt" class="nav-link" data-scroll-target="#sec-08-jwt"><span class="header-section-number">8.3</span> JWT: um <em>Token</em> Sem Estado</a></li>
   <li><a href="#sec-08-ciclo-vida-token" id="toc-sec-08-ciclo-vida-token" class="nav-link" data-scroll-target="#sec-08-ciclo-vida-token"><span class="header-section-number">8.4</span> O Ciclo de Vida de um <em>Token</em></a></li>
-  <li><a href="#sec-08-escalabilidade-horizontal" id="toc-sec-08-escalabilidade-horizontal" class="nav-link" data-scroll-target="#sec-08-escalabilidade-horizontal"><span class="header-section-number">8.5</span> Escalabilidade Horizontal</a></li>
-  <li><a href="#sec-08-mvc-distribuido" id="toc-sec-08-mvc-distribuido" class="nav-link" data-scroll-target="#sec-08-mvc-distribuido"><span class="header-section-number">8.6</span> MVC Distribuído: o Padrão Divide-se entre Servidor e Cliente</a></li>
-  <li><a href="#sec-08-fetch-json" id="toc-sec-08-fetch-json" class="nav-link" data-scroll-target="#sec-08-fetch-json"><span class="header-section-number">8.7</span> Consumir uma API REST em JavaScript: <code>fetch()</code> e JSON</a></li>
-  <li><a href="#sec-08-dom-view" id="toc-sec-08-dom-view" class="nav-link" data-scroll-target="#sec-08-dom-view"><span class="header-section-number">8.8</span> O DOM como “View” do <em>Browser</em></a></li>
+  <li><a href="#sec-08-escalabilidade-horizontal" id="toc-sec-08-escalabilidade-horizontal" class="nav-link" data-scroll-target="#sec-08-escalabilidade-horizontal"><span class="header-section-number">8.5</span> A Grande Vantagem do JWT: Escalar Sem Estado</a></li>
+  <li><a href="#sec-08-microsservicos" id="toc-sec-08-microsservicos" class="nav-link" data-scroll-target="#sec-08-microsservicos"><span class="header-section-number">8.6</span> JWT e Microsserviços</a></li>
+  <li><a href="#sec-08-seguranca" id="toc-sec-08-seguranca" class="nav-link" data-scroll-target="#sec-08-seguranca"><span class="header-section-number">8.7</span> Cuidados de Segurança com <em>Tokens</em></a></li>
+  <li><a href="#sec-08-mvc-distribuido" id="toc-sec-08-mvc-distribuido" class="nav-link" data-scroll-target="#sec-08-mvc-distribuido"><span class="header-section-number">8.8</span> MVC Distribuído: o Padrão Divide-se entre Servidor e Cliente</a></li>
+  <li><a href="#sec-08-fetch-json" id="toc-sec-08-fetch-json" class="nav-link" data-scroll-target="#sec-08-fetch-json"><span class="header-section-number">8.9</span> Consumir uma API REST em JavaScript: <code>fetch()</code> e JSON</a></li>
+  <li><a href="#sec-08-dom-view" id="toc-sec-08-dom-view" class="nav-link" data-scroll-target="#sec-08-dom-view"><span class="header-section-number">8.10</span> O DOM como “View” do <em>Browser</em></a></li>
   </ul>
 </nav>
     </div>
@@ -325,8 +327,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="sec-08-limitacoes-sessao" class="level2" data-number="8.1">
 <h2 data-number="8.1" class="anchored" data-anchor-id="sec-08-limitacoes-sessao"><span class="header-section-number">8.1</span> Limitações de Sessões em Sistemas Distribuídos</h2>
-<p>O <a href="../capitulos/cap07.html">Capítulo 7</a> terminou a apontar o problema: um modelo de autenticação baseado em <code>HttpSession</code> (ver <a href="../capitulos/cap05.html">Capítulo 5</a>) exige que o servidor guarde, em memória, o estado de cada utilizador autenticado. Assim que existe mais do que uma instância do servidor, essa memória deixa de ser automaticamente partilhada entre elas.</p>
-<p>Existem paliativos conhecidos para este problema, as <em>sticky sessions</em> (encaminhar sempre o mesmo cliente para a mesma instância) e a replicação de sessões entre instâncias, mas ambos têm um custo: o primeiro limita a forma como os pedidos podem ser distribuídos, e o segundo exige infraestrutura adicional só para manter as instâncias sincronizadas. Nenhum dos dois resolve o problema na raiz; ambos são formas de contornar uma dependência de estado que, para uma API REST (ver <a href="../capitulos/cap07.html">Capítulo 7</a>), não deveria sequer existir.</p>
+<p>Uma aplicação web com muitos utilizadores tem de <strong>escalar</strong>, isto é, de aguentar mais trabalho (mais utilizadores, mais pedidos por segundo) sem ficar lenta nem parar. Há duas formas de o fazer:</p>
+<dl>
+<dt><strong>Escalabilidade vertical</strong></dt>
+<dd>
+Dar mais recursos (processadores, memória) à mesma máquina. É simples, porque a aplicação não muda, mas tem um limite físico e não resolve o problema do <em>ponto único de falha</em>: se essa única máquina avariar ou tiver de ser reiniciada, a aplicação inteira fica indisponível
+</dd>
+<dt><strong>Escalabilidade horizontal</strong></dt>
+<dd>
+Juntar mais servidores iguais, a correr em paralelo, com um balanceador (<em>load balancer</em>) a repartir os pedidos entre eles. Quase não tem limite, porque basta acrescentar servidores, e, se um falhar, os outros continuam a responder
+</dd>
+</dl>
+<p>A diferença é a mesma que num supermercado: em vez de ter um único operador de caixa cada vez mais rápido (vertical), abrem-se mais caixas, com uma fila única que encaminha cada cliente para a primeira caixa livre (horizontal). Para isto funcionar, qualquer caixa tem de conseguir atender qualquer cliente. As aplicações web com muitos utilizadores escalam na horizontal, e é aí que as sessões levantam problemas.</p>
+<p>O <a href="../capitulos/cap07.html">Capítulo 7</a> terminou a apontar esse problema: um modelo de autenticação baseado em <code>HttpSession</code> (ver <a href="../capitulos/cap05.html">Capítulo 5</a>) exige que o servidor guarde, em memória, o estado de cada utilizador autenticado. Assim que existe mais do que um servidor (vários Tomcats, cada um com a mesma aplicação instalada, à frente dos quais um balanceador reparte os pedidos), essa memória deixa de ser automaticamente partilhada entre eles. Não se trata de várias instâncias da mesma <em>Servlet</em>: dentro de um Tomcat, os pedidos simultâneos são atendidos por vários <em>threads</em> da mesma instância (ver <a href="../capitulos/cap04.html">Capítulo 4</a>), que partilham a mesma memória e, portanto, as mesmas sessões.</p>
+<p>Existem paliativos conhecidos para este problema (<a href="#fig-08-sticky-replicacao" class="quarto-xref">Figura&nbsp;<span>8.1</span></a>), as <em>sticky sessions</em> (encaminhar sempre o mesmo cliente para o mesmo servidor) e a replicação de sessões entre servidores, mas ambos têm um custo: o primeiro limita a forma como os pedidos podem ser distribuídos, e o segundo exige infraestrutura adicional só para manter os servidores sincronizados. Nenhum dos dois resolve o problema na raiz; ambos são formas de contornar uma dependência de estado que, para uma API REST (ver <a href="../capitulos/cap07.html">Capítulo 7</a>), não deveria sequer existir.</p>
+<div id="fig-08-sticky-replicacao" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-08-sticky-replicacao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap08/Sticky_Replicacao.png" class="img-fluid figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-08-sticky-replicacao-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;8.1: Os dois paliativos: com <em>sticky sessions</em>, o balanceador envia sempre a mesma utilizadora para o servidor que tem a sua sessão; com replicação, os servidores copiam as sessões entre si e qualquer um pode responder.
+</figcaption>
+</figure>
+</div>
 </section>
 <section id="sec-08-authorization-header" class="level2" data-number="8.2">
 <h2 data-number="8.2" class="anchored" data-anchor-id="sec-08-authorization-header"><span class="header-section-number">8.2</span> Autenticação Sem Estado: o Cabeçalho <code>Authorization</code></h2>
@@ -334,7 +358,48 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="httpmsg">
 <p>Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhbmEiLCJyb2xlIjoidXNlciIsImV4cCI6MTg5MzQ1NjAwMH0.O1M0ymsf-ceCK3OxAewCVLReDaVliYUirWclbBC4-LE</p>
 </div>
-<p>A palavra <code>Bearer</code> indica o tipo de credencial que se segue (literalmente, “portador”: quem apresenta este <em>token</em> é tratado como o seu legítimo dono). O servidor, ao receber o pedido, não precisa de consultar memória nenhuma: basta validar o <em>token</em> em si. O que ele é, e como essa validação funciona, é o tema da secção seguinte.</p>
+<p>O cabeçalho <code>Authorization</code> não é exclusivo dos <em>tokens</em>: a norma do HTTP define-o sempre com o formato <code>Authorization: &lt;esquema&gt; &lt;credenciais&gt;</code>, e a primeira palavra, o <strong>esquema</strong>, diz ao servidor como interpretar o que vem a seguir.</p>
+<div id="tbl-08-esquemas-authorization" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-08-esquemas-authorization-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabela&nbsp;8.1: Alguns esquemas do cabeçalho <code>Authorization</code>.
+</figcaption>
+<div aria-describedby="tbl-08-esquemas-authorization-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Esquema</th>
+<th>O que vem a seguir</th>
+<th>Exemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>Basic</code></td>
+<td><code>utilizador:palavra-passe</code> em <em>Base64</em></td>
+<td><code>Authorization: Basic YW5hOnNlZ3JlZG8=</code></td>
+</tr>
+<tr class="even">
+<td><code>Bearer</code></td>
+<td>um <em>token</em> (por exemplo, um JWT)</td>
+<td><code>Authorization: Bearer eyJhbGciOi...</code></td>
+</tr>
+<tr class="odd">
+<td><code>Digest</code></td>
+<td>um resumo calculado a partir da palavra-passe</td>
+<td>hoje pouco usado</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Sem o esquema, o servidor não saberia se <code>eyJhbGciOi...</code> é um <em>token</em>, uma palavra-passe codificada ou outra coisa; é também uma convenção seguida por clientes, bibliotecas e servidores, que escrevem e esperam <code>Bearer &lt;token&gt;</code>. A palavra <code>Bearer</code> significa, literalmente, “portador”: quem apresenta este <em>token</em> é tratado como o seu legítimo dono, sem mais perguntas. Por isso, o <em>token</em> tem de viajar sempre em HTTPS e nunca pode ser exposto. O servidor, ao receber o pedido, não precisa de consultar memória nenhuma: basta validar o <em>token</em> em si. O que ele é, e como essa validação funciona, é o tema da secção seguinte.</p>
 </section>
 <section id="sec-08-jwt" class="level2" data-number="8.3">
 <h2 data-number="8.3" class="anchored" data-anchor-id="sec-08-jwt"><span class="header-section-number">8.3</span> JWT: um <em>Token</em> Sem Estado</h2>
@@ -343,33 +408,45 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <dl>
 <dt><strong>Header</strong></dt>
 <dd>
-Metadados sobre o próprio <em>token</em>, tipicamente o algoritmo de assinatura usado, por exemplo <code>{"alg":"HS256","typ":"JWT"}</code>
+Metadados sobre o próprio <em>token</em>, por exemplo <code>{"alg":"HS256","typ":"JWT"}</code>: <code>alg</code> indica o algoritmo da assinatura (<code>HS256</code> é um HMAC com SHA-256); <code>typ</code> indica que se trata de um JWT, é opcional e, na prática, tem quase sempre este valor
 </dd>
 <dt><strong>Payload</strong></dt>
 <dd>
-Os dados que o <em>token</em> transporta (as <em>claims</em>), por exemplo <code>{"sub":"ana","role":"user","exp":1893456000}</code>, que identificam o utilizador, o seu perfil e a data de expiração
+Os dados que o <em>token</em> transporta, as <em>claims</em> (afirmações sobre o utilizador), por exemplo <code>{"sub":"ana","role":"user","exp":1893456000}</code>. <code>sub</code> (<em>subject</em>) indica quem é o utilizador; <code>role</code> é o seu perfil, uma <em>claim</em> definida pela própria aplicação; <code>exp</code> (<em>expiration</em>) é o momento até ao qual o <em>token</em> vale, contado em segundos desde 1 de janeiro de 1970 (aqui, 1 de janeiro de 2030)
 </dd>
 <dt><strong>Assinatura</strong></dt>
 <dd>
 O resultado de assinar criptograficamente o <em>header</em> e o <em>payload</em> com uma chave secreta, conhecida apenas pelo servidor
 </dd>
 </dl>
-<p>Cada uma destas três partes é codificada em <em>Base64URL</em> (uma variante do <em>Base64</em> que só usa caracteres seguros numa <em>URL</em>) e concatenada com pontos, resultando na <em>string</em> longa e ilegível característica de um JWT (como a do exemplo do cabeçalho <code>Authorization</code> acima). O <em>header</em> e o <em>payload</em> são apenas codificados, não cifrados: qualquer pessoa os consegue ler, sem precisar de nenhuma chave. O que garante que ninguém consegue <strong>forjar</strong> um <em>token</em> válido é a assinatura: só quem conhece a chave secreta do servidor a consegue gerar corretamente, e qualquer alteração ao <em>header</em> ou ao <em>payload</em>, por mínima que seja, invalida a assinatura. O servidor, ao receber um pedido, recalcula a assinatura a partir do <em>header</em> e do <em>payload</em> recebidos, e compara-a com a que veio no <em>token</em>: se coincidirem, o conteúdo é de confiar, sem que o servidor tenha precisado de guardar, ele próprio, absolutamente nada (<a href="#fig-08-jwt-anatomia" class="quarto-xref">Figura&nbsp;<span>8.1</span></a>).</p>
+<p>Cada uma destas três partes é codificada em <em>Base64URL</em> e concatenada com pontos, resultando na <em>string</em> longa e ilegível característica de um JWT (como a do exemplo do cabeçalho <code>Authorization</code> acima). O <em>Base64</em> escreve quaisquer dados usando só 64 caracteres seguros (as letras maiúsculas e minúsculas, os algarismos e mais dois símbolos): cada 3 bytes passam a 4 caracteres. A variante <em>Base64URL</em> troca esses dois símbolos, <code>+</code> e <code>/</code>, por <code>-</code> e <code>_</code>, e dispensa o <code>=</code> de enchimento no fim, para que o resultado possa ir num <em>URL</em> ou num cabeçalho HTTP sem ser alterado. Codificar não é cifrar: qualquer pessoa faz o caminho inverso. Por exemplo, o texto <code>Ana</code> (3 bytes) codifica-se em <code>QW5h</code> (4 caracteres), e <code>QW5h</code> volta a dar <code>Ana</code> sem chave nenhuma (<a href="#fig-08-base64" class="quarto-xref">Figura&nbsp;<span>8.2</span></a>). Do mesmo modo, <code>{"alg":"HS256",...}</code> dá <code>eyJhbGciOiJIUzI1NiIs...</code>, e é por isso que todos os JWT começam por <code>eyJ</code> (o <code>{"</code> inicial, codificado: os 8 bits da chaveta repartem-se pelo <code>e</code> e por parte do <code>y</code>, porque o <em>Base64</em> converte bits e não caracteres um a um).</p>
+<p>Há três razões para usar esta codificação num JWT. A assinatura são bytes em bruto (32, no caso do <code>HS256</code>), com valores que não correspondem a nenhum carácter imprimível e que não podem ir assim num cabeçalho HTTP. O JSON do <em>header</em> e do <em>payload</em> tem caracteres como <code>{</code>, <code>"</code>, <code>:</code>, espaços ou acentos, alguns dos quais têm significado especial num <em>URL</em> ou num cabeçalho. E, como o <code>.</code> não faz parte dos 64 caracteres do <em>Base64URL</em>, pode servir de separador entre as três partes sem ambiguidade. O <em>Base64</em> não protege nem comprime: qualquer pessoa o descodifica, e o resultado fica cerca de um terço maior do que o original.</p>
+<div id="fig-08-base64" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-08-base64-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap08/Base64_Ana.png" class="img-fluid figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-08-base64-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;8.2: Base64 passo a passo: os 3 bytes de <code>Ana</code> (65, 110 e 97) dão 24 bits; lidos em 4 grupos de 6 bits valem 16, 22, 57 e 33, que na tabela do Base64 correspondem a <code>Q</code>, <code>W</code>, <code>5</code> e <code>h</code>.
+</figcaption>
+</figure>
+</div>
+<p>O <em>header</em> e o <em>payload</em> são apenas codificados, não cifrados: qualquer pessoa os consegue ler, sem precisar de nenhuma chave. O que garante que ninguém consegue <strong>forjar</strong> um <em>token</em> válido é a assinatura: só quem conhece a chave secreta do servidor a consegue gerar corretamente, e qualquer alteração ao <em>header</em> ou ao <em>payload</em>, por mínima que seja, invalida a assinatura. O servidor, ao receber um pedido, recalcula a assinatura a partir do <em>header</em> e do <em>payload</em> recebidos, e compara-a com a que veio no <em>token</em>: se coincidirem, o conteúdo é de confiar, sem que o servidor tenha precisado de guardar, ele próprio, absolutamente nada (<a href="#fig-08-jwt-anatomia" class="quarto-xref">Figura&nbsp;<span>8.3</span></a>).</p>
 <div id="fig-08-jwt-anatomia" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-08-jwt-anatomia-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="../assets/images/capitulos/cap08/JWT_Anatomia.png" class="img-fluid figure-img" style="width:95.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-08-jwt-anatomia-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;8.1: As três partes de um JWT verdadeiro: o <em>header</em> e o <em>payload</em> são só codificados em <em>Base64URL</em> e qualquer pessoa os lê; a assinatura é calculada com a chave secreta do servidor e é ela que impede forjar o <em>token</em>.
+Figura&nbsp;8.3: As três partes de um JWT verdadeiro, todas em <em>Base64URL</em>: o <em>header</em> e o <em>payload</em> descodificam-se em JSON que qualquer pessoa lê; a assinatura descodifica-se em 32 bytes ilegíveis, calculados com a chave secreta do servidor, e é ela que impede forjar o <em>token</em>.
 </figcaption>
 </figure>
 </div>
-<p>No algoritmo <code>HS256</code>, a assinatura é um HMAC com SHA-256: um código calculado a partir do <em>header</em>, do <em>payload</em> e da chave secreta. Como a mesma chave serve para gerar e para verificar a assinatura, só o servidor a deve conhecer.</p>
+<p>No algoritmo <code>HS256</code>, a assinatura é um HMAC com SHA-256: um código de 32 bytes calculado a partir do <em>header</em> e do <em>payload</em> já codificados (<code>header.payload</code>) e da chave secreta. Esses 32 bytes também seguem no <em>token</em> em <em>Base64URL</em>; descodificados, não dão texto nenhum, só bytes em bruto. Como a mesma chave serve para gerar e para verificar a assinatura, só o servidor a deve conhecer.</p>
 </section>
 <section id="sec-08-ciclo-vida-token" class="level2" data-number="8.4">
 <h2 data-number="8.4" class="anchored" data-anchor-id="sec-08-ciclo-vida-token"><span class="header-section-number">8.4</span> O Ciclo de Vida de um <em>Token</em></h2>
-<p>Um <em>token</em> não substitui o momento de autenticação em si: substitui apenas a forma como o servidor se lembra dela (<a href="#fig-08-ciclo-token" class="quarto-xref">Figura&nbsp;<span>8.2</span></a>).</p>
+<p>Um <em>token</em> não substitui o momento de autenticação em si: substitui apenas a forma como o servidor se lembra dela (<a href="#fig-08-ciclo-token" class="quarto-xref">Figura&nbsp;<span>8.4</span></a>).</p>
 <dl>
 <dt><strong>Emissão</strong></dt>
 <dd>
@@ -377,7 +454,7 @@ O cliente autentica-se exatamente como no <a href="../capitulos/cap05.html">Cap�
 </dd>
 <dt><strong>Armazenamento e reenvio</strong></dt>
 <dd>
-Ao contrário do <code>JSESSIONID</code> (ver <a href="../capitulos/cap05.html">Capítulo 5</a>), que o <em>browser</em> reenvia automaticamente através de um <em>cookie</em>, o cliente é responsável por guardar o <em>token</em> recebido e por o reenviar, explicitamente, no cabeçalho <code>Authorization</code> de cada pedido seguinte. Num cliente em JavaScript, o <em>token</em> fica numa variável ou em <code>sessionStorage</code> (um espaço de armazenamento do <em>browser</em> que dura enquanto o separador estiver aberto). Qualquer JavaScript da página consegue ler o que lá estiver, incluindo código injetado por um ataque XSS (ver <a href="#sec-08-dom-view" class="quarto-xref"><span>Secção 8.8</span></a>): é mais uma razão para nunca inserir dados recebidos como HTML
+Ao contrário do <code>JSESSIONID</code> (ver <a href="../capitulos/cap05.html">Capítulo 5</a>), que o <em>browser</em> reenvia automaticamente através de um <em>cookie</em>, o cliente é responsável por guardar o <em>token</em> recebido e por o reenviar, explicitamente, no cabeçalho <code>Authorization</code> de cada pedido seguinte. Num cliente em JavaScript, o <em>token</em> fica numa variável ou em <code>sessionStorage</code> (um espaço de armazenamento do <em>browser</em> que dura enquanto o separador estiver aberto). Qualquer JavaScript da página consegue ler o que lá estiver, incluindo código malicioso injetado na página (ver <a href="#sec-08-seguranca" class="quarto-xref"><span>Secção 8.7</span></a>)
 </dd>
 <dt><strong>Validação</strong></dt>
 <dd>
@@ -394,18 +471,29 @@ A <em>claim</em> <code>exp</code> do <em>payload</em> define até quando o <em>t
 <img src="../assets/images/capitulos/cap08/Ciclo_Token.png" class="img-fluid figure-img" style="width:85.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-08-ciclo-token-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figura&nbsp;8.2: O ciclo de vida de um <em>token</em>: o <em>login</em> devolve um JWT, que o cliente reenvia em cada pedido; quando a <em>claim</em> <code>exp</code> passa, o servidor responde <code>401</code> e o cliente tem de fazer <em>login</em> de novo.
+Figura&nbsp;8.4: O ciclo de vida de um <em>token</em>: o <em>login</em> devolve um JWT, que o cliente reenvia em cada pedido; quando a <em>claim</em> <code>exp</code> passa, o servidor responde <code>401</code> e o cliente tem de fazer <em>login</em> de novo.
 </figcaption>
 </figure>
 </div>
-<p>Na emissão, com a biblioteca <a href="https://github.com/jwtk/jjwt">JJWT</a> apresentada mais à frente, gerar o <em>token</em> resume-se a indicar o utilizador, a expiração e a chave:</p>
+<p>Na emissão, o <em>token</em> raramente é construído à mão. A <a href="https://github.com/jwtk/jjwt">JJWT</a> é uma biblioteca Java, de código aberto, para criar e validar JWT; a sua classe principal, <code>Jwts</code>, tem um método para cada uma dessas tarefas: <code>Jwts.builder()</code> cria um <em>token</em> e <code>Jwts.parser()</code> valida-o. Gerar um <em>token</em> resume-se a indicar o utilizador, a expiração e a chave:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb2-1"><a href="#cb2-1"></a><span class="bu">String</span> token <span class="op">=</span> Jwts<span class="op">.</span><span class="fu">builder</span><span class="op">()</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a>        <span class="op">.</span><span class="fu">subject</span><span class="op">(</span>utilizador<span class="op">)</span>                                   <span class="co">// a claim "sub"</span></span>
-<span id="cb2-3"><a href="#cb2-3"></a>        <span class="op">.</span><span class="fu">issuedAt</span><span class="op">(</span><span class="kw">new</span> <span class="bu">Date</span><span class="op">())</span>                                  <span class="co">// a claim "iat"</span></span>
-<span id="cb2-4"><a href="#cb2-4"></a>        <span class="op">.</span><span class="fu">expiration</span><span class="op">(</span><span class="kw">new</span> <span class="bu">Date</span><span class="op">(</span><span class="bu">System</span><span class="op">.</span><span class="fu">currentTimeMillis</span><span class="op">()</span> <span class="op">+</span> <span class="dv">30</span> <span class="op">*</span> <span class="dv">60</span> <span class="op">*</span> <span class="dv">1000</span><span class="op">))</span> <span class="co">// "exp": daqui a 30 minutos</span></span>
-<span id="cb2-5"><a href="#cb2-5"></a>        <span class="op">.</span><span class="fu">signWith</span><span class="op">(</span>SECRET_KEY<span class="op">,</span> Jwts<span class="op">.</span><span class="fu">SIG</span><span class="op">.</span><span class="fu">HS256</span><span class="op">)</span>                  <span class="co">// a assinatura</span></span>
-<span id="cb2-6"><a href="#cb2-6"></a>        <span class="op">.</span><span class="fu">compact</span><span class="op">();</span>                                            <span class="co">// as três partes, separadas por pontos</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>O <em>servlet</em> de <em>login</em> devolve depois esta <em>string</em> no corpo da resposta, por exemplo dentro de um JSON como <code>{"token":"eyJhbGciOi..."}</code>. O código completo, com a classe <code>JwtUtil</code>, está no <a href="../capitulos/apendiceD5.html">Apêndice D5</a>.</p>
+<span id="cb2-2"><a href="#cb2-2"></a>        <span class="op">.</span><span class="fu">subject</span><span class="op">(</span>utilizador<span class="op">)</span>                  <span class="co">// claim "sub"</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a>        <span class="op">.</span><span class="fu">issuedAt</span><span class="op">(</span><span class="kw">new</span> <span class="bu">Date</span><span class="op">())</span>                 <span class="co">// claim "iat" (issued at): agora</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a>        <span class="op">.</span><span class="fu">expiration</span><span class="op">(</span><span class="kw">new</span> <span class="bu">Date</span><span class="op">(</span><span class="bu">System</span><span class="op">.</span><span class="fu">currentTimeMillis</span><span class="op">()</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a>                <span class="op">+</span> <span class="dv">30</span> <span class="op">*</span> <span class="dv">60</span> <span class="op">*</span> <span class="dv">1000</span><span class="op">))</span>            <span class="co">// "exp": daqui a 30 min (em ms)</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a>        <span class="op">.</span><span class="fu">signWith</span><span class="op">(</span>SECRET_KEY<span class="op">,</span> Jwts<span class="op">.</span><span class="fu">SIG</span><span class="op">.</span><span class="fu">HS256</span><span class="op">)</span> <span class="co">// a assinatura</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a>        <span class="op">.</span><span class="fu">compact</span><span class="op">();</span>                           <span class="co">// junta as três partes</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A <em>Servlet</em> de <em>login</em> devolve depois esta <em>string</em> no corpo da resposta, por exemplo dentro de um JSON como <code>{"token":"eyJhbGciOi..."}</code>. O código completo, com a classe <code>JwtUtil</code>, está no <a href="../capitulos/apendiceD5.html">Apêndice D5</a>.</p>
+<p>Repare-se nas unidades: o Java conta o tempo em milissegundos (<code>System.currentTimeMillis()</code>, <code>new Date(...)</code>), por isso 30 minutos são <code>30 * 60 * 1000</code>; a <em>claim</em> <code>exp</code>, pelo contrário, é contada em segundos. Não é preciso fazer a conversão à mão: a JJWT converte a data para segundos ao escrever a <em>claim</em>.</p>
+<p>A <code>SECRET_KEY</code> merece cuidado, porque é dela que depende toda a segurança: quem a tiver consegue forjar <em>tokens</em> de qualquer utilizador. Deve ser gerada uma vez, ao acaso, com pelo menos 32 bytes (256 bits) para o <code>HS256</code> (por exemplo, com <code>Jwts.SIG.HS256.key().build()</code> ou <code>openssl rand -base64 32</code>), e guardada fora do código, tipicamente numa variável de ambiente do servidor:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb3-1"><a href="#cb3-1"></a><span class="bu">SecretKey</span> SECRET_KEY <span class="op">=</span> Keys<span class="op">.</span><span class="fu">hmacShaKeyFor</span><span class="op">(</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a>        <span class="bu">System</span><span class="op">.</span><span class="fu">getenv</span><span class="op">(</span><span class="st">"JWT_SECRET"</span><span class="op">).</span><span class="fu">getBytes</span><span class="op">(</span>StandardCharsets<span class="op">.</span><span class="fu">UTF_8</span><span class="op">));</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Todos os servidores usam a mesma chave (ver <a href="#sec-08-escalabilidade-horizontal" class="quarto-xref"><span>Secção 8.5</span></a>), e ela nunca deve ir para um repositório Git nem chegar ao cliente.</p>
+<p>Uma <strong>variável de ambiente</strong> é um par nome = valor que o sistema operativo guarda fora de qualquer programa e entrega a cada programa quando ele arranca; o programa lê o valor pelo nome, sem que esse valor esteja escrito no código. Qualquer computador já tem várias, como <code>PATH</code> (as pastas onde o sistema procura os programas), <code>HOME</code> (a pasta do utilizador) ou <code>JAVA_HOME</code> (onde está instalado o Java, usada pelo próprio Tomcat). Para a chave do JWT, define-se a variável na máquina do servidor antes de arrancar a aplicação:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1"></a><span class="bu">export</span> <span class="va">JWT_SECRET</span><span class="op">=</span><span class="st">"k3J9...32-bytes-ou-mais-ao-acaso..."</span>   <span class="co"># macOS e Linux</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource bat number-lines code-with-copy"><code class="sourceCode dosbat"><span id="cb5-1"><a href="#cb5-1"></a><span class="bu">set</span> <span class="va">JWT_SECRET</span>=k3J9...32-bytes-ou-mais-ao-acaso...        :: Windows</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>No Tomcat, o sítio habitual para estas definições é o ficheiro <code>bin/setenv.sh</code> (ou <code>bin/setenv.bat</code>, no Windows), que o Tomcat executa sempre que arranca. No código Java, o valor lê-se com <code>System.getenv("JWT_SECRET")</code>, como no excerto acima.</p>
+<p>Esta solução tem três vantagens: o segredo não fica no código, e por isso quem vê o código ou o repositório não fica com ele; pode ser mudado sem recompilar a aplicação, bastando alterar a variável e reiniciar o servidor; e cada máquina pode ter o seu valor (a do programador, a de testes e a de produção), com todos os servidores de produção a receber o mesmo. Não é, contudo, um cofre: a variável fica visível para os programas dessa máquina e para quem a administra. Sistemas maiores recorrem a serviços próprios de gestão de segredos, que ficam fora do âmbito desta UC.</p>
 <p>A tabela seguinte resume a diferença entre os dois modelos de autenticação já vistos nesta UC:</p>
 <table class="caption-top table">
 <colgroup>
@@ -437,151 +525,214 @@ Figura&nbsp;8.2: O ciclo de vida de um <em>token</em>: o <em>login</em> devolve 
 <td>Verificação da assinatura, sem consultar nada</td>
 </tr>
 <tr class="even">
-<td>Várias instâncias do servidor</td>
+<td>Vários servidores</td>
 <td>Precisam de partilhar a sessão entre si</td>
-<td>Cada uma valida de forma independente</td>
+<td>Cada um valida de forma independente</td>
 </tr>
 </tbody>
 </table>
 <p>Na prática, um Filtro (ver <a href="../capitulos/cap06.html">Capítulo 6</a>) continua a ser o sítio natural onde esta validação acontece. Recorde-se o Filtro de autenticação baseado em sessão, já apresentado nesse capítulo:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">public</span> <span class="dt">void</span> <span class="fu">doFilter</span><span class="op">(</span>ServletRequest request<span class="op">,</span> ServletResponse response<span class="op">,</span> FilterChain chain<span class="op">)</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a>        <span class="kw">throws</span> <span class="bu">IOException</span><span class="op">,</span> ServletException <span class="op">{</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a></span>
-<span id="cb3-4"><a href="#cb3-4"></a>    HttpServletRequest req <span class="op">=</span> <span class="op">(</span>HttpServletRequest<span class="op">)</span> request<span class="op">;</span></span>
-<span id="cb3-5"><a href="#cb3-5"></a>    HttpServletResponse res <span class="op">=</span> <span class="op">(</span>HttpServletResponse<span class="op">)</span> response<span class="op">;</span></span>
-<span id="cb3-6"><a href="#cb3-6"></a></span>
-<span id="cb3-7"><a href="#cb3-7"></a>    HttpSession session <span class="op">=</span> req<span class="op">.</span><span class="fu">getSession</span><span class="op">(</span><span class="kw">false</span><span class="op">);</span></span>
-<span id="cb3-8"><a href="#cb3-8"></a></span>
-<span id="cb3-9"><a href="#cb3-9"></a>    <span class="cf">if</span> <span class="op">(</span>session <span class="op">==</span> <span class="kw">null</span> <span class="op">||</span> session<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"utilizador"</span><span class="op">)</span> <span class="op">==</span> <span class="kw">null</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb3-10"><a href="#cb3-10"></a>        res<span class="op">.</span><span class="fu">sendError</span><span class="op">(</span>HttpServletResponse<span class="op">.</span><span class="fu">SC_UNAUTHORIZED</span><span class="op">);</span> <span class="co">// 401</span></span>
-<span id="cb3-11"><a href="#cb3-11"></a>        <span class="cf">return</span><span class="op">;</span></span>
-<span id="cb3-12"><a href="#cb3-12"></a>    <span class="op">}</span></span>
-<span id="cb3-13"><a href="#cb3-13"></a></span>
-<span id="cb3-14"><a href="#cb3-14"></a>    chain<span class="op">.</span><span class="fu">doFilter</span><span class="op">(</span>request<span class="op">,</span> response<span class="op">);</span></span>
-<span id="cb3-15"><a href="#cb3-15"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>A versão equivalente, baseada num <em>token</em>, tem exatamente a mesma estrutura: só a verificação em si é que muda, de uma consulta à <code>HttpSession</code> para a validação da assinatura e da validade do <em>token</em>. Essa validação raramente é escrita de raiz: é código sensível, que envolve criptografia, e compensa deixar a cargo de uma biblioteca testada e mantida ativamente, em vez de reimplementada. A JJWT é uma das mais usadas em Java, e uma das mais cuidadas em segurança. Por exemplo, protege contra o ataque <code>"alg":"none"</code>: o atacante altera o <em>payload</em> (por exemplo, para <code>"role":"admin"</code>), escreve <code>"alg":"none"</code> no <em>header</em> e apaga a assinatura. Uma biblioteca descuidada leria o <em>header</em>, concluiria que não há assinatura para verificar e aceitaria o <em>token</em> forjado, dando ao atacante os privilégios que ele próprio escreveu. A JJWT rejeita <em>tokens</em> sem assinatura sempre que se lhe indica uma chave com <code>verifyWith()</code>:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">public</span> <span class="dt">void</span> <span class="fu">doFilter</span><span class="op">(</span>ServletRequest request<span class="op">,</span> ServletResponse response<span class="op">,</span> FilterChain chain<span class="op">)</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a>        <span class="kw">throws</span> <span class="bu">IOException</span><span class="op">,</span> ServletException <span class="op">{</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a></span>
-<span id="cb4-4"><a href="#cb4-4"></a>    HttpServletRequest req <span class="op">=</span> <span class="op">(</span>HttpServletRequest<span class="op">)</span> request<span class="op">;</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a>    HttpServletResponse res <span class="op">=</span> <span class="op">(</span>HttpServletResponse<span class="op">)</span> response<span class="op">;</span></span>
-<span id="cb4-6"><a href="#cb4-6"></a></span>
-<span id="cb4-7"><a href="#cb4-7"></a>    <span class="bu">String</span> authHeader <span class="op">=</span> req<span class="op">.</span><span class="fu">getHeader</span><span class="op">(</span><span class="st">"Authorization"</span><span class="op">);</span></span>
-<span id="cb4-8"><a href="#cb4-8"></a></span>
-<span id="cb4-9"><a href="#cb4-9"></a>    <span class="cf">if</span> <span class="op">(</span>authHeader <span class="op">==</span> <span class="kw">null</span> <span class="op">||</span> <span class="op">!</span>authHeader<span class="op">.</span><span class="fu">startsWith</span><span class="op">(</span><span class="st">"Bearer "</span><span class="op">))</span> <span class="op">{</span></span>
-<span id="cb4-10"><a href="#cb4-10"></a>        res<span class="op">.</span><span class="fu">sendError</span><span class="op">(</span>HttpServletResponse<span class="op">.</span><span class="fu">SC_UNAUTHORIZED</span><span class="op">);</span> <span class="co">// 401</span></span>
-<span id="cb4-11"><a href="#cb4-11"></a>        <span class="cf">return</span><span class="op">;</span></span>
-<span id="cb4-12"><a href="#cb4-12"></a>    <span class="op">}</span></span>
-<span id="cb4-13"><a href="#cb4-13"></a></span>
-<span id="cb4-14"><a href="#cb4-14"></a>    <span class="bu">String</span> token <span class="op">=</span> authHeader<span class="op">.</span><span class="fu">substring</span><span class="op">(</span><span class="st">"Bearer "</span><span class="op">.</span><span class="fu">length</span><span class="op">());</span></span>
-<span id="cb4-15"><a href="#cb4-15"></a></span>
-<span id="cb4-16"><a href="#cb4-16"></a>    <span class="cf">try</span> <span class="op">{</span></span>
-<span id="cb4-17"><a href="#cb4-17"></a>        Claims claims <span class="op">=</span> Jwts<span class="op">.</span><span class="fu">parser</span><span class="op">()</span></span>
-<span id="cb4-18"><a href="#cb4-18"></a>                <span class="op">.</span><span class="fu">verifyWith</span><span class="op">(</span>SECRET_KEY<span class="op">)</span>          <span class="co">// a chave secreta do servidor</span></span>
-<span id="cb4-19"><a href="#cb4-19"></a>                <span class="op">.</span><span class="fu">build</span><span class="op">()</span></span>
-<span id="cb4-20"><a href="#cb4-20"></a>                <span class="op">.</span><span class="fu">parseSignedClaims</span><span class="op">(</span>token<span class="op">)</span></span>
-<span id="cb4-21"><a href="#cb4-21"></a>                <span class="op">.</span><span class="fu">getPayload</span><span class="op">();</span></span>
-<span id="cb4-22"><a href="#cb4-22"></a></span>
-<span id="cb4-23"><a href="#cb4-23"></a>        req<span class="op">.</span><span class="fu">setAttribute</span><span class="op">(</span><span class="st">"utilizador"</span><span class="op">,</span> claims<span class="op">.</span><span class="fu">getSubject</span><span class="op">());</span></span>
-<span id="cb4-24"><a href="#cb4-24"></a>    <span class="op">}</span> <span class="cf">catch</span> <span class="op">(</span>JwtException e<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb4-25"><a href="#cb4-25"></a>        res<span class="op">.</span><span class="fu">sendError</span><span class="op">(</span>HttpServletResponse<span class="op">.</span><span class="fu">SC_UNAUTHORIZED</span><span class="op">);</span> <span class="co">// assinatura inválida ou token expirado</span></span>
-<span id="cb4-26"><a href="#cb4-26"></a>        <span class="cf">return</span><span class="op">;</span></span>
-<span id="cb4-27"><a href="#cb4-27"></a>    <span class="op">}</span></span>
-<span id="cb4-28"><a href="#cb4-28"></a></span>
-<span id="cb4-29"><a href="#cb4-29"></a>    chain<span class="op">.</span><span class="fu">doFilter</span><span class="op">(</span>request<span class="op">,</span> response<span class="op">);</span></span>
-<span id="cb4-30"><a href="#cb4-30"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">public</span> <span class="dt">void</span> <span class="fu">doFilter</span><span class="op">(</span>ServletRequest request<span class="op">,</span> ServletResponse response<span class="op">,</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a>                     FilterChain chain<span class="op">)</span> <span class="kw">throws</span> <span class="bu">IOException</span><span class="op">,</span> ServletException <span class="op">{</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a></span>
+<span id="cb6-4"><a href="#cb6-4"></a>    HttpServletRequest req <span class="op">=</span> <span class="op">(</span>HttpServletRequest<span class="op">)</span> request<span class="op">;</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a>    HttpServletResponse res <span class="op">=</span> <span class="op">(</span>HttpServletResponse<span class="op">)</span> response<span class="op">;</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a></span>
+<span id="cb6-7"><a href="#cb6-7"></a>    HttpSession session <span class="op">=</span> req<span class="op">.</span><span class="fu">getSession</span><span class="op">(</span><span class="kw">false</span><span class="op">);</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a></span>
+<span id="cb6-9"><a href="#cb6-9"></a>    <span class="cf">if</span> <span class="op">(</span>session <span class="op">==</span> <span class="kw">null</span> <span class="op">||</span> session<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"utilizador"</span><span class="op">)</span> <span class="op">==</span> <span class="kw">null</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a>        res<span class="op">.</span><span class="fu">sendError</span><span class="op">(</span>HttpServletResponse<span class="op">.</span><span class="fu">SC_UNAUTHORIZED</span><span class="op">);</span> <span class="co">// 401</span></span>
+<span id="cb6-11"><a href="#cb6-11"></a>        <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb6-12"><a href="#cb6-12"></a>    <span class="op">}</span></span>
+<span id="cb6-13"><a href="#cb6-13"></a></span>
+<span id="cb6-14"><a href="#cb6-14"></a>    chain<span class="op">.</span><span class="fu">doFilter</span><span class="op">(</span>request<span class="op">,</span> response<span class="op">);</span></span>
+<span id="cb6-15"><a href="#cb6-15"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A versão equivalente, baseada num <em>token</em>, tem exatamente a mesma estrutura: só a verificação em si é que muda, de uma consulta à <code>HttpSession</code> para a validação da assinatura e da validade do <em>token</em>. A <a href="#fig-08-filtros" class="quarto-xref">Figura&nbsp;<span>8.5</span></a> mostra os dois lado a lado.</p>
+<div id="fig-08-filtros" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-08-filtros-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap08/Filtros_Sessao_JWT.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-08-filtros-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;8.5: Filtro por sessão e Filtro por JWT: em ambos, uma verificação falhada termina o pedido com <code>401</code> e uma verificação bem-sucedida continua a cadeia com <code>chain.doFilter()</code>; o Filtro por JWT só tem mais um passo, porque primeiro confirma que o cabeçalho traz um <em>token</em> <code>Bearer</code> e depois valida-o.
+</figcaption>
+</figure>
+</div>
+<p>Essa validação raramente é escrita de raiz: é código sensível, que envolve criptografia, e compensa deixar a cargo de uma biblioteca testada e mantida ativamente, em vez de reimplementada. A JJWT, já usada na emissão, é uma das mais usadas em Java, e uma das mais cuidadas em segurança. Por exemplo, protege contra o ataque <code>"alg":"none"</code>: o atacante altera o <em>payload</em> (por exemplo, para <code>"role":"admin"</code>), escreve <code>"alg":"none"</code> no <em>header</em> e apaga a assinatura. Uma biblioteca descuidada leria o <em>header</em>, concluiria que não há assinatura para verificar e aceitaria o <em>token</em> forjado, dando ao atacante os privilégios que ele próprio escreveu. A JJWT rejeita <em>tokens</em> sem assinatura sempre que se lhe indica uma chave com <code>verifyWith()</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">public</span> <span class="dt">void</span> <span class="fu">doFilter</span><span class="op">(</span>ServletRequest request<span class="op">,</span> ServletResponse response<span class="op">,</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a>                     FilterChain chain<span class="op">)</span> <span class="kw">throws</span> <span class="bu">IOException</span><span class="op">,</span> ServletException <span class="op">{</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a></span>
+<span id="cb7-4"><a href="#cb7-4"></a>    HttpServletRequest req <span class="op">=</span> <span class="op">(</span>HttpServletRequest<span class="op">)</span> request<span class="op">;</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a>    HttpServletResponse res <span class="op">=</span> <span class="op">(</span>HttpServletResponse<span class="op">)</span> response<span class="op">;</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a></span>
+<span id="cb7-7"><a href="#cb7-7"></a>    <span class="bu">String</span> authHeader <span class="op">=</span> req<span class="op">.</span><span class="fu">getHeader</span><span class="op">(</span><span class="st">"Authorization"</span><span class="op">);</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a></span>
+<span id="cb7-9"><a href="#cb7-9"></a>    <span class="cf">if</span> <span class="op">(</span>authHeader <span class="op">==</span> <span class="kw">null</span> <span class="op">||</span> <span class="op">!</span>authHeader<span class="op">.</span><span class="fu">startsWith</span><span class="op">(</span><span class="st">"Bearer "</span><span class="op">))</span> <span class="op">{</span></span>
+<span id="cb7-10"><a href="#cb7-10"></a>        res<span class="op">.</span><span class="fu">sendError</span><span class="op">(</span>HttpServletResponse<span class="op">.</span><span class="fu">SC_UNAUTHORIZED</span><span class="op">);</span> <span class="co">// 401</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a>        <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb7-12"><a href="#cb7-12"></a>    <span class="op">}</span></span>
+<span id="cb7-13"><a href="#cb7-13"></a></span>
+<span id="cb7-14"><a href="#cb7-14"></a>    <span class="co">// tira "Bearer " (7 caracteres): fica só o token</span></span>
+<span id="cb7-15"><a href="#cb7-15"></a>    <span class="bu">String</span> token <span class="op">=</span> authHeader<span class="op">.</span><span class="fu">substring</span><span class="op">(</span><span class="st">"Bearer "</span><span class="op">.</span><span class="fu">length</span><span class="op">());</span></span>
+<span id="cb7-16"><a href="#cb7-16"></a></span>
+<span id="cb7-17"><a href="#cb7-17"></a>    <span class="cf">try</span> <span class="op">{</span></span>
+<span id="cb7-18"><a href="#cb7-18"></a>        Claims claims <span class="op">=</span> Jwts<span class="op">.</span><span class="fu">parser</span><span class="op">()</span></span>
+<span id="cb7-19"><a href="#cb7-19"></a>                <span class="op">.</span><span class="fu">verifyWith</span><span class="op">(</span>SECRET_KEY<span class="op">)</span>          <span class="co">// a chave secreta do servidor</span></span>
+<span id="cb7-20"><a href="#cb7-20"></a>                <span class="op">.</span><span class="fu">build</span><span class="op">()</span></span>
+<span id="cb7-21"><a href="#cb7-21"></a>                <span class="op">.</span><span class="fu">parseSignedClaims</span><span class="op">(</span>token<span class="op">)</span></span>
+<span id="cb7-22"><a href="#cb7-22"></a>                <span class="op">.</span><span class="fu">getPayload</span><span class="op">();</span></span>
+<span id="cb7-23"><a href="#cb7-23"></a></span>
+<span id="cb7-24"><a href="#cb7-24"></a>        req<span class="op">.</span><span class="fu">setAttribute</span><span class="op">(</span><span class="st">"utilizador"</span><span class="op">,</span> claims<span class="op">.</span><span class="fu">getSubject</span><span class="op">());</span></span>
+<span id="cb7-25"><a href="#cb7-25"></a>    <span class="op">}</span> <span class="cf">catch</span> <span class="op">(</span>JwtException e<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-26"><a href="#cb7-26"></a>        <span class="co">// assinatura inválida ou token expirado</span></span>
+<span id="cb7-27"><a href="#cb7-27"></a>        res<span class="op">.</span><span class="fu">sendError</span><span class="op">(</span>HttpServletResponse<span class="op">.</span><span class="fu">SC_UNAUTHORIZED</span><span class="op">);</span></span>
+<span id="cb7-28"><a href="#cb7-28"></a>        <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb7-29"><a href="#cb7-29"></a>    <span class="op">}</span></span>
+<span id="cb7-30"><a href="#cb7-30"></a></span>
+<span id="cb7-31"><a href="#cb7-31"></a>    chain<span class="op">.</span><span class="fu">doFilter</span><span class="op">(</span>request<span class="op">,</span> response<span class="op">);</span></span>
+<span id="cb7-32"><a href="#cb7-32"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>A chamada a <code>parseSignedClaims(token)</code> faz, internamente, tudo o que a validação exige: descodifica o <em>header</em> e o <em>payload</em>, recalcula a assinatura com <code>SECRET_KEY</code> e compara-a com a recebida, e verifica a <em>claim</em> <code>exp</code>; lança uma <code>JwtException</code> (ou uma das suas subclasses, como <code>ExpiredJwtException</code> para um <em>token</em> expirado, ou <code>SignatureException</code> para uma assinatura inválida) caso alguma destas verificações falhe. Note-se a semelhança estrutural com o Filtro baseado em sessão: em ambos os casos, uma condição de falha termina o pedido com <code>401</code>, e só se a autenticação for válida se continua a cadeia com <code>chain.doFilter()</code>.</p>
 </section>
 <section id="sec-08-escalabilidade-horizontal" class="level2" data-number="8.5">
-<h2 data-number="8.5" class="anchored" data-anchor-id="sec-08-escalabilidade-horizontal"><span class="header-section-number">8.5</span> Escalabilidade Horizontal</h2>
-<p>Escalar uma aplicação significa aumentar a sua capacidade de resposta a mais pedidos. Existem, tipicamente, duas formas de o fazer:</p>
+<h2 data-number="8.5" class="anchored" data-anchor-id="sec-08-escalabilidade-horizontal"><span class="header-section-number">8.5</span> A Grande Vantagem do JWT: Escalar Sem Estado</h2>
+<p>A escalabilidade horizontal (ver <a href="#sec-08-limitacoes-sessao" class="quarto-xref"><span>Secção 8.1</span></a>) só funciona sem complicações quando qualquer servidor pode responder a qualquer pedido, indiferentemente. Com sessões, isso obriga a <em>sticky sessions</em> ou a replicação; com autenticação baseada em JWT, acontece naturalmente: o estado viaja no próprio pedido, nenhum servidor precisa de saber nada sobre nenhum outro, e cada um valida o <em>token</em> recebido de forma completamente independente, com a mesma chave secreta partilhada por todos (<a href="#fig-08-servidores-sem-estado" class="quarto-xref">Figura&nbsp;<span>8.6</span></a>). É esta a principal vantagem do JWT sobre as sessões, e a razão pela qual as APIs REST usam <em>tokens</em> em vez de sessões.</p>
+<div id="fig-08-servidores-sem-estado" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-08-servidores-sem-estado-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap08/Servidores_Sem_Estado.png" class="img-fluid figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-08-servidores-sem-estado-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;8.6: Sem estado no servidor: o <em>login</em> é tratado pelo servidor A, o pedido seguinte cai no servidor B, e B responde <code>200</code> porque o próprio pedido traz o <em>token</em>.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="sec-08-microsservicos" class="level2" data-number="8.6">
+<h2 data-number="8.6" class="anchored" data-anchor-id="sec-08-microsservicos"><span class="header-section-number">8.6</span> JWT e Microsserviços</h2>
+<p>A mesma lógica aplica-se, com ainda mais força, a uma aplicação repartida em <strong>microsserviços</strong> (ver <a href="cap07.html#sec-07-monolito-microsservicos" class="quarto-xref"><span>Secção 7.12</span></a>): em vez de uma única aplicação web, há vários serviços pequenos, cada um uma aplicação web própria (por exemplo, um serviço de autenticação, um de livros e um de encomendas), instalados no mesmo servidor, em portas ou caminhos diferentes, ou em servidores diferentes.</p>
+<p>Com sessões, cada serviço teria as suas próprias sessões: o <code>JSESSIONID</code> criado pelo serviço de autenticação não significa nada para o serviço de livros, que teria de voltar a pedir as credenciais ou de perguntar ao primeiro, a cada pedido, quem é aquele utilizador. Com JWT, o cliente faz <em>login</em> uma única vez, no serviço de autenticação, e envia o mesmo <em>token</em> a todos os outros; cada serviço verifica a assinatura sozinho, sem perguntar nada a ninguém (<a href="#fig-08-microsservicos" class="quarto-xref">Figura&nbsp;<span>8.7</span></a>). Cada serviço pode, além disso, escalar independentemente dos restantes: se o serviço de livros for o mais procurado, acrescentam-se servidores só para ele.</p>
+<div id="fig-08-microsservicos" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-08-microsservicos-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap08/JWT_Microsservicos.png" class="img-fluid figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-08-microsservicos-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;8.7: JWT com microsserviços: o cliente faz <em>login</em> no serviço de autenticação, recebe o JWT e envia-o aos serviços de livros e de encomendas, que o validam sem consultar o serviço de autenticação.
+</figcaption>
+</figure>
+</div>
+<p>Há um cuidado a ter: com <code>HS256</code>, todos os serviços teriam de conhecer a chave secreta e, com ela, qualquer um poderia emitir <em>tokens</em>. Em sistemas com vários serviços usa-se, por isso, um algoritmo assimétrico (<code>RS256</code> ou <code>ES256</code>): só o serviço de autenticação assina, com uma chave privada, e os restantes apenas verificam, com a chave pública correspondente (ver <a href="apendiceB.html#sec-apB-assimetrico" class="quarto-xref"><span>Secção B.3</span></a>).</p>
+</section>
+<section id="sec-08-seguranca" class="level2" data-number="8.7">
+<h2 data-number="8.7" class="anchored" data-anchor-id="sec-08-seguranca"><span class="header-section-number">8.7</span> Cuidados de Segurança com <em>Tokens</em></h2>
+<p>Um JWT é uma credencial “de portador”: quem o tiver é tratado como o seu dono até ele expirar. A assinatura impede que seja <strong>forjado</strong>, mas não impede que seja <strong>roubado</strong>, e é contra o roubo que estão a maior parte dos cuidados.</p>
 <dl>
-<dt><strong>Escalabilidade vertical</strong></dt>
+<dt><strong>Interceção na rede</strong></dt>
 <dd>
-Aumentar os recursos (CPU, memória) da máquina existente: tem um limite físico e não resolve o problema de um único ponto de falha
+Sem HTTPS, o pedido viaja em claro, e quem estiver na mesma rede (num Wi-Fi público, por exemplo) consegue ler o cabeçalho <code>Authorization</code> e copiar o <em>token</em>. A defesa é usar HTTPS sempre, sem exceções
 </dd>
-<dt><strong>Escalabilidade horizontal</strong></dt>
+<dt><strong>XSS (<em>Cross-Site Scripting</em>)</strong></dt>
 <dd>
-Acrescentar mais instâncias do servidor, a correr em paralelo, distribuindo os pedidos entre elas, tipicamente através de um <em>load balancer</em>
+O atacante consegue pôr JavaScript seu a correr na página que outra pessoa está a ver. A forma mais comum é através de dados que a aplicação recebe de um utilizador e mostra a outros sem os tratar: um comentário, um nome, o título de um livro. Se a página inserir esse texto como HTML, o <em>browser</em> executa o código que lá vier escondido, com os mesmos direitos da própria página. Esse código pode, por exemplo, ler o <em>token</em> guardado em <code>sessionStorage</code> e enviá-lo ao atacante, que passa a fazer-se passar pela vítima (<a href="#fig-08-xss" class="quarto-xref">Figura&nbsp;<span>8.8</span></a>)
 </dd>
 </dl>
-<p>A escalabilidade horizontal só funciona sem complicações quando qualquer instância pode responder a qualquer pedido, indiferentemente, que é exatamente a propriedade que um serviço sem estado oferece. Com autenticação baseada em JWT, nenhuma instância precisa de saber nada sobre nenhuma outra: cada uma valida o <em>token</em> recebido de forma completamente independente, com a mesma chave secreta partilhada por todas. É esta independência entre instâncias que torna a arquitetura sem estado a base de qualquer sistema pensado para escalar.</p>
+<div id="fig-08-xss" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-08-xss-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap08/XSS_Roubo_Token.png" class="img-fluid figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-08-xss-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;8.8: Roubo de um <em>token</em> por XSS: o atacante publica um comentário com código escondido (1); o servidor guarda-o e devolve-o à vítima (2); a página mostra-o como HTML e o <em>browser</em> executa o código, que lê o <em>token</em> (3) e o envia ao atacante (4); o atacante usa-o nos seus pedidos (5), e o servidor não o distingue da vítima.
+</figcaption>
+</figure>
+</div>
+<p>O exemplo usa uma imagem com um endereço inválido (<code>&lt;img src=x onerror="..."&gt;</code>) e não uma etiqueta <code>&lt;script&gt;</code>: os <em>browsers</em> não executam um <code>&lt;script&gt;</code> inserido com <code>innerHTML</code>, mas executam o código do atributo <code>onerror</code> quando a imagem falha a carregar. A defesa é inserir sempre os dados recebidos como texto, com <code>textContent</code>, e nunca como HTML, com <code>innerHTML</code> (ver <a href="#sec-08-dom-view" class="quarto-xref"><span>Secção 8.10</span></a>): o comentário aparece tal como foi escrito e nada é executado.</p>
+<p>Além destes dois riscos, há um conjunto de boas práticas a seguir sempre que se usam <em>tokens</em>:</p>
+<ul>
+<li><strong>Expiração curta</strong>: a <em>claim</em> <code>exp</code> deve ser de minutos ou de poucas horas, para limitar o que um <em>token</em> roubado permite fazer;</li>
+<li><strong>Um JWT não se “desliga” antes de expirar</strong>: como o servidor não guarda nada, o <em>logout</em> limita-se a apagar o <em>token</em> do lado do cliente; para o revogar a sério seria preciso manter uma lista de <em>tokens</em> proibidos, ou seja, voltar a ter estado no servidor (mais uma razão para a expiração ser curta);</li>
+<li><strong>Nada de dados sensíveis no <em>payload</em></strong>: qualquer pessoa o lê, por isso nunca deve conter palavras-passe, NIF ou dados pessoais desnecessários;</li>
+<li><strong>Chave secreta longa, aleatória e fora do código</strong> (ver <a href="#sec-08-ciclo-vida-token" class="quarto-xref"><span>Secção 8.4</span></a>);</li>
+<li><strong>Impor o algoritmo na validação</strong>, com <code>verifyWith()</code>, contra o ataque <code>"alg":"none"</code> (ver <a href="#sec-08-ciclo-vida-token" class="quarto-xref"><span>Secção 8.4</span></a>);</li>
+<li><strong>Validar sempre no servidor, em cada pedido</strong>, a assinatura e a expiração: é o trabalho do Filtro.</li>
+</ul>
+<p>O <a href="../capitulos/apendiceB.html">Apêndice B</a> aprofunda estas questões, em particular a escolha entre guardar o <em>token</em> no <code>sessionStorage</code>/<code>localStorage</code> ou num <em>cookie</em> <code>HttpOnly</code> (ver <a href="apendiceB.html#sec-apB-armazenamento" class="quarto-xref"><span>Secção B.6</span></a>).</p>
 </section>
-<section id="sec-08-mvc-distribuido" class="level2" data-number="8.6">
-<h2 data-number="8.6" class="anchored" data-anchor-id="sec-08-mvc-distribuido"><span class="header-section-number">8.6</span> MVC Distribuído: o Padrão Divide-se entre Servidor e Cliente</h2>
+<section id="sec-08-mvc-distribuido" class="level2" data-number="8.8">
+<h2 data-number="8.8" class="anchored" data-anchor-id="sec-08-mvc-distribuido"><span class="header-section-number">8.8</span> MVC Distribuído: o Padrão Divide-se entre Servidor e Cliente</h2>
 <p>Numa aplicação orientada à apresentação, o padrão MVC (ver <a href="../capitulos/cap01.html">Capítulo 1</a>) vive inteiramente do lado do servidor: um componente funciona como Controller, e outro, responsável por gerar HTML, como View. Numa API REST, essa organização deixa de fazer sentido: o servidor já não gera HTML, e a View, tal como definida no MVC clássico, desaparece do lado do servidor.</p>
 <p>Do lado do servidor ficam apenas o Model (o acesso aos dados) e o Controller (o <em>endpoint</em> que recebe o pedido HTTP e devolve JSON). O papel de View passa integralmente para o cliente: é o código <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a>, a correr no <em>browser</em>, que interpreta o JSON recebido e manipula o <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model"><em>DOM</em></a> para o apresentar a quem usa a aplicação.</p>
 <p>Esta divisão pode ler-se como uma segunda aplicação do mesmo padrão, agora do lado do cliente: o JavaScript que trata a resposta e atualiza a página funciona, ele próprio, como Controller (decide o que fazer com a resposta recebida) e como View (gera o HTML mostrado); o JSON devolvido pela API é o Model, mantido no servidor e sincronizado a cada pedido <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API"><code>fetch()</code></a>.</p>
 <p>É esta a razão pela qual um <em>front-office</em> em JavaScript ligado a uma API REST não é uma alternativa ao MVC, mas sim o mesmo padrão distribuído por duas máquinas em vez de uma.</p>
 </section>
-<section id="sec-08-fetch-json" class="level2" data-number="8.7">
-<h2 data-number="8.7" class="anchored" data-anchor-id="sec-08-fetch-json"><span class="header-section-number">8.7</span> Consumir uma API REST em JavaScript: <code>fetch()</code> e JSON</h2>
+<section id="sec-08-fetch-json" class="level2" data-number="8.9">
+<h2 data-number="8.9" class="anchored" data-anchor-id="sec-08-fetch-json"><span class="header-section-number">8.9</span> Consumir uma API REST em JavaScript: <code>fetch()</code> e JSON</h2>
 <p>A <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">Fetch API</a> é a forma normalizada de um <em>browser</em> emitir pedidos HTTP a partir de JavaScript, sem recarregar a página. Um pedido simples, sem autenticação, tem esta forma:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource javascript number-lines code-with-copy"><code class="sourceCode javascript"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">fetch</span>(<span class="st">"/livros/12"</span>)</span>
-<span id="cb5-2"><a href="#cb5-2"></a>  <span class="op">.</span><span class="fu">then</span>(response <span class="kw">=&gt;</span> response<span class="op">.</span><span class="fu">json</span>())</span>
-<span id="cb5-3"><a href="#cb5-3"></a>  <span class="op">.</span><span class="fu">then</span>(data <span class="kw">=&gt;</span> {</span>
-<span id="cb5-4"><a href="#cb5-4"></a>    <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(data<span class="op">.</span><span class="at">titulo</span>)<span class="op">;</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a>  })<span class="op">;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource javascript number-lines code-with-copy"><code class="sourceCode javascript"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">fetch</span>(<span class="st">"/livros/12"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a>  <span class="op">.</span><span class="fu">then</span>(response <span class="kw">=&gt;</span> response<span class="op">.</span><span class="fu">json</span>())</span>
+<span id="cb8-3"><a href="#cb8-3"></a>  <span class="op">.</span><span class="fu">then</span>(data <span class="kw">=&gt;</span> {</span>
+<span id="cb8-4"><a href="#cb8-4"></a>    <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(data<span class="op">.</span><span class="at">titulo</span>)<span class="op">;</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a>  })<span class="op">;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><code>fetch()</code> devolve uma <em>promise</em>: um valor que ainda não está disponível, mas que o será, mais tarde, quando o pedido terminar. O primeiro <code>.then()</code> recebe a resposta HTTP em bruto e converte o seu corpo, em texto JSON, para um objeto JavaScript comum através de <code>response.json()</code>. Este passo também devolve uma <em>promise</em>, por isso encadeia-se com um segundo <code>.then()</code>, já com os dados prontos a usar.</p>
 <p>Para um pedido autenticado (ver <a href="#sec-08-authorization-header" class="quarto-xref"><span>Secção 8.2</span></a> e <a href="#sec-08-jwt" class="quarto-xref"><span>Secção 8.3</span></a>), o <em>token</em> viaja num cabeçalho, tal como qualquer outro pedido HTTP autenticado:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource javascript number-lines code-with-copy"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">fetch</span>(<span class="st">"/livros"</span><span class="op">,</span> {</span>
-<span id="cb6-2"><a href="#cb6-2"></a>  <span class="dt">headers</span><span class="op">:</span> { <span class="st">"Authorization"</span><span class="op">:</span> <span class="st">"Bearer "</span> <span class="op">+</span> token }</span>
-<span id="cb6-3"><a href="#cb6-3"></a>})</span>
-<span id="cb6-4"><a href="#cb6-4"></a>  <span class="op">.</span><span class="fu">then</span>(response <span class="kw">=&gt;</span> response<span class="op">.</span><span class="fu">json</span>())</span>
-<span id="cb6-5"><a href="#cb6-5"></a>  <span class="op">.</span><span class="fu">then</span>(data <span class="kw">=&gt;</span> {</span>
-<span id="cb6-6"><a href="#cb6-6"></a>    <span class="co">// ...</span></span>
-<span id="cb6-7"><a href="#cb6-7"></a>  })<span class="op">;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource javascript number-lines code-with-copy"><code class="sourceCode javascript"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">fetch</span>(<span class="st">"/livros"</span><span class="op">,</span> {</span>
+<span id="cb9-2"><a href="#cb9-2"></a>  <span class="dt">headers</span><span class="op">:</span> { <span class="st">"Authorization"</span><span class="op">:</span> <span class="st">"Bearer "</span> <span class="op">+</span> token }</span>
+<span id="cb9-3"><a href="#cb9-3"></a>})</span>
+<span id="cb9-4"><a href="#cb9-4"></a>  <span class="op">.</span><span class="fu">then</span>(response <span class="kw">=&gt;</span> response<span class="op">.</span><span class="fu">json</span>())</span>
+<span id="cb9-5"><a href="#cb9-5"></a>  <span class="op">.</span><span class="fu">then</span>(data <span class="kw">=&gt;</span> {</span>
+<span id="cb9-6"><a href="#cb9-6"></a>    <span class="co">// ...</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a>  })<span class="op">;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Um <code>fetch()</code> com um <em>token</em> expirado ou inválido não falha: o pedido chega ao servidor e volta com o estado <code>401</code>. Cabe ao cliente verificar o estado da resposta antes de usar o corpo, através de <code>response.ok</code> (verdadeiro para os estados <code>2xx</code>), e pedir um novo <em>login</em> quando o servidor recusa o <em>token</em>:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode numberSource javascript number-lines code-with-copy"><code class="sourceCode javascript"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">fetch</span>(<span class="st">"/livros"</span><span class="op">,</span> {</span>
-<span id="cb7-2"><a href="#cb7-2"></a>  <span class="dt">headers</span><span class="op">:</span> { <span class="st">"Authorization"</span><span class="op">:</span> <span class="st">"Bearer "</span> <span class="op">+</span> token }</span>
-<span id="cb7-3"><a href="#cb7-3"></a>})</span>
-<span id="cb7-4"><a href="#cb7-4"></a>  <span class="op">.</span><span class="fu">then</span>(response <span class="kw">=&gt;</span> {</span>
-<span id="cb7-5"><a href="#cb7-5"></a>    <span class="cf">if</span> (response<span class="op">.</span><span class="at">status</span> <span class="op">===</span> <span class="dv">401</span>) {</span>
-<span id="cb7-6"><a href="#cb7-6"></a>      <span class="bu">window</span><span class="op">.</span><span class="at">location</span><span class="op">.</span><span class="at">href</span> <span class="op">=</span> <span class="st">"/login.html"</span><span class="op">;</span>   <span class="co">// token expirado ou inválido: novo login</span></span>
-<span id="cb7-7"><a href="#cb7-7"></a>      <span class="cf">return</span><span class="op">;</span></span>
-<span id="cb7-8"><a href="#cb7-8"></a>    }</span>
-<span id="cb7-9"><a href="#cb7-9"></a>    <span class="cf">if</span> (<span class="op">!</span>response<span class="op">.</span><span class="at">ok</span>) {</span>
-<span id="cb7-10"><a href="#cb7-10"></a>      <span class="cf">throw</span> <span class="kw">new</span> <span class="bu">Error</span>(<span class="st">"Erro "</span> <span class="op">+</span> response<span class="op">.</span><span class="at">status</span>)<span class="op">;</span></span>
-<span id="cb7-11"><a href="#cb7-11"></a>    }</span>
-<span id="cb7-12"><a href="#cb7-12"></a>    <span class="cf">return</span> response<span class="op">.</span><span class="fu">json</span>()<span class="op">;</span></span>
-<span id="cb7-13"><a href="#cb7-13"></a>  })</span>
-<span id="cb7-14"><a href="#cb7-14"></a>  <span class="op">.</span><span class="fu">then</span>(livros <span class="kw">=&gt;</span> {</span>
-<span id="cb7-15"><a href="#cb7-15"></a>    <span class="co">// ... mostrar os livros</span></span>
-<span id="cb7-16"><a href="#cb7-16"></a>  })<span class="op">;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource javascript number-lines code-with-copy"><code class="sourceCode javascript"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">fetch</span>(<span class="st">"/livros"</span><span class="op">,</span> {</span>
+<span id="cb10-2"><a href="#cb10-2"></a>  <span class="dt">headers</span><span class="op">:</span> { <span class="st">"Authorization"</span><span class="op">:</span> <span class="st">"Bearer "</span> <span class="op">+</span> token }</span>
+<span id="cb10-3"><a href="#cb10-3"></a>})</span>
+<span id="cb10-4"><a href="#cb10-4"></a>  <span class="op">.</span><span class="fu">then</span>(response <span class="kw">=&gt;</span> {</span>
+<span id="cb10-5"><a href="#cb10-5"></a>    <span class="cf">if</span> (response<span class="op">.</span><span class="at">status</span> <span class="op">===</span> <span class="dv">401</span>) {</span>
+<span id="cb10-6"><a href="#cb10-6"></a>      <span class="bu">window</span><span class="op">.</span><span class="at">location</span><span class="op">.</span><span class="at">href</span> <span class="op">=</span> <span class="st">"/login.html"</span><span class="op">;</span>   <span class="co">// token inválido: novo login</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a>      <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb10-8"><a href="#cb10-8"></a>    }</span>
+<span id="cb10-9"><a href="#cb10-9"></a>    <span class="cf">if</span> (<span class="op">!</span>response<span class="op">.</span><span class="at">ok</span>) {</span>
+<span id="cb10-10"><a href="#cb10-10"></a>      <span class="cf">throw</span> <span class="kw">new</span> <span class="bu">Error</span>(<span class="st">"Erro "</span> <span class="op">+</span> response<span class="op">.</span><span class="at">status</span>)<span class="op">;</span></span>
+<span id="cb10-11"><a href="#cb10-11"></a>    }</span>
+<span id="cb10-12"><a href="#cb10-12"></a>    <span class="cf">return</span> response<span class="op">.</span><span class="fu">json</span>()<span class="op">;</span></span>
+<span id="cb10-13"><a href="#cb10-13"></a>  })</span>
+<span id="cb10-14"><a href="#cb10-14"></a>  <span class="op">.</span><span class="fu">then</span>(livros <span class="kw">=&gt;</span> {</span>
+<span id="cb10-15"><a href="#cb10-15"></a>    <span class="co">// ... mostrar os livros</span></span>
+<span id="cb10-16"><a href="#cb10-16"></a>  })<span class="op">;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Um pedido <code>POST</code>, a criar um recurso, transporta o corpo já em JSON, indicando explicitamente esse formato no cabeçalho <code>Content-Type</code> (ver <a href="../capitulos/cap04.html">Capítulo 4</a>):</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode numberSource javascript number-lines code-with-copy"><code class="sourceCode javascript"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">fetch</span>(<span class="st">"/livros"</span><span class="op">,</span> {</span>
-<span id="cb8-2"><a href="#cb8-2"></a>  <span class="dt">method</span><span class="op">:</span> <span class="st">"POST"</span><span class="op">,</span></span>
-<span id="cb8-3"><a href="#cb8-3"></a>  <span class="dt">headers</span><span class="op">:</span> { <span class="st">"Content-Type"</span><span class="op">:</span> <span class="st">"application/json"</span> }<span class="op">,</span></span>
-<span id="cb8-4"><a href="#cb8-4"></a>  <span class="dt">body</span><span class="op">:</span> <span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>({ <span class="dt">titulo</span><span class="op">:</span> <span class="st">"Os Maias"</span><span class="op">,</span> <span class="dt">autor</span><span class="op">:</span> <span class="st">"Eça de Queirós"</span> })</span>
-<span id="cb8-5"><a href="#cb8-5"></a>})</span>
-<span id="cb8-6"><a href="#cb8-6"></a>  <span class="op">.</span><span class="fu">then</span>(response <span class="kw">=&gt;</span> response<span class="op">.</span><span class="fu">json</span>())</span>
-<span id="cb8-7"><a href="#cb8-7"></a>  <span class="op">.</span><span class="fu">then</span>(data <span class="kw">=&gt;</span> {</span>
-<span id="cb8-8"><a href="#cb8-8"></a>    <span class="co">// ...</span></span>
-<span id="cb8-9"><a href="#cb8-9"></a>  })<span class="op">;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource javascript number-lines code-with-copy"><code class="sourceCode javascript"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">fetch</span>(<span class="st">"/livros"</span><span class="op">,</span> {</span>
+<span id="cb11-2"><a href="#cb11-2"></a>  <span class="dt">method</span><span class="op">:</span> <span class="st">"POST"</span><span class="op">,</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a>  <span class="dt">headers</span><span class="op">:</span> { <span class="st">"Content-Type"</span><span class="op">:</span> <span class="st">"application/json"</span> }<span class="op">,</span></span>
+<span id="cb11-4"><a href="#cb11-4"></a>  <span class="dt">body</span><span class="op">:</span> <span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>({ <span class="dt">titulo</span><span class="op">:</span> <span class="st">"Os Maias"</span><span class="op">,</span> <span class="dt">autor</span><span class="op">:</span> <span class="st">"Eça de Queirós"</span> })</span>
+<span id="cb11-5"><a href="#cb11-5"></a>})</span>
+<span id="cb11-6"><a href="#cb11-6"></a>  <span class="op">.</span><span class="fu">then</span>(response <span class="kw">=&gt;</span> response<span class="op">.</span><span class="fu">json</span>())</span>
+<span id="cb11-7"><a href="#cb11-7"></a>  <span class="op">.</span><span class="fu">then</span>(data <span class="kw">=&gt;</span> {</span>
+<span id="cb11-8"><a href="#cb11-8"></a>    <span class="co">// ...</span></span>
+<span id="cb11-9"><a href="#cb11-9"></a>  })<span class="op">;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="sec-08-dom-view" class="level2" data-number="8.8">
-<h2 data-number="8.8" class="anchored" data-anchor-id="sec-08-dom-view"><span class="header-section-number">8.8</span> O DOM como “View” do <em>Browser</em></h2>
-<p>O <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model"><em>DOM</em></a> (<em>Document Object Model</em>) é a representação, em memória, da página HTML que o <em>browser</em> está a mostrar: uma árvore de objetos, um por cada elemento da página, que o JavaScript pode ler e alterar diretamente. É através do DOM que o JavaScript desempenha o papel de View (ver <a href="#sec-08-mvc-distribuido" class="quarto-xref"><span>Secção 8.6</span></a>): não gera HTML como texto, como faz uma JSP (ver <a href="../capitulos/cap05.html">Capítulo 5</a>), mas localiza elementos já existentes na página e atualiza o seu conteúdo.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode numberSource javascript number-lines code-with-copy"><code class="sourceCode javascript"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">fetch</span>(<span class="st">"/livros/12"</span>)</span>
-<span id="cb9-2"><a href="#cb9-2"></a>  <span class="op">.</span><span class="fu">then</span>(response <span class="kw">=&gt;</span> response<span class="op">.</span><span class="fu">json</span>())</span>
-<span id="cb9-3"><a href="#cb9-3"></a>  <span class="op">.</span><span class="fu">then</span>(data <span class="kw">=&gt;</span> {</span>
-<span id="cb9-4"><a href="#cb9-4"></a>    <span class="bu">document</span><span class="op">.</span><span class="fu">querySelector</span>(<span class="st">"#titulo"</span>)<span class="op">.</span><span class="at">textContent</span> <span class="op">=</span> data<span class="op">.</span><span class="at">titulo</span><span class="op">;</span></span>
-<span id="cb9-5"><a href="#cb9-5"></a>  })<span class="op">;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="sec-08-dom-view" class="level2" data-number="8.10">
+<h2 data-number="8.10" class="anchored" data-anchor-id="sec-08-dom-view"><span class="header-section-number">8.10</span> O DOM como “View” do <em>Browser</em></h2>
+<p>O <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model"><em>DOM</em></a> (<em>Document Object Model</em>) é a representação, em memória, da página HTML que o <em>browser</em> está a mostrar: uma árvore de objetos, um por cada elemento da página, que o JavaScript pode ler e alterar diretamente. É através do DOM que o JavaScript desempenha o papel de View (ver <a href="#sec-08-mvc-distribuido" class="quarto-xref"><span>Secção 8.8</span></a>): não gera HTML como texto, como faz uma JSP (ver <a href="../capitulos/cap05.html">Capítulo 5</a>), mas localiza elementos já existentes na página e atualiza o seu conteúdo.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource javascript number-lines code-with-copy"><code class="sourceCode javascript"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">fetch</span>(<span class="st">"/livros/12"</span>)</span>
+<span id="cb12-2"><a href="#cb12-2"></a>  <span class="op">.</span><span class="fu">then</span>(response <span class="kw">=&gt;</span> response<span class="op">.</span><span class="fu">json</span>())</span>
+<span id="cb12-3"><a href="#cb12-3"></a>  <span class="op">.</span><span class="fu">then</span>(data <span class="kw">=&gt;</span> {</span>
+<span id="cb12-4"><a href="#cb12-4"></a>    <span class="bu">document</span><span class="op">.</span><span class="fu">querySelector</span>(<span class="st">"#titulo"</span>)<span class="op">.</span><span class="at">textContent</span> <span class="op">=</span> data<span class="op">.</span><span class="at">titulo</span><span class="op">;</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a>  })<span class="op">;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><code>document.querySelector(seletor)</code> localiza o primeiro elemento da página que corresponda ao seletor indicado (aqui, o elemento com <code>id="titulo"</code>), devolvendo uma referência a esse elemento do DOM; <code>textContent</code> é a propriedade que define o texto mostrado dentro dele. O mesmo princípio aplica-se a uma lista de resultados: para cada item devolvido pela API, cria-se um novo elemento HTML e insere-se na página.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource javascript number-lines code-with-copy"><code class="sourceCode javascript"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">fetch</span>(<span class="st">"/livros"</span>)</span>
-<span id="cb10-2"><a href="#cb10-2"></a>  <span class="op">.</span><span class="fu">then</span>(response <span class="kw">=&gt;</span> response<span class="op">.</span><span class="fu">json</span>())</span>
-<span id="cb10-3"><a href="#cb10-3"></a>  <span class="op">.</span><span class="fu">then</span>(livros <span class="kw">=&gt;</span> {</span>
-<span id="cb10-4"><a href="#cb10-4"></a>    <span class="kw">const</span> tabela <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">querySelector</span>(<span class="st">"#tabela-livros"</span>)<span class="op">;</span></span>
-<span id="cb10-5"><a href="#cb10-5"></a>    livros<span class="op">.</span><span class="fu">forEach</span>(livro <span class="kw">=&gt;</span> {</span>
-<span id="cb10-6"><a href="#cb10-6"></a>      <span class="kw">const</span> linha <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">createElement</span>(<span class="st">"tr"</span>)<span class="op">;</span></span>
-<span id="cb10-7"><a href="#cb10-7"></a>      <span class="cf">for</span> (<span class="kw">const</span> valor <span class="kw">of</span> [livro<span class="op">.</span><span class="at">id</span><span class="op">,</span> livro<span class="op">.</span><span class="at">titulo</span><span class="op">,</span> livro<span class="op">.</span><span class="at">autor</span>]) {</span>
-<span id="cb10-8"><a href="#cb10-8"></a>        <span class="kw">const</span> celula <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">createElement</span>(<span class="st">"td"</span>)<span class="op">;</span></span>
-<span id="cb10-9"><a href="#cb10-9"></a>        celula<span class="op">.</span><span class="at">textContent</span> <span class="op">=</span> valor<span class="op">;</span>     <span class="co">// texto, nunca HTML</span></span>
-<span id="cb10-10"><a href="#cb10-10"></a>        linha<span class="op">.</span><span class="fu">appendChild</span>(celula)<span class="op">;</span></span>
-<span id="cb10-11"><a href="#cb10-11"></a>      }</span>
-<span id="cb10-12"><a href="#cb10-12"></a>      tabela<span class="op">.</span><span class="fu">appendChild</span>(linha)<span class="op">;</span></span>
-<span id="cb10-13"><a href="#cb10-13"></a>    })<span class="op">;</span></span>
-<span id="cb10-14"><a href="#cb10-14"></a>  })<span class="op">;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource javascript number-lines code-with-copy"><code class="sourceCode javascript"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">fetch</span>(<span class="st">"/livros"</span>)</span>
+<span id="cb13-2"><a href="#cb13-2"></a>  <span class="op">.</span><span class="fu">then</span>(response <span class="kw">=&gt;</span> response<span class="op">.</span><span class="fu">json</span>())</span>
+<span id="cb13-3"><a href="#cb13-3"></a>  <span class="op">.</span><span class="fu">then</span>(livros <span class="kw">=&gt;</span> {</span>
+<span id="cb13-4"><a href="#cb13-4"></a>    <span class="kw">const</span> tabela <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">querySelector</span>(<span class="st">"#tabela-livros"</span>)<span class="op">;</span></span>
+<span id="cb13-5"><a href="#cb13-5"></a>    livros<span class="op">.</span><span class="fu">forEach</span>(livro <span class="kw">=&gt;</span> {</span>
+<span id="cb13-6"><a href="#cb13-6"></a>      <span class="kw">const</span> linha <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">createElement</span>(<span class="st">"tr"</span>)<span class="op">;</span></span>
+<span id="cb13-7"><a href="#cb13-7"></a>      <span class="cf">for</span> (<span class="kw">const</span> valor <span class="kw">of</span> [livro<span class="op">.</span><span class="at">id</span><span class="op">,</span> livro<span class="op">.</span><span class="at">titulo</span><span class="op">,</span> livro<span class="op">.</span><span class="at">autor</span>]) {</span>
+<span id="cb13-8"><a href="#cb13-8"></a>        <span class="kw">const</span> celula <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">createElement</span>(<span class="st">"td"</span>)<span class="op">;</span></span>
+<span id="cb13-9"><a href="#cb13-9"></a>        celula<span class="op">.</span><span class="at">textContent</span> <span class="op">=</span> valor<span class="op">;</span>     <span class="co">// texto, nunca HTML</span></span>
+<span id="cb13-10"><a href="#cb13-10"></a>        linha<span class="op">.</span><span class="fu">appendChild</span>(celula)<span class="op">;</span></span>
+<span id="cb13-11"><a href="#cb13-11"></a>      }</span>
+<span id="cb13-12"><a href="#cb13-12"></a>      tabela<span class="op">.</span><span class="fu">appendChild</span>(linha)<span class="op">;</span></span>
+<span id="cb13-13"><a href="#cb13-13"></a>    })<span class="op">;</span></span>
+<span id="cb13-14"><a href="#cb13-14"></a>  })<span class="op">;</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Cada célula é preenchida com <code>textContent</code>, e não com <code>innerHTML</code>. A diferença importa: <code>innerHTML</code> interpreta o valor como HTML, e um título de livro vindo do servidor que contivesse, por exemplo, <code>&lt;img src=x onerror="..."&gt;</code> faria o <em>browser</em> executar esse JavaScript na página (um ataque de <em>Cross-Site Scripting</em>, ou XSS). Com <code>textContent</code>, o valor é sempre inserido como texto, seja qual for o seu conteúdo.</p>
 <p>Este padrão, pedir dados a uma API REST com <code>fetch()</code> e usar o DOM para os mostrar, é a base de qualquer <em>front-office</em> em JavaScript ligado a um serviço REST, independentemente da aplicação concreta ou dos dados envolvidos.</p>
 

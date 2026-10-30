@@ -533,7 +533,7 @@ Figura&nbsp;6.3: Sem Filtro, cada Servlet acumula autenticação, logging, valid
 </section>
 <section id="sec-06-preparacao-sem-estado" class="level2" data-number="6.9">
 <h2 data-number="6.9" class="anchored" data-anchor-id="sec-06-preparacao-sem-estado"><span class="header-section-number">6.9</span> Preparação para uma Segurança Sem Estado</h2>
-<p>O modelo apresentado neste capítulo assenta inteiramente em sessão: o servidor guarda o estado do utilizador autenticado (<code>HttpSession</code>), e o Filtro verifica essa sessão em cada pedido. Este modelo tem uma limitação: exige que o servidor mantenha memória de cada utilizador, o que se torna problemático assim que existe mais do que uma instância do servidor (ver <a href="../capitulos/cap07.html">Capítulo 7</a>).</p>
+<p>O modelo apresentado neste capítulo assenta inteiramente em sessão: o servidor guarda o estado do utilizador autenticado (<code>HttpSession</code>), e o Filtro verifica essa sessão em cada pedido. Este modelo tem uma limitação: exige que o servidor mantenha memória de cada utilizador, o que se torna problemático assim que existe mais do que um servidor a atender pedidos (ver <a href="../capitulos/cap07.html">Capítulo 7</a>).</p>
 <p>A alternativa é a autenticação baseada em <em>token</em>: em vez de o servidor guardar sessão nenhuma, o próprio pedido transporta, em cada chamada, toda a informação necessária para se autenticar. Esta mudança, de um modelo com estado (<em>stateful</em>) para um modelo sem estado (<em>stateless</em>), é o tema dos capítulos seguintes.</p>
 
 

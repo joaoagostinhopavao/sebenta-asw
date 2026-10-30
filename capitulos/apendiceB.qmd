@@ -17,7 +17,7 @@ Essa chave nunca é gerada no cliente, nem alguma vez viaja até ele: é criada 
 
 ![Num esquema simétrico (HMAC), o mesmo servidor guarda a única chave secreta que existe, e usa-a tanto para assinar o token no login como para o verificar em cada pedido seguinte.](../assets/images/capitulos/apendiceB/JWT_HMAC.png){#fig-apB-hmac width="65%"}
 
-Isto funciona bem exatamente na situação apresentada ao longo desta UC: **um único servidor** (ou várias instâncias desse mesmo servidor, todas com acesso à mesma chave secreta, ver @sec-08-escalabilidade-horizontal) é, simultaneamente, quem emite os *tokens* e quem os valida. A chave nunca sai desse perímetro de confiança.
+Isto funciona bem exatamente na situação apresentada ao longo desta UC: **um único servidor** (ou vários servidores com a mesma aplicação, todos com acesso à mesma chave secreta, ver @sec-08-escalabilidade-horizontal) é, simultaneamente, quem emite os *tokens* e quem os valida. A chave nunca sai desse perímetro de confiança.
 
 O inconveniente do HMAC aparece quando esse perímetro deixa de fazer sentido: se um sistema externo — que não deveria ter autoridade para **emitir** *tokens* válidos — precisasse de os **validar**, teria de receber a mesma chave secreta usada para os assinar. Nesse momento, deixa de ser só um verificador: passa a ser também capaz de forjar *tokens* novos, válidos, para qualquer utilizador.
 

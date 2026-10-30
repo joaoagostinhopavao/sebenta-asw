@@ -211,6 +211,6 @@ A diferença resume-se a uma frase: numa aplicação Web tradicional, uma falha 
 
 ## Preparação para uma Segurança Sem Estado {#sec-06-preparacao-sem-estado}
 
-O modelo apresentado neste capítulo assenta inteiramente em sessão: o servidor guarda o estado do utilizador autenticado (`HttpSession`), e o Filtro verifica essa sessão em cada pedido. Este modelo tem uma limitação: exige que o servidor mantenha memória de cada utilizador, o que se torna problemático assim que existe mais do que uma instância do servidor (ver [Capítulo 7](cap07.qmd)).
+O modelo apresentado neste capítulo assenta inteiramente em sessão: o servidor guarda o estado do utilizador autenticado (`HttpSession`), e o Filtro verifica essa sessão em cada pedido. Este modelo tem uma limitação: exige que o servidor mantenha memória de cada utilizador, o que se torna problemático assim que existe mais do que um servidor a atender pedidos (ver [Capítulo 7](cap07.qmd)).
 
 A alternativa é a autenticação baseada em *token*: em vez de o servidor guardar sessão nenhuma, o próprio pedido transporta, em cada chamada, toda a informação necessária para se autenticar. Esta mudança, de um modelo com estado (*stateful*) para um modelo sem estado (*stateless*), é o tema dos capítulos seguintes.

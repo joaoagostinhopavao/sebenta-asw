@@ -41,7 +41,7 @@ public void doFilter(ServletRequest request, ServletResponse response, FilterCha
     if (session != null && session.getAttribute("UserName") != null) {
         chain.doFilter(request, response);
     } else {
-        httpResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         httpResponse.setContentType("application/json");
         PrintWriter out = httpResponse.getWriter();
         String jsonResponse = "{\"error\": \"Authentication required\"}";
@@ -50,7 +50,7 @@ public void doFilter(ServletRequest request, ServletResponse response, FilterCha
 }
 ```
 
-The call to `chain.doFilter(request, response)` is what lets the request continue on to the target *Servlet* — if the session is not valid, that call should not be made, and the Filter responds directly with `403 FORBIDDEN`.
+The call to `chain.doFilter(request, response)` is what lets the request continue on to the target *Servlet* — if the session is not valid, that call should not be made, and the Filter responds directly with `401 UNAUTHORIZED`.
 
 ### Step 3.3: Remove the Manual Verification from the *Servlet* {#sec-apD3-step3-en}
 
@@ -80,11 +80,11 @@ out.print(jsonResponse);
 
 ### Step 3.5: Integrated Testing {#sec-apD3-step5-en}
 
-1. Access `/country?countrycode=PT` without logging in. Expected result: `HTTP 403`, `{"error": "Authentication required"}`
+1. Access `/country?countrycode=PT` without logging in. Expected result: `HTTP 401`, `{"error": "Authentication required"}`
 2. Log in through `login.html` ([Appendix E](apendiceD2.qmd)) with `javaee` / `asw2026`. Expected result: `HTTP 200` with the success response — and, at this point, confirm (for example, in the *browser*'s developer tools) that a `JSESSIONID` *cookie* was automatically created
 3. Repeat the request to `/country?countrycode=PT`. Expected result: `HTTP 200`, with the country's data
 4. Access `/logout`. Expected result: `HTTP 200`, `{"message": "Logout OK"}`
-5. Repeat the request to `/country?countrycode=PT` once more. Expected result: `HTTP 403` again — *logout* invalidated the session
+5. Repeat the request to `/country?countrycode=PT` once more. Expected result: `HTTP 401` again — *logout* invalidated the session
 
 ### Conclusion {#sec-apD3-conclusion-en}
 

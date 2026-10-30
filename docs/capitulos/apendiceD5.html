@@ -426,6 +426,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-47"><a href="#cb1-47"></a>    <span class="op">}</span></span>
 <span id="cb1-48"><a href="#cb1-48"></a><span class="op">}</span></span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Importante: nunca guardar palavras-passe dentro do <em>token</em>.</p>
+<p>Importante: neste LAB, a chave <code>SECRET</code> está escrita no código só por simplicidade. Numa aplicação real, quem tivesse acesso ao código (por exemplo, num repositório Git) ficava com a chave e podia forjar <em>tokens</em> de qualquer utilizador. A chave deve ser gerada ao acaso, com pelo menos 32 bytes, e lida de fora do código, por exemplo de uma variável de ambiente, com <code>System.getenv("JWT_SECRET")</code>.</p>
 </section>
 <section id="sec-apD5-passo3" class="level3" data-number="H.1.4">
 <h3 data-number="H.1.4" class="anchored" data-anchor-id="sec-apD5-passo3"><span class="header-section-number">H.1.4</span> Passo 5.3: Alterar o <code>/login</code> para Devolver um Token (Sem Sessão)</h3>

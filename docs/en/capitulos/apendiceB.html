@@ -341,7 +341,7 @@ Figure&nbsp;B.1: In a symmetric scheme (HMAC), the same server holds the single 
 </figcaption>
 </figure>
 </div>
-<p>This works well in exactly the situation presented throughout this course: <strong>a single server</strong> (or several instances of that same server, all with access to the same secret key, see <a href="cap08.html#sec-08-horizontal-scalability-en" class="quarto-xref"><span>Section 8.5</span></a>) is, at the same time, the one that issues <em>tokens</em> and the one that validates them. The key never leaves that trust boundary.</p>
+<p>This works well in exactly the situation presented throughout this course: <strong>a single server</strong> (or several servers running the same application, all with access to the same secret key, see <a href="cap08.html#sec-08-horizontal-scalability-en" class="quarto-xref"><span>Section 8.5</span></a>) is, at the same time, the one that issues <em>tokens</em> and the one that validates them. The key never leaves that trust boundary.</p>
 <p>The drawback of HMAC appears when that boundary stops making sense: if an external system — one that should not have the authority to <strong>issue</strong> valid <em>tokens</em> — needed to <strong>validate</strong> them, it would have to receive the same secret key used to sign them. At that point, it stops being just a verifier: it also becomes capable of forging new, valid <em>tokens</em>, for any user.</p>
 </section>
 <section id="sec-apB-asymmetric-en" class="level2" data-number="B.3">
@@ -457,7 +457,7 @@ Marked with the <code>HttpOnly</code> attribute, a <em>cookie</em> becomes inacc
 </tr>
 </tbody>
 </table>
-<p>Neither option is risk-free — each trades one kind of vulnerability for another. The model followed in <a href="../capitulos/cap08.html">Chapter 8</a> (<em>token</em> resent manually in the <code>Authorization</code> header, see <a href="cap08.html#sec-08-fetch-json-en" class="quarto-xref"><span>Section 8.7</span></a>) assumes the <em>token</em> is accessible to the page’s own JavaScript, which points to <code>localStorage</code>, and is the most common approach in modern single-page applications. In that model, preventing XSS stops being just a general best practice: it becomes an essential condition for the security of the authentication mechanism itself — even though preventing XSS itself falls outside the scope of this appendix.</p>
+<p>Neither option is risk-free — each trades one kind of vulnerability for another. The model followed in <a href="../capitulos/cap08.html">Chapter 8</a> (<em>token</em> resent manually in the <code>Authorization</code> header, see <a href="cap08.html#sec-08-fetch-json-en" class="quarto-xref"><span>Section 8.9</span></a>) assumes the <em>token</em> is accessible to the page’s own JavaScript, which points to <code>localStorage</code>, and is the most common approach in modern single-page applications. In that model, preventing XSS stops being just a general best practice: it becomes an essential condition for the security of the authentication mechanism itself — even though preventing XSS itself falls outside the scope of this appendix.</p>
 </section>
 <section id="sec-apB-best-practices-en" class="level2" data-number="B.7">
 <h2 data-number="B.7" class="anchored" data-anchor-id="sec-apB-best-practices-en"><span class="header-section-number">B.7</span> Minimum Best Practices</h2>

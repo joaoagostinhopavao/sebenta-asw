@@ -17,7 +17,7 @@ That key is never generated on the client, nor does it ever travel to it: it is 
 
 ![In a symmetric scheme (HMAC), the same server holds the single secret key that exists, and uses it both to sign the token at login and to verify it on every subsequent request.](../assets/images/capitulos/apendiceB/JWT_HMAC.png){#fig-apB-hmac-en width="65%"}
 
-This works well in exactly the situation presented throughout this course: **a single server** (or several instances of that same server, all with access to the same secret key, see @sec-08-horizontal-scalability-en) is, at the same time, the one that issues *tokens* and the one that validates them. The key never leaves that trust boundary.
+This works well in exactly the situation presented throughout this course: **a single server** (or several servers running the same application, all with access to the same secret key, see @sec-08-horizontal-scalability-en) is, at the same time, the one that issues *tokens* and the one that validates them. The key never leaves that trust boundary.
 
 The drawback of HMAC appears when that boundary stops making sense: if an external system — one that should not have the authority to **issue** valid *tokens* — needed to **validate** them, it would have to receive the same secret key used to sign them. At that point, it stops being just a verifier: it also becomes capable of forging new, valid *tokens*, for any user.
 

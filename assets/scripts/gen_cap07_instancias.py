@@ -1,6 +1,7 @@
-"""Duas instâncias do servidor atrás de um balanceador: com sessão vs. sem estado (Cap07 / Aula 07 da ASW).
+"""Dois servidores atrás de um balanceador: com sessão vs. sem estado (Cap07 / Aula 07 da ASW).
 
-Uso: python gen_cap07_instancias.py <ficheiro_saida.png>
+Uso: python gen_cap07_instancias.py <ficheiro_saida.png> [--sem-estado]
+     --sem-estado: só a metade de baixo (usada na Aula 08)
 """
 import sys
 
@@ -20,6 +21,7 @@ GREY = "#9aa7ad"
 FS = 15
 
 out = sys.argv[1] if len(sys.argv) > 1 else "instancias.png"
+SO_SEM_ESTADO = "--sem-estado" in sys.argv
 
 
 def box(ax, x0, y0, w, h, fc, ec, lw=2.2, z=1):
@@ -48,7 +50,7 @@ def row(ax, y0, title, stateful):
     ax.text(5.3, y0 + 1.6, "distribui os pedidos", ha="center", va="center", fontsize=FS - 4, color=DARK,
             style="italic")
     # instâncias
-    for k, (yy, name) in enumerate(((y0 + 2.35, "Instância A"), (y0 + 0.05, "Instância B"))):
+    for k, (yy, name) in enumerate(((y0 + 2.35, "Servidor A"), (y0 + 0.05, "Servidor B"))):
         box(ax, 9.6, yy, 4.4, 1.4, "white", MID, lw=2.0)
         ax.text(9.85, yy + 1.05, name, ha="left", va="center", fontsize=FS - 1, color=MID, fontweight="bold")
         if stateful and k == 0:
@@ -78,13 +80,18 @@ def row(ax, y0, title, stateful):
     ax.text(14.25, y0 + 0.4, note, ha="left", va="center", fontsize=FS - 4, color=col, style="italic")
 
 
-fig, ax = plt.subplots(figsize=(18.6, 9.8), dpi=200)
+if SO_SEM_ESTADO:
+    fig, ax = plt.subplots(figsize=(18.6, 5.0), dpi=200)
+    ax.set_ylim(-0.4, 4.6)
+else:
+    fig, ax = plt.subplots(figsize=(18.6, 9.8), dpi=200)
+    ax.set_ylim(-0.4, 9.4)
 ax.set_xlim(0, 18.6)
-ax.set_ylim(-0.4, 9.4)
 ax.set_aspect("equal")
 ax.axis("off")
 
-row(ax, 4.9, "Com sessão no servidor (stateful)", True)
+if not SO_SEM_ESTADO:
+    row(ax, 4.9, "Com sessão no servidor (stateful)", True)
 row(ax, 0.2, "Sem estado no servidor (stateless)", False)
 
 fig.savefig(out, bbox_inches="tight", pad_inches=0.12, facecolor="white")

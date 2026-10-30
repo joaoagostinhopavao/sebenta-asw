@@ -23,15 +23,21 @@ In this optional LAB, the project evolves towards a modern, stateless REST API a
 
 Generating and validating *JSON Web Tokens* requires an external library — the standard Java API includes no native JWT support. This LAB uses the **JJWT** library (*Java JWT*, see [Appendix B](apendiceB.qmd)).
 
-**Where to download it**: the library is available on Maven Central (search for `io.jsonwebtoken jjwt`). The following three artifacts need to be downloaded (example for version `0.11.5`):
+**Where to download it**: the library is available on Maven Central (search for `io.jsonwebtoken jjwt`). The following three artifacts need to be downloaded (example for version `0.13.0`):
 
-- `jjwt-api-0.11.5.jar`
-- `jjwt-impl-0.11.5.jar`
-- `jjwt-jackson-0.11.5.jar`
+- `jjwt-api-0.13.0.jar`
+- `jjwt-impl-0.13.0.jar`
+- `jjwt-jackson-0.13.0.jar`
 
-All three JAR files must be downloaded.
+`jjwt-jackson` uses the *Jackson* library to read and write the *token*'s JSON, so its three JARs must also be downloaded (search for `com.fasterxml.jackson.core` on Maven Central):
 
-**Where to place the JAR files**: copy the three files to `src/main/webapp/WEB-INF/lib` — the same location already used earlier for the JDBC *driver* (see [Appendix G](apendiceD4.qmd)).
+- `jackson-databind-2.12.7.1.jar`
+- `jackson-core-2.12.7.jar`
+- `jackson-annotations-2.12.7.jar`
+
+These are the versions JJWT 0.13.0 declares; a more recent 2.x version of *Jackson* also works, as long as the three JARs are of the same version.
+
+**Where to place the JAR files**: copy the six files to `src/main/webapp/WEB-INF/lib` — the same location already used earlier for the JDBC *driver* (see [Appendix G](apendiceD4.qmd)).
 
 After copying the files:
 
@@ -60,20 +66,23 @@ Example implementation:
 ```java
 package capitaisapi.security;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import java.security.Key;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import javax.crypto.SecretKey;
 
-public class JWTUtil {
-    // Secret key (must be at least 256 bits long for HS256)
+public class JwtUtil {
+    // Secret key (must be at least 256 bits for HS256)
     private static final String SECRET =
         "MySuperSecretKeyForJwtSigningMustBeLongEnough12345";
 
     private static final long EXPIRATION_TIME = 1000 * 60 * 30; // 30 minutes
 
-    private static Key getSigningKey() {
-        return Keys.hmacShaKeyFor(SECRET.getBytes());
+    private static SecretKey getSigningKey() {
+        return Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
     }
 
     // Generates the token
@@ -81,24 +90,22 @@ public class JWTUtil {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + EXPIRATION_TIME);
 
-        JwtBuilder builder = Jwts.builder();
-        builder.setSubject(username);
-        builder.setIssuedAt(now);
-        builder.setExpiration(expiryDate);
-        builder.signWith(getSigningKey(), SignatureAlgorithm.HS256);
-
-        String token = builder.compact();
-        return token;
+        return Jwts.builder()
+                .subject(username)
+                .issuedAt(now)
+                .expiration(expiryDate)
+                .signWith(getSigningKey(), Jwts.SIG.HS256)
+                .compact();
     }
 
     // Validates the token and returns the username if valid, or null otherwise
     public static String validateToken(String token) {
         try {
-            Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(getSigningKey())
+            Claims claims = Jwts.parser()
+                    .verifyWith(getSigningKey())
                     .build()
-                    .parseClaimsJws(token)
-                    .getBody();
+                    .parseSignedClaims(token)
+                    .getPayload();
             return claims.getSubject(); // username
         } catch (JwtException | IllegalArgumentException e) {
             return null;
@@ -108,6 +115,8 @@ public class JWTUtil {
 ```
 
 Important: never store passwords inside the *token*.
+
+Important: in this LAB, the `SECRET` key is written in the code only for simplicity. In a real application, whoever had access to the code (for example, in a Git repository) would have the key and could forge *tokens* for any user. The key should be generated at random, with at least 32 bytes, and read from outside the code, for example from an environment variable, with `System.getenv("JWT_SECRET")`.
 
 ### Step 5.3: Change `/login` to Return a Token (No Session) {#sec-apD5-step3-en}
 
@@ -168,9 +177,9 @@ Always use these definitions: `401 Unauthorized` — the request is not authenti
 
 This tutorial mostly uses `401`, because roles/permissions are not yet implemented. If roles are added later (for example, administrator vs. regular user), `403` becomes relevant. Recall: authentication answers "who are you?"; authorization answers "are you allowed to do this?" (see [Chapter 6](cap06.qmd)).
 
-### Step 5.7: How to Test (*Browser* + `curl`/Postman) {#sec-apD5-step7-en}
+### Step 5.7: How to Test with a REST Client {#sec-apD5-step7-en}
 
-Since *browsers* do not easily allow setting custom headers during normal navigation, testing a JWT is best done with `curl` or Postman (see [Appendix C](apendiceC.qmd)).
+Since *browsers* do not easily allow setting custom headers during normal navigation, testing a JWT is best done with a REST client, such as Yaak or the VSCode REST Client extension, or with `curl` (see [Appendix C](apendiceC.qmd)).
 
 **1) Log in and obtain a token**: send a `POST` request to `/login` with valid credentials (`javaee` / `asw2026`) and copy the *token* from the JSON response.
 

@@ -280,15 +280,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#sec-07-problem-en" id="toc-sec-07-problem-en" class="nav-link active" data-scroll-target="#sec-07-problem-en"><span class="header-section-number">7.1</span> The Problem: Applications That Need to Communicate</a></li>
-  <li><a href="#sec-07-webservice-en" id="toc-sec-07-webservice-en" class="nav-link" data-scroll-target="#sec-07-webservice-en"><span class="header-section-number">7.2</span> What a Web Service Is</a></li>
+  <li><a href="#sec-07-webservice-en" id="toc-sec-07-webservice-en" class="nav-link" data-scroll-target="#sec-07-webservice-en"><span class="header-section-number">7.2</span> What Is a <em>Web Service</em></a></li>
   <li><a href="#sec-07-soap-rest-en" id="toc-sec-07-soap-rest-en" class="nav-link" data-scroll-target="#sec-07-soap-rest-en"><span class="header-section-number">7.3</span> SOAP and REST: Two Approaches</a></li>
   <li><a href="#sec-07-rest-principles-en" id="toc-sec-07-rest-principles-en" class="nav-link" data-scroll-target="#sec-07-rest-principles-en"><span class="header-section-number">7.4</span> REST: Fielding’s Principles</a></li>
   <li><a href="#sec-07-resources-en" id="toc-sec-07-resources-en" class="nav-link" data-scroll-target="#sec-07-resources-en"><span class="header-section-number">7.5</span> Resource-Oriented Architecture</a></li>
-  <li><a href="#sec-07-methods-contract-en" id="toc-sec-07-methods-contract-en" class="nav-link" data-scroll-target="#sec-07-methods-contract-en"><span class="header-section-number">7.6</span> HTTP Methods as the API’s Contract</a></li>
-  <li><a href="#sec-07-json-representation-en" id="toc-sec-07-json-representation-en" class="nav-link" data-scroll-target="#sec-07-json-representation-en"><span class="header-section-number">7.7</span> JSON as a Resource’s Representation</a></li>
-  <li><a href="#sec-07-web-to-rest-en" id="toc-sec-07-web-to-rest-en" class="nav-link" data-scroll-target="#sec-07-web-to-rest-en"><span class="header-section-number">7.8</span> From a Web Application to a REST Service</a></li>
-  <li><a href="#sec-07-stateful-stateless-en" id="toc-sec-07-stateful-stateless-en" class="nav-link" data-scroll-target="#sec-07-stateful-stateless-en"><span class="header-section-number">7.9</span> Stateful vs.&nbsp;Stateless</a></li>
-  <li><a href="#sec-07-why-stateless-matters-en" id="toc-sec-07-why-stateless-matters-en" class="nav-link" data-scroll-target="#sec-07-why-stateless-matters-en"><span class="header-section-number">7.10</span> Why the Absence of State Matters</a></li>
+  <li><a href="#sec-07-methods-contract-en" id="toc-sec-07-methods-contract-en" class="nav-link" data-scroll-target="#sec-07-methods-contract-en"><span class="header-section-number">7.6</span> HTTP Methods as the API Contract</a></li>
+  <li><a href="#sec-07-http-contract-en" id="toc-sec-07-http-contract-en" class="nav-link" data-scroll-target="#sec-07-http-contract-en"><span class="header-section-number">7.7</span> The REST Contract: HTTP Semantics</a></li>
+  <li><a href="#sec-07-json-representation-en" id="toc-sec-07-json-representation-en" class="nav-link" data-scroll-target="#sec-07-json-representation-en"><span class="header-section-number">7.8</span> JSON as the Representation of a Resource</a></li>
+  <li><a href="#sec-07-web-to-rest-en" id="toc-sec-07-web-to-rest-en" class="nav-link" data-scroll-target="#sec-07-web-to-rest-en"><span class="header-section-number">7.9</span> From a Web Application to a REST Service</a></li>
+  <li><a href="#sec-07-stateful-stateless-en" id="toc-sec-07-stateful-stateless-en" class="nav-link" data-scroll-target="#sec-07-stateful-stateless-en"><span class="header-section-number">7.10</span> <em>Stateful</em> vs.&nbsp;<em>Stateless</em></a></li>
+  <li><a href="#sec-07-why-stateless-matters-en" id="toc-sec-07-why-stateless-matters-en" class="nav-link" data-scroll-target="#sec-07-why-stateless-matters-en"><span class="header-section-number">7.11</span> Why the Absence of State Matters</a></li>
+  <li><a href="#sec-07-monolith-microservices-en" id="toc-sec-07-monolith-microservices-en" class="nav-link" data-scroll-target="#sec-07-monolith-microservices-en"><span class="header-section-number">7.12</span> Monolith and Microservices</a></li>
+  <li><a href="#sec-07-rest-restful-en" id="toc-sec-07-rest-restful-en" class="nav-link" data-scroll-target="#sec-07-rest-restful-en"><span class="header-section-number">7.13</span> REST and RESTful</a></li>
   </ul>
 </nav>
     </div>
@@ -328,13 +331,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="sec-07-problem-en" class="level2" data-number="7.1">
 <h2 data-number="7.1" class="anchored" data-anchor-id="sec-07-problem-en"><span class="header-section-number">7.1</span> The Problem: Applications That Need to Communicate</h2>
-<p>Up to this point, the server has always been thought of from the perspective of a single kind of client: a <em>browser</em>, requesting HTML pages for a human user to read. But a server rarely serves only that kind of client. A mobile application, another server, an integration script, or the JavaScript running in the <em>browser</em> itself (see <a href="../capitulos/cap08.html">Chapter 8</a>) may also need to access the same information — without any of them needing, or wanting, to receive a ready-to-display HTML page.</p>
-<p>HTML is a format designed for presentation: it mixes data with the form, or semantic structure, in which that data should be shown. A program that only needs the data (for example, the price of a product, or a country’s capital) would have to “take apart” the HTML to get to it — fragile, and dependent on presentation details that have nothing to do with the information itself. What is needed is a way of exposing the same data so that any program, not just a <em>browser</em> with a human looking at it, can consume it directly.</p>
+<p>So far, the server has always been thought of from the perspective of a single type of client: a <em>browser</em>, asking for HTML pages for a human user to read. But a server rarely serves only that type of client. A mobile application, another server, an integration <em>script</em>, or the JavaScript running in the <em>browser</em> itself (see <a href="../capitulos/cap08.html">Chapter 8</a>) may also need to access the same information, without any of them needing, or wanting, to receive an HTML page ready to display.</p>
+<p>HTML is a format designed for presentation: it mixes the data with the structure and with the way that data should be shown. A program that only needs the data (for example, the title and author of a book) would have to “take apart” the HTML to get to it, which is fragile and depends on presentation details that have nothing to do with the information itself. What is needed is a way of exposing the same data so that any program, and not only a <em>browser</em> with a human looking at it, can consume it directly.</p>
 </section>
 <section id="sec-07-webservice-en" class="level2" data-number="7.2">
-<h2 data-number="7.2" class="anchored" data-anchor-id="sec-07-webservice-en"><span class="header-section-number">7.2</span> What a Web Service Is</h2>
-<p>A <em>Web Service</em> is a software component accessible over the network — typically via HTTP — that exposes functionality or data in a format designed to be consumed by other programs, not read directly by a human. Unlike a Web page, a <em>Web Service</em> does not generate presentation: it returns structured data with no semantic dressing, and it is the client that decides what to do with it.</p>
-<p>This decoupling is what allows the same server to answer, with the same logic, requests coming from completely different sources: a mobile application, a JavaScript <em>front-office</em>, or another server — all receive the same data, in the same structure, and each decides how to present it (or whether to present it at all).</p>
+<h2 data-number="7.2" class="anchored" data-anchor-id="sec-07-webservice-en"><span class="header-section-number">7.2</span> What Is a <em>Web Service</em></h2>
+<p>A <em>Web Service</em> is a <em>software</em> component accessible over the network, typically via HTTP, that exposes functionality or data in a format designed to be consumed by other programs, not by a human reading directly. Unlike a <em>Web</em> page, a <em>Web Service</em> does not generate presentation: it returns only the data, organised in a known structure, and it is the client that decides what to do with it.</p>
+<p>This decoupling is what allows the same server to answer, with the same logic, requests coming from completely different sources: a mobile application, a JavaScript <em>front-office</em>, or another server. They all receive the same data, in the same structure, and each one decides how to present it (or whether to present it at all).</p>
 </section>
 <section id="sec-07-soap-rest-en" class="level2" data-number="7.3">
 <h2 data-number="7.3" class="anchored" data-anchor-id="sec-07-soap-rest-en"><span class="header-section-number">7.3</span> SOAP and REST: Two Approaches</h2>
@@ -342,48 +345,49 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <dl>
 <dt><strong>SOAP</strong> (<em>Simple Object Access Protocol</em>)</dt>
 <dd>
-A formal, XML-based protocol, with a rigid message structure (the SOAP <em>envelope</em>) and a contract described separately, in a <em>WSDL</em> document. It is verbose and requires specific tooling to generate and consume that contract, but it offers strong formal guarantees — used mostly in legacy enterprise systems, with strict transaction and security requirements.
+A formal, XML-based protocol, with a rigid message structure (the SOAP <em>envelope</em>) and a contract described separately, in a <em>WSDL</em> document. It is verbose and requires specific tools to generate and consume that contract, but it offers strong formal guarantees. It is used mainly in legacy enterprise systems, with strict transaction and security requirements.
 </dd>
 <dt><strong>REST</strong> (<em>Representational State Transfer</em>)</dt>
 <dd>
-An architectural style, not a formal protocol, that uses HTTP directly as both transport and contract: the verbs, status codes and headers already seen in <a href="../capitulos/cap03.html">Chapters 3</a> and <a href="../capitulos/cap04.html">4</a> are, themselves, the vocabulary of the API. It is lighter, simpler to test, and is the dominant approach today for Web and mobile applications — the only one covered in detail in this course.
+An architectural style, not a formal protocol, that uses HTTP directly as transport and as contract: the methods, status codes and headers already presented in <a href="../capitulos/cap03.html">Chapters 3</a> and <a href="../capitulos/cap04.html">4</a> are themselves the vocabulary of the API. It is lighter and simpler to test, and it is today the dominant approach in <em>Web</em> and mobile applications. It is the only one covered in detail in this course.
 </dd>
 </dl>
 </section>
 <section id="sec-07-rest-principles-en" class="level2" data-number="7.4">
 <h2 data-number="7.4" class="anchored" data-anchor-id="sec-07-rest-principles-en"><span class="header-section-number">7.4</span> REST: Fielding’s Principles</h2>
-<p>The term REST was coined by Roy Fielding, in 2000, to describe the architectural style that was already, in practice, implicit in the design of the Web itself. A REST service follows a set of principles:</p>
+<p>The term REST was coined by Roy Fielding, in 2000, to describe the architectural style that was already, in practice, implicit in the design of the <em>Web</em> itself. A REST service follows a set of principles:</p>
 <ul>
-<li><strong>Client-server</strong>: responsibilities are separated; the client does not need to know how the data is stored, and the server does not need to know how it is presented,</li>
-<li><strong>Stateless</strong>: each request contains all the information needed to be processed, without depending on memory of previous requests on the server (see <a href="#sec-07-stateful-stateless-en" class="quarto-xref"><span>Section 7.9</span></a>),</li>
-<li><strong>Uniform interface</strong>: resources are always manipulated the same way, through HTTP’s own verbs and status codes, without inventing a bespoke vocabulary per API,</li>
-<li><strong>Resources and representations</strong>: everything the API exposes is modelled as a resource, identified by a <em>URL</em>, with one or more possible representations (typically JSON),</li>
+<li><strong>Client-server</strong>: responsibilities are separated; the client does not need to know how the data is stored, and the server does not need to know how it is presented.</li>
+<li><strong>Stateless</strong>: each request contains all the information needed to process it, without depending on memory of previous requests on the server (see <a href="#sec-07-stateful-stateless-en" class="quarto-xref"><span>Section 7.10</span></a>).</li>
+<li><strong>Uniform interface</strong>: resources are always manipulated in the same way, through HTTP’s own methods and status codes, without inventing a vocabulary of its own for each API.</li>
+<li><strong>Resources and representations</strong>: everything the API exposes is modelled as a resource, identified by a <em>URL</em>, with one or more possible representations (typically JSON).</li>
 <li><strong>Cacheable</strong>: a response can indicate whether or not it may be cached, to avoid unnecessary repeated requests.</li>
 </ul>
-<p>Not every API that calls itself “REST” strictly follows all of these principles — in practice, “REST” has become a generic term for “resource-oriented API over HTTP, typically with JSON”. That is the sense used throughout this course.</p>
+<p>Not all APIs that call themselves “REST” respect all these principles rigorously. In practice, “REST” has become a generic term for “API over HTTP, resource-oriented, typically with JSON”, and that is the meaning used throughout this course.</p>
 </section>
 <section id="sec-07-resources-en" class="level2" data-number="7.5">
 <h2 data-number="7.5" class="anchored" data-anchor-id="sec-07-resources-en"><span class="header-section-number">7.5</span> Resource-Oriented Architecture</h2>
-<p>REST’s most visible principle is thinking of the API around <strong>resources</strong>, not actions. A resource is anything that can be identified and manipulated — a country, a user, an order — and it is identified by a <em>URL</em>, never by a function name.</p>
-<p>A design that does not follow this principle is closer to an <em>RPC</em> (<em>Remote Procedure Call</em>) style, where the <em>URL</em> names an operation:</p>
+<p>The most visible principle of REST is to think of the API in terms of <strong>resources</strong>, not actions. A resource is anything that can be identified and manipulated (a book, an author, an order) and is identified by a <em>URL</em>, never by a function name.</p>
+<p>A design that does not follow this principle is closer to an <em>RPC</em> (<em>Remote Procedure Call</em>) style, in which the <em>URL</em> names an operation:</p>
 <div class="httpmsg">
-<p>GET /getCountry?code=PT<br>
-GET /deleteCountry?code=PT</p>
+<p>GET /obterLivro?id=12<br>
+GET /removerLivro?id=12</p>
 </div>
-<p>A resource-oriented design uses the <em>URL</em> itself to identify the resource, leaving the HTTP verb (see <a href="../capitulos/cap03.html">Chapter 3</a>) to indicate the operation to perform on it:</p>
+<p>A resource-oriented design uses the <em>URL</em> itself to identify the resource, and lets the HTTP method (see <a href="../capitulos/cap03.html">Chapter 3</a>) indicate the operation to perform on it:</p>
 <div class="httpmsg">
-<p>GET /country/PT → get country PT<br>
-DELETE /country/PT → remove country PT</p>
+<p>GET /livros/12 → get book 12<br>
+DELETE /livros/12 → remove book 12</p>
 </div>
-<p>The advantage is not just aesthetic: it makes the API predictable. Once the <code>/country/{code}</code> pattern is known, it is immediately clear how to access, update or remove any country, without needing to memorise a different function name for each operation.</p>
+<p>The advantage is not merely aesthetic: it makes the API predictable. Once the <code>/livros/{id}</code> pattern is known, it is immediately clear how to get, update or remove any book, without having to memorise a different function name for each operation. The same pattern applies to any other resource: <code>/autores/3</code>, <code>/encomendas/5</code>.</p>
 </section>
 <section id="sec-07-methods-contract-en" class="level2" data-number="7.6">
-<h2 data-number="7.6" class="anchored" data-anchor-id="sec-07-methods-contract-en"><span class="header-section-number">7.6</span> HTTP Methods as the API’s Contract</h2>
-<p>In a REST API, HTTP methods stop being just “the way the request arrives” (see <a href="../capitulos/cap03.html">Chapter 3</a>) and become the API’s own contract: the meaning of each verb, applied to a resource, is always the same.</p>
+<h2 data-number="7.6" class="anchored" data-anchor-id="sec-07-methods-contract-en"><span class="header-section-number">7.6</span> HTTP Methods as the API Contract</h2>
+<p>In a REST API, HTTP methods are no longer just “the way the request arrives” (see <a href="../capitulos/cap03.html">Chapter 3</a>) and become the API contract itself: the meaning of each method, applied to a resource, is always the same.</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
 <th>Method</th>
+<th>Example</th>
 <th>Operation</th>
 <th>Idempotent?</th>
 </tr>
@@ -391,62 +395,161 @@ DELETE /country/PT → remove country PT</p>
 <tbody>
 <tr class="odd">
 <td><code>GET</code></td>
+<td><code>GET /livros/12</code></td>
 <td>Read the resource</td>
 <td>Yes</td>
 </tr>
 <tr class="even">
 <td><code>POST</code></td>
+<td><code>POST /livros</code></td>
 <td>Create a new resource</td>
 <td>No</td>
 </tr>
 <tr class="odd">
 <td><code>PUT</code></td>
+<td><code>PUT /livros/12</code></td>
 <td>Update or replace the resource</td>
 <td>Yes</td>
 </tr>
 <tr class="even">
 <td><code>DELETE</code></td>
+<td><code>DELETE /livros/12</code></td>
 <td>Remove the resource</td>
 <td>Yes</td>
 </tr>
 </tbody>
 </table>
-<p>A method is said to be <strong>idempotent</strong> when repeating it several times has exactly the same effect as executing it once. <code>DELETE /country/PT</code> removes country PT; repeating the same request does not remove “anything more”, the final result is identical. <code>POST /country</code>, on the other hand, creates a new resource on every call, so it is not idempotent: repeating the request creates several resources, not just one. This property matters especially on unreliable networks: a client unsure whether a <code>PUT</code> or <code>DELETE</code> request reached its destination can safely repeat it; the same cannot be done with a <code>POST</code>, on pain of duplicating the created resource.</p>
-</section>
-<section id="sec-07-json-representation-en" class="level2" data-number="7.7">
-<h2 data-number="7.7" class="anchored" data-anchor-id="sec-07-json-representation-en"><span class="header-section-number">7.7</span> JSON as a Resource’s Representation</h2>
-<p>A resource can have more than one possible representation — the same country could, in theory, be returned in JSON, in XML, or in any other format, depending on what the client requests. In practice, and throughout this course, the representation used is always <a href="https://www.json.org/">JSON</a> (the format traditionally associated with SOAP is XML, more verbose and less straightforward to generate and parse in JavaScript).</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">{</span><span class="dt">"code"</span><span class="fu">:</span> <span class="st">"PT"</span><span class="fu">,</span> <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"Portugal"</span><span class="fu">,</span> <span class="dt">"capital"</span><span class="fu">:</span> <span class="st">"Lisboa"</span><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>The <code>Content-Type: application/json</code> header (see <a href="../capitulos/cap04.html">Chapter 4</a>) is what informs the client that this is the representation chosen for the response.</p>
-</section>
-<section id="sec-07-web-to-rest-en" class="level2" data-number="7.8">
-<h2 data-number="7.8" class="anchored" data-anchor-id="sec-07-web-to-rest-en"><span class="header-section-number">7.8</span> From a Web Application to a REST Service</h2>
-<p>The infrastructure behind a REST service is nothing new: it is still a <em>Servlet</em>, mapped to a <em>URL</em> through <code>@WebServlet</code> (see <a href="../capitulos/cap04.html">Chapter 4</a>), receiving an HTTP request and returning a response. What changes is <strong>what</strong> that response contains, and <strong>who</strong> it is designed for.</p>
-<p>In a presentation-oriented application (see <a href="../capitulos/cap01.html">Chapters 1</a> and <a href="../capitulos/cap05.html">5</a>), the Servlet returns HTML, meant for a human to read directly in the <em>browser</em>. In a REST API, the same Servlet returns JSON, meant to be interpreted by code — whether that code is another server, a mobile application, or the <em>browser</em>’s own JavaScript (see <a href="../capitulos/cap08.html">Chapter 8</a>). The View, in the classic MVC sense (see <a href="../capitulos/cap01.html">Chapter 1</a>), stops existing on the server side: it is the client, whatever it may be, that decides how (or whether) to present the data received.</p>
-</section>
-<section id="sec-07-stateful-stateless-en" class="level2" data-number="7.9">
-<h2 data-number="7.9" class="anchored" data-anchor-id="sec-07-stateful-stateless-en"><span class="header-section-number">7.9</span> Stateful vs.&nbsp;Stateless</h2>
-<p><a href="../capitulos/cap05.html">Chapter 5</a> presented a <em>stateful</em> model: the server keeps, in the <code>HttpSession</code>, information about each authenticated user, and every subsequent request is interpreted in light of that memory. A <strong>stateless</strong> service follows the opposite principle: the server keeps no memory at all between requests, and each request must carry, within itself, all the information needed to be processed — including, if required, proof that whoever is making it is authenticated.</p>
-<p>This does not mean the application as a whole stops having persistent data — the database keeps storing countries, users, orders. It only means that the <strong>application server</strong> itself keeps no session information about who is making each request, from one request to the next.</p>
-</section>
-<section id="sec-07-why-stateless-matters-en" class="level2" data-number="7.10">
-<h2 data-number="7.10" class="anchored" data-anchor-id="sec-07-why-stateless-matters-en"><span class="header-section-number">7.10</span> Why the Absence of State Matters</h2>
-<p>The limitation of the stateful model only becomes visible once there is more than one server instance answering requests — a common situation in any application with a real need to scale. If a user authenticates on instance A, and a following request is routed to instance B, that second instance has no corresponding session in its memory: the user appears unauthenticated, despite having just logged in.</p>
-<p>A stateless service does not suffer from this problem: since no instance keeps memory of anyone, any one of them can answer any request, indifferently. This property is what makes it possible to distribute requests across several server instances with no coordination between them at all — a topic picked up in detail in <a href="../capitulos/cap08.html">Chapter 8</a>.</p>
+<p>A method is said to be <strong>idempotent</strong> when repeating it several times has exactly the same effect as executing it once. <code>DELETE /livros/12</code> removes book 12; repeating the same request does not remove “anything else”, and the end result is identical. <code>POST /livros</code>, on the other hand, creates a new book on each call, so it is not idempotent: repeating the request creates several books, not just one. This property matters above all on unreliable networks. A client that is not sure whether a <code>PUT</code> or <code>DELETE</code> request reached its destination can safely repeat it; with a <code>POST</code> it cannot, or it risks duplicating the created resource.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<code>POST</code> + <code>operation</code> as an alternative to “pure” HTTP verbs
+<code>POST</code> + <code>operation</code> as an alternative to “pure” HTTP methods
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>In practice, it is common to find APIs that do not follow the “pure” semantics of HTTP verbs presented above (<code>POST</code> to create, <code>PUT</code> to update, <code>DELETE</code> to remove). A pragmatic alternative, used especially in contexts with technical constraints — for example, when only <code>GET</code>/<code>POST</code> requests can be issued, as from a simple HTML form, with no JavaScript involved (see <a href="../capitulos/cap02.html">Chapter 2</a>) — is to concentrate write operations in a single <em>endpoint</em>, always received via <code>POST</code>, distinguishing the intended operation through an additional parameter, such as <code>operation</code> (<code>insert</code>, <code>update</code>, <code>delete</code>).</p>
-<p>This solution works, but moves away from more conventional REST design: a single <em>endpoint</em> no longer maps directly to a resource and a verb, drifting instead towards an <em>RPC</em> style over HTTP. In an API designed to be consumed by JavaScript — which can issue <code>PUT</code> and <code>DELETE</code> requests with no limitation at all (see <a href="../capitulos/cap08.html">Chapter 8</a>) — the closer-to-REST alternative is to rewrite that <em>endpoint</em> as several, one per HTTP verb (for example, <code>PUT /resource/{id}</code> to update and <code>DELETE /resource/{id}</code> to remove).</p>
+<p>In practice, it is common to find APIs that do not follow the “pure” semantics of the HTTP methods presented above (<code>POST</code> to create, <code>PUT</code> to update, <code>DELETE</code> to remove). A pragmatic alternative, used mainly when only <code>GET</code> and <code>POST</code> requests can be issued (as from a plain HTML form, without JavaScript, see <a href="../capitulos/cap02.html">Chapter 2</a>), is to concentrate the write operations in a single <em>endpoint</em>, always received by <code>POST</code>, and to distinguish the intended operation through an additional parameter, such as <code>operation</code> (<code>insert</code>, <code>update</code>, <code>delete</code>).</p>
+<p>This solution works, but it departs from the more conventional REST design: a single <em>endpoint</em> no longer corresponds directly to a resource and a method, and gets closer to an <em>RPC</em> style over HTTP. In an API designed to be consumed by JavaScript, which can issue <code>PUT</code> and <code>DELETE</code> requests without any limitation (see <a href="../capitulos/cap08.html">Chapter 8</a>), the alternative closest to REST is to split that <em>endpoint</em> into several, one per HTTP method (for example, <code>PUT /livros/{id}</code> to update and <code>DELETE /livros/{id}</code> to remove).</p>
 </div>
 </div>
+</section>
+<section id="sec-07-http-contract-en" class="level2" data-number="7.7">
+<h2 data-number="7.7" class="anchored" data-anchor-id="sec-07-http-contract-en"><span class="header-section-number">7.7</span> The REST Contract: HTTP Semantics</h2>
+<p>In SOAP, the contract is explicit: to know how to call a service, one has to read the <em>WSDL</em> document that describes it. In REST, the contract is implicit: it is already defined by HTTP itself, complemented by a few conventions. Besides the methods, two parts of HTTP belong to this contract:</p>
+<ul>
+<li><strong>Status codes</strong> tell the client what happened to the request, without having to read the response body.</li>
+<li><strong>Headers</strong> carry the metadata: the body format (<code>Content-Type</code>), its size, or the identification of who is making the request.</li>
+</ul>
+<p>The status codes most used in a REST API are these (see <a href="../capitulos/cap03.html">Chapter 3</a>):</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Code</th>
+<th>Meaning in a REST API</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>200 OK</code></td>
+<td>The request went well; the body carries the result</td>
+<td><code>GET /livros/12</code></td>
+</tr>
+<tr class="even">
+<td><code>201 Created</code></td>
+<td>The resource was created</td>
+<td><code>POST /livros</code></td>
+</tr>
+<tr class="odd">
+<td><code>400 Bad Request</code></td>
+<td>The data sent is invalid</td>
+<td><code>POST /livros</code> without a title</td>
+</tr>
+<tr class="even">
+<td><code>401 Unauthorized</code></td>
+<td>The request is not authenticated</td>
+<td>any protected request, without authentication</td>
+</tr>
+<tr class="odd">
+<td><code>404 Not Found</code></td>
+<td>The resource does not exist</td>
+<td><code>GET /livros/99</code>, if there is no book 99</td>
+</tr>
+</tbody>
+</table>
+<p>A client asking for a book that does not exist sends this request:</p>
+<div class="httpmsg">
+<p>GET /livros/99 HTTP/1.1<br>
+Host: exemplo.pt</p>
+</div>
+<p>and receives a response whose meaning is clear from the first line alone:</p>
+<div class="httpmsg">
+<p>HTTP/1.1 404 Not Found</p>
+</div>
+<p>Whoever understands HTTP understands the API: the same knowledge works for any REST API, without having to learn a new contract for each one.</p>
+</section>
+<section id="sec-07-json-representation-en" class="level2" data-number="7.8">
+<h2 data-number="7.8" class="anchored" data-anchor-id="sec-07-json-representation-en"><span class="header-section-number">7.8</span> JSON as the Representation of a Resource</h2>
+<p>A resource can have more than one possible representation: the same book could, in theory, be returned in JSON, in XML, or in any other format, depending on what the client asks for. In practice, and throughout this course, the representation used is always <a href="https://www.json.org/">JSON</a>, a lightweight, easy-to-read format, independent of the programming language (the format traditionally associated with SOAP is XML, more verbose and less direct to generate and interpret in JavaScript).</p>
+<p>The response to <code>GET /livros/12</code> is, for example, this representation of the book:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource json number-lines code-with-copy"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">{</span><span class="dt">"id"</span><span class="fu">:</span> <span class="dv">12</span><span class="fu">,</span> <span class="dt">"titulo"</span><span class="fu">:</span> <span class="st">"Os Maias"</span><span class="fu">,</span> <span class="dt">"autor"</span><span class="fu">:</span> <span class="st">"Eça de Queirós"</span><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>Content-Type: application/json</code> header (see <a href="../capitulos/cap04.html">Chapter 4</a>) is what informs the client that this is the representation chosen for the response. In a REST API, neither objects nor pages are transferred, but representations of the state of each resource.</p>
+</section>
+<section id="sec-07-web-to-rest-en" class="level2" data-number="7.9">
+<h2 data-number="7.9" class="anchored" data-anchor-id="sec-07-web-to-rest-en"><span class="header-section-number">7.9</span> From a Web Application to a REST Service</h2>
+<p>The infrastructure behind a REST service is not new: it is still a <em>Servlet</em>, mapped to a <em>URL</em> through <code>@WebServlet</code> (see <a href="../capitulos/cap04.html">Chapter 4</a>), receiving an HTTP request and returning a response. What changes is <strong>what</strong> that response contains, and <strong>who</strong> it is meant for.</p>
+<p>In a presentation-oriented application (see <a href="../capitulos/cap01.html">Chapters 1</a> and <a href="../capitulos/cap05.html">5</a>), the <em>Servlet</em> returns HTML, meant for a human to read directly in the <em>browser</em>. In a REST API, the same <em>Servlet</em> returns JSON, meant to be interpreted by code: another server, a mobile application, or the <em>browser</em>’s own JavaScript (see <a href="../capitulos/cap08.html">Chapter 8</a>). The <em>View</em>, in the classic MVC sense (see <a href="../capitulos/cap01.html">Chapter 1</a>), no longer exists on the server side: it is the client, whatever it is, that decides how (or whether) to present the data received.</p>
+<div id="fig-07-mvc-vs-rest-en" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-07-mvc-vs-rest-en-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap07/MVC_vs_REST.png" class="img-fluid figure-img" style="width:90.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-07-mvc-vs-rest-en-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.1: In a Web application, the View (JSP) lives on the server and generates the HTML; in a REST API, the server returns only JSON and it is the client’s JavaScript that draws the page.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="sec-07-stateful-stateless-en" class="level2" data-number="7.10">
+<h2 data-number="7.10" class="anchored" data-anchor-id="sec-07-stateful-stateless-en"><span class="header-section-number">7.10</span> <em>Stateful</em> vs.&nbsp;<em>Stateless</em></h2>
+<p><a href="../capitulos/cap05.html">Chapter 5</a> presented a <em>stateful</em> model: the server keeps, in the <code>HttpSession</code>, information about each authenticated user, and each following request is interpreted in the light of that memory. A <strong>stateless</strong> service follows the opposite principle: the server keeps no memory at all between requests, and each request must carry, in itself, all the information needed to process it, including, if necessary, the proof that whoever makes it is authenticated.</p>
+<p>This does not mean that the application as a whole stops having persistent data: the database still keeps books, authors and orders. It only means that the <strong>application server</strong> itself keeps no session information about who is making each request, between one request and the next.</p>
+</section>
+<section id="sec-07-why-stateless-matters-en" class="level2" data-number="7.11">
+<h2 data-number="7.11" class="anchored" data-anchor-id="sec-07-why-stateless-matters-en"><span class="header-section-number">7.11</span> Why the Absence of State Matters</h2>
+<p>The limitation of the stateful model only becomes visible when there is more than one server handling requests (several Tomcats, each with the same application installed; not to be confused with instances of a <em>Servlet</em>, of which there is always only one per Tomcat, see <a href="../capitulos/cap04.html">Chapter 4</a>), a common situation in any application with a real need to scale. Requests first reach a <strong>load balancer</strong>, which distributes them among the various servers. The path of two consecutive requests shows where the problem lies:</p>
+<ol type="1">
+<li>The user logs in; the load balancer sends the request to server A, which creates the session in its memory.</li>
+<li>The next request, <code>GET /livros</code>, is sent by the load balancer to server B.</li>
+<li>Server B has no corresponding session in its memory: the user appears as not authenticated (<code>401</code>), despite having just logged in.</li>
+</ol>
+<div id="fig-07-instances-en" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-07-instances-en-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/capitulos/cap07/Instancias_Stateful_Stateless.png" class="img-fluid figure-img" style="width:95.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-07-instances-en-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.2: With a session, server B does not know the session created on server A and answers 401; without state, the request itself carries the proof of authentication and any server can answer.
+</figcaption>
+</figure>
+</div>
+<p>A stateless service does not suffer from this problem: since no server keeps a memory of anyone, any of them can answer any request. This property is what makes it possible to distribute requests among several servers without any coordination between them, a subject taken up in detail in <a href="../capitulos/cap08.html">Chapter 8</a>.</p>
+</section>
+<section id="sec-07-monolith-microservices-en" class="level2" data-number="7.12">
+<h2 data-number="7.12" class="anchored" data-anchor-id="sec-07-monolith-microservices-en"><span class="header-section-number">7.12</span> Monolith and Microservices</h2>
+<p>The absence of state has consequences for the way an application is organised. In a <strong>monolith</strong>, the application is a single unit of deployment, often stateful (the session lives in the server’s memory), and it can only be scaled as a whole. In a <strong>microservices</strong> architecture, the application is split into small, independent services, which communicate with each other through REST APIs, without state and with <em>token</em> authentication, and each one can scale on its own. The absence of state is what makes it possible to spread an application across several servers and several services.</p>
+</section>
+<section id="sec-07-rest-restful-en" class="level2" data-number="7.13">
+<h2 data-number="7.13" class="anchored" data-anchor-id="sec-07-rest-restful-en"><span class="header-section-number">7.13</span> REST and RESTful</h2>
+<p><strong>REST</strong> is an architectural style: stateless, resource-oriented and with a uniform interface. A <strong>RESTful API</strong> is an API that claims to follow that style. Since the absence of state is part of the very definition of REST, an API that keeps the user’s session on the server is not fully RESTful.</p>
+<p>One question is therefore left open: if the server keeps no state at all, how does it know, on each request, who the user is? The answer, <em>token</em> authentication, is the subject of <a href="../capitulos/cap08.html">Chapter 8</a>.</p>
 
 
 </section>

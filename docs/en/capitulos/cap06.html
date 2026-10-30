@@ -281,12 +281,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#sec-06-problem-en" id="toc-sec-06-problem-en" class="nav-link active" data-scroll-target="#sec-06-problem-en"><span class="header-section-number">6.1</span> The Problem: Security Repeated in Every <em>Servlet</em></a></li>
   <li><a href="#sec-06-authentication-authorisation-en" id="toc-sec-06-authentication-authorisation-en" class="nav-link" data-scroll-target="#sec-06-authentication-authorisation-en"><span class="header-section-number">6.2</span> Authentication vs.&nbsp;Authorisation</a></li>
-  <li><a href="#sec-06-what-is-a-filter-en" id="toc-sec-06-what-is-a-filter-en" class="nav-link" data-scroll-target="#sec-06-what-is-a-filter-en"><span class="header-section-number">6.3</span> What a Filter Is</a></li>
+  <li><a href="#sec-06-what-is-a-filter-en" id="toc-sec-06-what-is-a-filter-en" class="nav-link" data-scroll-target="#sec-06-what-is-a-filter-en"><span class="header-section-number">6.3</span> What Is a Filter</a></li>
   <li><a href="#sec-06-where-a-filter-sits-en" id="toc-sec-06-where-a-filter-sits-en" class="nav-link" data-scroll-target="#sec-06-where-a-filter-sits-en"><span class="header-section-number">6.4</span> Where a Filter Sits in the Request</a></li>
-  <li><a href="#sec-06-filter-lifecycle-en" id="toc-sec-06-filter-lifecycle-en" class="nav-link" data-scroll-target="#sec-06-filter-lifecycle-en"><span class="header-section-number">6.5</span> A Filter’s Lifecycle</a></li>
+  <li><a href="#sec-06-filter-lifecycle-en" id="toc-sec-06-filter-lifecycle-en" class="nav-link" data-scroll-target="#sec-06-filter-lifecycle-en"><span class="header-section-number">6.5</span> The Life Cycle of a Filter</a></li>
   <li><a href="#sec-06-separation-of-responsibilities-en" id="toc-sec-06-separation-of-responsibilities-en" class="nav-link" data-scroll-target="#sec-06-separation-of-responsibilities-en"><span class="header-section-number">6.6</span> <em>Servlet</em> and Filter: Separation of Responsibilities</a></li>
   <li><a href="#sec-06-declaring-a-filter-en" id="toc-sec-06-declaring-a-filter-en" class="nav-link" data-scroll-target="#sec-06-declaring-a-filter-en"><span class="header-section-number">6.7</span> Declaring and Implementing a Filter</a></li>
-  <li><a href="#sec-06-redirect-vs-401-en" id="toc-sec-06-redirect-vs-401-en" class="nav-link" data-scroll-target="#sec-06-redirect-vs-401-en"><span class="header-section-number">6.8</span> Redirection vs.&nbsp;<code>401</code>: an Architectural Difference</a></li>
+  <li><a href="#sec-06-redirect-vs-401-en" id="toc-sec-06-redirect-vs-401-en" class="nav-link" data-scroll-target="#sec-06-redirect-vs-401-en"><span class="header-section-number">6.8</span> Redirect vs.&nbsp;<code>401</code>: an Architectural Difference</a></li>
   <li><a href="#sec-06-preparing-for-stateless-en" id="toc-sec-06-preparing-for-stateless-en" class="nav-link" data-scroll-target="#sec-06-preparing-for-stateless-en"><span class="header-section-number">6.9</span> Preparing for Stateless Security</a></li>
   </ul>
 </nav>
@@ -327,65 +327,65 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="sec-06-problem-en" class="level2" data-number="6.1">
 <h2 data-number="6.1" class="anchored" data-anchor-id="sec-06-problem-en"><span class="header-section-number">6.1</span> The Problem: Security Repeated in Every <em>Servlet</em></h2>
-<p>With what has been presented so far (see <a href="../capitulos/cap05.html">Chapter 5</a>), authentication is solved: the <code>LoginServlet</code> validates the credentials and stores the user in the session, and each protected <em>endpoint</em> checks that session at the start of its <code>doGet()</code> or <code>doPost()</code>. This works, but it has a hidden cost: the authentication logic lives, duplicated, inside <strong>every</strong> protected <em>Servlet</em>.</p>
-<p>This duplication brings several problems along with it:</p>
+<p>With what has been presented so far (see <a href="../capitulos/cap05.html">Chapter 5</a>), authentication is solved: the <code>LoginServlet</code> validates the credentials and stores the user in the session, and each protected <em>endpoint</em> checks that session at the start of its <code>doGet()</code> or <code>doPost()</code>. This works, but it has a hidden cost: the authentication logic lives, duplicated, inside <strong>each</strong> protected <em>Servlet</em>.</p>
+<p>This duplication brings several problems:</p>
 <ul>
 <li>The same session check is repeated in every protected <em>endpoint</em></li>
-<li>There is a real risk of inconsistency between these copies</li>
+<li>There is a real risk of inconsistency between those copies</li>
 <li>It is easy to forget the protection when creating a new <em>endpoint</em></li>
 </ul>
-<p>Put another way, this duplication violates the <em>DRY</em> principle (<em>Don’t Repeat Yourself</em>): a responsibility should live in a single place, and repeated logic increases the maintenance cost whenever that logic needs to change. More concretely, this design violates the <strong>Single Responsibility Principle</strong>: each <em>Servlet</em> ends up with two distinct responsibilities, its own business logic, and the security logic imposed on it. This makes security policies hard to evolve, and the design poorly scalable, both in number of <em>endpoints</em> and in the complexity of the access rules.</p>
+<p>In other words, this duplication violates the <em>DRY</em> principle (<em>Don’t Repeat Yourself</em>): a responsibility should live in a single place, and repeated logic increases the maintenance cost whenever that logic needs to change. More precisely, this design violates the <strong>Single Responsibility Principle</strong>: each <em>Servlet</em> ends up with two distinct responsibilities, its own business logic and the security logic imposed on it. This makes security policies hard to evolve, and the design poorly scalable, both in number of <em>endpoints</em> and in the complexity of the access rules.</p>
 </section>
 <section id="sec-06-authentication-authorisation-en" class="level2" data-number="6.2">
 <h2 data-number="6.2" class="anchored" data-anchor-id="sec-06-authentication-authorisation-en"><span class="header-section-number">6.2</span> Authentication vs.&nbsp;Authorisation</h2>
-<p>Before solving the problem, it is worth pinning down two often-confused concepts:</p>
+<p>Before solving the problem, it is worth clarifying two concepts that are often confused:</p>
 <dl>
 <dt><strong>Authentication</strong></dt>
 <dd>
-Answers “who is the user?”. It is the identity check, typically performed at <em>login</em> time.
+Answers “who is the user?”. It is the identity check, typically done at <em>login</em> time.
 </dd>
 </dl>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb1-1"><a href="#cb1-1"></a><span class="cf">if</span> <span class="op">(</span>username<span class="op">.</span><span class="fu">equals</span><span class="op">(</span><span class="st">"admin"</span><span class="op">)</span> <span class="op">&amp;&amp;</span> password<span class="op">.</span><span class="fu">equals</span><span class="op">(</span><span class="st">"1234"</span><span class="op">))</span> <span class="op">{</span></span>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb1-1"><a href="#cb1-1"></a><span class="cf">if</span> <span class="op">(</span>dao<span class="op">.</span><span class="fu">validarCredenciais</span><span class="op">(</span>utilizador<span class="op">,</span> palavraPasse<span class="op">))</span> <span class="op">{</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a>    HttpSession session <span class="op">=</span> request<span class="op">.</span><span class="fu">getSession</span><span class="op">(</span><span class="kw">true</span><span class="op">);</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a>    session<span class="op">.</span><span class="fu">setAttribute</span><span class="op">(</span><span class="st">"UserName"</span><span class="op">,</span> username<span class="op">);</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>    session<span class="op">.</span><span class="fu">setAttribute</span><span class="op">(</span><span class="st">"utilizador"</span><span class="op">,</span> utilizador<span class="op">);</span></span>
 <span id="cb1-4"><a href="#cb1-4"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <dl>
 <dt><strong>Authorisation</strong></dt>
 <dd>
-Answers “what is this user allowed to access?”. It is the permission check, performed once identity has already been confirmed.
+Answers “what is this user allowed to access?”. It is the permission check, done after the identity has been confirmed.
 </dd>
 </dl>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb2-1"><a href="#cb2-1"></a><span class="cf">if</span> <span class="op">(</span>session<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"UserRole"</span><span class="op">).</span><span class="fu">equals</span><span class="op">(</span><span class="st">"ADMIN"</span><span class="op">))</span> <span class="op">{</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a>    <span class="co">// access granted</span></span>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb2-1"><a href="#cb2-1"></a><span class="cf">if</span> <span class="op">(</span><span class="st">"admin"</span><span class="op">.</span><span class="fu">equals</span><span class="op">(</span>session<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"perfil"</span><span class="op">)))</span> <span class="op">{</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a>    <span class="co">// access allowed</span></span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Authentication always happens first: it makes no sense to check the permissions of someone whose identity has not yet been confirmed. This distinction is directly reflected in the HTTP status codes used in the response (see <a href="../capitulos/cap03.html">Chapter 3</a>):</p>
+<p>In this example, the <em>login</em> stored in the session, besides the user, their profile (for example, <code>"admin"</code>), and only users with that profile have access to the resource.</p>
+<p>Authentication always comes first: it makes no sense to check the permissions of someone whose identity has not yet been confirmed. This distinction is directly reflected in the HTTP status codes used in the response (see <a href="../capitulos/cap03.html">Chapter 3</a>):</p>
 <ul>
 <li><code>401 Unauthorized</code>: the request is not authenticated</li>
-<li><code>403 Forbidden</code>: the request is authenticated, but lacks permission for the requested resource</li>
+<li><code>403 Forbidden</code>: the request is authenticated, but has no permission for the requested resource</li>
 </ul>
 </section>
 <section id="sec-06-what-is-a-filter-en" class="level2" data-number="6.3">
-<h2 data-number="6.3" class="anchored" data-anchor-id="sec-06-what-is-a-filter-en"><span class="header-section-number">6.3</span> What a Filter Is</h2>
-<p>The question left unanswered is where the security logic should live: inside each <em>Servlet</em>? Duplicated across every <em>endpoint</em>? Or centralised in a single component? Security is, by nature, a <em>cross-cutting concern</em>: it runs through the whole application, rather than belonging to a single module. This is exactly what the Filter exists for.</p>
+<h2 data-number="6.3" class="anchored" data-anchor-id="sec-06-what-is-a-filter-en"><span class="header-section-number">6.3</span> What Is a Filter</h2>
+<p>The question still to answer is where the security logic should live: inside each <em>Servlet</em>? Duplicated across all <em>endpoints</em>? Or centralised in a single component? Security is, by nature, a <em>cross-cutting concern</em>: it runs through the whole application, instead of belonging to a single module. This is exactly what the Filter exists for.</p>
 <p>A <a href="https://jakarta.ee/specifications/servlet/">Filter</a> is a server-side component that intercepts HTTP requests:</p>
 <ul>
-<li>It runs <strong>before</strong> the destination <em>Servlet</em></li>
-<li>It can also run <strong>after</strong> the <em>Servlet</em> (over the response)</li>
-<li>It can block, redirect, or modify the request or the response</li>
+<li>It runs <strong>before</strong> the target <em>Servlet</em></li>
+<li>It can also run <strong>after</strong> the <em>Servlet</em> (on the response)</li>
+<li>It can block, redirect or modify the request or the response</li>
 </ul>
-<p>Beyond authentication and authorisation, Filters are the natural mechanism for other cross-cutting concerns: activity <em>logging</em>, <em>CORS</em> (<em>Cross-Origin Resource Sharing</em>), or input validation. A Filter separates these concerns from the business logic, which stays exclusively in the <em>Servlet</em>.</p>
+<p>Besides authentication and authorisation, Filters are the natural mechanism for other cross-cutting concerns: activity logging, <em>CORS</em> (<em>Cross-Origin Resource Sharing</em>), or input validation. A Filter separates these concerns from the business logic, which stays exclusively in the <em>Servlet</em>.</p>
 </section>
 <section id="sec-06-where-a-filter-sits-en" class="level2" data-number="6.4">
 <h2 data-number="6.4" class="anchored" data-anchor-id="sec-06-where-a-filter-sits-en"><span class="header-section-number">6.4</span> Where a Filter Sits in the Request</h2>
-<p>One or more Filters can be chained between the client and the <em>Servlet</em> that actually handles the request:</p>
-<pre><code>Client → Filter 1 → ... → Filter N → Servlet (business logic) → Response</code></pre>
+<p>One or more Filters can be chained between the client and the <em>Servlet</em> that actually handles the request. The request goes through the Filters in the order of the chain and only then reaches the <em>Servlet</em>, where the business logic lives; the response follows the reverse path, back to the client.</p>
 <div id="fig-06-filter-chain-en" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-06-filter-chain-en-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="../assets/images/capitulos/cap06/Filter_Chain.png" class="img-fluid figure-img" style="width:80.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-06-filter-chain-en-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6.1: A request passes through the Filter chain before reaching the Servlet; each Filter can block the request (red), modify it (yellow), or let it proceed (green, by calling chain.doFilter()).
+Figure&nbsp;6.1: A request goes through the chain of Filters before reaching the Servlet; each Filter can block the request (red), modify it (yellow) or let it proceed (green, by calling chain.doFilter()).
 </figcaption>
 </figure>
 </div>
@@ -395,23 +395,31 @@ Figure&nbsp;6.1: A request passes through the Filter chain before reaching the S
 <li><strong>Modify the request</strong>: data normalisation and validation, activity logging, among others</li>
 <li><strong>Let it proceed</strong>: by calling <code>chain.doFilter(request, response)</code>, passing control to the next element in the chain</li>
 </ul>
+<p>Consider an application with an authentication Filter in front of the <em>Servlet</em> that shows the user’s profile, mapped to <code>/perfil</code>. The path of a request is this:</p>
+<ol type="1">
+<li>The <em>browser</em> sends <code>GET /perfil</code>.</li>
+<li>Before the request reaches the <em>Servlet</em>, the container hands it to the Filter, which looks for the session with <code>getSession(false)</code> and, inside it, the <code>utilizador</code> attribute.</li>
+<li><strong>No session</strong> (the user has not logged in yet): the Filter answers <code>401</code> and the request ends there. The <em>Servlet</em> never runs.</li>
+<li><strong>With a session</strong>: the Filter calls <code>chain.doFilter(request, response)</code> and the request goes on to the <em>Servlet</em>, which produces the profile page.</li>
+<li>The <em>Servlet</em>’s response passes through the Filter again, on its way to the <em>browser</em>.</li>
+</ol>
 </section>
 <section id="sec-06-filter-lifecycle-en" class="level2" data-number="6.5">
-<h2 data-number="6.5" class="anchored" data-anchor-id="sec-06-filter-lifecycle-en"><span class="header-section-number">6.5</span> A Filter’s Lifecycle</h2>
-<p>A Filter’s lifecycle follows the same model already presented for <em>Servlets</em> (see <a href="../capitulos/cap04.html">Chapter 4</a>):</p>
+<h2 data-number="6.5" class="anchored" data-anchor-id="sec-06-filter-lifecycle-en"><span class="header-section-number">6.5</span> The Life Cycle of a Filter</h2>
+<p>The life cycle of a Filter follows the same model already presented for <em>Servlets</em> (see <a href="../capitulos/cap04.html">Chapter 4</a>):</p>
 <ul>
-<li><code>init()</code>: executed once, when the container puts the Filter into service</li>
-<li><code>doFilter()</code>: executed on every request; it can inspect, block or modify the request and the response, and must call <code>chain.doFilter()</code> to continue the chain</li>
-<li><code>destroy()</code>: executed once, when the Filter is taken out of service, to free resources</li>
+<li><code>init()</code>: runs only once, when the container puts the Filter into service</li>
+<li><code>doFilter()</code>: runs on each request; it can inspect, block or modify the request and the response, and must call <code>chain.doFilter()</code> to continue the chain; it can also run code after <code>chain.doFilter()</code> returns, with the response already produced by the <em>Servlet</em></li>
+<li><code>destroy()</code>: runs only once, when the Filter is taken out of service, to release resources</li>
 </ul>
-<p>Just like a <em>Servlet</em>, there is <strong>a single instance</strong> of each Filter, shared by multiple concurrent requests: exactly the same care already mentioned in Chapter 4 applies here — avoid shared mutable state, and prefer local variables inside <code>doFilter()</code>.</p>
+<p>Like a <em>Servlet</em>, there is <strong>a single instance</strong> of each Filter, shared by multiple concurrent requests: exactly the same care already mentioned in <a href="../capitulos/cap04.html">Chapter 4</a> applies here, avoid shared mutable state and prefer local variables inside <code>doFilter()</code>.</p>
 <div id="fig-06-filter-lifecycle-en" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-06-filter-lifecycle-en-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="../assets/images/capitulos/cap06/Filter_Lifecycle.png" class="img-fluid figure-img" style="width:85.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-06-filter-lifecycle-en-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6.2: A Filter’s lifecycle mirrors a Servlet’s: init() and destroy() run once, doFilter() runs on every request, for multiple concurrent requests.
+Figure&nbsp;6.2: The life cycle of a Filter mirrors that of a Servlet: init() and destroy() run only once, doFilter() runs on every request, for multiple concurrent requests.
 </figcaption>
 </figure>
 </div>
@@ -425,27 +433,45 @@ Figure&nbsp;6.2: A Filter’s lifecycle mirrors a Servlet’s: init() and destro
 <img src="../assets/images/capitulos/cap06/Servlet_vs_Filter.png" class="img-fluid figure-img" style="width:75.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-06-servlet-vs-filter-en-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6.3: Without a Filter, each Servlet accumulates authentication, logging, validation and business logic. With a Filter, those cross-cutting concerns are concentrated in a single place, and each Servlet is left with only its own business logic.
+Figure&nbsp;6.3: Without a Filter, each Servlet accumulates authentication, logging, validation and business logic. With a Filter, those cross-cutting concerns are concentrated in a single place, and each Servlet keeps only its business logic.
 </figcaption>
 </figure>
 </div>
 <p>This reorganisation brings concrete advantages:</p>
 <ul>
-<li>The authentication logic is written <strong>once</strong> (<em>DRY</em> principle)</li>
-<li>The security policy is applied consistently to every <em>endpoint</em></li>
-<li>There is no longer any risk of “forgetting” the protection on a new <em>Servlet</em></li>
+<li>The authentication logic is written <strong>only once</strong> (<em>DRY</em> principle)</li>
+<li>The security policy is applied consistently to all <em>endpoints</em></li>
+<li>There is no longer a risk of “forgetting” the protection in a new <em>Servlet</em></li>
 <li>The separation between cross-cutting concerns (Filter) and business logic (<em>Servlet</em>) becomes clear</li>
 </ul>
 </section>
 <section id="sec-06-declaring-a-filter-en" class="level2" data-number="6.7">
 <h2 data-number="6.7" class="anchored" data-anchor-id="sec-06-declaring-a-filter-en"><span class="header-section-number">6.7</span> Declaring and Implementing a Filter</h2>
 <p>A Filter is declared with the <code>@WebFilter</code> annotation, indicating the <em>URL</em> pattern it applies to:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb4-1"><a href="#cb4-1"></a><span class="at">@WebFilter</span><span class="op">(</span><span class="st">"/*"</span><span class="op">)</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="kw">public</span> <span class="kw">class</span> AuthenticationFilter <span class="kw">implements</span> <span class="bu">Filter</span> <span class="op">{</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a>    <span class="co">// ...</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>The pattern <code>"/*"</code> intercepts every request, with no exception. The class must implement <code>jakarta.servlet.Filter</code>, and the container discovers it automatically at <em>deployment</em> time. Just like <em>Servlets</em>, a Filter can also be declared equivalently in the <code>web.xml</code> file, although this practice is no longer much in use.</p>
-<p>A typical <code>doFilter()</code>, protecting every request by requiring a valid session, has this form:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb3-1"><a href="#cb3-1"></a><span class="at">@WebFilter</span><span class="op">(</span><span class="st">"/*"</span><span class="op">)</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="kw">public</span> <span class="kw">class</span> AuthenticationFilter <span class="kw">implements</span> <span class="bu">Filter</span> <span class="op">{</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a>    <span class="co">// ...</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>"/*"</code> pattern intercepts all requests, without exception. The class must implement <code>jakarta.servlet.Filter</code>, and the container discovers it automatically at <em>deployment</em> time. Like <em>Servlets</em>, a Filter can also be declared equivalently in the <code>web.xml</code> file, although this practice is no longer widely used.</p>
+<p>A typical <code>doFilter()</code>, which protects all requests by requiring a valid session, looks like this:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">public</span> <span class="dt">void</span> <span class="fu">doFilter</span><span class="op">(</span>ServletRequest request<span class="op">,</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>                      ServletResponse response<span class="op">,</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>                      FilterChain chain<span class="op">)</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a>        <span class="kw">throws</span> <span class="bu">IOException</span><span class="op">,</span> ServletException <span class="op">{</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a></span>
+<span id="cb4-6"><a href="#cb4-6"></a>    HttpServletRequest req <span class="op">=</span> <span class="op">(</span>HttpServletRequest<span class="op">)</span> request<span class="op">;</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a>    HttpServletResponse res <span class="op">=</span> <span class="op">(</span>HttpServletResponse<span class="op">)</span> response<span class="op">;</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a></span>
+<span id="cb4-9"><a href="#cb4-9"></a>    HttpSession session <span class="op">=</span> req<span class="op">.</span><span class="fu">getSession</span><span class="op">(</span><span class="kw">false</span><span class="op">);</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a></span>
+<span id="cb4-11"><a href="#cb4-11"></a>    <span class="cf">if</span> <span class="op">(</span>session <span class="op">==</span> <span class="kw">null</span> <span class="op">||</span> session<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"utilizador"</span><span class="op">)</span> <span class="op">==</span> <span class="kw">null</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a>        res<span class="op">.</span><span class="fu">sendError</span><span class="op">(</span>HttpServletResponse<span class="op">.</span><span class="fu">SC_UNAUTHORIZED</span><span class="op">);</span> <span class="co">// 401</span></span>
+<span id="cb4-13"><a href="#cb4-13"></a>        <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb4-14"><a href="#cb4-14"></a>    <span class="op">}</span></span>
+<span id="cb4-15"><a href="#cb4-15"></a></span>
+<span id="cb4-16"><a href="#cb4-16"></a>    chain<span class="op">.</span><span class="fu">doFilter</span><span class="op">(</span>request<span class="op">,</span> response<span class="op">);</span></span>
+<span id="cb4-17"><a href="#cb4-17"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In practice, not all requests should be protected: <code>/login</code> itself, and static resources such as <code>/css</code>, <code>/js</code> or <code>/images</code>, must remain accessible without authentication, otherwise the user could never even reach the <em>login</em> form. The complete version of <code>doFilter()</code> handles these exceptions first and only then checks the session:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">public</span> <span class="dt">void</span> <span class="fu">doFilter</span><span class="op">(</span>ServletRequest request<span class="op">,</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a>                      ServletResponse response<span class="op">,</span></span>
 <span id="cb5-3"><a href="#cb5-3"></a>                      FilterChain chain<span class="op">)</span></span>
@@ -454,41 +480,62 @@ Figure&nbsp;6.3: Without a Filter, each Servlet accumulates authentication, logg
 <span id="cb5-6"><a href="#cb5-6"></a>    HttpServletRequest req <span class="op">=</span> <span class="op">(</span>HttpServletRequest<span class="op">)</span> request<span class="op">;</span></span>
 <span id="cb5-7"><a href="#cb5-7"></a>    HttpServletResponse res <span class="op">=</span> <span class="op">(</span>HttpServletResponse<span class="op">)</span> response<span class="op">;</span></span>
 <span id="cb5-8"><a href="#cb5-8"></a></span>
-<span id="cb5-9"><a href="#cb5-9"></a>    HttpSession session <span class="op">=</span> req<span class="op">.</span><span class="fu">getSession</span><span class="op">(</span><span class="kw">false</span><span class="op">);</span></span>
-<span id="cb5-10"><a href="#cb5-10"></a></span>
-<span id="cb5-11"><a href="#cb5-11"></a>    <span class="cf">if</span> <span class="op">(</span>session <span class="op">==</span> <span class="kw">null</span> <span class="op">||</span> session<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"UserName"</span><span class="op">)</span> <span class="op">==</span> <span class="kw">null</span><span class="op">)</span> <span class="op">{</span></span>
-<span id="cb5-12"><a href="#cb5-12"></a>        res<span class="op">.</span><span class="fu">sendError</span><span class="op">(</span>HttpServletResponse<span class="op">.</span><span class="fu">SC_UNAUTHORIZED</span><span class="op">);</span> <span class="co">// 401</span></span>
-<span id="cb5-13"><a href="#cb5-13"></a>        <span class="cf">return</span><span class="op">;</span></span>
-<span id="cb5-14"><a href="#cb5-14"></a>    <span class="op">}</span></span>
-<span id="cb5-15"><a href="#cb5-15"></a></span>
-<span id="cb5-16"><a href="#cb5-16"></a>    chain<span class="op">.</span><span class="fu">doFilter</span><span class="op">(</span>request<span class="op">,</span> response<span class="op">);</span></span>
-<span id="cb5-17"><a href="#cb5-17"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>In practice, not every request should be protected: <code>/login</code> itself, and static resources such as <code>/css</code>, <code>/js</code> or <code>/images</code>, need to remain accessible without authentication — otherwise the user could never even reach the <em>login</em> form.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb6-1"><a href="#cb6-1"></a><span class="bu">String</span> path <span class="op">=</span> req<span class="op">.</span><span class="fu">getRequestURI</span><span class="op">();</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a></span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="dt">boolean</span> isLogin <span class="op">=</span> path<span class="op">.</span><span class="fu">endsWith</span><span class="op">(</span><span class="st">"/login"</span><span class="op">);</span></span>
-<span id="cb6-4"><a href="#cb6-4"></a><span class="dt">boolean</span> isStatic <span class="op">=</span> path<span class="op">.</span><span class="fu">startsWith</span><span class="op">(</span>req<span class="op">.</span><span class="fu">getContextPath</span><span class="op">()</span> <span class="op">+</span> <span class="st">"/css"</span><span class="op">)</span></span>
-<span id="cb6-5"><a href="#cb6-5"></a>                 <span class="op">||</span> path<span class="op">.</span><span class="fu">startsWith</span><span class="op">(</span>req<span class="op">.</span><span class="fu">getContextPath</span><span class="op">()</span> <span class="op">+</span> <span class="st">"/js"</span><span class="op">)</span></span>
-<span id="cb6-6"><a href="#cb6-6"></a>                 <span class="op">||</span> path<span class="op">.</span><span class="fu">startsWith</span><span class="op">(</span>req<span class="op">.</span><span class="fu">getContextPath</span><span class="op">()</span> <span class="op">+</span> <span class="st">"/images"</span><span class="op">);</span></span>
-<span id="cb6-7"><a href="#cb6-7"></a></span>
-<span id="cb6-8"><a href="#cb6-8"></a><span class="cf">if</span> <span class="op">(</span>isLogin <span class="op">||</span> isStatic<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb6-9"><a href="#cb6-9"></a>    chain<span class="op">.</span><span class="fu">doFilter</span><span class="op">(</span>request<span class="op">,</span> response<span class="op">);</span></span>
-<span id="cb6-10"><a href="#cb6-10"></a>    <span class="cf">return</span><span class="op">;</span></span>
-<span id="cb6-11"><a href="#cb6-11"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-9"><a href="#cb5-9"></a>    <span class="bu">String</span> ctx <span class="op">=</span> req<span class="op">.</span><span class="fu">getContextPath</span><span class="op">();</span>   <span class="co">// e.g. "/MinhaApp"</span></span>
+<span id="cb5-10"><a href="#cb5-10"></a>    <span class="bu">String</span> path <span class="op">=</span> req<span class="op">.</span><span class="fu">getRequestURI</span><span class="op">();</span>   <span class="co">// e.g. "/MinhaApp/css/estilo.css"</span></span>
+<span id="cb5-11"><a href="#cb5-11"></a></span>
+<span id="cb5-12"><a href="#cb5-12"></a>    <span class="dt">boolean</span> isLogin <span class="op">=</span> path<span class="op">.</span><span class="fu">endsWith</span><span class="op">(</span><span class="st">"/login"</span><span class="op">);</span></span>
+<span id="cb5-13"><a href="#cb5-13"></a>    <span class="dt">boolean</span> isStatic <span class="op">=</span> path<span class="op">.</span><span class="fu">startsWith</span><span class="op">(</span>ctx <span class="op">+</span> <span class="st">"/css"</span><span class="op">)</span></span>
+<span id="cb5-14"><a href="#cb5-14"></a>                     <span class="op">||</span> path<span class="op">.</span><span class="fu">startsWith</span><span class="op">(</span>ctx <span class="op">+</span> <span class="st">"/js"</span><span class="op">)</span></span>
+<span id="cb5-15"><a href="#cb5-15"></a>                     <span class="op">||</span> path<span class="op">.</span><span class="fu">startsWith</span><span class="op">(</span>ctx <span class="op">+</span> <span class="st">"/images"</span><span class="op">);</span></span>
+<span id="cb5-16"><a href="#cb5-16"></a></span>
+<span id="cb5-17"><a href="#cb5-17"></a>    <span class="cf">if</span> <span class="op">(</span>isLogin <span class="op">||</span> isStatic<span class="op">)</span> <span class="op">{</span>           <span class="co">// public resources</span></span>
+<span id="cb5-18"><a href="#cb5-18"></a>        chain<span class="op">.</span><span class="fu">doFilter</span><span class="op">(</span>request<span class="op">,</span> response<span class="op">);</span></span>
+<span id="cb5-19"><a href="#cb5-19"></a>        <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb5-20"><a href="#cb5-20"></a>    <span class="op">}</span></span>
+<span id="cb5-21"><a href="#cb5-21"></a></span>
+<span id="cb5-22"><a href="#cb5-22"></a>    HttpSession session <span class="op">=</span> req<span class="op">.</span><span class="fu">getSession</span><span class="op">(</span><span class="kw">false</span><span class="op">);</span></span>
+<span id="cb5-23"><a href="#cb5-23"></a></span>
+<span id="cb5-24"><a href="#cb5-24"></a>    <span class="cf">if</span> <span class="op">(</span>session <span class="op">==</span> <span class="kw">null</span> <span class="op">||</span> session<span class="op">.</span><span class="fu">getAttribute</span><span class="op">(</span><span class="st">"utilizador"</span><span class="op">)</span> <span class="op">==</span> <span class="kw">null</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb5-25"><a href="#cb5-25"></a>        res<span class="op">.</span><span class="fu">sendError</span><span class="op">(</span>HttpServletResponse<span class="op">.</span><span class="fu">SC_UNAUTHORIZED</span><span class="op">);</span> <span class="co">// 401</span></span>
+<span id="cb5-26"><a href="#cb5-26"></a>        <span class="cf">return</span><span class="op">;</span></span>
+<span id="cb5-27"><a href="#cb5-27"></a>    <span class="op">}</span></span>
+<span id="cb5-28"><a href="#cb5-28"></a></span>
+<span id="cb5-29"><a href="#cb5-29"></a>    chain<span class="op">.</span><span class="fu">doFilter</span><span class="op">(</span>request<span class="op">,</span> response<span class="op">);</span></span>
+<span id="cb5-30"><a href="#cb5-30"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>getContextPath()</code> method returns the prefix under which the application is installed on the server, and <code>getRequestURI()</code> returns the full requested path. Comparing the start of the path with <code>ctx + "/css"</code> works whatever the name under which the application was installed.</p>
+<p>Everything a Filter does after <code>chain.doFilter()</code> returns happens with the response already produced by the <em>Servlet</em>. An activity logging Filter, for example, notes the time before passing the request to the chain and computes the duration when the chain returns:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode numberSource java number-lines code-with-copy"><code class="sourceCode java"><span id="cb6-1"><a href="#cb6-1"></a><span class="at">@WebFilter</span><span class="op">(</span><span class="st">"/*"</span><span class="op">)</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="kw">public</span> <span class="kw">class</span> RegistoFilter <span class="kw">implements</span> <span class="bu">Filter</span> <span class="op">{</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a></span>
+<span id="cb6-4"><a href="#cb6-4"></a>    <span class="kw">public</span> <span class="dt">void</span> <span class="fu">doFilter</span><span class="op">(</span>ServletRequest request<span class="op">,</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a>                          ServletResponse response<span class="op">,</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a>                          FilterChain chain<span class="op">)</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a>            <span class="kw">throws</span> <span class="bu">IOException</span><span class="op">,</span> ServletException <span class="op">{</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a></span>
+<span id="cb6-9"><a href="#cb6-9"></a>        <span class="dt">long</span> inicio <span class="op">=</span> <span class="bu">System</span><span class="op">.</span><span class="fu">currentTimeMillis</span><span class="op">();</span>   <span class="co">// before the Servlet</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a></span>
+<span id="cb6-11"><a href="#cb6-11"></a>        chain<span class="op">.</span><span class="fu">doFilter</span><span class="op">(</span>request<span class="op">,</span> response<span class="op">);</span>          <span class="co">// the Servlet runs here</span></span>
+<span id="cb6-12"><a href="#cb6-12"></a></span>
+<span id="cb6-13"><a href="#cb6-13"></a>        <span class="dt">long</span> duracao <span class="op">=</span> <span class="bu">System</span><span class="op">.</span><span class="fu">currentTimeMillis</span><span class="op">()</span> <span class="op">-</span> inicio<span class="op">;</span>   <span class="co">// after</span></span>
+<span id="cb6-14"><a href="#cb6-14"></a>        HttpServletRequest req <span class="op">=</span> <span class="op">(</span>HttpServletRequest<span class="op">)</span> request<span class="op">;</span></span>
+<span id="cb6-15"><a href="#cb6-15"></a>        <span class="bu">System</span><span class="op">.</span><span class="fu">out</span><span class="op">.</span><span class="fu">println</span><span class="op">(</span>req<span class="op">.</span><span class="fu">getRequestURI</span><span class="op">()</span> <span class="op">+</span> <span class="st">": "</span> <span class="op">+</span> duracao <span class="op">+</span> <span class="st">" ms"</span><span class="op">);</span></span>
+<span id="cb6-16"><a href="#cb6-16"></a>    <span class="op">}</span></span>
+<span id="cb6-17"><a href="#cb6-17"></a><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>inicio</code> and <code>duracao</code> variables are local: each request has its own, and concurrent requests do not interfere with one another, as recommended in the life cycle.</p>
 </section>
 <section id="sec-06-redirect-vs-401-en" class="level2" data-number="6.8">
-<h2 data-number="6.8" class="anchored" data-anchor-id="sec-06-redirect-vs-401-en"><span class="header-section-number">6.8</span> Redirection vs.&nbsp;<code>401</code>: an Architectural Difference</h2>
-<p>The correct way to react to an authentication failure depends on the kind of application:</p>
+<h2 data-number="6.8" class="anchored" data-anchor-id="sec-06-redirect-vs-401-en"><span class="header-section-number">6.8</span> Redirect vs.&nbsp;<code>401</code>: an Architectural Difference</h2>
+<p>The right way to react to an authentication failure depends on the type of application:</p>
 <ul>
 <li>In a traditional, presentation-oriented Web application (see <a href="../capitulos/cap01.html">Chapter 1</a>), the natural response is a <strong>redirect</strong> to the <em>login</em> page (code <code>302</code>)</li>
-<li>In a REST API, whose contract is JSON (see <a href="../capitulos/cap07.html">Chapters 7</a> and <a href="../capitulos/cap08.html">8</a>), the correct response is to return <strong><code>401</code></strong>, with no redirection at all</li>
+<li>In a REST API, whose contract is JSON (see <a href="../capitulos/cap07.html">Chapters 7</a> and <a href="../capitulos/cap08.html">8</a>), the right response is to return <strong><code>401</code></strong>, without any redirect</li>
 </ul>
-<p>The difference boils down to one sentence: in a traditional Web application, an authentication failure changes the page shown; in a REST API, it only changes the status code returned. It is the client, not the server, that decides what to do next with that <code>401</code>.</p>
+<p>The difference boils down to one sentence: in a traditional Web application, an authentication failure changes the page shown; in a REST API, it changes only the status code returned. It is the client, not the server, that decides what to do next with that <code>401</code>.</p>
 </section>
 <section id="sec-06-preparing-for-stateless-en" class="level2" data-number="6.9">
 <h2 data-number="6.9" class="anchored" data-anchor-id="sec-06-preparing-for-stateless-en"><span class="header-section-number">6.9</span> Preparing for Stateless Security</h2>
-<p>The model presented in this chapter rests entirely on sessions: the server stores the authenticated user’s state (<code>HttpSession</code>), and the Filter checks that session on every request. This model has one limitation: it requires the server to keep memory of each user, which becomes problematic as soon as there is more than one server instance (see <a href="../capitulos/cap08.html">Chapter 8</a>).</p>
-<p>The alternative is token-based authentication: instead of the server storing any session at all, each request itself carries, on every call, all the information needed to authenticate. This shift, from a stateful model to a stateless model, is the subject of the following chapters.</p>
+<p>The model presented in this chapter relies entirely on the session: the server keeps the authenticated user’s state (<code>HttpSession</code>), and the Filter checks that session on every request. This model has a limitation: it requires the server to keep a memory of each user, which becomes a problem as soon as there is more than one server handling requests (see <a href="../capitulos/cap07.html">Chapter 7</a>).</p>
+<p>The alternative is <em>token</em>-based authentication: instead of the server keeping any session, the request itself carries, on every call, all the information needed to authenticate itself. This change, from a <em>stateful</em> model to a <em>stateless</em> model, is the subject of the following chapters.</p>
 
 
 </section>

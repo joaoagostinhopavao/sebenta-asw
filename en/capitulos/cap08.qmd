@@ -5,78 +5,151 @@ date: 2026-08-26
 lang: en-GB
 ---
 
-## Session Limitations in Distributed Systems {#sec-08-session-limitations-en}
+## Limitations of Sessions in Distributed Systems {#sec-08-session-limitations-en}
 
-[Chapter 7](cap07.qmd) ended by pointing at the problem: an authentication model based on `HttpSession` (see [Chapter 5](cap05.qmd)) requires the server to keep, in memory, the state of each authenticated user. As soon as there is more than one server instance, that memory is no longer automatically shared between them.
+A web application with many users has to **scale**, that is, to cope with more work (more users, more requests per second) without slowing down or stopping. There are two ways of doing it:
 
-There are known workarounds for this problem — *sticky sessions* (always routing the same client to the same instance) or replicating sessions across instances — but both come at a cost: the first limits how requests can be distributed, and the second requires extra infrastructure just to keep instances synchronised. Neither solves the problem at its root; both are ways of working around a dependency on state that, for a REST API (see [Chapter 7](cap07.qmd)), should not exist in the first place.
+**Vertical scalability**
+: Giving more resources (processors, memory) to the same machine. It is simple, because the application does not change, but it has a physical limit and does not solve the problem of the *single point of failure*: if that single machine breaks down or has to be restarted, the whole application becomes unavailable
+
+**Horizontal scalability**
+: Adding more identical servers, running in parallel, with a *load balancer* distributing the requests among them. It has almost no limit, because more servers can simply be added, and, if one fails, the others keep answering
+
+The difference is the same as in a supermarket: instead of having a single checkout operator who gets faster and faster (vertical), more checkouts are opened, with a single queue that sends each customer to the first free checkout (horizontal). For this to work, any checkout has to be able to serve any customer. Web applications with many users scale horizontally, and that is where sessions cause problems.
+
+[Chapter 7](cap07.qmd) ended by pointing out that problem: an authentication model based on `HttpSession` (see [Chapter 5](cap05.qmd)) requires the server to keep, in memory, the state of each authenticated user. As soon as there is more than one server (several Tomcats, each with the same application installed, behind a load balancer that distributes the requests), that memory is no longer automatically shared among them. This is not about several instances of the same *Servlet*: inside a Tomcat, simultaneous requests are handled by several *threads* of the same instance (see [Chapter 4](cap04.qmd)), which share the same memory and therefore the same sessions.
+
+There are well-known workarounds for this problem (@fig-08-sticky-replication-en), *sticky sessions* (always routing the same client to the same server) and session replication between servers, but both have a cost: the first limits how requests can be distributed, and the second requires extra infrastructure just to keep the servers in sync. Neither solves the problem at its root; both are ways of working around a dependency on state that, for a REST API (see [Chapter 7](cap07.qmd)), should not even exist.
+
+![The two workarounds: with *sticky sessions*, the load balancer always sends the same user to the server that holds her session; with replication, the servers copy the sessions to each other and any of them can answer.](../assets/images/capitulos/cap08/Sticky_Replicacao.png){#fig-08-sticky-replication-en width="95%"}
 
 ## Stateless Authentication: the `Authorization` Header {#sec-08-authorization-header-en}
 
-The stateless alternative reverses the responsibility: instead of the server keeping track of who is authenticated, it is the **client itself** that keeps proof of its authentication — a *token* — and resends it with every request, typically in the HTTP `Authorization` header:
+The stateless alternative reverses the responsibility: instead of the server keeping track of who is authenticated, it is the **client itself** that keeps a proof of its authentication, a *token*, and sends it back with each request, typically in the HTTP `Authorization` header:
 
 ::: {.httpmsg}
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqYXZhZWUifQ.dGhpc19pc19hX2Zha2Vfc2lnbmF0dXJl
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhbmEiLCJyb2xlIjoidXNlciIsImV4cCI6MTg5MzQ1NjAwMH0.O1M0ymsf-ceCK3OxAewCVLReDaVliYUirWclbBC4-LE
 :::
 
-The word `Bearer` indicates the type of credential that follows (literally, "bearer": whoever presents this *token* is treated as its rightful owner). Upon receiving the request, the server does not need to consult any memory: it only needs to validate the *token* itself — what that is, and how that validation works, is the subject of the next section.
+The `Authorization` header is not exclusive to *tokens*: the HTTP standard always defines it with the format `Authorization: <scheme> <credentials>`, and the first word, the **scheme**, tells the server how to interpret what follows.
+
+| Scheme | What follows | Example |
+|---|---|---|
+| `Basic` | `user:password` in *Base64* | `Authorization: Basic YW5hOnNlZ3JlZG8=` |
+| `Bearer` | a *token* (for example, a JWT) | `Authorization: Bearer eyJhbGciOi...` |
+| `Digest` | a digest computed from the password | rarely used today |
+
+: Some schemes of the `Authorization` header. {#tbl-08-authorization-schemes-en}
+
+Without the scheme, the server would not know whether `eyJhbGciOi...` is a *token*, an encoded password or something else; it is also a convention followed by clients, libraries and servers, which write and expect `Bearer <token>`. The word `Bearer` literally means "bearer": whoever presents this *token* is treated as its rightful owner, with no further questions. That is why the *token* must always travel over HTTPS and must never be exposed. On receiving the request, the server does not need to look anything up in memory: it only has to validate the *token* itself. What it is, and how that validation works, is the subject of the next section.
 
 ## JWT: a Stateless *Token* {#sec-08-jwt-en}
 
-A *JSON Web Token* (JWT) is a standardised *token* format, designed to carry information compactly and verifiably, without the server needing to keep anything about it. A JWT always has three parts, separated by dots:
+A *JSON Web Token* (JWT) is a standardised *token* format, designed to carry information in a compact and verifiable way, without the server needing to store anything about it. A JWT always has three parts, separated by dots:
 
 ```
 <header>.<payload>.<signature>
 ```
 
 **Header**
-: Metadata about the *token* itself, typically the signing algorithm used — for example, `{"alg":"HS256","typ":"JWT"}`
+: Metadata about the *token* itself, for example `{"alg":"HS256","typ":"JWT"}`: `alg` indicates the signature algorithm (`HS256` is an HMAC with SHA-256); `typ` indicates that it is a JWT, is optional and, in practice, almost always has this value
 
 **Payload**
-: The data the *token* carries (the *claims*) — for example, `{"sub":"javaee","role":"user","exp":1893456000}`, identifying the user, their role, and the expiry date
+: The data the *token* carries, the *claims* (statements about the user), for example `{"sub":"ana","role":"user","exp":1893456000}`. `sub` (*subject*) indicates who the user is; `role` is their profile, a *claim* defined by the application itself; `exp` (*expiration*) is the moment until which the *token* is valid, counted in seconds since 1 January 1970 (here, 1 January 2030)
 
 **Signature**
 : The result of cryptographically signing the *header* and the *payload* with a secret key, known only to the server
 
-Each of these three parts is encoded in *Base64* and concatenated with dots, producing the long, unreadable *string* characteristic of a JWT (like the one in the `Authorization` header example above). The *header* and the *payload* are only encoded, not encrypted — anyone can read them, with no key needed. What guarantees that no one can **forge** a valid *token* is the signature: only whoever knows the server's secret key can generate it correctly, and any change to the *header* or the *payload*, however small, invalidates the signature. Upon receiving a request, the server recomputes the signature from the received *header* and *payload*, and compares it with the one carried in the *token*: if they match, the content can be trusted, without the server having had to keep, itself, absolutely anything.
+Each of these three parts is encoded in *Base64URL* and joined with dots, resulting in the long, unreadable *string* typical of a JWT (like the one in the `Authorization` header example above). *Base64* writes any data using only 64 safe characters (upper- and lower-case letters, digits and two more symbols): every 3 bytes become 4 characters. The *Base64URL* variant replaces those two symbols, `+` and `/`, with `-` and `_`, and drops the `=` padding at the end, so that the result can go in a *URL* or an HTTP header without being altered. Encoding is not encrypting: anyone can reverse it. For example, the text `Ana` (3 bytes) is encoded as `QW5h` (4 characters), and `QW5h` turns back into `Ana` with no key at all (@fig-08-base64-en). Likewise, `{"alg":"HS256",...}` gives `eyJhbGciOiJIUzI1NiIs...`, which is why every JWT starts with `eyJ` (the initial `{"`, encoded: the 8 bits of the brace are split between the `e` and part of the `y`, because *Base64* converts bits, not characters one by one).
 
-## The Lifecycle of a *Token* {#sec-08-token-lifecycle-en}
+There are three reasons for using this encoding in a JWT. The signature is raw bytes (32, in the case of `HS256`), with values that do not correspond to any printable character and cannot go into an HTTP header as they are. The JSON of the *header* and the *payload* contains characters such as `{`, `"`, `:`, spaces or accented letters, some of which have a special meaning in a *URL* or a header. And, since `.` is not one of the 64 *Base64URL* characters, it can serve as an unambiguous separator between the three parts. *Base64* neither protects nor compresses: anyone can decode it, and the result is about a third larger than the original.
 
-A *token* does not replace the moment of authentication itself — it only replaces the way the server remembers it.
+![Base64 step by step: the 3 bytes of `Ana` (65, 110 and 97) make 24 bits; read in 4 groups of 6 bits, they are worth 16, 22, 57 and 33, which in the Base64 table correspond to `Q`, `W`, `5` and `h`.](../assets/images/capitulos/cap08/Base64_Ana.png){#fig-08-base64-en width="95%"}
 
-**Issuance**
-: The client authenticates exactly as in [Chapter 5](cap05.qmd), sending `user`/`pass` to a *login* *endpoint*. The server validates the credentials (for example, through a DAO, see [Chapter 4](cap04.qmd)) but, instead of creating an `HttpSession`, generates a new JWT, signs it with its secret key, and returns it to the client in the response body
+The *header* and the *payload* are only encoded, not encrypted: anyone can read them, without needing any key. What ensures that nobody can **forge** a valid *token* is the signature: only whoever knows the server's secret key can generate it correctly, and any change to the *header* or the *payload*, however small, invalidates the signature. On receiving a request, the server recomputes the signature from the *header* and *payload* received, and compares it with the one that came in the *token*: if they match, the content can be trusted, without the server having had to store absolutely anything itself (@fig-08-jwt-anatomy-en).
 
-**Storage and resending**
-: Unlike `JSESSIONID` (see [Chapter 5](cap05.qmd)), which the *browser* resends automatically through a *cookie*, the client is responsible for storing the received *token* and for explicitly resending it in the `Authorization` header of every subsequent request
+![The three parts of a real JWT, all in *Base64URL*: the *header* and the *payload* decode into JSON that anyone can read; the signature decodes into 32 unreadable bytes, computed with the server's secret key, and it is the signature that prevents the *token* from being forged.](../assets/images/capitulos/cap08/JWT_Anatomia.png){#fig-08-jwt-anatomy-en width="95%"}
+
+In the `HS256` algorithm, the signature is an HMAC with SHA-256: a 32-byte code computed from the already encoded *header* and *payload* (`header.payload`) and from the secret key. Those 32 bytes are also carried in the *token* in *Base64URL*; decoded, they give no text at all, only raw bytes. Since the same key is used both to generate and to verify the signature, only the server should know it.
+
+## The Life Cycle of a *Token* {#sec-08-token-lifecycle-en}
+
+A *token* does not replace the authentication moment itself: it only replaces the way the server remembers it (@fig-08-token-cycle-en).
+
+**Issuing**
+: The client authenticates exactly as in [Chapter 5](cap05.qmd), sending `utilizador` and `palavraPasse` to a *login* *endpoint*. The server validates the credentials (for example, with `dao.validarCredenciais()`, see [Chapter 4](cap04.qmd)) but, instead of creating an `HttpSession`, generates a new JWT, signs it with its secret key and returns it to the client in the response body
+
+**Storing and resending**
+: Unlike the `JSESSIONID` (see [Chapter 5](cap05.qmd)), which the *browser* sends back automatically through a *cookie*, the client is responsible for storing the *token* received and for resending it, explicitly, in the `Authorization` header of each following request. In a JavaScript client, the *token* is kept in a variable or in `sessionStorage` (a *browser* storage area that lasts while the tab is open). Any JavaScript on the page can read what is stored there, including malicious code injected into the page (see @sec-08-security-en)
 
 **Validation**
-: Each request is validated completely independently of previous ones: the server recomputes the signature, without consulting any session at all (see @sec-08-horizontal-scalability-en)
+: Each request is validated completely independently of the previous ones: the server recomputes the signature, without looking up any session (see @sec-08-horizontal-scalability-en)
 
 **Expiry**
-: The `exp` *claim* in the *payload* defines how long the *token* remains valid. Once that moment has passed, the server rejects it (`401`) even if the signature is still correct, forcing a new *login*. This limits the time window in which an intercepted *token* could be misused — unlike an `HttpSession`, which only ends through explicit *logout* or prolonged inactivity (see [Chapter 5](cap05.qmd)), a JWT always expires, even if it is still being used
+: The `exp` *claim* of the *payload* defines until when the *token* is valid. After that moment, the server rejects it (`401`) even if the signature is still correct, forcing a new *login*. This limits the time window in which an intercepted *token* could be misused. Unlike an `HttpSession`, which only ends by explicit *logout* or prolonged inactivity (see [Chapter 5](cap05.qmd)), a JWT always expires, even if it keeps being used
 
-The following table summarises the difference between the two authentication models seen so far in this course:
+![The life cycle of a *token*: the *login* returns a JWT, which the client resends with each request; when the `exp` *claim* passes, the server answers `401` and the client has to log in again.](../assets/images/capitulos/cap08/Ciclo_Token.png){#fig-08-token-cycle-en width="85%"}
+
+When issuing, the *token* is rarely built by hand. [JJWT](https://github.com/jwtk/jjwt) is an open-source Java library for creating and validating JWTs; its main class, `Jwts`, has a method for each of these tasks: `Jwts.builder()` creates a *token* and `Jwts.parser()` validates it. Generating a *token* boils down to indicating the user, the expiry and the key:
+
+```java
+String token = Jwts.builder()
+        .subject(utilizador)                  // "sub" claim
+        .issuedAt(new Date())                 // "iat" claim (issued at): now
+        .expiration(new Date(System.currentTimeMillis()
+                + 30 * 60 * 1000))            // "exp": in 30 min (in ms)
+        .signWith(SECRET_KEY, Jwts.SIG.HS256) // the signature
+        .compact();                           // joins the three parts
+```
+
+The *login* *Servlet* then returns this *string* in the response body, for example inside a JSON such as `{"token":"eyJhbGciOi..."}`. The complete code, with the `JwtUtil` class, is in [Appendix D5](apendiceD5.qmd).
+
+Note the units: Java counts time in milliseconds (`System.currentTimeMillis()`, `new Date(...)`), so 30 minutes are `30 * 60 * 1000`; the `exp` *claim*, on the other hand, is counted in seconds. There is no need to convert by hand: JJWT converts the date to seconds when writing the *claim*.
+
+The `SECRET_KEY` deserves care, because the whole security depends on it: whoever has it can forge *tokens* for any user. It should be generated once, at random, with at least 32 bytes (256 bits) for `HS256` (for example, with `Jwts.SIG.HS256.key().build()` or `openssl rand -base64 32`), and stored outside the code, typically in an environment variable of the server:
+
+```java
+SecretKey SECRET_KEY = Keys.hmacShaKeyFor(
+        System.getenv("JWT_SECRET").getBytes(StandardCharsets.UTF_8));
+```
+
+All servers use the same key (see @sec-08-horizontal-scalability-en), and it must never go into a Git repository or reach the client.
+
+An **environment variable** is a name = value pair that the operating system keeps outside any program and hands to each program when it starts; the program reads the value by name, without that value being written in the code. Every computer already has several, such as `PATH` (the folders where the system looks for programs), `HOME` (the user's folder) or `JAVA_HOME` (where Java is installed, used by Tomcat itself). For the JWT key, the variable is set on the server machine before starting the application:
+
+```bash
+export JWT_SECRET="k3J9...32-bytes-or-more-at-random..."   # macOS and Linux
+```
+
+```bat
+set JWT_SECRET=k3J9...32-bytes-or-more-at-random...        :: Windows
+```
+
+In Tomcat, the usual place for these settings is the `bin/setenv.sh` file (or `bin/setenv.bat`, on Windows), which Tomcat runs every time it starts. In the Java code, the value is read with `System.getenv("JWT_SECRET")`, as in the excerpt above.
+
+This solution has three advantages: the secret is not in the code, so whoever sees the code or the repository does not get it; it can be changed without recompiling the application, simply by changing the variable and restarting the server; and each machine can have its own value (the developer's, the test one and the production one), with all production servers receiving the same one. It is not, however, a vault: the variable is visible to the programs on that machine and to whoever administers it. Larger systems use dedicated secret management services, which are outside the scope of this course.
+
+The following table summarises the difference between the two authentication models seen in this course:
 
 | | Session (`HttpSession`) | JWT |
 |---|---|---|
 | Where the state lives | On the server, in memory | In the *token* itself, on the client side |
-| What the client keeps | An identifier (`JSESSIONID`) | The full *token*, already carrying the data |
-| Validation on each request | A lookup in the server's memory | Signature verification, with no lookup at all |
-| Multiple server instances | Need to share the session with one another | Each validates independently |
+| What the client keeps | An identifier (`JSESSIONID`) | The full *token*, already with the data |
+| Validation on each request | Lookup in the server's memory | Signature check, without looking anything up |
+| Several servers | Need to share the session among them | Each one validates independently |
 
-In practice, a Filter (see [Chapter 6](cap06.qmd)) remains the natural place for this validation to happen. Recall the session-based authentication Filter already presented in that chapter:
+In practice, a Filter (see [Chapter 6](cap06.qmd)) is still the natural place for this validation to happen. Recall the session-based authentication Filter, already presented in that chapter:
 
 ```java
-public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-        throws IOException, ServletException {
+public void doFilter(ServletRequest request, ServletResponse response,
+                     FilterChain chain) throws IOException, ServletException {
 
     HttpServletRequest req = (HttpServletRequest) request;
     HttpServletResponse res = (HttpServletResponse) response;
 
     HttpSession session = req.getSession(false);
 
-    if (session == null || session.getAttribute("UserName") == null) {
+    if (session == null || session.getAttribute("utilizador") == null) {
         res.sendError(HttpServletResponse.SC_UNAUTHORIZED); // 401
         return;
     }
@@ -85,11 +158,15 @@ public void doFilter(ServletRequest request, ServletResponse response, FilterCha
 }
 ```
 
-The equivalent, *token*-based version has exactly the same structure — only the check itself changes, from an `HttpSession` lookup to validating the *token*'s signature and validity. That validation is rarely written from scratch: it is sensitive code, involving cryptography, and it pays off to leave it to a well-tested, actively maintained library, rather than reimplementing it. [JJWT](https://github.com/jwtk/jjwt) is one of the most widely used in Java, and one of the more security-conscious in the ecosystem (for example, it requires the expected algorithm to be stated explicitly, to prevent a common attack in which a *token* with no signature at all would be accepted as valid):
+The equivalent *token*-based version has exactly the same structure: only the check itself changes, from a lookup in the `HttpSession` to validating the signature and expiry of the *token*. @fig-08-filters-en shows both side by side.
+
+![Session Filter and JWT Filter: in both, a failed check ends the request with `401` and a successful check continues the chain with `chain.doFilter()`; the JWT Filter only has one extra step, because it first confirms that the header carries a `Bearer` *token* and then validates it.](../assets/images/capitulos/cap08/Filtros_Sessao_JWT.png){#fig-08-filters-en width="90%"}
+
+That validation is rarely written from scratch: it is sensitive code, involving cryptography, and it pays to leave it to a tested and actively maintained library, rather than reimplementing it. JJWT, already used for issuing, is one of the most used in Java, and one of the most careful about security. For example, it protects against the `"alg":"none"` attack: the attacker changes the *payload* (for example, to `"role":"admin"`), writes `"alg":"none"` in the *header* and deletes the signature. A careless library would read the *header*, conclude that there is no signature to check and accept the forged *token*, giving the attacker the privileges they wrote themselves. JJWT rejects unsigned *tokens* whenever it is given a key with `verifyWith()`:
 
 ```java
-public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-        throws IOException, ServletException {
+public void doFilter(ServletRequest request, ServletResponse response,
+                     FilterChain chain) throws IOException, ServletException {
 
     HttpServletRequest req = (HttpServletRequest) request;
     HttpServletResponse res = (HttpServletResponse) response;
@@ -101,6 +178,7 @@ public void doFilter(ServletRequest request, ServletResponse response, FilterCha
         return;
     }
 
+    // strip "Bearer " (7 characters): only the token is left
     String token = authHeader.substring("Bearer ".length());
 
     try {
@@ -110,9 +188,10 @@ public void doFilter(ServletRequest request, ServletResponse response, FilterCha
                 .parseSignedClaims(token)
                 .getPayload();
 
-        req.setAttribute("UserName", claims.getSubject());
+        req.setAttribute("utilizador", claims.getSubject());
     } catch (JwtException e) {
-        res.sendError(HttpServletResponse.SC_UNAUTHORIZED); // invalid signature or expired token
+        // invalid signature or expired token
+        res.sendError(HttpServletResponse.SC_UNAUTHORIZED);
         return;
     }
 
@@ -120,48 +199,77 @@ public void doFilter(ServletRequest request, ServletResponse response, FilterCha
 }
 ```
 
-The call to `parseSignedClaims(token)` internally does everything the validation requires: it decodes the *header* and the *payload*, recomputes the signature with `SECRET_KEY` and compares it with the one received, and checks the `exp` *claim* — throwing a `JwtException` (or one of its subclasses, such as `ExpiredJwtException` for an expired *token*, or `SignatureException` for an invalid signature) should any of these checks fail. Note the structural similarity to the session-based Filter: in both cases, a failure condition ends the request with `401`, and the chain only continues with `chain.doFilter()` if authentication is valid.
+The call to `parseSignedClaims(token)` does, internally, everything the validation requires: it decodes the *header* and the *payload*, recomputes the signature with `SECRET_KEY` and compares it with the one received, and checks the `exp` *claim*; it throws a `JwtException` (or one of its subclasses, such as `ExpiredJwtException` for an expired *token*, or `SignatureException` for an invalid signature) if any of these checks fails. Note the structural similarity with the session-based Filter: in both cases, a failure condition ends the request with `401`, and the chain only continues with `chain.doFilter()` if the authentication is valid.
 
-## Horizontal Scalability {#sec-08-horizontal-scalability-en}
+## The Great Advantage of JWT: Scaling Without State {#sec-08-horizontal-scalability-en}
 
-Scaling an application means increasing its capacity to answer more requests. There are, typically, two ways of doing this:
+Horizontal scalability (see @sec-08-session-limitations-en) only works smoothly when any server can answer any request, indiscriminately. With sessions, this requires *sticky sessions* or replication; with JWT-based authentication, it happens naturally: the state travels in the request itself, no server needs to know anything about any other, and each one validates the *token* received completely independently, with the same secret key shared by all (@fig-08-stateless-servers-en). This is the main advantage of JWT over sessions, and the reason why REST APIs use *tokens* instead of sessions.
 
-**Vertical scalability**
-: Increasing the resources (CPU, memory) of the existing machine — has a physical limit, and does not solve the problem of a single point of failure
+![No state on the server: the *login* is handled by server A, the next request lands on server B, and B answers `200` because the request itself carries the *token*.](../assets/images/capitulos/cap08/Servidores_Sem_Estado.png){#fig-08-stateless-servers-en width="95%"}
 
-**Horizontal scalability**
-: Adding more server instances, running in parallel, distributing requests between them — typically through a *load balancer*
+## JWT and Microservices {#sec-08-microservices-en}
 
-Horizontal scalability only works without complications when any instance can answer any request, indifferently — exactly the property a stateless service offers. With JWT-based authentication, no instance needs to know anything about any other: each validates the received *token* completely independently, using the same secret key shared by all of them. It is this independence between instances that makes stateless architecture the foundation of any system designed to scale.
+The same logic applies, even more strongly, to an application split into **microservices** (see @sec-07-monolith-microservices-en): instead of a single web application, there are several small services, each one a web application of its own (for example, an authentication service, a books service and an orders service), installed on the same server, on different ports or paths, or on different servers.
 
-## Distributed MVC: the Pattern Splits Across Server and Client {#sec-08-distributed-mvc-en}
+With sessions, each service would have its own sessions: the `JSESSIONID` created by the authentication service means nothing to the books service, which would have to ask for the credentials again or ask the first service, on every request, who that user is. With JWT, the client logs in only once, at the authentication service, and sends the same *token* to all the others; each service checks the signature on its own, without asking anyone (@fig-08-microservices-en). Each service can also scale independently of the others: if the books service is the most requested, servers are added just for it.
 
-In a presentation-oriented application, the MVC pattern (see [Chapter 1](cap01.qmd)) lives entirely on the server side: one component acts as Controller, and another, responsible for generating HTML, as View. In a REST API, that organisation stops making sense: the server no longer generates HTML, and the View, as defined in classic MVC, disappears from the server side.
+![JWT with microservices: the client logs in at the authentication service, receives the JWT and sends it to the books and orders services, which validate it without consulting the authentication service.](../assets/images/capitulos/cap08/JWT_Microsservicos.png){#fig-08-microservices-en width="95%"}
 
-On the server side, only the Model (data access) and the Controller (the *endpoint* that receives the HTTP request and returns JSON) remain. The role of View moves entirely to the client: it is the [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) code, running in the *browser*, that interprets the received JSON and manipulates the [*DOM*](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model) to present it to whoever is using the application.
+There is one precaution: with `HS256`, all the services would have to know the secret key and, with it, any of them could issue *tokens*. In systems with several services, an asymmetric algorithm (`RS256` or `ES256`) is therefore used: only the authentication service signs, with a private key, and the others only verify, with the corresponding public key (see @sec-apB-asymmetric-en).
 
-This split can be read as a second application of the same pattern, now on the client side: the JavaScript that handles the response and updates the page itself acts as both Controller (deciding what to do with the received response) and View (generating the HTML shown); the JSON returned by the API is the Model, kept on the server and synchronised on every [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) request.
+## Security Precautions with *Tokens* {#sec-08-security-en}
 
-This is why a JavaScript *front-office* connected to a REST API is not an alternative to MVC, but rather the same pattern distributed across two machines instead of one.
+A JWT is a "bearer" credential: whoever has it is treated as its owner until it expires. The signature prevents it from being **forged**, but not from being **stolen**, and most of the precautions are against theft.
+
+**Network interception**
+: Without HTTPS, the request travels in the clear, and anyone on the same network (on a public Wi-Fi, for example) can read the `Authorization` header and copy the *token*. The defence is to always use HTTPS, without exceptions
+
+**XSS (*Cross-Site Scripting*)**
+: The attacker manages to get their own JavaScript running on the page another person is viewing. The most common way is through data the application receives from one user and shows to others without treating it: a comment, a name, the title of a book. If the page inserts that text as HTML, the *browser* runs whatever code is hidden in it, with the same rights as the page itself. That code can, for example, read the *token* stored in `sessionStorage` and send it to the attacker, who can then impersonate the victim (@fig-08-xss-en)
+
+![Stealing a *token* through XSS: the attacker posts a comment with hidden code (1); the server stores it and returns it to the victim (2); the page shows it as HTML and the *browser* runs the code, which reads the *token* (3) and sends it to the attacker (4); the attacker uses it in their own requests (5), and the server cannot tell them apart from the victim.](../assets/images/capitulos/cap08/XSS_Roubo_Token.png){#fig-08-xss-en width="95%"}
+
+The example uses an image with an invalid address (`<img src=x onerror="...">`) rather than a `<script>` tag: *browsers* do not run a `<script>` inserted with `innerHTML`, but they do run the code of the `onerror` attribute when the image fails to load. The defence is to always insert the data received as text, with `textContent`, and never as HTML, with `innerHTML` (see @sec-08-dom-view-en): the comment appears exactly as it was written and nothing is executed.
+
+Besides these two risks, there is a set of good practices to follow whenever *tokens* are used:
+
+- **Short expiry**: the `exp` *claim* should be minutes or a few hours, to limit what a stolen *token* allows;
+- **A JWT cannot be "switched off" before it expires**: since the server stores nothing, *logout* merely deletes the *token* on the client side; to truly revoke it, a list of banned *tokens* would have to be kept, that is, state would have to return to the server (one more reason for a short expiry);
+- **No sensitive data in the *payload***: anyone can read it, so it must never contain passwords, tax numbers or unnecessary personal data;
+- **A long, random secret key, kept outside the code** (see @sec-08-token-lifecycle-en);
+- **Enforce the algorithm when validating**, with `verifyWith()`, against the `"alg":"none"` attack (see @sec-08-token-lifecycle-en);
+- **Always validate on the server, on every request**, the signature and the expiry: that is the Filter's job.
+
+[Appendix B](apendiceB.qmd) goes deeper into these issues, in particular the choice between keeping the *token* in `sessionStorage`/`localStorage` or in an `HttpOnly` *cookie* (see @sec-apB-storage-en).
+
+## Distributed MVC: the Pattern Splits Between Server and Client {#sec-08-distributed-mvc-en}
+
+In a presentation-oriented application, the MVC pattern (see [Chapter 1](cap01.qmd)) lives entirely on the server side: one component works as Controller, and another, responsible for generating HTML, as View. In a REST API, that organisation no longer makes sense: the server no longer generates HTML, and the View, as defined in classic MVC, disappears from the server side.
+
+On the server side, only the Model (data access) and the Controller (the *endpoint* that receives the HTTP request and returns JSON) remain. The role of View passes entirely to the client: it is the [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) code, running in the *browser*, that interprets the JSON received and manipulates the [*DOM*](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model) to present it to whoever uses the application.
+
+This split can be read as a second application of the same pattern, now on the client side: the JavaScript that handles the response and updates the page works, itself, as Controller (it decides what to do with the response received) and as View (it generates the HTML shown); the JSON returned by the API is the Model, kept on the server and synchronised with each [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) request.
+
+This is why a JavaScript *front-office* connected to a REST API is not an alternative to MVC, but the same pattern distributed across two machines instead of one.
 
 ## Consuming a REST API in JavaScript: `fetch()` and JSON {#sec-08-fetch-json-en}
 
-The [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) is the standard way for a *browser* to issue HTTP requests from JavaScript, without reloading the page. A simple, unauthenticated request looks like this:
+The [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) is the standard way for a *browser* to issue HTTP requests from JavaScript, without reloading the page. A simple request, without authentication, looks like this:
 
 ```javascript
-fetch("/country/PT")
+fetch("/livros/12")
   .then(response => response.json())
   .then(data => {
-    console.log(data.capital);
+    console.log(data.titulo);
   });
 ```
 
-`fetch()` returns a *promise* — a value that is not yet available, but will be, later, once the request finishes. The first `.then()` receives the raw HTTP response, and converts its body, as JSON text, into a plain JavaScript object through `response.json()` — this step, in turn, also returns a *promise*, so it is chained with a second `.then()`, with the data now ready to use.
+`fetch()` returns a *promise*: a value that is not yet available, but will be later, when the request finishes. The first `.then()` receives the raw HTTP response and converts its body, in JSON text, into an ordinary JavaScript object through `response.json()`. This step also returns a *promise*, so it is chained with a second `.then()`, with the data ready to use.
 
-For an authenticated request (see @sec-08-authorization-header-en and @sec-08-jwt-en), the *token* travels in a header, just like any other authenticated HTTP request:
+For an authenticated request (see @sec-08-authorization-header-en and @sec-08-jwt-en), the *token* travels in a header, like any other authenticated HTTP request:
 
 ```javascript
-fetch("/country", {
+fetch("/livros", {
   headers: { "Authorization": "Bearer " + token }
 })
   .then(response => response.json())
@@ -170,13 +278,34 @@ fetch("/country", {
   });
 ```
 
-A `POST` request, creating a resource, carries its body already in JSON, explicitly stating that format in the `Content-Type` header (see [Chapter 4](cap04.qmd)):
+A `fetch()` with an expired or invalid *token* does not fail: the request reaches the server and comes back with status `401`. It is up to the client to check the status of the response before using the body, through `response.ok` (true for `2xx` statuses), and to ask for a new *login* when the server rejects the *token*:
 
 ```javascript
-fetch("/country", {
+fetch("/livros", {
+  headers: { "Authorization": "Bearer " + token }
+})
+  .then(response => {
+    if (response.status === 401) {
+      window.location.href = "/login.html";   // expired or invalid token: new login
+      return;
+    }
+    if (!response.ok) {
+      throw new Error("Erro " + response.status);
+    }
+    return response.json();
+  })
+  .then(livros => {
+    // ... show the books
+  });
+```
+
+A `POST` request, creating a resource, carries the body already in JSON, stating that format explicitly in the `Content-Type` header (see [Chapter 4](cap04.qmd)):
+
+```javascript
+fetch("/livros", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ code: "PT", name: "Portugal", capital: "Lisboa" })
+  body: JSON.stringify({ titulo: "Os Maias", autor: "Eça de Queirós" })
 })
   .then(response => response.json())
   .then(data => {
@@ -186,29 +315,35 @@ fetch("/country", {
 
 ## The DOM as the *Browser*'s "View" {#sec-08-dom-view-en}
 
-The [*DOM*](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model) (*Document Object Model*) is the in-memory representation of the HTML page the *browser* is displaying — a tree of objects, one per page element, that JavaScript can read and change directly. It is through the DOM that JavaScript plays the role of View (see @sec-08-distributed-mvc-en): it does not generate HTML as text, the way a JSP does (see [Chapter 5](cap05.qmd)), but instead locates elements already present on the page and updates their content.
+The [*DOM*](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model) (*Document Object Model*) is the in-memory representation of the HTML page the *browser* is showing: a tree of objects, one for each element of the page, which JavaScript can read and change directly. It is through the DOM that JavaScript plays the role of View (see @sec-08-distributed-mvc-en): it does not generate HTML as text, as a JSP does (see [Chapter 5](cap05.qmd)), but finds elements already present on the page and updates their content.
 
 ```javascript
-fetch("/country/PT")
+fetch("/livros/12")
   .then(response => response.json())
   .then(data => {
-    document.querySelector("#capital").textContent = data.capital;
+    document.querySelector("#titulo").textContent = data.titulo;
   });
 ```
 
-`document.querySelector(selector)` locates the first page element matching the given selector (here, the element with `id="capital"`), returning a reference to that DOM element; `textContent` is the property that sets the text shown inside it. The same principle applies to a list of results: for each item returned by the API, a new HTML element is created and inserted into the page.
+`document.querySelector(selector)` finds the first element on the page matching the selector given (here, the element with `id="titulo"`), returning a reference to that DOM element; `textContent` is the property that sets the text shown inside it. The same principle applies to a list of results: for each item returned by the API, a new HTML element is created and inserted into the page.
 
 ```javascript
-fetch("/country")
+fetch("/livros")
   .then(response => response.json())
-  .then(countries => {
-    const table = document.querySelector("#tabela-paises");
-    countries.forEach(country => {
-      const row = document.createElement("tr");
-      row.innerHTML = `<td>${country.code}</td><td>${country.name}</td><td>${country.capital}</td>`;
-      table.appendChild(row);
+  .then(livros => {
+    const tabela = document.querySelector("#tabela-livros");
+    livros.forEach(livro => {
+      const linha = document.createElement("tr");
+      for (const valor of [livro.id, livro.titulo, livro.autor]) {
+        const celula = document.createElement("td");
+        celula.textContent = valor;     // text, never HTML
+        linha.appendChild(celula);
+      }
+      tabela.appendChild(linha);
     });
   });
 ```
 
-This pattern — requesting data from a REST API with `fetch()`, and using the DOM to display it — is the foundation of any JavaScript *front-office* connected to a REST service, regardless of the specific application or data involved.
+Each cell is filled with `textContent`, not `innerHTML`. The difference matters: `innerHTML` interprets the value as HTML, and a book title coming from the server that contained, for example, `<img src=x onerror="...">` would make the *browser* run that JavaScript on the page (a *Cross-Site Scripting*, or XSS, attack). With `textContent`, the value is always inserted as text, whatever its content.
+
+This pattern, requesting data from a REST API with `fetch()` and using the DOM to show it, is the basis of any JavaScript *front-office* connected to a REST service, regardless of the specific application or the data involved.

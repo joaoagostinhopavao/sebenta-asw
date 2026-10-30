@@ -197,7 +197,7 @@ Simply add these *URLs* to `urlPatterns` in the Filter's `@WebFilter`. The user-
 5. Update the country
 6. Remove the country
 7. *Log out*
-8. Confirm that access is denied again (`403`)
+8. Confirm that access is denied again (`401`)
 
 ### Conclusion {#sec-apD4-conclusion-en}
 

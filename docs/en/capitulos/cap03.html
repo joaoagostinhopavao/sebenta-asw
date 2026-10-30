@@ -868,14 +868,18 @@ Content-Type: text/html</p>
 <td>The request is malformed, or a required parameter is missing</td>
 </tr>
 <tr class="even">
-<td><code>403 Forbidden</code></td>
-<td>The client lacks permission to access the resource</td>
+<td><code>401 Unauthorized</code></td>
+<td>The request is not authenticated: the server does not know who the client is</td>
 </tr>
 <tr class="odd">
+<td><code>403 Forbidden</code></td>
+<td>The client is authenticated but lacks permission to access the resource</td>
+</tr>
+<tr class="even">
 <td><code>404 Not Found</code></td>
 <td>The requested resource does not exist</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>500 Internal Server Error</code></td>
 <td>An unhandled error occurred on the server side</td>
 </tr>

@@ -192,7 +192,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 Note that the visible text of the two links — "Entrar" and "Sair" — stays in Portuguese: these links belong to the shared navigation bar first built in [Chapter 2](cap02.qmd) and reused throughout [Appendix A](apendiceA.qmd), and its screenshots were never retaken in this English edition.
 
-This `localStorage` is only a convenience for the interface — it is not, in any way, real security. What still decides whether a request to `/country`, `/countrycodes` or `/countryEdit` is accepted is `AuthenticationFilter`, on the server side (see [Appendix F](apendiceD3.qmd)). If someone opens the *browser*'s developer tools and manually changes this value, the worst that happens is seeing a button that should not be there — protected requests still get a `403` response from the server.
+This `localStorage` is only a convenience for the interface — it is not, in any way, real security. What still decides whether a request to `/country`, `/countrycodes` or `/countryEdit` is accepted is `AuthenticationFilter`, on the server side (see [Appendix F](apendiceD3.qmd)). If someone opens the *browser*'s developer tools and manually changes this value, the worst that happens is seeing a button that should not be there — protected requests still get a `401` response from the server.
 
 Since `paises-editar.html` only makes sense for someone with an active session, add a simple check at the start of `js/countries-edit.js` (see [Step 6.7](#sec-apD6-step7-en)):
 

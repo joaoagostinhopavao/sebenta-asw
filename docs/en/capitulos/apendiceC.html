@@ -316,7 +316,7 @@ Chrome, Firefox and Edge all work equally well; what matters is knowing how to o
 </dd>
 <dt><strong>A REST client</strong></dt>
 <dd>
-A tool for building HTTP requests by hand (<code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE</code>, with headers and body of your choosing), useful for testing a REST API directly (see <a href="../capitulos/cap07.html">Chapter 7</a>) without depending on any <em>front-office</em> already built. A simple <code>GET</code> can always be tested directly in the <em>browser</em>, but <code>POST</code>, <code>PUT</code> and <code>DELETE</code> cannot. <a href="https://www.postman.com/downloads/">Postman</a> is the best known; <a href="https://insomnia.rest/download">Insomnia</a> is a lighter alternative; whoever prefers the command line can use <code>curl</code>, already included by default on macOS, on Linux, and on Windows 10 and later.
+A tool for building HTTP requests by hand (<code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE</code>, with headers and body of your choosing), useful for testing a REST API directly (see <a href="../capitulos/cap07.html">Chapter 7</a>) without depending on any <em>front-office</em> already built. A simple <code>GET</code> can always be tested directly in the <em>browser</em>, but <code>POST</code>, <code>PUT</code> and <code>DELETE</code> cannot. <a href="https://yaak.app/">Yaak</a> is recommended: a lightweight, open-source application, free for personal use, that reaches Tomcat directly on <code>localhost</code>. Whoever prefers not to install anything else can use the VSCode <a href="https://marketplace.visualstudio.com/items?itemName=humao.rest-client">REST Client</a> extension: requests are written in a <code>.http</code> file, as text, in the same format as the HTTP messages of <a href="../capitulos/cap03.html">Chapter 3</a>, and each one is sent with a click. <a href="https://hoppscotch.io/">Hoppscotch</a> works directly in the <em>browser</em>, but can only reach a server on <code>localhost</code> once its <em>browser</em> extension or the Hoppscotch Agent is installed. Whoever prefers the command line can use <code>curl</code>, already included by default on macOS, on Linux, and on Windows 10 and later.
 </dd>
 <dt><strong>MySQL or MariaDB</strong></dt>
 <dd>
@@ -368,7 +368,7 @@ The relational database management system used from LAB4 onward (<a href="../cap
 </tr>
 </tbody>
 </table>
-<p>A REST client (Postman, Insomnia, or <code>curl</code>) is recommended, but not strictly required: the first LABs can be tested with simple HTML forms (see <a href="../capitulos/cap03.html">Chapter 3</a>), with no dedicated client at all.</p>
+<p>A REST client (Yaak, the VSCode REST Client extension, Hoppscotch or <code>curl</code>) is recommended, but not strictly required: the first LABs can be tested with simple HTML forms (see <a href="../capitulos/cap03.html">Chapter 3</a>), with no dedicated client at all.</p>
 </section>
 <section id="sec-apC-confirming-en" class="level2" data-number="C.4">
 <h2 data-number="C.4" class="anchored" data-anchor-id="sec-apC-confirming-en"><span class="header-section-number">C.4</span> Confirming the Installation</h2>

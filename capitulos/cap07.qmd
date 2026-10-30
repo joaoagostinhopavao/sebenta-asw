@@ -140,19 +140,19 @@ Isto não significa que a aplicação, no seu todo, deixe de ter dados persisten
 
 ## Porque a Ausência de Estado Importa {#sec-07-porque-stateless-importa}
 
-A limitação do modelo com estado só se torna visível quando existe mais do que uma instância do servidor a atender pedidos, uma situação comum em qualquer aplicação com necessidade real de escala. Os pedidos chegam primeiro a um **balanceador** (*load balancer*), que os distribui pelas várias instâncias. O percurso de dois pedidos seguidos mostra onde está o problema:
+A limitação do modelo com estado só se torna visível quando existe mais do que um servidor a atender pedidos (vários Tomcats, cada um com a mesma aplicação instalada; não confundir com instâncias de uma *Servlet*, que são sempre uma só por Tomcat, ver [Capítulo 4](cap04.qmd)), uma situação comum em qualquer aplicação com necessidade real de escala. Os pedidos chegam primeiro a um **balanceador** (*load balancer*), que os distribui pelos vários servidores. O percurso de dois pedidos seguidos mostra onde está o problema:
 
-1. O utilizador faz *login*; o balanceador envia o pedido para a instância A, que cria a sessão na sua memória.
-2. O pedido seguinte, `GET /livros`, é enviado pelo balanceador para a instância B.
-3. A instância B não tem, na sua memória, nenhuma sessão correspondente: o utilizador aparece como não autenticado (`401`), apesar de ter acabado de fazer *login*.
+1. O utilizador faz *login*; o balanceador envia o pedido para o servidor A, que cria a sessão na sua memória.
+2. O pedido seguinte, `GET /livros`, é enviado pelo balanceador para o servidor B.
+3. O servidor B não tem, na sua memória, nenhuma sessão correspondente: o utilizador aparece como não autenticado (`401`), apesar de ter acabado de fazer *login*.
 
-![Com sessão, a instância B não conhece a sessão criada na instância A e responde 401; sem estado, o próprio pedido traz a prova de autenticação e qualquer instância responde.](../assets/images/capitulos/cap07/Instancias_Stateful_Stateless.png){#fig-07-instancias width="95%"}
+![Com sessão, o servidor B não conhece a sessão criada no servidor A e responde 401; sem estado, o próprio pedido traz a prova de autenticação e qualquer servidor responde.](../assets/images/capitulos/cap07/Instancias_Stateful_Stateless.png){#fig-07-instancias width="95%"}
 
-Um serviço sem estado não sofre deste problema: como nenhuma instância guarda memória de ninguém, qualquer uma delas pode responder a qualquer pedido. Esta propriedade é o que torna possível distribuir os pedidos por várias instâncias do servidor sem qualquer coordenação entre elas, tema retomado em pormenor no [Capítulo 8](cap08.qmd).
+Um serviço sem estado não sofre deste problema: como nenhum servidor guarda memória de ninguém, qualquer um deles pode responder a qualquer pedido. Esta propriedade é o que torna possível distribuir os pedidos por vários servidores sem qualquer coordenação entre eles, tema retomado em pormenor no [Capítulo 8](cap08.qmd).
 
 ## Monólito e Microsserviços {#sec-07-monolito-microsservicos}
 
-A ausência de estado tem consequências na forma como uma aplicação é organizada. Num **monólito**, a aplicação é uma única unidade de instalação, frequentemente com estado (a sessão vive na memória do servidor), e só se consegue escalar por inteiro. Numa arquitetura de **microsserviços**, a aplicação é repartida em serviços pequenos e independentes, que comunicam entre si por APIs REST, sem estado e com autenticação por *token*, e cada um pode escalar isoladamente. A ausência de estado é o que torna possível repartir uma aplicação por várias instâncias e por vários serviços.
+A ausência de estado tem consequências na forma como uma aplicação é organizada. Num **monólito**, a aplicação é uma única unidade de instalação, frequentemente com estado (a sessão vive na memória do servidor), e só se consegue escalar por inteiro. Numa arquitetura de **microsserviços**, a aplicação é repartida em serviços pequenos e independentes, que comunicam entre si por APIs REST, sem estado e com autenticação por *token*, e cada um pode escalar isoladamente. A ausência de estado é o que torna possível repartir uma aplicação por vários servidores e por vários serviços.
 
 ## REST e RESTful {#sec-07-rest-restful}
 

@@ -340,7 +340,7 @@ Figura&nbsp;B.1: Num esquema simétrico (HMAC), o mesmo servidor guarda a única
 </figcaption>
 </figure>
 </div>
-<p>Isto funciona bem exatamente na situação apresentada ao longo desta UC: <strong>um único servidor</strong> (ou várias instâncias desse mesmo servidor, todas com acesso à mesma chave secreta, ver <a href="cap08.html#sec-08-escalabilidade-horizontal" class="quarto-xref"><span>Secção 8.5</span></a>) é, simultaneamente, quem emite os <em>tokens</em> e quem os valida. A chave nunca sai desse perímetro de confiança.</p>
+<p>Isto funciona bem exatamente na situação apresentada ao longo desta UC: <strong>um único servidor</strong> (ou vários servidores com a mesma aplicação, todos com acesso à mesma chave secreta, ver <a href="cap08.html#sec-08-escalabilidade-horizontal" class="quarto-xref"><span>Secção 8.5</span></a>) é, simultaneamente, quem emite os <em>tokens</em> e quem os valida. A chave nunca sai desse perímetro de confiança.</p>
 <p>O inconveniente do HMAC aparece quando esse perímetro deixa de fazer sentido: se um sistema externo — que não deveria ter autoridade para <strong>emitir</strong> <em>tokens</em> válidos — precisasse de os <strong>validar</strong>, teria de receber a mesma chave secreta usada para os assinar. Nesse momento, deixa de ser só um verificador: passa a ser também capaz de forjar <em>tokens</em> novos, válidos, para qualquer utilizador.</p>
 </section>
 <section id="sec-apB-assimetrico" class="level2" data-number="B.3">
@@ -456,7 +456,7 @@ Marcado com o atributo <code>HttpOnly</code>, um <em>cookie</em> fica inacessív
 </tr>
 </tbody>
 </table>
-<p>Nenhuma das duas opções é isenta de risco — cada uma troca um tipo de vulnerabilidade por outro. O modelo seguido no <a href="../capitulos/cap08.html">Capítulo 8</a> (<em>token</em> reenviado manualmente no cabeçalho <code>Authorization</code>, ver <a href="cap08.html#sec-08-fetch-json" class="quarto-xref"><span>Secção 8.7</span></a>) pressupõe que o <em>token</em> está acessível ao próprio JavaScript, o que aponta para <code>localStorage</code>, e é o mais comum em aplicações de página única modernas. Nesse modelo, prevenir XSS deixa de ser só uma boa prática geral: torna-se uma condição essencial para a segurança do próprio mecanismo de autenticação — ainda que a prevenção de XSS em si fique fora do âmbito deste apêndice.</p>
+<p>Nenhuma das duas opções é isenta de risco — cada uma troca um tipo de vulnerabilidade por outro. O modelo seguido no <a href="../capitulos/cap08.html">Capítulo 8</a> (<em>token</em> reenviado manualmente no cabeçalho <code>Authorization</code>, ver <a href="cap08.html#sec-08-fetch-json" class="quarto-xref"><span>Secção 8.9</span></a>) pressupõe que o <em>token</em> está acessível ao próprio JavaScript, o que aponta para <code>localStorage</code>, e é o mais comum em aplicações de página única modernas. Nesse modelo, prevenir XSS deixa de ser só uma boa prática geral: torna-se uma condição essencial para a segurança do próprio mecanismo de autenticação — ainda que a prevenção de XSS em si fique fora do âmbito deste apêndice.</p>
 </section>
 <section id="sec-apB-boas-praticas" class="level2" data-number="B.7">
 <h2 data-number="B.7" class="anchored" data-anchor-id="sec-apB-boas-praticas"><span class="header-section-number">B.7</span> Boas Práticas Mínimas</h2>
